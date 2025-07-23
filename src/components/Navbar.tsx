@@ -27,7 +27,7 @@ export default function Navbar() {
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-8 text-gray-500 font-medium">
           <li><a href="#about" className="hover:text-black">About us</a></li>
-          <li><a href="#gst" className="hover:text-black">GST Based Loan</a></li>
+          {/*<li><a href="#gst" className="hover:text-black">GST Based Loan</a></li>*/}
           <li><a href="#process" className="hover:text-black">Loan Process</a></li>
           <li><a href="#personal" className="hover:text-black">Personal Loan</a></li>
         </ul>
