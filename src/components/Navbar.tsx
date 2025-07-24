@@ -3,13 +3,16 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [loansOpen, setLoansOpen] = useState(false);
+  const [calcOpen, setCalcOpen] = useState(false);
 
   return (
-    <header className="w-full shadow-sm bg-white z-50 sticky top-0 left-0 ">
-      <nav className="max-w-7xl mx-[4%]  py-4 flex items-center justify-between">
+    <header className="w-full shadow-sm bg-white z-50 sticky top-0 left-0">
+      <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
         <div className="flex-shrink-0">
           <div className="w-32 sm:w-40 md:w-48 lg:w-56 xl:w-60">
@@ -25,11 +28,54 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex space-x-8 text-gray-500 font-medium">
-          <li><a href="#about" className="hover:text-black">About us</a></li>
-          {/*<li><a href="#gst" className="hover:text-black">GST Based Loan</a></li>*/}
-          <li><a href="#process" className="hover:text-black">Loan Process</a></li>
-          <li><a href="#personal" className="hover:text-black">Personal Loan</a></li>
+        <ul className="hidden md:flex space-x-8 text-gray-600 font-medium items-center">
+          <li><a href="#home" className="hover:text-blue-700 transition-colors">Home</a></li>
+
+          {/* Loans Dropdown */}
+          <li className="relative group">
+            <button
+              className="hover:text-blue-700 transition-colors flex items-center gap-1"
+              onMouseEnter={() => setLoansOpen(true)}
+              onMouseLeave={() => setLoansOpen(false)}
+              onClick={() => setLoansOpen((v) => !v)}
+            >
+              Loans <span className="ml-1">▾</span>
+            </button>
+            <div
+              className={`absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-30 transition-all duration-200 ${loansOpen ? 'block' : 'hidden'} group-hover:block`}
+              onMouseEnter={() => setLoansOpen(true)}
+              onMouseLeave={() => setLoansOpen(false)}
+            >
+              <Link href="#process" className="block px-5 py-2 hover:bg-blue-50 hover:text-blue-700">Personal Loan</Link>
+              <Link href="#process" className="block px-5 py-2 hover:bg-blue-50 hover:text-blue-700">Business Loan</Link>
+             </div>
+          </li>
+
+          {/* Calculators Dropdown */}
+          <li className="relative group">
+            <button
+              className="hover:text-blue-700 transition-colors flex items-center gap-1"
+              onMouseEnter={() => setCalcOpen(true)}
+              onMouseLeave={() => setCalcOpen(false)}
+              onClick={() => setCalcOpen((v) => !v)}
+            >
+              Calculators <span className="ml-1">▾</span>
+            </button>
+            <div
+              className={`absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-30 transition-all duration-200 ${calcOpen ? 'block' : 'hidden'} group-hover:block`}
+              onMouseEnter={() => setCalcOpen(true)}
+              onMouseLeave={() => setCalcOpen(false)}
+            >
+              <Link href="/loan-calculator" className="block px-5 py-2 hover:bg-blue-50 hover:text-blue-700">Loan EMI Calculator</Link>
+              <Link href="/repayment-calculator" className="block px-5 py-2 hover:bg-blue-50 hover:text-blue-700">Loan Repayment Calculator</Link>
+              <Link href="/credit-score-checker" className="block px-5 py-2 hover:bg-blue-50 hover:text-blue-700">Credit Score Checker</Link>
+            </div>
+          </li>
+
+          <li><a href="#about" className="hover:text-blue-700 transition-colors">About Us</a></li>
+          <li><a href="#process" className="hover:text-blue-700 transition-colors">How to Apply</a></li>
+          <li><Link href="/blog" className="hover:text-blue-700 transition-colors">Blogs & News</Link></li>
+          <li><a href="#faqs" className="hover:text-blue-700 transition-colors">FAQs</a></li>
         </ul>
 
         {/* Mobile Menu Toggle */}
@@ -42,10 +88,22 @@ export default function Navbar() {
       {isOpen && (
         <div className="md:hidden bg-white px-4 pb-4">
           <ul className="space-y-4 text-gray-700 font-medium">
-            <li><a href="#about" onClick={() => setIsOpen(false)}>About us</a></li>
-            <li><a href="#gst" onClick={() => setIsOpen(false)}>GST Based Loan</a></li>
-            <li><a href="#process" onClick={() => setIsOpen(false)}>Loan Process</a></li>
-            <li><a href="#personal" onClick={() => setIsOpen(false)}>Personal Loan</a></li>
+            <li><a href="#home" onClick={() => setIsOpen(false)}>Home</a></li>
+            <li className="font-semibold">Loans</li>
+            <ul className="ml-4 space-y-2">
+              <li><Link href="/personal-loan" onClick={() => setIsOpen(false)}>Personal Loan</Link></li>
+              <li><Link href="/business-loan" onClick={() => setIsOpen(false)}>Business Loan</Link></li>
+                </ul>
+            <li className="font-semibold mt-2">Calculators</li>
+            <ul className="ml-4 space-y-2">
+              <li><Link href="/loan-calculator" onClick={() => setIsOpen(false)}>Loan EMI Calculator</Link></li>
+              <li><Link href="/repayment-calculator" onClick={() => setIsOpen(false)}>Loan Repayment Calculator</Link></li>
+              <li><Link href="/credit-score-checker" onClick={() => setIsOpen(false)}>Credit Score Checker</Link></li>
+            </ul>
+            <li><a href="#about" onClick={() => setIsOpen(false)}>About Us</a></li>
+            <li><a href="#process" onClick={() => setIsOpen(false)}>How to Apply</a></li>
+            <li><Link href="/blog" onClick={() => setIsOpen(false)}>Blogs & News</Link></li>
+            <li><a href="#faqs" onClick={() => setIsOpen(false)}>FAQs</a></li>
           </ul>
         </div>
       )}

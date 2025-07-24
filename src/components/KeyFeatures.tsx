@@ -58,7 +58,7 @@ const features = [
 
 export default function KeyFeatures() {
     return (
-        <section className="relative py-24 bg-gradient-to-br from-[#f0f6ff] via-white to-[#f8faff] overflow-hidden">
+        <section className="relative py-24 overflow-hidden">
             {/* Enhanced background elements */}
             <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#276EF4]/20 to-cyan-400/10 rounded-full blur-3xl -z-10 animate-pulse" />
             <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-[#276EF4]/30 to-purple-400/15 rounded-full blur-2xl -z-10 animate-pulse delay-1000" />
