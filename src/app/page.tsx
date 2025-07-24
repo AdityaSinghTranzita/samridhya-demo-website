@@ -7,7 +7,7 @@ import WhyChoose from "@/components/WhyChoose";
 import KeyFeatures from "@/components/KeyFeatures";
 import Faq from "@/components/Faq";
 import CTA from "@/components/CTA";
-import AboutUs from "@/components/AboutUs";
+import AboutUs from "@/components/Aboutus";
 import LoanProcess from "@/components/LoanProcess";
 
 export default function Home() {
