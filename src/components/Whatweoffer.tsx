@@ -95,7 +95,7 @@ export default function WhatWeOffer() {
   }, []);
 
   return (
-    <section className="relative py-20 px-4 md:px-12 overflow-hidden">
+    <section className="relative py-14 sm:py-20 px-2 sm:px-4 md:px-12 overflow-hidden">
       {/* Background gradients */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#276ef4]/10 to-transparent rounded-full blur-3xl -z-10" />
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-purple-400/10 to-transparent rounded-full blur-3xl -z-10" />
@@ -121,46 +121,37 @@ export default function WhatWeOffer() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <motion.div
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#276ef4]/10 to-purple-500/10 text-[#276ef4] px-6 py-3 rounded-full text-sm font-semibold mb-6 backdrop-blur-sm border border-[#276ef4]/20"
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <Sparkles className="w-4 h-4" />
-            Loan Solutions for Every Need
-          </motion.div>
+          
 
-          <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#2b004b] mb-4 sm:mb-6">
             What We{' '}
             <span className="bg-gradient-to-r from-[#276ef4] to-purple-600 bg-clip-text text-transparent">
               Offer
             </span>
           </h2>
 
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Comprehensive financial solutions tailored to your unique needs,
             with instant approvals and competitive rates.
           </p>
 
-          <div className="w-24 h-1 bg-gradient-to-r from-[#276ef4] to-purple-600 rounded-full mx-auto mt-6" />
+          <div className="w-24 h-1 bg-gradient-to-r from-[#276ef4] to-purple-600 rounded-full mx-auto mt-4 sm:mt-6" />
         </motion.div>
 
         {/* Loan Cards Grid */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
           {offers.map((offer, idx) => {
             const Icon = offer.icon;
             return (
               <motion.div
                 key={idx}
-                className={`group relative bg-gradient-to-br ${offer.bgGradient} backdrop-blur-sm border border-white/50 shadow-lg hover:shadow-2xl rounded-3xl p-8 transition-all duration-500 hover:-translate-y-3 overflow-hidden`}
+                className={`group relative bg-gradient-to-br ${offer.bgGradient} backdrop-blur-sm border border-white/50 shadow-lg hover:shadow-2xl rounded-3xl p-5 sm:p-8 transition-all duration-500 hover:-translate-y-3 overflow-hidden`}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
@@ -185,17 +176,17 @@ export default function WhatWeOffer() {
                     </div>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-[#2b004b] group-hover:text-[#276ef4] transition-colors duration-300 mb-3">
+                  <h3 className="text-lg sm:text-2xl font-bold text-[#2b004b] group-hover:text-[#276ef4] transition-colors duration-300 mb-2 sm:mb-3">
                     {offer.title}
                   </h3>
 
-                  <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mb-6 leading-relaxed">
+                  <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base">
                     {offer.description}
                   </p>
 
-                  <div className="space-y-2 mb-6">
+                  <div className="space-y-1 sm:space-y-2 mb-4 sm:mb-6">
                     {offer.features.map((feature, i) => (
-                      <div key={i} className="flex items-center text-sm text-gray-600">
+                      <div key={i} className="flex items-center text-xs sm:text-sm text-gray-600">
                         <div className={`w-2 h-2 bg-gradient-to-r ${offer.gradient} rounded-full mr-3 flex-shrink-0`} />
                         {feature}
                       </div>
@@ -204,7 +195,7 @@ export default function WhatWeOffer() {
 
                   {offer.href && (
                     <Link href={offer.href} className="group/link">
-                      <div className={`inline-flex items-center gap-2 bg-gradient-to-r ${offer.gradient} text-white px-6 py-3 rounded-2xl font-semibold text-sm shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300`}>
+                      <div className={`inline-flex items-center gap-2 bg-gradient-to-r ${offer.gradient} text-white px-4 sm:px-6 py-2 sm:py-3 rounded-2xl font-semibold text-xs sm:text-sm shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300`}>
                         <span>Learn More</span>
                         <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform duration-300" />
                       </div>
@@ -224,21 +215,21 @@ export default function WhatWeOffer() {
 
         {/* Bottom CTA */}
         <motion.div
-          className="mt-20 text-center"
+          className="mt-12 sm:mt-20 text-center"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          <div className="bg-white/60 backdrop-blur-sm border border-white/80 rounded-3xl p-8 md:p-12 shadow-xl">
-            <h3 className="text-2xl md:text-3xl font-bold text-[#2b004b] mb-4">
+          <div className="bg-white/60 backdrop-blur-sm border border-white/80 rounded-3xl p-6 sm:p-8 md:p-12 shadow-xl">
+            <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-[#2b004b] mb-3 sm:mb-4">
               Can't Find What You're Looking For?
             </h3>
-            <p className="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
+            <p className="text-gray-600 text-base sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto">
               Our loan experts are here to help you find the perfect financial solution for your unique needs.
             </p>
             <motion.button
-              className="bg-gradient-to-r from-[#276ef4] to-purple-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-lg transition-all duration-300"
+              className="bg-gradient-to-r from-[#276ef4] to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold text-base sm:text-lg hover:shadow-lg transition-all duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

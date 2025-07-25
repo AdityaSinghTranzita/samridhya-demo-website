@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function AboutUs() {
     return (
-        <section className="py-16 px-4 md:px-12 min-h-[60vh] w-full relative overflow-hidden">
+        <section className="py-12 sm:py-16 px-2 sm:px-4 md:px-12 min-h-[50vh] sm:min-h-[60vh] w-full relative overflow-hidden">
             {/* Animated colorful blobs for vibrancy */}
             <motion.div
                 className="absolute top-[-12%] left-[-10%] w-72 h-72 bg-gradient-to-br from-[#276ef4]/40 via-[#a259ff]/30 to-[#f7971e]/30 rounded-full blur-3xl -z-10 animate-pulse"
@@ -22,18 +22,10 @@ export default function AboutUs() {
                 animate={{ scale: [1, 1.12, 1], opacity: [0.7, 1, 0.7] }}
                 transition={{ repeat: Infinity, duration: 14, ease: 'easeInOut', delay: 1 }}
             />
-            <div className="max-w-5xl mx-auto text-center relative z-10">
-                <motion.div
-                    className="inline-flex items-center gap-2 bg-gradient-to-r from-[#276ef4]/10 to-purple-500/10 text-[#276ef4] px-6 py-3 rounded-full text-sm font-semibold mb-6 backdrop-blur-sm border border-[#276ef4]/20"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                >
-                    About Samridhya
-                </motion.div>
+            <div className="max-w-5xl mx-auto text-center relative z-10 px-2 sm:px-0">
+            
                 <motion.h2
-                    className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#276ef4] via-[#a259ff] to-[#f7971e] text-center mb-6 drop-shadow-lg"
+                    className="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#276ef4] via-[#a259ff] to-[#f7971e] text-center mb-4 sm:mb-6 drop-shadow-lg"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
@@ -41,10 +33,10 @@ export default function AboutUs() {
                 >
                     About Us
                 </motion.h2>
-                <div className="w-24 h-1 bg-gradient-to-r from-[#276ef4] to-purple-600 rounded-full mx-auto mb-8"></div>
+                <div className="w-24 h-1 bg-gradient-to-r from-[#276ef4] to-purple-600 rounded-full mx-auto mb-6 sm:mb-8"></div>
 
                 <motion.p
-                    className="text-base md:text-lg text-gray-700 leading-relaxed"
+                    className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
@@ -55,7 +47,7 @@ export default function AboutUs() {
                 </motion.p>
 
                 <motion.p
-                    className="text-base md:text-lg text-gray-700 leading-relaxed mt-6"
+                    className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mt-4 sm:mt-6"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.4 }}
@@ -66,7 +58,7 @@ export default function AboutUs() {
                 </motion.p>
 
                 <motion.p
-                    className="text-base md:text-lg text-gray-700 leading-relaxed mt-6"
+                    className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mt-4 sm:mt-6"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.6 }}
@@ -77,7 +69,7 @@ export default function AboutUs() {
                 </motion.p>
 
                 <motion.p
-                    className="text-base md:text-lg text-gray-700 leading-relaxed mt-6"
+                    className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mt-4 sm:mt-6"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.8 }}
