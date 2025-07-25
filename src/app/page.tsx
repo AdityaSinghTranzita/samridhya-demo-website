@@ -9,6 +9,7 @@ import Faq from "@/components/Faq";
 import CTA from "@/components/CTA";
 import AboutUs from "@/components/Aboutus";
 import LoanProcess from "@/components/LoanProcess";
+import TestimonialSection from "@/components/Testimonials";
 
 export default function Home() {
     return (
@@ -39,7 +40,9 @@ export default function Home() {
             <section style={{ backgroundColor: '#f5faff' }}>
                 <KeyFeatures />
             </section>
-
+            <section className="bg-white">
+                <TestimonialSection />
+            </section>
             <section id="faqs" className="py-16" style={{ backgroundColor: '#f8f6ff' }}>
                 <Faq />
             </section>
