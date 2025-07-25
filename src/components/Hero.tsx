@@ -21,7 +21,7 @@ const itemVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      type: "spring",
+      type: "spring" as const,
       stiffness: 100,
       damping: 10,
     },
@@ -33,7 +33,7 @@ const itemVariants1 = {
     opacity: 1,
     y: 0,
     transition: {
-      type: "spring",
+      type: "spring" as const,
       stiffness: 100,
       damping: 10,
     },
@@ -48,7 +48,7 @@ const floatingAnimation = (delay = 0) => ({
     duration: 4 + delay * 2,
     repeat: Infinity,
     repeatType: "loop" as const,
-    ease: "easeInOut"
+    ease: "easeInOut" as  const,
   },
 });
 
