@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cloudflare/next-on-pages": "^1.13.13",
+    "express": "^5.1.0",
+    "firebase-functions": "^6.4.0",
     "framer-motion": "^12.23.6",
     "lucide-react": "^0.525.0",
-    "next": "15.4.2",
+    "next": "^15.4.2",
     "postcss": "^8.5.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -24,6 +27,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "firebase-tools": "^14.11.1",
     "tailwindcss": "^4.1.11",
     "typescript": "^5"
   }

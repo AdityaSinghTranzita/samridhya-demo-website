@@ -1,18 +1,15 @@
-// next.config.js
-
-import { hostname } from "os"
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'framerusercontent.com',
       },
-      
     ],
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
