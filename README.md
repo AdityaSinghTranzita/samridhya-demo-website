@@ -1,4 +1,21 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Samridhya - Loan EMI Calculator
+
+This is a [Next.js](https://nextjs.org) project for Samridhya, a comprehensive loan and EMI calculator platform.
+
+## Features
+
+- **EMI Calculator**: Advanced loan EMI calculator with real-time calculations
+- **Multiple Loan Types**: Support for personal, business, education, wedding, travel, and medical loans
+- **Responsive Design**: Modern, mobile-friendly interface
+- **Interactive UI**: Smooth animations and user-friendly interface
+
+## Pages
+
+- **Home** (`/`): Main landing page with loan offerings
+- **EMI Calculator** (`/calculators/loan-calculator`): Dedicated EMI calculator page
+- **Loan Pages**: Individual pages for different loan types
+- **About** (`/about`): Company information
+- **Blog** (`/blog`): News and articles
 
 ## Getting Started
 

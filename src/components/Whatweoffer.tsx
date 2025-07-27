@@ -18,7 +18,7 @@ const offers = [
   {
     title: 'Personal Loan',
     description: 'Get Up to ₹40 Lakhs in Just 10 Minutes!',
-    href: '/personal-loan',
+    href: '/loans/personal-loan',
     icon: User,
     gradient: 'from-blue-500 to-cyan-500',
     bgGradient: 'from-blue-50 to-cyan-50',
@@ -29,7 +29,7 @@ const offers = [
   {
     title: 'Business Loan',
     description: 'Get Business Loans up to ₹40 Lakhs with Flexible Tenure up to 5 Years',
-    href: '/business-loan',
+    href: '/loans/business-loan',
     icon: Building2,
     gradient: 'from-emerald-500 to-green-500',
     bgGradient: 'from-emerald-50 to-green-50',
@@ -40,7 +40,7 @@ const offers = [
   {
     title: 'Education Loan',
     description: 'Empower your future with affordable education financing.',
-    href: '/education-loan',
+    href: '/loans/education-loan',
     icon: GraduationCap,
     gradient: 'from-purple-500 to-violet-500',
     bgGradient: 'from-purple-50 to-violet-50',
@@ -51,7 +51,7 @@ const offers = [
   {
     title: 'Wedding Loan',
     description: 'Make your dream wedding come true without financial stress.',
-    href: '/wedding-loan',
+    href: '/loans/wedding-loan',
     icon: Heart,
     gradient: 'from-pink-500 to-rose-500',
     bgGradient: 'from-pink-50 to-rose-50',
@@ -62,7 +62,7 @@ const offers = [
   {
     title: 'Travel Loan',
     description: 'Plan your next big trip with hassle-free travel loans.',
-    href: '/travel-loan',
+    href: '/loans/travel-loan',
     icon: Plane,
     gradient: 'from-orange-500 to-amber-500',
     bgGradient: 'from-orange-50 to-amber-50',
@@ -73,7 +73,7 @@ const offers = [
   {
     title: 'Medical Loan',
     description: 'Access emergency funds quickly for medical expenses.',
-    href: '/medical-loan',
+    href: '/loans/medical-loan',
     icon: Stethoscope,
     gradient: 'from-red-500 to-pink-500',
     bgGradient: 'from-red-50 to-pink-50',
@@ -196,7 +196,7 @@ export default function WhatWeOffer() {
                   {offer.href && (
                     <Link href={offer.href} className="group/link">
                       <div className={`inline-flex items-center gap-2 bg-gradient-to-r ${offer.gradient} text-white px-4 sm:px-6 py-2 sm:py-3 rounded-2xl font-semibold text-xs sm:text-sm shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300`}>
-                        <span>Learn More</span>
+                        <span>Apply for {offer.title}</span>
                         <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform duration-300" />
                       </div>
                     </Link>

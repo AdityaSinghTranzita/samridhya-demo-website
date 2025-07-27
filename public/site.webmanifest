@@ -1,0 +1,21 @@
+{
+  "name": "Samridhya - Digital Lending Platform",
+  "short_name": "Samridhya",
+  "description": "Get instant personal loans, business loans, and more with Samridhya's digital lending platform",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/"
+} 

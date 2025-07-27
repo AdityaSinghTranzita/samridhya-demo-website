@@ -9,15 +9,8 @@ const tools = [
         icon: Calculator,
         title: 'Loan Calculator',
         description: 'Know your EMI before you borrow',
-        href: '/loan-calculator',
+        href: '/calculators/loan-calculator',
         gradient: 'from-blue-500 to-cyan-500',
-    },
-    {
-        icon: FileText,
-        title: 'Loan Repayment Calculator',
-        description: 'Plan repayments smartly',
-        href: '/repayment-calculator',
-        gradient: 'from-purple-500 to-pink-500',
     },
     {
         icon: BarChart3,
@@ -48,7 +41,8 @@ export default function Tools() {
                     <p className="text-gray-600 mt-2 sm:mt-4 text-base sm:text-lg">Smart tools to help you borrow better</p>
                 </motion.div>
 
-                <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 w-full max-w-full">
+                <div className="flex justify-center">
+                    <div className="grid gap-4 sm:gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 max-w-4xl">
                     {tools.map((tool, idx) => {
                         const Icon = tool.icon;
                         return (
@@ -87,6 +81,7 @@ export default function Tools() {
                             </motion.div>
                         );
                     })}
+                    </div>
                 </div>
             </div>
         </section>

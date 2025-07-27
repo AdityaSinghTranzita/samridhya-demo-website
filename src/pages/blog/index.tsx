@@ -1,58 +1,164 @@
 'use client';
 
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Wrench } from 'lucide-react';
+import { Wrench, BookOpen, Clock, Users, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import Navbar from '@/components/Navbar';
+import CTA from '@/components/CTA';
 
 export default function BlogWIP() {
   return (
-    <section className="bg-[#f8f8f8] py-16 px-4 md:px-12 min-h-screen w-full relative overflow-hidden">
-      {/* Animated colorful blobs - enhanced for vibrancy */}
-      <motion.div
-        className="absolute top-[-12%] left-[-10%] w-96 h-96 bg-gradient-to-br from-[#276ef4]/50 via-[#a259ff]/40 to-[#f7971e]/40 rounded-full blur-3xl -z-10 animate-pulse"
-        animate={{ scale: [1, 1.1, 1], rotate: [0, 15, -10, 0] }}
-        transition={{ repeat: Infinity, duration: 8, ease: 'easeInOut' }}
-      />
-      <motion.div
-        className="absolute bottom-[-12%] right-[-10%] w-96 h-96 bg-gradient-to-tr from-[#f7971e]/40 via-[#43e97b]/40 to-[#38f9d7]/50 rounded-full blur-3xl -z-10 animate-pulse"
-        animate={{ scale: [1, 1.08, 1], rotate: [0, -10, 10, 0] }}
-        transition={{ repeat: Infinity, duration: 10, ease: 'easeInOut', delay: 2 }}
-      />
-      <motion.div
-        className="absolute top-1/2 left-1/2 w-80 h-80 bg-gradient-to-br from-[#43e97b]/30 via-[#38f9d7]/30 to-[#a259ff]/30 rounded-full blur-2xl -z-10 animate-pulse"
-        style={{ transform: 'translate(-50%, -50%)' }}
-        animate={{ scale: [1, 1.12, 1], opacity: [0.7, 1, 0.7] }}
-        transition={{ repeat: Infinity, duration: 12, ease: 'easeInOut', delay: 1 }}
-      />
-      {/* Extra blob for more color */}
-      <motion.div
-        className="absolute top-[10%] right-[15%] w-60 h-60 bg-gradient-to-tl from-[#a259ff]/30 via-[#f7971e]/30 to-[#276ef4]/30 rounded-full blur-2xl -z-10 animate-pulse"
-        animate={{ scale: [1, 1.05, 1], rotate: [0, 10, -10, 0] }}
-        transition={{ repeat: Infinity, duration: 9, ease: 'easeInOut', delay: 3 }}
-      />
-      <div className="max-w-5xl mx-auto text-center flex flex-col items-center w-full z-10">
-        <motion.div
-          animate={{ rotate: [0, 20, -20, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-          className="mb-8"
-        >
-          <span className="inline-flex items-center justify-center rounded-full bg-gradient-to-br from-[#276ef4] via-[#a259ff] to-[#f7971e] shadow-2xl p-6 border-4 border-white">
-            <Wrench className="w-16 h-16 md:w-20 md:h-20 text-white drop-shadow-lg" />
-          </span>
-        </motion.div>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#276ef4] via-[#a259ff] to-[#f7971e] mb-4 drop-shadow-lg">
-          Work in Progress
-        </h1>
-        <p className="text-lg md:text-xl text-gray-700 mb-10 max-w-2xl font-medium drop-shadow-sm">
-          Our blog & news section is <span className="text-[#a259ff] font-semibold">coming soon!</span> <br />We’re working hard to bring you the latest updates, tips, and insights. Please check back later.
-        </p>
-        <Link
-          href="/"
-          className="inline-block bg-gradient-to-r from-[#276ef4] via-[#a259ff] to-[#f7971e] text-white px-8 py-4 rounded-full font-bold shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300 text-lg border-2 border-white"
-        >
-          ← Back to Home
-        </Link>
-      </div>
-    </section>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <Navbar />
+      
+      {/* Hero Section */}
+      <section className="relative overflow-hidden pt-32 pb-16 sm:pt-40 sm:pb-20">
+        {/* Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-10 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-10 right-10 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-indigo-400/20 rounded-full blur-3xl animate-pulse delay-500"></div>
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            className="text-center"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="flex justify-center mb-6">
+              <motion.div 
+                className="w-16 h-16 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-xl"
+                animate={{ rotate: [0, 10, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+              >
+                <BookOpen className="w-8 h-8 text-white" />
+              </motion.div>
+            </div>
+            
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              Blog & News
+            </h1>
+            
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
+              Stay updated with the latest insights, tips, and news from the world of digital lending.
+            </p>
+
+            {/* Work in Progress Card */}
+            <motion.div
+              className="max-w-4xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-3xl p-8 sm:p-12 shadow-xl">
+                <div className="text-center mb-8">
+                  <motion.div
+                    className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-6"
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+                  >
+                    <Wrench className="w-10 h-10 text-white" />
+                  </motion.div>
+                  
+                  <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                    Work in Progress
+                  </h2>
+                  
+                  <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                    We're crafting amazing content to help you make informed financial decisions. 
+                    Our blog section is coming soon with expert insights, tips, and the latest industry updates.
+                  </p>
+                </div>
+
+                {/* Features Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+                  <motion.div
+                    className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 text-center border border-blue-100"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                  >
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <BookOpen className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <h3 className="text-gray-900 font-semibold mb-2">Expert Insights</h3>
+                    <p className="text-gray-600 text-sm">Financial tips and industry knowledge</p>
+                  </motion.div>
+
+                  <motion.div
+                    className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 text-center border border-purple-100"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                  >
+                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <Clock className="w-6 h-6 text-purple-600" />
+                    </div>
+                    <h3 className="text-gray-900 font-semibold mb-2">Latest Updates</h3>
+                    <p className="text-gray-600 text-sm">Stay informed with current trends</p>
+                  </motion.div>
+
+                  <motion.div
+                    className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 text-center border border-green-100"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.5 }}
+                  >
+                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <Users className="w-6 h-6 text-green-600" />
+                    </div>
+                    <h3 className="text-gray-900 font-semibold mb-2">Community</h3>
+                    <p className="text-gray-600 text-sm">Join our growing community</p>
+                  </motion.div>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="mb-8">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium text-gray-700">Development Progress</span>
+                    <span className="text-sm font-medium text-blue-600">75%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-3">
+                    <motion.div
+                      className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: "75%" }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 2, ease: "easeOut" }}
+                    />
+                  </div>
+                </div>
+
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link
+                    href="/"
+                    className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Back to Home
+                  </Link>
+                  
+                  <button className="inline-flex items-center justify-center px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-300 border border-gray-200">
+                    <Clock className="w-4 h-4 mr-2" />
+                    Coming Soon
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <CTA />
+    </div>
   );
 }
