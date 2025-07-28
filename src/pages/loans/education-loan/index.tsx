@@ -157,7 +157,7 @@ export default function EducationLoan() {
 
             {/* Main Heading */}
             <motion.h1
-              className="text-4xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-6 leading-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-black text-gray-900 mb-6 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -171,7 +171,7 @@ export default function EducationLoan() {
 
             {/* Subtitle */}
             <motion.p
-              className="text-xl sm:text-2xl text-gray-700 max-w-3xl mx-auto mb-8 leading-relaxed"
+              className="text-sm sm:text-base md:text-lg lg:text-lg text-gray-700 max-w-3xl mx-auto mb-8 leading-relaxed"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -189,7 +189,7 @@ export default function EducationLoan() {
             >
               <motion.button
                 onClick={handleAppDownload}
-                className="group relative bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 text-lg"
+                className="group relative bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -199,7 +199,7 @@ export default function EducationLoan() {
               
               <motion.button
                 onClick={scrollToCalculator}
-                className="group relative bg-purple-400/20 backdrop-blur-sm border border-purple-400/30 text-purple-700 font-bold px-8 py-4 rounded-2xl hover:bg-purple-400/30 transition-all duration-300 text-lg"
+                className="group relative bg-purple-400/20 backdrop-blur-sm border border-purple-400/30 text-purple-700 font-bold px-8 py-4 rounded-2xl hover:bg-purple-400/30 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -215,16 +215,16 @@ export default function EducationLoan() {
               transition={{ duration: 0.8, delay: 0.8 }}
             >
               <div className="bg-white/90 backdrop-blur-sm border border-purple-300 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-2xl font-bold text-purple-700 mb-1">₹1Cr</div>
-                <div className="text-purple-500 text-sm">Maximum Loan</div>
+                <div className="text-base font-bold text-purple-700 mb-1">₹1Cr</div>
+                <div className="text-purple-500 text-xs">Maximum Loan</div>
               </div>
               <div className="bg-white/90 backdrop-blur-sm border border-purple-300 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-2xl font-bold text-purple-700 mb-1">15 Years</div>
-                <div className="text-purple-500 text-sm">Repayment Period</div>
+                <div className="text-base font-bold text-purple-700 mb-1">15 Years</div>
+                <div className="text-purple-500 text-xs">Repayment Period</div>
               </div>
               <div className="bg-white/90 backdrop-blur-sm border border-purple-300 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-2xl font-bold text-purple-700 mb-1">8.50%</div>
-                <div className="text-purple-500 text-sm">Interest Rate</div>
+                <div className="text-base font-bold text-purple-700 mb-1">8.50%</div>
+                <div className="text-purple-500 text-xs">Interest Rate</div>
               </div>
             </motion.div>
           </div>
@@ -245,8 +245,8 @@ export default function EducationLoan() {
                 <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <GraduationCap className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-gray-900 font-bold text-lg mb-2">Study Abroad</h3>
-                <p className="text-gray-700 text-sm">International education financing</p>
+                <h3 className="text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl font-bold text-gray-900 mb-2">Study Abroad</h3>
+                <p className="text-sm sm:text-base md:text-lg lg:text-lg text-gray-700">International education financing</p>
               </motion.div>
 
               <motion.div
@@ -257,8 +257,8 @@ export default function EducationLoan() {
                 <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Clock className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-gray-900 font-bold text-lg mb-2">Moratorium Period</h3>
-                <p className="text-gray-700 text-sm">No EMI during course duration</p>
+                <h3 className="text-base font-bold text-gray-900 mb-2">Moratorium Period</h3>
+                <p className="text-xs text-gray-700">No EMI during course duration</p>
               </motion.div>
 
               <motion.div
@@ -269,8 +269,8 @@ export default function EducationLoan() {
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <BookOpen className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-gray-900 font-bold text-lg mb-2">All Courses</h3>
-                <p className="text-gray-700 text-sm">Engineering, Medical, MBA & more</p>
+                <h3 className="text-base font-bold text-gray-900 mb-2">All Courses</h3>
+                <p className="text-xs text-gray-700">Engineering, Medical, MBA & more</p>
               </motion.div>
             </div>
           </motion.div>
@@ -307,7 +307,7 @@ export default function EducationLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6 leading-tight">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#2b004b] mb-6 leading-tight">
               Why Choose Our{' '}
               <span className="bg-gradient-to-r from-[#276EF4] to-cyan-500 bg-clip-text text-transparent">
                 Education Loans
@@ -338,10 +338,10 @@ export default function EducationLoan() {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-[#2b004b] text-lg sm:text-xl mb-2 sm:mb-3 group-hover:text-[#276EF4] transition-colors duration-300">
+                      <h3 className="font-bold text-[#2b004b] text-xs sm:text-base mb-2 sm:mb-3 group-hover:text-[#276EF4] transition-colors duration-300">
                         {feature.title}
                       </h3>
-                      <p className="text-gray-600 text-sm sm:text-base leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                      <p className="text-gray-600 text-xs sm:text-xs leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
                         {feature.description}
                       </p>
                     </div>
@@ -363,7 +363,7 @@ export default function EducationLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#2b004b] mb-6">
               Loan Details
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
@@ -378,18 +378,18 @@ export default function EducationLoan() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h3 className="text-2xl font-bold text-[#2b004b] mb-6">Loan Amounts & EMI</h3>
+              <h3 className="text-lg font-bold text-[#2b004b] mb-6">Loan Amounts & EMI</h3>
               <div className="space-y-4">
                 {loanAmounts.map((loan, idx) => (
                   <div key={idx} className="bg-white rounded-2xl p-4 shadow-sm">
                     <div className="flex justify-between items-center">
                       <div>
-                        <div className="text-xl font-bold text-[#276EF4]">{loan.amount}</div>
-                        <div className="text-sm text-gray-600">Tenure: {loan.tenure}</div>
+                        <div className="text-base font-bold text-[#276EF4]">{loan.amount}</div>
+                        <div className="text-xs text-gray-600">Tenure: {loan.tenure}</div>
                       </div>
                       <div className="text-right">
-                        <div className="text-lg font-semibold text-gray-800">EMI from</div>
-                        <div className="text-xl font-bold text-green-600">{loan.emi}</div>
+                        <div className="text-sm font-semibold text-gray-800">EMI from</div>
+                        <div className="text-base font-bold text-green-600">{loan.emi}</div>
                       </div>
                     </div>
                   </div>
@@ -406,7 +406,7 @@ export default function EducationLoan() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
               >
-                <h3 className="text-2xl font-bold text-[#2b004b] mb-6">Eligibility Criteria</h3>
+                <h3 className="text-lg font-bold text-[#2b004b] mb-6">Eligibility Criteria</h3>
                 <ul className="space-y-3">
                   {eligibilityCriteria.map((criteria, idx) => (
                     <li key={idx} className="flex items-center space-x-3">
@@ -424,7 +424,7 @@ export default function EducationLoan() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <h3 className="text-2xl font-bold text-[#2b004b] mb-6">Documents Required</h3>
+                <h3 className="text-lg font-bold text-[#2b004b] mb-6">Documents Required</h3>
                 <ul className="space-y-3">
                   {documentsRequired.map((doc, idx) => (
                     <li key={idx} className="flex items-center space-x-3">
@@ -449,7 +449,7 @@ export default function EducationLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#2b004b] mb-6">
               What Our Students Say
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
@@ -475,7 +475,7 @@ export default function EducationLoan() {
                   />
                   <div>
                     <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
-                    <p className="text-sm text-gray-600">{testimonial.role}</p>
+                    <p className="text-xs text-gray-600">{testimonial.role}</p>
                   </div>
                 </div>
                 <div className="flex mb-4">
@@ -500,7 +500,7 @@ export default function EducationLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#2b004b] mb-6">
               Need Help? Contact Us
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
@@ -517,9 +517,9 @@ export default function EducationLoan() {
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Phone className="w-8 h-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Call Us</h3>
-              <p className="text-gray-600">1800-123-4567</p>
-              <p className="text-sm text-gray-500">24/7 Support</p>
+              <h3 className="text-base font-semibold text-gray-800 mb-2">Call Us</h3>
+              <p className="text-xs text-gray-600">1800-123-4567</p>
+              <p className="text-xs text-gray-500">24/7 Support</p>
             </motion.div>
 
             <motion.div
@@ -532,9 +532,9 @@ export default function EducationLoan() {
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Mail className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Email Us</h3>
-              <p className="text-gray-600">support@samridhya.com</p>
-              <p className="text-sm text-gray-500">Quick Response</p>
+              <h3 className="text-base font-semibold text-gray-800 mb-2">Email Us</h3>
+              <p className="text-xs text-gray-600">support@samridhya.com</p>
+              <p className="text-xs text-gray-500">Quick Response</p>
             </motion.div>
 
             <motion.div
@@ -547,9 +547,9 @@ export default function EducationLoan() {
               <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="w-8 h-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Visit Us</h3>
-              <p className="text-gray-600">Mumbai, Maharashtra</p>
-              <p className="text-sm text-gray-500">Head Office</p>
+              <h3 className="text-base font-semibold text-gray-800 mb-2">Visit Us</h3>
+              <p className="text-xs text-gray-600">Mumbai, Maharashtra</p>
+              <p className="text-xs text-gray-500">Head Office</p>
             </motion.div>
           </div>
         </div>

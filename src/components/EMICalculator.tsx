@@ -186,10 +186,10 @@ export default function EMICalculator({
             <Calculator className={`w-6 h-6 ${accentColors.icon}`} />
             <span className={`${accentColors.text} font-semibold`}>EMI Calculator</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
             Calculate Your {loanType} EMI
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base text-gray-600 max-w-3xl mx-auto">
             Use our EMI calculator to estimate your monthly payments and plan your loan repayment effectively.
           </p>
         </motion.div>
@@ -203,17 +203,17 @@ export default function EMICalculator({
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Loan Details</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-6">Loan Details</h3>
             
             <div className="space-y-6">
               {/* Loan Amount */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                <label className="block text-xs font-semibold text-gray-700 mb-3">
                   Loan Amount
                 </label>
                 <div className="space-y-3">
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600 font-semibold text-lg">₹</span>
+                    <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600 font-semibold text-base">₹</span>
                     <input
                       type="text"
                       value={loanAmountInput}
@@ -236,7 +236,7 @@ export default function EMICalculator({
                     }}
                     className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                   />
-                  <div className="flex justify-between text-sm text-gray-600 font-medium">
+                  <div className="flex justify-between text-xs text-gray-600 font-medium">
                     <span>₹{formatNumber(minAmount)}</span>
                     <span className={`font-semibold ${accentColors.icon}`}>₹{formatNumber(loanAmount)}</span>
                     <span>₹{formatNumber(maxAmount)}</span>
@@ -246,7 +246,7 @@ export default function EMICalculator({
 
               {/* Tenure */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                <label className="block text-xs font-semibold text-gray-700 mb-3">
                   Loan Tenure (Months)
                 </label>
                 <div className="space-y-3">
@@ -276,7 +276,7 @@ export default function EMICalculator({
                     }}
                     className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                   />
-                  <div className="flex justify-between text-sm text-gray-600 font-medium">
+                  <div className="flex justify-between text-xs text-gray-600 font-medium">
                     <span>{minTenure} months</span>
                     <span className={`font-semibold ${accentColors.icon}`}>{tenure} months</span>
                     <span>{maxTenure} months</span>
@@ -286,7 +286,7 @@ export default function EMICalculator({
 
               {/* Interest Rate */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                <label className="block text-xs font-semibold text-gray-700 mb-3">
                   Interest Rate (% p.a.)
                 </label>
                 <div className="space-y-3">
@@ -317,7 +317,7 @@ export default function EMICalculator({
                     }}
                     className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                   />
-                  <div className="flex justify-between text-sm text-gray-600 font-medium">
+                  <div className="flex justify-between text-xs text-gray-600 font-medium">
                     <span>{minRate}%</span>
                     <span className={`font-semibold ${accentColors.icon}`}>{interestRate}%</span>
                     <span>{maxRate}%</span>
@@ -328,7 +328,7 @@ export default function EMICalculator({
               {/* Calculate Button */}
               <motion.button
                 onClick={handleCalculate}
-                className={`w-full bg-gradient-to-r ${primaryColor} text-white py-4 px-6 rounded-2xl font-semibold text-lg hover:shadow-xl transition-all duration-300 shadow-lg flex items-center justify-center gap-3`}
+                className={`w-full bg-gradient-to-r ${primaryColor} text-white py-4 px-6 rounded-2xl font-semibold text-base hover:shadow-xl transition-all duration-300 shadow-lg flex items-center justify-center gap-3`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -346,7 +346,7 @@ export default function EMICalculator({
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
+            <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
               <Hash className="w-6 h-6" />
               EMI Breakdown
             </h3>
@@ -355,28 +355,28 @@ export default function EMICalculator({
               <div className="space-y-6">
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                   <div className="text-center">
-                    <p className="text-white/90 text-sm mb-2 flex items-center justify-center gap-2 font-medium">
-                      <span className="text-lg">₹</span>
+                    <p className="text-white/90 text-xs mb-2 flex items-center justify-center gap-2 font-medium">
+                      <span className="text-base">₹</span>
                       Monthly EMI
                     </p>
-                    <p className="text-4xl font-bold text-white">₹{formatNumber(emi)}</p>
+                    <p className="text-2xl font-bold text-white">₹{formatNumber(emi)}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                    <p className="text-white/90 text-sm mb-1 flex items-center gap-2 font-medium">
+                    <p className="text-white/90 text-xs mb-1 flex items-center gap-2 font-medium">
                       <TrendingUp className="w-4 h-4" />
                       Total Interest
                     </p>
-                    <p className="text-xl font-semibold text-white">₹{formatNumber(totalInterest)}</p>
+                    <p className="text-lg font-semibold text-white">₹{formatNumber(totalInterest)}</p>
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                    <p className="text-white/90 text-sm mb-1 flex items-center gap-2 font-medium">
-                      <span className="text-lg">₹</span>
+                    <p className="text-white/90 text-xs mb-1 flex items-center gap-2 font-medium">
+                      <span className="text-base">₹</span>
                       Total Amount
                     </p>
-                    <p className="text-xl font-semibold text-white">₹{formatNumber(totalAmount)}</p>
+                    <p className="text-lg font-semibold text-white">₹{formatNumber(totalAmount)}</p>
                   </div>
                 </div>
 

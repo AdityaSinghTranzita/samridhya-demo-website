@@ -70,10 +70,10 @@ export default function Hero() {
           className="w-full max-w-xl text-center lg:text-left mb-10 lg:mb-0"
           variants={itemVariants}
         >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
             Lending Partner <br className="hidden md:block" /> for your prosperity
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-10">
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 mb-6 sm:mb-10">
             100% paperless and seamless journey to avail credit within minutes for your Business as well as Personal Growth.
           </p>
           <motion.div

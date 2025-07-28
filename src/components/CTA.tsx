@@ -34,7 +34,7 @@ export default function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-4">
               Ready to Start Your
               <br />
               <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
@@ -42,7 +42,7 @@ export default function Footer() {
               </span>
             </h2>
             
-            <p className="text-sm sm:text-base text-white/80 max-w-3xl mx-auto mb-8 leading-relaxed">
+            <p className="text-xs sm:text-sm text-gray-600 mb-6">
               Join thousands of satisfied customers who have transformed their financial future with Samridhya. 
               Get started in minutes with our seamless digital process.
             </p>

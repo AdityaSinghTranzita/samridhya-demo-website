@@ -63,10 +63,10 @@ export default function Tools() {
                                     </div>
 
                                     <div className="w-full max-w-full">
-                                        <h3 className="text-sm sm:text-lg font-semibold text-[#2b004b] group-hover:text-[#276ef4] transition">
+                                        <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 flex items-center gap-2">
                                             {tool.title}
                                         </h3>
-                                        <p className="text-gray-600 mt-1 text-xs sm:text-sm">{tool.description}</p>
+                                        <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{tool.description}</p>
 
                                         {tool.href && (
                                             <Link

@@ -246,8 +246,9 @@ export default function TestimonialSection() {
                         {testimonial.avatar}
                       </motion.div>
                       <div className="text-center">
-                        <p className="font-bold text-gray-900">{testimonial.name}</p>
-                        <p className="text-sm text-gray-500">{testimonial.role}</p>
+                        <h4 className="font-semibold text-gray-800 text-base sm:text-lg">{testimonial.name}</h4>
+                        <p className="text-xs sm:text-sm text-gray-600">{testimonial.role}</p>
+                        <p className="text-gray-700 italic text-xs sm:text-sm leading-relaxed">"{testimonial.review}"</p>
                       </div>
                     </motion.div>
 

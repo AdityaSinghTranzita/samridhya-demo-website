@@ -51,7 +51,7 @@ export default function Faq() {
             <div className="max-w-4xl mx-auto">
                 <div className="flex flex-col items-center w-full px-2 sm:px-0">
                     <motion.h2
-                        className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#276ef4] to-purple-600 text-center mb-4 sm:mb-6"
+                        className="text-lg sm:text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#276ef4] to-purple-600 text-center mb-4 sm:mb-6"
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
@@ -61,7 +61,7 @@ export default function Faq() {
                     </motion.h2>
                     <div className="w-24 h-1 bg-gradient-to-r from-[#276ef4] to-purple-600 rounded-full mx-auto mb-6 sm:mb-8"></div>
                     <motion.p
-                        className="text-gray-600 text-center mb-8 max-w-2xl text-sm sm:text-base"
+                        className="text-gray-600 text-center mb-8 max-w-2xl text-xs sm:text-sm"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.2 }}
@@ -85,7 +85,7 @@ export default function Faq() {
                                 onClick={() => toggleFaq(idx)}
                                 className="w-full p-6 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200 rounded-xl"
                             >
-                                <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 pr-4">
+                                <h3 className="text-xs sm:text-sm md:text-base font-semibold text-gray-900 pr-4">
                                     {faq.question}
                                 </h3>
                                 <motion.div
@@ -112,7 +112,7 @@ export default function Faq() {
                                     >
                                         <div className="px-6 pb-6">
                                             <div className="pt-2 border-t border-gray-100">
-                                                <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
+                                                <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">
                                                     {faq.answer}
                                                 </p>
                                             </div>
@@ -132,7 +132,7 @@ export default function Faq() {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     viewport={{ once: true }}
                 >
-                    <p className="text-gray-600 mb-4 text-sm sm:text-base">
+                    <p className="text-gray-600 mb-4 text-xs sm:text-sm">
                         Still have questions? We're here to help!
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -129,14 +129,14 @@ export default function WhatWeOffer() {
         >
           
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#2b004b] mb-4 sm:mb-6">
             What We{' '}
             <span className="bg-gradient-to-r from-[#276ef4] to-purple-600 bg-clip-text text-transparent">
               Offer
             </span>
           </h2>
 
-          <p className="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Comprehensive financial solutions tailored to your unique needs,
             with instant approvals and competitive rates.
           </p>

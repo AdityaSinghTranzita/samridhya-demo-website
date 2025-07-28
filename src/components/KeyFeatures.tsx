@@ -124,10 +124,10 @@ export default function KeyFeatures() {
                                     </div>
 
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="font-bold text-[#2b004b] text-base sm:text-lg mb-2 sm:mb-3 group-hover:text-[#276EF4] transition-colors duration-300">
+                                        <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
                                             {feature.title}
                                         </h3>
-                                        <p className="text-gray-600 text-xs sm:text-sm leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                                        <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                                             {feature.desc}
                                         </p>
 
