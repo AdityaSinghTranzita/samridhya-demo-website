@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Menu, X, Download, ChevronDown, ChevronRight } from 'lucide-react';
+import { Menu, X, Download, ChevronDown, ChevronRight, Phone } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { handleAppDownload } from '@/utils/appStore';
@@ -154,14 +154,15 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <button 
-              onClick={() => scrollToSection('faqs')}
-              className={`hover:text-blue-700 transition-colors duration-300 ${
+            <Link 
+              href="/contact" 
+              className={`flex items-center gap-2 hover:text-blue-700 transition-colors duration-300 ${
                 isScrolled ? 'text-gray-700' : 'text-gray-700'
               }`}
             >
-              FAQs
-            </button>
+              <Phone size={16} />
+              Contact Us
+            </Link>
           </li>
         </ul>
 
@@ -323,17 +324,15 @@ export default function Navbar() {
                   Blogs & News
                 </Link>
               </li>
-              
               <li>
-                <button 
-                  onClick={() => {
-                    scrollToSection('faqs');
-                    closeMobileMenu();
-                  }} 
-                  className="block py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors w-full text-left"
+                <Link 
+                  href="/contact" 
+                  onClick={closeMobileMenu} 
+                  className="flex items-center gap-2 py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors"
                 >
-                  FAQs
-                </button>
+                  <Phone size={16} />
+                  Contact Us
+                </Link>
               </li>
             </ul>
             

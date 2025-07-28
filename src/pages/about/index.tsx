@@ -157,12 +157,12 @@ export default function About() {
       <LoanNavbar />
       
       {/* Hero Section */}
-      <section className="relative w-full bg-gradient-to-br from-blue-900 via-cyan-900 to-indigo-900 min-h-[calc(100vh-4rem)] overflow-hidden">
+      <section className="relative w-full bg-gradient-to-br from-blue-50 via-cyan-50 to-indigo-50 min-h-[calc(100vh-4rem)] overflow-hidden">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-40 right-20 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-indigo-400/20 rounded-full blur-3xl animate-pulse delay-500"></div>
+          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-300/40 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-40 right-20 w-96 h-96 bg-cyan-300/40 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-indigo-300/40 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
         
         {/* Grid Pattern Overlay */}
@@ -177,32 +177,32 @@ export default function About() {
           <div className="text-center mb-8 sm:mb-12">
             {/* Badge */}
             <motion.div
-              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-3 mb-6 sm:mb-8"
+              className="inline-flex items-center gap-2 bg-blue-400/20 backdrop-blur-sm border border-blue-400/30 rounded-full px-6 py-3 mb-6 sm:mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-white/90 font-medium">ONDC Registered & RBI Compliant</span>
+              <span className="text-blue-700 font-medium">ONDC Registered & RBI Compliant</span>
             </motion.div>
 
             {/* Main Heading */}
             <motion.h1
-              className="text-4xl sm:text-6xl md:text-7xl font-black text-white mb-4 sm:mb-6 leading-tight"
+              className="text-4xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-4 sm:mb-6 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               About Samridhya
               <br />
-              <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 bg-clip-text text-transparent">
                 Your Trusted Financial Partner
               </span>
             </motion.h1>
 
             {/* Subtitle */}
             <motion.p
-              className="text-xl sm:text-2xl text-white/80 max-w-4xl mx-auto mb-6 sm:mb-8 leading-relaxed"
+              className="text-xl sm:text-2xl text-gray-700 max-w-4xl mx-auto mb-6 sm:mb-8 leading-relaxed"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -233,14 +233,14 @@ export default function About() {
                 };
 
                 return (
-                  <div key={idx} ref={ref} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 text-center">
-                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <IconComponent className="w-6 h-6 text-white" />
+                  <div key={idx} ref={ref} className="bg-white/90 backdrop-blur-sm border border-blue-300 rounded-2xl p-4 text-center shadow-lg">
+                    <div className="w-12 h-12 bg-blue-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <IconComponent className="w-6 h-6 text-blue-700" />
                     </div>
-                    <div className="text-2xl font-bold text-white mb-1">
+                    <div className="text-2xl font-bold text-blue-700 mb-1">
                       {stat.prefix || ''}{formatNumber(count)}{stat.suffix || ''}
                     </div>
-                    <div className="text-white/70 text-sm">{stat.label}</div>
+                    <div className="text-blue-500 text-sm">{stat.label}</div>
                   </div>
                 );
               })}
@@ -267,7 +267,7 @@ export default function About() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <motion.div
-              className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-8 shadow-lg"
+              className="bg-gradient-to-br from-blue-25 to-cyan-25 rounded-3xl p-8 shadow-lg"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -295,7 +295,7 @@ export default function About() {
             </motion.div>
 
             <motion.div
-              className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl p-8 shadow-lg"
+              className="bg-gradient-to-br from-indigo-25 to-purple-25 rounded-3xl p-8 shadow-lg"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -353,14 +353,14 @@ export default function About() {
               return (
                 <motion.div
                   key={idx}
-                  className="group relative bg-white rounded-3xl p-5 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 text-left border border-gray-100/50 backdrop-blur-sm hover:-translate-y-2"
+                  className="group relative bg-white/95 rounded-3xl p-5 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 text-left border border-blue-200/50 backdrop-blur-sm hover:-translate-y-2"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: idx * 0.1 }}
                   whileHover={{ scale: 1.02 }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#276EF4]/5 to-cyan-400/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#276EF4]/10 to-cyan-400/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   <div className={`absolute top-0 left-8 right-8 h-1 bg-gradient-to-r ${feature.gradient} rounded-b-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500`}></div>
 
                   <div className="relative z-10 flex items-start space-x-5">
@@ -385,7 +385,7 @@ export default function About() {
       </section>
 
       {/* Team Section */}
-      <section className="relative py-16 sm:py-24 bg-gradient-to-br from-gray-50 to-blue-50">
+      <section className="relative py-16 sm:py-24 bg-gradient-to-br from-gray-25 to-blue-25">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 md:px-12">
           <motion.div
             className="text-center mb-12 sm:mb-16"
@@ -404,7 +404,7 @@ export default function About() {
             {team.map((member, idx) => (
               <motion.div
                 key={idx}
-                className="bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center"
+                className="bg-white/95 rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center border border-blue-200/50"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -447,7 +447,7 @@ export default function About() {
             {testimonials.map((testimonial, idx) => (
               <motion.div
                 key={idx}
-                className="bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+                className="bg-white/95 rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-200/50"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
