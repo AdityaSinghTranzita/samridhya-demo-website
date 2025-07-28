@@ -173,9 +173,10 @@ export default function WhyChoose() {
                                     </div>
 
                                     {/* Check mark positioned absolutely */}
-                                    <div className="absolute top-4 right-4 w-8 h-8 bg-green-100 group-hover:bg-green-200 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+                                    <div className="hidden sm:flex hidden md:flex  w-8 h-8 bg-green-100 group-hover:bg-green-200 rounded-full items-center justify-center transition-all duration-300 group-hover:scale-110">
                                         <CheckCircle2 className="w-5 h-5 text-green-600" />
                                     </div>
+
                                 </div>
 
                                 {/* Bottom right accent */}

@@ -204,7 +204,8 @@ export default function WhatWeOffer() {
                 </div>
 
                 <div className="absolute top-4 right-4 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                  <div className={`w-3 h-3 bg-gradient-to-r ${offer.gradient} rounded-full`} />
+                  {/*<div className={`w-3 h-3 bg-gradient-to-r ${offer.gradient} rounded-full`} />*/}
+                  <div className={`hidden sm:flex w-3 h-3 bg-gradient-to-r ${offer.gradient} rounded-full`} />
                 </div>
 
                 <div className={`absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl ${offer.gradient} opacity-10 rounded-tl-full transform scale-0 group-hover:scale-100 transition-transform duration-500`} />

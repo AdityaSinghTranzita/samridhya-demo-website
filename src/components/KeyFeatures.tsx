@@ -142,7 +142,7 @@ export default function KeyFeatures() {
                                 </div>
 
                                 {/* Check circle positioned absolutely */}
-                                <div className="absolute top-6 right-6 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center group-hover:bg-green-200 transition-colors duration-300">
+                                <div className=" hidden sm:flex absolute top-6 right-6 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center group-hover:bg-green-200 transition-colors duration-300">
                                     <CheckCircle2 className="text-green-600 w-5 h-5" />
                                 </div>
                             </motion.div>

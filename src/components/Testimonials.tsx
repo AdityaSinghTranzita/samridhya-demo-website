@@ -101,8 +101,8 @@ export default function TestimonialSection() {
     <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-32 px-4 sm:px-10 lg:px-20">
       {/* Background blobs */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-3xl" />
+        {/*<div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl" />*/}
+        {/*<div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-3xl" />*/}
       </div>
 
       <div className="relative max-w-7xl mx-auto text-center">
