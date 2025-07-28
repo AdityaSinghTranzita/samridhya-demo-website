@@ -45,19 +45,19 @@ export default function LoanNavbar() {
     
     switch (currentPage) {
       case 'personal':
-        return 'bg-gradient-to-r from-blue-900 via-cyan-900 to-indigo-900';
+        return 'bg-gradient-to-r from-blue-50 via-cyan-50 to-indigo-50';
       case 'business':
-        return 'bg-gradient-to-r from-emerald-900 via-green-900 to-teal-900';
+        return 'bg-gradient-to-r from-emerald-50 via-green-50 to-teal-50';
       case 'education':
-        return 'bg-gradient-to-r from-purple-900 via-blue-900 to-indigo-900';
+        return 'bg-gradient-to-r from-purple-50 via-blue-50 to-indigo-50';
       case 'wedding':
-        return 'bg-gradient-to-r from-pink-900 via-rose-900 to-red-900';
+        return 'bg-gradient-to-r from-pink-50 via-rose-50 to-red-50';
       case 'travel':
-        return 'bg-gradient-to-r from-orange-900 via-amber-900 to-yellow-900';
+        return 'bg-gradient-to-r from-orange-50 via-amber-50 to-yellow-50';
       case 'medical':
-        return 'bg-gradient-to-r from-red-900 via-pink-900 to-rose-900';
+        return 'bg-gradient-to-r from-red-50 via-pink-50 to-rose-50';
       default:
-        return 'bg-gradient-to-r from-blue-900 via-cyan-900 to-indigo-900';
+        return 'bg-gradient-to-r from-blue-50 via-cyan-50 to-indigo-50';
     }
   };
 
@@ -95,7 +95,7 @@ export default function LoanNavbar() {
             <Link 
               href="/" 
               className={`hover:text-blue-700 transition-colors duration-300 ${
-                isScrolled ? 'text-gray-700' : 'text-white'
+                isScrolled ? 'text-gray-700' : 'text-gray-900'
               }`}
             >
               Home
@@ -105,7 +105,7 @@ export default function LoanNavbar() {
             <Link 
               href="/about" 
               className={`hover:text-blue-700 transition-colors duration-300 ${
-                isScrolled ? 'text-gray-700' : 'text-white'
+                isScrolled ? 'text-gray-700' : 'text-gray-900'
               }`}
             >
               About Us
@@ -116,7 +116,7 @@ export default function LoanNavbar() {
           <li className="relative group">
             <button
               className={`flex items-center gap-1 hover:text-blue-700 transition-colors duration-300 ${
-                isScrolled ? 'text-gray-700' : 'text-white'
+                isScrolled ? 'text-gray-700' : 'text-gray-900'
               }`}
               aria-haspopup="true"
               aria-expanded={dropdown === 'loans'}
@@ -140,7 +140,7 @@ export default function LoanNavbar() {
           <li className="relative group">
             <button
               className={`flex items-center gap-1 hover:text-blue-700 transition-colors duration-300 ${
-                isScrolled ? 'text-gray-700' : 'text-white'
+                isScrolled ? 'text-gray-700' : 'text-gray-900'
               }`}
               aria-haspopup="true"
               aria-expanded={dropdown === 'calculators'}
@@ -160,7 +160,7 @@ export default function LoanNavbar() {
             <Link 
               href="/blog" 
               className={`hover:text-blue-700 transition-colors duration-300 ${
-                isScrolled ? 'text-gray-700' : 'text-white'
+                isScrolled ? 'text-gray-700' : 'text-gray-900'
               }`}
             >
               Blogs & News
@@ -170,7 +170,7 @@ export default function LoanNavbar() {
             <button 
               onClick={() => scrollToSection('faqs')}
               className={`hover:text-blue-700 transition-colors duration-300 ${
-                isScrolled ? 'text-gray-700' : 'text-white'
+                isScrolled ? 'text-gray-700' : 'text-gray-900'
               }`}
             >
               FAQs
@@ -184,7 +184,7 @@ export default function LoanNavbar() {
           className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium ${
             isScrolled 
               ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700' 
-              : 'bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30'
+              : 'bg-blue-600/10 backdrop-blur-sm border border-blue-600/20 text-blue-800 hover:bg-blue-600/20'
           }`}
         >
           <Download size={16} />
@@ -197,14 +197,14 @@ export default function LoanNavbar() {
           className={`md:hidden p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ${
             isScrolled 
               ? 'border border-gray-200' 
-              : 'border border-white/30 bg-white/10 backdrop-blur-sm'
+              : 'border border-blue-600/20 bg-blue-600/10 backdrop-blur-sm'
           }`}
           aria-label="Toggle Menu"
         >
           {isOpen ? (
-            <X size={28} className={isScrolled ? 'text-gray-700' : 'text-white'} />
+            <X size={28} className={isScrolled ? 'text-gray-700' : 'text-blue-800'} />
           ) : (
-            <Menu size={28} className={isScrolled ? 'text-gray-700' : 'text-white'} />
+            <Menu size={28} className={isScrolled ? 'text-gray-700' : 'text-blue-800'} />
           )}
         </button>
       </nav>

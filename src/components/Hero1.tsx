@@ -38,13 +38,13 @@ export default function Hero1() {
         
         {/* Text Section */}
         <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left justify-center max-w-2xl lg:max-w-none">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-gray-900 mb-4 sm:mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-gray-900 mb-4 sm:mb-6 leading-tight">
             Instant Personal Loans
           </h1>
           <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-blue-700 mb-2 sm:mb-4 tracking-wide uppercase">
             Get Money in Minutes
           </h2>
-          <p className="text-gray-800 mb-6 sm:mb-8 max-w-xl lg:max-w-2xl font-medium text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed">
+          <p className="text-gray-800 mb-6 sm:mb-8 max-w-xl lg:max-w-2xl font-medium text-base sm:text-md md:text-xl lg:text-xl leading-relaxed">
             Get a quick, paperless loan up to ₹10 Lakhs. Trusted by millions. 100% online, direct bank transfer, and instant approval.
           </p>
           <button

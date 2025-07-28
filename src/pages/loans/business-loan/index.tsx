@@ -126,12 +126,12 @@ export default function BusinessLoan() {
         <LoanNavbar />
       
       {/* Hero Section */}
-      <section className="relative w-full bg-gradient-to-br from-emerald-900 via-green-900 to-teal-900 min-h-screen overflow-hidden pt-20">
+      <section className="relative w-full bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 min-h-screen overflow-hidden pt-20">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-400/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-40 right-20 w-96 h-96 bg-green-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-teal-400/20 rounded-full blur-3xl animate-pulse delay-500"></div>
+          <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-300/40 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-40 right-20 w-96 h-96 bg-green-300/40 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-teal-300/40 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
         
         {/* Grid Pattern Overlay */}
@@ -146,32 +146,32 @@ export default function BusinessLoan() {
           <div className="text-center mb-16">
             {/* Badge */}
             <motion.div
-              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-3 mb-8"
+              className="inline-flex items-center gap-2 bg-emerald-400/20 backdrop-blur-sm border border-emerald-400/30 rounded-full px-6 py-3 mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-white/90 font-medium">Business Loan Approval in 24 Hours</span>
+              <span className="text-emerald-700 font-medium">Business Loan Approval in 24 Hours</span>
             </motion.div>
 
             {/* Main Heading */}
             <motion.h1
-              className="text-4xl sm:text-6xl md:text-7xl font-black text-white mb-6 leading-tight"
+              className="text-4xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-6 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               Business Loans
               <br />
-              <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 bg-clip-text text-transparent">
                 For Growth
               </span>
             </motion.h1>
 
             {/* Subtitle */}
             <motion.p
-              className="text-xl sm:text-2xl text-white/80 max-w-3xl mx-auto mb-8 leading-relaxed"
+              className="text-xl sm:text-2xl text-gray-700 max-w-3xl mx-auto mb-8 leading-relaxed"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -189,17 +189,17 @@ export default function BusinessLoan() {
             >
               <motion.button
                 onClick={handleAppDownload}
-                className="group relative bg-gradient-to-r from-emerald-500 to-green-600 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300 text-lg"
+                className="group relative bg-gradient-to-r from-emerald-500 to-green-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300 text-lg"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <span className="relative z-10">Apply Now - Get ₹5 Lakhs</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-green-700 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-green-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </motion.button>
               
               <motion.button
                 onClick={scrollToCalculator}
-                className="group relative bg-white/10 backdrop-blur-sm border border-white/20 text-white font-bold px-8 py-4 rounded-2xl hover:bg-white/20 transition-all duration-300 text-lg"
+                className="group relative bg-emerald-400/20 backdrop-blur-sm border border-emerald-400/30 text-emerald-700 font-bold px-8 py-4 rounded-2xl hover:bg-emerald-400/30 transition-all duration-300 text-lg"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -214,17 +214,17 @@ export default function BusinessLoan() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 text-center">
-                <div className="text-2xl font-bold text-white mb-1">₹2Cr</div>
-                <div className="text-white/70 text-sm">Maximum Loan</div>
+              <div className="bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-4 text-center shadow-lg">
+                <div className="text-2xl font-bold text-emerald-700 mb-1">₹2Cr</div>
+                <div className="text-emerald-500 text-sm">Maximum Loan</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 text-center">
-                <div className="text-2xl font-bold text-white mb-1">24 Hrs</div>
-                <div className="text-white/70 text-sm">Approval Time</div>
+              <div className="bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-4 text-center shadow-lg">
+                <div className="text-2xl font-bold text-emerald-700 mb-1">24 Hrs</div>
+                <div className="text-emerald-500 text-sm">Approval Time</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 text-center">
-                <div className="text-2xl font-bold text-white mb-1">12.99%</div>
-                <div className="text-white/70 text-sm">Interest Rate</div>
+              <div className="bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-4 text-center shadow-lg">
+                <div className="text-2xl font-bold text-emerald-700 mb-1">12.99%</div>
+                <div className="text-emerald-500 text-sm">Interest Rate</div>
               </div>
             </motion.div>
           </div>
@@ -238,15 +238,15 @@ export default function BusinessLoan() {
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto px-4">
               <motion.div
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center"
+                className="bg-white/80 backdrop-blur-sm border border-emerald-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center shadow-lg"
                 whileHover={{ y: -5, scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-emerald-400 to-green-500 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                   <Building2 className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
-                <h3 className="text-white font-bold text-base sm:text-lg mb-2">Business Focused</h3>
-                <p className="text-white/70 text-xs sm:text-sm leading-relaxed">Tailored for business growth and expansion</p>
+                <h3 className="text-gray-900 font-bold text-base sm:text-lg mb-2">Business Focused</h3>
+                <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">Tailored for business growth and expansion</p>
               </motion.div>
 
               <motion.div

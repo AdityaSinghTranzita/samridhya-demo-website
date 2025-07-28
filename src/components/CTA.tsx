@@ -130,8 +130,9 @@ export default function Footer() {
                   alt="Samridhya Logo"
                   width={120}
                   height={31}
-                  className="h-8 w-auto brightness-0 invert"
+                  className="h-6 sm:h-8 w-auto brightness-0 invert"
                   priority
+                  unoptimized
                 />
               </div>
               <p className="text-gray-400 mb-6 leading-relaxed">
