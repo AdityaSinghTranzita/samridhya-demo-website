@@ -19,7 +19,7 @@ const floatingAnimation = (delay = 0) => ({
 
 export default function Hero1() {
   return (
-    <section className="relative w-full bg-gradient-to-b from-blue-50 via-white to-white min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 py-12 md:py-24 lg:py-32">
+    <section className="relative w-full bg-gradient-to-b from-blue-50 via-white to-white min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 py-6 md:py-12 lg:py-16">
       <div className="relative z-10 mx-auto max-w-7xl w-full flex flex-col lg:flex-row items-center justify-center gap-8 md:gap-12 lg:gap-16 xl:gap-20">
         {/* Image Section - Responsive sizing */}
         <div className="w-full lg:w-1/2 flex justify-center items-center mb-8 lg:mb-0">
@@ -38,22 +38,22 @@ export default function Hero1() {
         
         {/* Text Section */}
         <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left justify-center max-w-2xl lg:max-w-none">
-          <h1 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-gray-900 mb-4 sm:mb-6 leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-extrabold text-gray-900 mb-4 sm:mb-6 leading-tight">
             Instant Personal Loans
           </h1>
-          <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-blue-700 mb-2 sm:mb-4 tracking-wide uppercase">
+          <h2 className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-bold text-blue-700 mb-2 sm:mb-4 tracking-wide uppercase">
             Get Money in Minutes
           </h2>
-          <p className="text-gray-800 mb-6 sm:mb-8 max-w-xl lg:max-w-2xl font-medium text-base sm:text-md md:text-xl lg:text-xl leading-relaxed">
+          <p className="text-gray-800 mb-6 sm:mb-8 max-w-xl lg:max-w-2xl font-medium text-sm sm:text-base md:text-lg lg:text-lg leading-relaxed">
             Get a quick, paperless loan up to ₹10 Lakhs. Trusted by millions. 100% online, direct bank transfer, and instant approval.
           </p>
           <button
             onClick={() => window.open(getAppStoreLink(), '_blank')}
-            className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-4 sm:px-10 sm:py-5 lg:px-12 lg:py-6 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl text-center text-base sm:text-lg md:text-xl lg:text-2xl mb-4 lg:mb-6 transform hover:scale-105"
+            className="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-semibold px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg text-center text-sm sm:text-base md:text-lg lg:text-xl mb-4 lg:mb-6 transform hover:scale-102"
           >
             Get Loan Now
           </button>
-          <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-6 lg:mt-8 justify-center lg:justify-start w-full lg:w-auto items-center">
+          <div className="flex flex-row gap-3 mt-4 sm:mt-6 lg:mt-8 justify-center lg:justify-start w-full lg:w-auto items-center">
             <button
               onClick={() => window.open('https://play.google.com/store/apps/details?id=samridh.consumer', '_blank')}
               className="transition-transform hover:scale-105"
@@ -63,7 +63,7 @@ export default function Hero1() {
                 alt="Get it on Google Play"
                 width={140}
                 height={42}
-                className="h-12 w-[140px] object-contain"
+                className="h-10 w-[120px] object-contain"
                 loading="lazy"
                 unoptimized
               />
@@ -77,7 +77,7 @@ export default function Hero1() {
                 alt="Download on the App Store"
                 width={140}
                 height={42}
-                className="h-12 w-[140px] object-contain"
+                className="h-10 w-[120px] object-contain"
                 loading="lazy"
                 unoptimized
               />

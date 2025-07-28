@@ -132,7 +132,7 @@ export default function Contact() {
 
               {/* Main Heading */}
               <motion.h1
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-4 sm:mb-6 leading-tight"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-4 sm:mb-6 leading-tight"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -147,7 +147,7 @@ export default function Contact() {
 
               {/* Subtitle */}
               <motion.p
-                className="text-lg sm:text-xl text-gray-700 max-w-3xl mx-auto mb-8 sm:mb-12 leading-relaxed px-4 sm:px-0"
+                className="text-base sm:text-lg text-gray-700 max-w-3xl mx-auto mb-8 sm:mb-12 leading-relaxed px-4 sm:px-0"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -192,156 +192,158 @@ export default function Contact() {
           </div>
         </section>
 
+        {/* Contact Form Section */}
+        <section className="py-16 sm:py-20">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 lg:p-10"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center">
+                  <MessageSquare className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Send us a Message</h2>
+                  <p className="text-gray-600 text-xs sm:text-sm">We'll get back to you within 24 hours</p>
+                </div>
+              </div>
+              
+              {isSubmitted ? (
+                <motion.div
+                  className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+                  <h3 className="text-green-800 font-bold text-base sm:text-lg mb-2">Message Sent Successfully!</h3>
+                  <p className="text-green-700 text-sm sm:text-base">Thank you for contacting us. We'll get back to you soon.</p>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-900 mb-2">
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-gray-900 placeholder-gray-500"
+                        placeholder="Enter your full name"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-gray-900 placeholder-gray-500"
+                        placeholder="Enter your email"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-900 mb-2">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-gray-900 placeholder-gray-500"
+                        placeholder="Enter your phone number"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="subject" className="block text-sm font-medium text-gray-900 mb-2">
+                        Subject *
+                      </label>
+                      <select
+                        id="subject"
+                        name="subject"
+                        value={formData.subject}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-gray-900"
+                      >
+                        <option value="">Select a subject</option>
+                        <option value="loan-inquiry">Loan Inquiry</option>
+                        <option value="application-support">Application Support</option>
+                        <option value="technical-issue">Technical Issue</option>
+                        <option value="general-inquiry">General Inquiry</option>
+                        <option value="feedback">Feedback</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-900 mb-2">
+                      Message *
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      required
+                      rows={5}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none text-gray-900 placeholder-gray-500"
+                      placeholder="Tell us how we can help you..."
+                    />
+                  </div>
+                  
+                  <motion.button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold px-8 py-4 rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send size={20} />
+                        Send Message
+                      </>
+                    )}
+                  </motion.button>
+                </form>
+              )}
+            </motion.div>
+          </div>
+        </section>
+
         {/* Main Content Section */}
         <section className="py-16 sm:py-20">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
               
-              {/* Contact Form */}
-              <motion.div
-                className="order-2 lg:order-1"
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-              >
-                <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 lg:p-10">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center">
-                      <MessageSquare className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Send us a Message</h2>
-                      <p className="text-gray-600 text-sm sm:text-base">We'll get back to you within 24 hours</p>
-                    </div>
-                  </div>
-                  
-                  {isSubmitted ? (
-                    <motion.div
-                      className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-                      <h3 className="text-green-800 font-bold text-lg mb-2">Message Sent Successfully!</h3>
-                      <p className="text-green-700">Thank you for contacting us. We'll get back to you soon.</p>
-                    </motion.div>
-                  ) : (
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                        <div>
-                          <label htmlFor="name" className="block text-sm font-medium text-gray-900 mb-2">
-                            Full Name *
-                          </label>
-                          <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            required
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-gray-900 placeholder-gray-500"
-                            placeholder="Enter your full name"
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
-                            Email Address *
-                          </label>
-                          <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            required
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-gray-900 placeholder-gray-500"
-                            placeholder="Enter your email"
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                        <div>
-                          <label htmlFor="phone" className="block text-sm font-medium text-gray-900 mb-2">
-                            Phone Number
-                          </label>
-                          <input
-                            type="tel"
-                            id="phone"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleInputChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-gray-900 placeholder-gray-500"
-                            placeholder="Enter your phone number"
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="subject" className="block text-sm font-medium text-gray-900 mb-2">
-                            Subject *
-                          </label>
-                          <select
-                            id="subject"
-                            name="subject"
-                            value={formData.subject}
-                            onChange={handleInputChange}
-                            required
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-gray-900"
-                          >
-                            <option value="">Select a subject</option>
-                            <option value="loan-inquiry">Loan Inquiry</option>
-                            <option value="application-support">Application Support</option>
-                            <option value="technical-issue">Technical Issue</option>
-                            <option value="general-inquiry">General Inquiry</option>
-                            <option value="feedback">Feedback</option>
-                          </select>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="message" className="block text-sm font-medium text-gray-900 mb-2">
-                          Message *
-                        </label>
-                        <textarea
-                          id="message"
-                          name="message"
-                          value={formData.message}
-                          onChange={handleInputChange}
-                          required
-                          rows={5}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none text-gray-900 placeholder-gray-500"
-                          placeholder="Tell us how we can help you..."
-                        />
-                      </div>
-                      
-                      <motion.button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold px-8 py-4 rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                            Sending...
-                          </>
-                        ) : (
-                          <>
-                            <Send size={20} />
-                            Send Message
-                          </>
-                        )}
-                      </motion.button>
-                    </form>
-                  )}
-                </div>
-              </motion.div>
-
               {/* Contact Information */}
               <motion.div
-                className="order-1 lg:order-2 space-y-8"
+                className="space-y-8"
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -349,7 +351,7 @@ export default function Contact() {
               >
                 {/* Mobile Contact Cards */}
                 <div className="lg:hidden">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Contact Information</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {contactInfo.map((info, idx) => {
                       const IconComponent = info.icon;
@@ -380,8 +382,8 @@ export default function Contact() {
 
                 {/* Desktop Contact Information */}
                 <div className="hidden lg:block">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h3>
-                  <p className="text-gray-700 leading-relaxed mb-8">
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Get in Touch</h3>
+                  <p className="text-gray-700 leading-relaxed mb-8 text-sm sm:text-base">
                     We're committed to providing exceptional customer service and support. 
                     Our dedicated team is here to help you with any questions or concerns.
                   </p>
@@ -445,8 +447,8 @@ export default function Contact() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
-              <p className="text-gray-600 text-lg">Find answers to common questions about our services</p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+              <p className="text-gray-600 text-sm sm:text-base">Find answers to common questions about our services</p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -459,8 +461,8 @@ export default function Contact() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: idx * 0.1 }}
                 >
-                  <h4 className="font-bold text-gray-900 mb-3">{faq.question}</h4>
-                  <p className="text-gray-700 text-sm leading-relaxed">{faq.answer}</p>
+                  <h4 className="font-bold text-gray-900 mb-3 text-sm sm:text-base">{faq.question}</h4>
+                  <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">{faq.answer}</p>
                 </motion.div>
               ))}
             </div>

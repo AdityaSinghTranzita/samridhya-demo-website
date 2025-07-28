@@ -77,7 +77,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex space-x-4 lg:space-x-8 font-medium text-base lg:text-lg items-center">
+        <ul className="hidden md:flex space-x-4 lg:space-x-8 font-medium text-sm lg:text-base items-center">
           <li>
             <Link 
               href="/" 
@@ -203,7 +203,7 @@ export default function Navbar() {
                 <Link 
                   href="/" 
                   onClick={closeMobileMenu} 
-                  className="block py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors"
+                  className="block py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors text-sm"
                 >
                   Home
                 </Link>
@@ -213,7 +213,7 @@ export default function Navbar() {
                 <Link 
                   href="/about" 
                   onClick={closeMobileMenu} 
-                  className="block py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors"
+                  className="block py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors text-sm"
                 >
                   About Us
                 </Link>
@@ -223,7 +223,7 @@ export default function Navbar() {
               <li>
                 <button
                   onClick={() => toggleMobileDropdown('loans')}
-                  className="w-full flex items-center justify-between py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors"
+                  className="w-full flex items-center justify-between py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors text-sm"
                 >
                   <span>Loans</span>
                   {mobileDropdowns.loans ? (
@@ -285,7 +285,7 @@ export default function Navbar() {
               <li>
                 <button
                   onClick={() => toggleMobileDropdown('calculators')}
-                  className="w-full flex items-center justify-between py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors"
+                  className="w-full flex items-center justify-between py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors text-sm"
                 >
                   <span>Calculators</span>
                   {mobileDropdowns.calculators ? (

@@ -99,12 +99,12 @@ export default function WhyChoose() {
                 >
                 
 
-                    <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6">
                         Why Choose{' '}
                         <span className="bg-gradient-to-r from-[#276ef4] to-green-500 bg-clip-text text-transparent">
                             Samridhya
                         </span>
-                        <span className="text-3xl md:text-4xl">?</span>
+                        <span className="text-xl sm:text-2xl md:text-3xl">?</span>
                     </h2>
 
                     <motion.div
@@ -120,12 +120,12 @@ export default function WhyChoose() {
                         <div className="absolute bottom-4 left-4 w-4 h-4 bg-gradient-to-br from-orange-400/20 to-pink-400/20 rounded-full"></div>
                         <div className="absolute bottom-4 right-4 w-10 h-10 bg-gradient-to-br from-purple-400/20 to-blue-400/20 rounded-full"></div>
 
-                        <p className="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed">
+                        <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
                             <strong className="bg-gradient-to-r from-[#276ef4] to-purple-600 bg-clip-text text-transparent font-bold">
                                 Samridhya
                             </strong> is your one-stop solution for fast, flexible, and secure
                             financing. From personal to GST-based business loans, enjoy a 100% digital, stress-free experience with top lender offers, real-time tracking, and rates starting at just{' '}
-                            <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent font-bold text-xl sm:text-2xl">
+                            <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent font-bold text-lg sm:text-xl">
                                 9.99% p.a.
                             </span>
                         </p>
@@ -161,7 +161,7 @@ export default function WhyChoose() {
                                     </div>
 
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-gray-700 group-hover:text-gray-800 transition-colors duration-300 text-sm sm:text-base md:text-lg leading-relaxed font-medium">
+                                        <p className="text-gray-700 group-hover:text-gray-800 transition-colors duration-300 text-xs sm:text-sm md:text-base leading-relaxed font-medium">
                                             {feature.text}
                                         </p>
 

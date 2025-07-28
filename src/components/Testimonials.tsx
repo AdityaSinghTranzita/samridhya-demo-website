@@ -114,10 +114,10 @@ export default function TestimonialSection() {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-4">
             What Our Users Say
           </h2>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
             Don&apos;t just take our word for it. Here&apos;s what our satisfied customers have to say about their
             experience.
           </p>
@@ -223,7 +223,7 @@ export default function TestimonialSection() {
 
                     {/* Review Text */}
                     <motion.p
-                      className="text-gray-700 leading-relaxed mb-8 italic font-medium text-center"
+                      className="text-gray-700 leading-relaxed mb-8 italic font-medium text-center text-sm sm:text-base"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
@@ -299,7 +299,7 @@ export default function TestimonialSection() {
           viewport={{ once: true }}
           className="mt-20"
         >
-          <p className="text-lg text-gray-600 mb-6">Ready to join thousands of satisfied customers?</p>
+          <p className="text-sm sm:text-base text-gray-600 mb-6">Ready to join thousands of satisfied customers?</p>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

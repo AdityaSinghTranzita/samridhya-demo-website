@@ -157,7 +157,7 @@ export default function PersonalLoan() {
 
             {/* Main Heading */}
             <motion.h1
-              className="text-4xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-6 leading-tight"
+              className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-6 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -171,7 +171,7 @@ export default function PersonalLoan() {
 
             {/* Subtitle */}
             <motion.p
-              className="text-xl sm:text-2xl text-gray-700 max-w-3xl mx-auto mb-8 leading-relaxed"
+              className="text-base sm:text-lg md:text-xl text-gray-700 max-w-3xl mx-auto mb-8 leading-relaxed"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -307,7 +307,7 @@ export default function PersonalLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6 leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6 leading-tight">
               Why Choose Our{' '}
               <span className="bg-gradient-to-r from-[#276EF4] to-cyan-500 bg-clip-text text-transparent">
                 Personal Loans
@@ -338,10 +338,10 @@ export default function PersonalLoan() {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-[#2b004b] text-lg sm:text-xl mb-2 sm:mb-3 group-hover:text-[#276EF4] transition-colors duration-300">
+                      <h3 className="font-bold text-[#2b004b] text-base sm:text-lg mb-2 sm:mb-3 group-hover:text-[#276EF4] transition-colors duration-300">
                         {feature.title}
                       </h3>
-                      <p className="text-gray-600 text-sm sm:text-base leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                      <p className="text-gray-600 text-xs sm:text-sm leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
                         {feature.description}
                       </p>
                     </div>
@@ -363,7 +363,7 @@ export default function PersonalLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6">
               Loan Details
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
@@ -378,7 +378,7 @@ export default function PersonalLoan() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h3 className="text-2xl font-bold text-[#2b004b] mb-6">Loan Amounts & EMI</h3>
+              <h3 className="text-xl sm:text-2xl font-bold text-[#2b004b] mb-6">Loan Amounts & EMI</h3>
               <div className="space-y-4">
                 {loanAmounts.map((loan, idx) => (
                   <div key={idx} className="bg-white rounded-2xl p-4 shadow-sm">

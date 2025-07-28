@@ -38,11 +38,11 @@ export default function BlogWIP() {
               </motion.div>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
               Blog & News
             </h1>
             
-            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
+            <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
               Stay updated with the latest insights, tips, and news from the world of digital lending.
             </p>
 
@@ -64,11 +64,11 @@ export default function BlogWIP() {
                     <Wrench className="w-10 h-10 text-white" />
                   </motion.div>
                   
-                  <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
                     Work in Progress
                   </h2>
                   
-                  <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                  <p className="text-sm sm:text-base text-gray-600 mb-8 max-w-2xl mx-auto">
                     We're crafting amazing content to help you make informed financial decisions. 
                     Our blog section is coming soon with expert insights, tips, and the latest industry updates.
                   </p>

@@ -34,11 +34,11 @@ export default function PrivacyPolicy() {
               </div>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
               Privacy Policy
             </h1>
             
-            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
+            <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
               Your privacy is our priority. Learn how we protect and handle your personal information 
               with the highest standards of security and transparency.
             </p>
@@ -105,35 +105,35 @@ export default function PrivacyPolicy() {
               
               {/* Introduction */}
               <section>
-                <p className="text-gray-700 leading-relaxed mb-6">
+                <p className="text-gray-700 leading-relaxed mb-6 text-sm sm:text-base">
                   Samridhya Innovations Private Limited ("Samridhya"/"Company"/"Samridhya.com") including online website www.samridhya.com and "Mobile App" (Collectively "Application") recognizes the importance of maintaining your privacy. Samridhya is committed to maintain the confidentiality, integrity and security of all information of its users. This Privacy Policy describes how Samridhya collects, stores, handles and transfers certain information received from you via the use of the Application on a need basis. This Privacy Policy applies to the visitors to our Application and our existing and future customers. By visiting and/or using our Application, you are accepting and consenting to the practices described in this Privacy Policy.
                 </p>
-                <p className="text-gray-700 leading-relaxed">
+                <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
                   By using or continuing to use the Application you agree to our use of your information (including sensitive personal information as defined under the Information Technology Act 2000, applicable rules, notification etc.) in accordance with this Privacy Policy, as may be amended from time to time by Samridhya at its sole discretion.
                 </p>
               </section>
 
               {/* Section 1 */}
               <section>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
                   <Shield className="text-blue-500" size={24} />
                   1. Controllers of Personal Information
                 </h2>
-                <p className="text-gray-700 leading-relaxed">
+                <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
                   Your Personal data/information will be collected and stored at servers located in India by Samridhya Innovations Private Limited. Our partners on the ONDC network may also collect certain information separately to facilitate the delivery of service and will be bound by the Privacy policy declared by the respective partner. Samridhya is not responsible for the data collected and managed by the partners on the ONDC network.
                 </p>
               </section>
 
               {/* Section 2 */}
               <section>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
                   <Users className="text-blue-500" size={24} />
                   2. What Personal Information we gather about you
                 </h2>
-                <p className="text-gray-700 leading-relaxed mb-4">
+                <p className="text-gray-700 leading-relaxed mb-4 text-sm sm:text-base">
                   The information we learn from customers helps us personalize and continually improve your experience at the Application. Here are the types of information we gather.
                 </p>
-                <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4 text-sm sm:text-base">
                   <li>We receive and store any information or document you enter or upload on our Application or give us in any other way, in line with the product or service opted by you and as required by us or our business partners, including your personal information like first name, last name, email address, date of birth, residence city etc. You can choose not to provide certain information but then you might not be able to take advantage of many of our services and features. We neither collect nor store your biometric information.</li>
                   <li>We may also have one time access to your camera, microphone, location and mobile device and store such information only for the purpose of onboarding or KYC requirements of us or our Partner with your explicit consent, in accordance with the Digital Lending guidelines issued by RBI and as amended from time to time.</li>
                   <li>We might receive information about you from other sources and add it to our account information.</li>
@@ -142,11 +142,11 @@ export default function PrivacyPolicy() {
 
               {/* Section 3 - App Permissions */}
               <section>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
                   <FileText className="text-blue-500" size={24} />
                   3. App Permissions
                 </h2>
-                <p className="text-gray-700 leading-relaxed mb-6">
+                <p className="text-gray-700 leading-relaxed mb-6 text-sm sm:text-base">
                   "Samridhya.com" application use below mentioned device level permissions as per lending process of NBFCs and bank on ONDC network.
                 </p>
                 

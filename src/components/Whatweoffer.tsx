@@ -129,14 +129,14 @@ export default function WhatWeOffer() {
         >
           
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#2b004b] mb-4 sm:mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-4 sm:mb-6">
             What We{' '}
             <span className="bg-gradient-to-r from-[#276ef4] to-purple-600 bg-clip-text text-transparent">
               Offer
             </span>
           </h2>
 
-          <p className="text-base sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Comprehensive financial solutions tailored to your unique needs,
             with instant approvals and competitive rates.
           </p>
@@ -176,11 +176,11 @@ export default function WhatWeOffer() {
                     </div>
                   </div>
 
-                  <h3 className="text-lg sm:text-2xl font-bold text-[#2b004b] group-hover:text-[#276ef4] transition-colors duration-300 mb-2 sm:mb-3">
+                  <h3 className="text-base sm:text-xl font-bold text-[#2b004b] group-hover:text-[#276ef4] transition-colors duration-300 mb-2 sm:mb-3">
                     {offer.title}
                   </h3>
 
-                  <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base">
+                  <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mb-4 sm:mb-6 leading-relaxed text-xs sm:text-sm">
                     {offer.description}
                   </p>
 
@@ -223,10 +223,10 @@ export default function WhatWeOffer() {
           transition={{ duration: 0.8, delay: 0.4 }}
         >
           <div className="bg-white/60 backdrop-blur-sm border border-white/80 rounded-3xl p-6 sm:p-8 md:p-12 shadow-xl">
-            <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-[#2b004b] mb-3 sm:mb-4">
+            <h3 className="text-base sm:text-xl md:text-2xl font-bold text-[#2b004b] mb-3 sm:mb-4">
               Can't Find What You're Looking For?
             </h3>
-            <p className="text-gray-600 text-base sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto">
+            <p className="text-gray-600 text-sm sm:text-base mb-6 sm:mb-8 max-w-2xl mx-auto">
               Our loan experts are here to help you find the perfect financial solution for your unique needs.
             </p>
             <motion.button

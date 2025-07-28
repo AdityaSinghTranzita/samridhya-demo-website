@@ -83,13 +83,13 @@ export default function KeyFeatures() {
                 >
                     
 
-                    <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6 leading-tight">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6 leading-tight">
                         Key Features of{' '}
                         <span className="bg-gradient-to-r from-[#276EF4] to-cyan-500 bg-clip-text text-transparent">
                             Samridhya
                         </span>
                         <br />
-                        <span className="text-2xl sm:text-3xl md:text-4xl text-gray-600 font-medium">
+                        <span className="text-lg sm:text-xl md:text-2xl text-gray-600 font-medium">
                             Your Trusted Loan App
                         </span>
                     </h2>
@@ -124,10 +124,10 @@ export default function KeyFeatures() {
                                     </div>
 
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="font-bold text-[#2b004b] text-lg sm:text-xl mb-2 sm:mb-3 group-hover:text-[#276EF4] transition-colors duration-300">
+                                        <h3 className="font-bold text-[#2b004b] text-base sm:text-lg mb-2 sm:mb-3 group-hover:text-[#276EF4] transition-colors duration-300">
                                             {feature.title}
                                         </h3>
-                                        <p className="text-gray-600 text-sm sm:text-base leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                                        <p className="text-gray-600 text-xs sm:text-sm leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
                                             {feature.desc}
                                         </p>
 
@@ -159,10 +159,10 @@ export default function KeyFeatures() {
                     transition={{ duration: 0.8, delay: 0.5 }}
                 >
                     <div className="bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-3xl p-6 sm:p-8 md:p-12 text-white text-center shadow-2xl">
-                        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">
+                        <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4">
                             Ready to Experience the Future of Lending?
                         </h3>
-                        <p className="text-white/90 text-base sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto">
+                        <p className="text-white/90 text-sm sm:text-base mb-6 sm:mb-8 max-w-2xl mx-auto">
                             Join thousands of satisfied customers who trust Samridhya for their financial needs.
                         </p>
                         <motion.button

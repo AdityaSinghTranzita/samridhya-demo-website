@@ -245,7 +245,7 @@ export default function CreditScoreChecker() {
               <span className="text-white/90 font-medium">Free Credit Score Checker</span>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
               Check Your Credit Score
               <br />
               <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
@@ -253,7 +253,7 @@ export default function CreditScoreChecker() {
               </span>
             </h1>
             
-            <p className="text-xl text-white/80 max-w-3xl mx-auto mb-8">
+            <p className="text-base sm:text-lg text-white/80 max-w-3xl mx-auto mb-8">
               Get your estimated credit score in minutes. Our advanced algorithm analyzes your financial profile 
               to provide accurate credit insights and personalized recommendations.
             </p>
@@ -468,7 +468,7 @@ export default function CreditScoreChecker() {
               {result ? (
                 <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
                   <div className="text-center mb-8">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Credit Score</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Your Credit Score</h2>
                     
                     <div className="relative w-48 h-48 mx-auto mb-6">
                       <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
