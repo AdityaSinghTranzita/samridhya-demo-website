@@ -118,7 +118,7 @@ export default function WhyChoose() {
                                 Samridhya
                             </strong> is your one-stop solution for fast, flexible, and secure
                             financing. From personal to GST-based business loans, enjoy a 100% digital, stress-free experience with top lender offers, real-time tracking, and rates starting at just{' '}
-                            <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent font-bold text-base sm:text-lg md:text-xl lg:text-2xl">
+                            <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent font-bold text-sm sm:text-base md:text-lg lg:text-xl">
                                 9.99% p.a.
                             </span>
                         </p>
@@ -128,28 +128,28 @@ export default function WhyChoose() {
                 </div>
 
                 {/* Enhanced features grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8 max-w-6xl mx-auto">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
                     {features.map((feature, idx) => {
                         const IconComponent = feature.icon;
                         return (
                             <div
                                 key={idx}
-                                className="group relative bg-white/80 backdrop-blur-sm border border-white/60 hover:border-white/80 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden"
+                                className="group relative bg-white/80 backdrop-blur-sm border border-white/60 hover:border-white/80 p-3 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl md:rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden"
                             >
                                 {/* Background gradient effect */}
-                                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-2xl sm:rounded-3xl`}></div>
+                                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-xl sm:rounded-2xl md:rounded-3xl`}></div>
 
                                 {/* Top accent line */}
-                                <div className={`absolute top-0 left-4 sm:left-6 right-4 sm:right-6 h-1 bg-gradient-to-r ${feature.gradient} rounded-b-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500`}></div>
+                                <div className={`absolute top-0 left-3 sm:left-6 right-3 sm:right-6 h-1 bg-gradient-to-r ${feature.gradient} rounded-b-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500`}></div>
 
-                                <div className="relative z-10 flex items-start space-x-3 sm:space-x-4 md:space-x-5">
+                                <div className="relative z-10 flex flex-col items-center text-center space-y-2 sm:space-y-3 md:space-y-4">
                                     {/* Enhanced icon */}
-                                    <div className={`flex-shrink-0 w-10 sm:w-12 md:w-14 h-10 sm:h-12 md:h-14 bg-gradient-to-br ${feature.gradient} rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 group-hover:rotate-3 transform transition-all duration-500`}>
-                                        <IconComponent className="w-5 sm:w-6 md:w-7 h-5 sm:h-6 md:h-7 text-white" />
+                                    <div className={`flex-shrink-0 w-10 h-10 sm:w-14 md:w-16 sm:h-14 md:h-16 bg-gradient-to-br ${feature.gradient} rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 group-hover:rotate-3 transform transition-all duration-500`}>
+                                        <IconComponent className="w-5 h-5 sm:w-7 md:w-8 sm:h-7 md:h-8 text-white" />
                                     </div>
 
-                                    <div className="flex-1 space-y-1 sm:space-y-2">
-                                        <h3 className="text-gray-900 font-semibold text-sm sm:text-base md:text-lg lg:text-xl">
+                                    <div className="flex-1 space-y-1 sm:space-y-2 md:space-y-3">
+                                        <h3 className="text-gray-900 font-semibold text-xs sm:text-sm md:text-base lg:text-lg">
                                             {feature.title}
                                         </h3>
 
@@ -176,26 +176,21 @@ export default function WhyChoose() {
 
                                         {/* Desktop: Always show description */}
                                         <div className="hidden sm:block">
-                                            <p className="text-gray-700 text-sm md:text-base lg:text-lg leading-relaxed font-medium">
+                                            <p className="text-gray-700 text-xs sm:text-sm md:text-base leading-relaxed font-medium">
                                                 {feature.description}
                                             </p>
                                         </div>
 
                                         {/* Subtle progress indicator */}
-                                        <div className="mt-2 sm:mt-4 flex items-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                                            <div className={`h-1 bg-gradient-to-r ${feature.gradient} rounded-full flex-1 mr-2 sm:mr-3`}></div>
+                                        <div className="mt-1 sm:mt-2 md:mt-3 flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                                            <div className={`h-1 bg-gradient-to-r ${feature.gradient} rounded-full flex-1 mr-2`}></div>
                                             <span className={`text-xs font-semibold ${feature.accent}`}>Verified</span>
                                         </div>
-                                    </div>
-
-                                    {/* Check mark positioned absolutely - hidden on mobile */}
-                                    <div className="hidden sm:flex w-6 sm:w-7 md:w-8 h-6 sm:h-7 md:h-8 bg-green-100 group-hover:bg-green-200 rounded-full items-center justify-center transition-all duration-300 group-hover:scale-110 flex-shrink-0">
-                                        <CheckCircle2 className="w-3 sm:w-4 md:w-5 h-3 sm:h-4 md:h-5 text-green-600" />
                                     </div>
                                 </div>
 
                                 {/* Bottom right accent */}
-                                <div className={`absolute bottom-0 right-0 w-16 sm:w-20 h-16 sm:h-20 bg-gradient-to-tl ${feature.gradient} opacity-5 rounded-tl-full transform scale-0 group-hover:scale-100 transition-transform duration-500`}></div>
+                                <div className={`absolute bottom-0 right-0 w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-gradient-to-tl ${feature.gradient} opacity-5 rounded-tl-full transform scale-0 group-hover:scale-100 transition-transform duration-500`}></div>
                             </div>
                         );
                     })}

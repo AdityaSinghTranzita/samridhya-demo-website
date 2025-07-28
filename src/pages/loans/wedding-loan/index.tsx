@@ -8,6 +8,7 @@ import LoanNavbar from '@/components/LoanNavbar';
 import CTA from '@/components/CTA';
 import EMICalculator from '@/components/EMICalculator';
 import LoanFAQ from '@/components/LoanFAQ';
+import ExploreOtherLoans from '@/components/ExploreOtherLoans';
 import { handleAppDownload } from '@/utils/appStore';
 import Head from 'next/head';
 
@@ -157,7 +158,7 @@ export default function WeddingLoan() {
 
             {/* Main Heading */}
             <motion.h1
-              className="text-4xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-6 leading-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-black text-gray-900 mb-6 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -171,7 +172,7 @@ export default function WeddingLoan() {
 
             {/* Subtitle */}
             <motion.p
-              className="text-xl sm:text-2xl text-gray-700 max-w-3xl mx-auto mb-8 leading-relaxed"
+              className="text-sm sm:text-base md:text-lg lg:text-lg text-gray-700 max-w-3xl mx-auto mb-8 leading-relaxed"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -189,7 +190,7 @@ export default function WeddingLoan() {
             >
               <motion.button
                 onClick={handleAppDownload}
-                className="group relative bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 text-lg"
+                className="group relative bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -199,7 +200,7 @@ export default function WeddingLoan() {
               
               <motion.button
                 onClick={scrollToCalculator}
-                className="group relative bg-pink-400/20 backdrop-blur-sm border border-pink-400/30 text-pink-700 font-bold px-8 py-4 rounded-2xl hover:bg-pink-400/30 transition-all duration-300 text-lg"
+                className="group relative bg-pink-400/20 backdrop-blur-sm border border-pink-400/30 text-pink-700 font-bold px-8 py-4 rounded-2xl hover:bg-pink-400/30 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -209,22 +210,22 @@ export default function WeddingLoan() {
 
             {/* Stats */}
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto"
+              className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <div className="bg-white/80 backdrop-blur-sm border border-pink-200 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-2xl font-bold text-pink-800 mb-1">₹20L</div>
-                <div className="text-pink-600 text-sm">Maximum Loan</div>
+              <div className="bg-white/80 backdrop-blur-sm border border-pink-200 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-pink-800 mb-1">₹20L</div>
+                <div className="text-pink-600 text-xs">Maximum Loan</div>
               </div>
-              <div className="bg-white/80 backdrop-blur-sm border border-pink-200 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-2xl font-bold text-pink-800 mb-1">10 Min</div>
-                <div className="text-pink-600 text-sm">Approval Time</div>
+              <div className="bg-white/80 backdrop-blur-sm border border-pink-200 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-pink-800 mb-1">24 Hrs</div>
+                <div className="text-pink-600 text-xs">Approval Time</div>
               </div>
-              <div className="bg-white/80 backdrop-blur-sm border border-pink-200 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-2xl font-bold text-pink-800 mb-1">11.99%</div>
-                <div className="text-pink-600 text-sm">Interest Rate</div>
+              <div className="col-span-2 md:col-span-1 bg-white/80 backdrop-blur-sm border border-pink-200 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-pink-800 mb-1">10.50%</div>
+                <div className="text-pink-600 text-xs">Interest Rate</div>
               </div>
             </motion.div>
           </div>
@@ -236,41 +237,41 @@ export default function WeddingLoan() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-4xl mx-auto">
               <motion.div
-                className="bg-white/80 backdrop-blur-sm border border-pink-200 rounded-3xl p-6 text-center shadow-lg"
+                className="bg-white/80 backdrop-blur-sm border border-pink-200 rounded-3xl p-4 md:p-6 text-center shadow-lg"
                 whileHover={{ y: -10, scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Heart className="w-8 h-8 text-white" />
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-pink-500 to-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                  <Heart className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <h3 className="text-gray-900 font-bold text-lg mb-2">Dream Wedding</h3>
-                <p className="text-gray-700 text-sm">Complete wedding celebration funding</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Wedding Expenses</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">Covers all wedding costs</p>
               </motion.div>
 
               <motion.div
-                className="bg-white/80 backdrop-blur-sm border border-pink-200 rounded-3xl p-6 text-center shadow-lg"
+                className="bg-white/80 backdrop-blur-sm border border-pink-200 rounded-3xl p-4 md:p-6 text-center shadow-lg"
                 whileHover={{ y: -10, scale: 1.02 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Clock className="w-8 h-8 text-white" />
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-green-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                  <Clock className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <h3 className="text-gray-900 font-bold text-lg mb-2">Quick Disbursal</h3>
-                <p className="text-gray-700 text-sm">Funds in your account within 24 hours</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Quick Disbursal</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">Funds in your account within 24 hours</p>
               </motion.div>
 
               <motion.div
-                className="bg-white/80 backdrop-blur-sm border border-pink-200 rounded-3xl p-6 text-center shadow-lg"
+                className="col-span-2 md:col-span-1 bg-white/80 backdrop-blur-sm border border-pink-200 rounded-3xl p-4 md:p-6 text-center shadow-lg"
                 whileHover={{ y: -10, scale: 1.02 }}
                 transition={{ duration: 0.3, delay: 0.2 }}
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Gift className="w-8 h-8 text-white" />
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                  <Gift className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <h3 className="text-gray-900 font-bold text-lg mb-2">All Expenses</h3>
-                <p className="text-gray-700 text-sm">Venue, catering, decoration & more</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">All Expenses</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">Venue, catering, decoration & more</p>
               </motion.div>
             </div>
           </motion.div>
@@ -307,7 +308,7 @@ export default function WeddingLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6 leading-tight">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#2b004b] mb-6 leading-tight">
               Why Choose Our{' '}
               <span className="bg-gradient-to-r from-[#276EF4] to-cyan-500 bg-clip-text text-transparent">
                 Wedding Loans
@@ -338,10 +339,10 @@ export default function WeddingLoan() {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-[#2b004b] text-lg sm:text-xl mb-2 sm:mb-3 group-hover:text-[#276EF4] transition-colors duration-300">
+                      <h3 className="font-bold text-[#2b004b] text-base sm:text-lg mb-2 sm:mb-3 group-hover:text-[#276EF4] transition-colors duration-300">
                         {feature.title}
                       </h3>
-                      <p className="text-gray-600 text-sm sm:text-base leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                      <p className="text-gray-600 text-xs sm:text-xs leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
                         {feature.description}
                       </p>
                     </div>
@@ -363,7 +364,7 @@ export default function WeddingLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#2b004b] mb-6">
               Loan Details
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
@@ -378,18 +379,18 @@ export default function WeddingLoan() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h3 className="text-2xl font-bold text-[#2b004b] mb-6">Loan Amounts & EMI</h3>
+              <h3 className="text-lg font-bold text-[#2b004b] mb-6">Loan Amounts & EMI</h3>
               <div className="space-y-4">
                 {loanAmounts.map((loan, idx) => (
                   <div key={idx} className="bg-white rounded-2xl p-4 shadow-sm">
                     <div className="flex justify-between items-center">
                       <div>
-                        <div className="text-xl font-bold text-[#276EF4]">{loan.amount}</div>
-                        <div className="text-sm text-gray-600">Tenure: {loan.tenure}</div>
+                        <div className="text-base font-bold text-[#276EF4]">{loan.amount}</div>
+                        <div className="text-xs text-gray-600">Tenure: {loan.tenure}</div>
                       </div>
                       <div className="text-right">
-                        <div className="text-lg font-semibold text-gray-800">EMI from</div>
-                        <div className="text-xl font-bold text-green-600">{loan.emi}</div>
+                        <div className="text-sm font-semibold text-gray-800">EMI from</div>
+                        <div className="text-base font-bold text-green-600">{loan.emi}</div>
                       </div>
                     </div>
                   </div>
@@ -406,7 +407,7 @@ export default function WeddingLoan() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
               >
-                <h3 className="text-2xl font-bold text-[#2b004b] mb-6">Eligibility Criteria</h3>
+                <h3 className="text-lg font-bold text-[#2b004b] mb-6">Eligibility Criteria</h3>
                 <ul className="space-y-3">
                   {eligibilityCriteria.map((criteria, idx) => (
                     <li key={idx} className="flex items-center space-x-3">
@@ -424,7 +425,7 @@ export default function WeddingLoan() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <h3 className="text-2xl font-bold text-[#2b004b] mb-6">Documents Required</h3>
+                <h3 className="text-lg font-bold text-[#2b004b] mb-6">Documents Required</h3>
                 <ul className="space-y-3">
                   {documentsRequired.map((doc, idx) => (
                     <li key={idx} className="flex items-center space-x-3">
@@ -449,7 +450,7 @@ export default function WeddingLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#2b004b] mb-6">
               What Our Couples Say
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
@@ -475,7 +476,7 @@ export default function WeddingLoan() {
                   />
                   <div>
                     <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
-                    <p className="text-sm text-gray-600">{testimonial.role}</p>
+                    <p className="text-xs text-gray-600">{testimonial.role}</p>
                   </div>
                 </div>
                 <div className="flex mb-4">
@@ -500,66 +501,66 @@ export default function WeddingLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#2b004b] mb-6">
               Need Help? Contact Us
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-3 gap-4">
             <motion.div
-              className="text-center p-6"
+              className="text-center p-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-8 h-8 text-blue-600" />
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Phone className="w-6 h-6 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Call Us</h3>
-              <p className="text-gray-600">1800-123-4567</p>
-              <p className="text-sm text-gray-500">24/7 Support</p>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Call Us</h3>
+              <p className="text-xs text-gray-500">24/7 Support</p>
             </motion.div>
 
             <motion.div
-              className="text-center p-6"
+              className="text-center p-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-8 h-8 text-green-600" />
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Mail className="w-6 h-6 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Email Us</h3>
-              <p className="text-gray-600">support@samridhya.com</p>
-              <p className="text-sm text-gray-500">Quick Response</p>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Email Us</h3>
+              <p className="text-xs text-gray-500">Quick Response</p>
             </motion.div>
 
             <motion.div
-              className="text-center p-6"
+              className="text-center p-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-8 h-8 text-purple-600" />
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <MapPin className="w-6 h-6 text-purple-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Visit Us</h3>
-              <p className="text-gray-600">Mumbai, Maharashtra</p>
-              <p className="text-sm text-gray-500">Head Office</p>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Visit Us</h3>
+              <p className="text-xs text-gray-500">Head Office</p>
             </motion.div>
           </div>
         </div>
       </section>
 
+      {/* Explore Other Loans Section */}
+      <ExploreOtherLoans currentLoan="wedding-loan" />
+
       {/* FAQ Section */}
       <LoanFAQ loanType="wedding" />
+      </div>
 
       <CTA />
-      </div>
     </div>
     </>
   );

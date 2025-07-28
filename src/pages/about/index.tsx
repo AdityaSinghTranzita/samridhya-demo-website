@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { CheckCircle2, Shield, Users, TrendingUp, Star, Phone, Mail, MapPin, Award, Clock, Zap, Globe } from 'lucide-react';
+import { CheckCircle2, Shield, Users, TrendingUp, Star, Phone, Mail, MapPin, Award, Clock, Zap, Globe, Percent, Target, CreditCard, FileText, BarChart3, Building2 } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import LoanNavbar from '@/components/LoanNavbar';
@@ -62,40 +62,52 @@ const useCountUp = (end: number, duration: number = 2000, start: number = 0) => 
 
 const features = [
   {
-    title: 'ONDC Registered',
-    description: 'Fully compliant with Open Network for Digital Commerce standards',
-    icon: Shield,
-    gradient: 'from-blue-500 to-cyan-500'
-  },
-  {
-    title: 'RBI Compliant',
-    description: 'Strictly follows all Reserve Bank of India regulations and guidelines',
-    icon: Award,
-    gradient: 'from-green-500 to-emerald-500'
-  },
-  {
-    title: '100% Digital Process',
-    description: 'Complete paperless experience from application to disbursal',
-    icon: Zap,
-    gradient: 'from-purple-500 to-pink-500'
-  },
-  {
-    title: 'Instant Approval',
-    description: 'Get approved in minutes with our AI-powered credit assessment',
+    text: 'Quick Online Loan App – Apply in minutes, get instant approval',
     icon: Clock,
-    gradient: 'from-orange-500 to-red-500'
+    gradient: 'from-blue-500 to-cyan-500',
+    accent: 'text-blue-600'
   },
   {
-    title: 'Multiple Lenders',
-    description: 'Compare offers from top banks and NBFCs in one platform',
-    icon: Users,
-    gradient: 'from-indigo-500 to-blue-500'
+    text: 'Affordable Interest Rates – Starting at just 9.99% p.a.',
+    icon: Percent,
+    gradient: 'from-green-500 to-emerald-500',
+    accent: 'text-green-600'
   },
   {
-    title: 'Secure & Safe',
-    description: 'Bank-grade security with end-to-end encryption for your data',
-    icon: Shield,
-    gradient: 'from-teal-500 to-green-500'
+    text: 'Custom Offers – Tailored rates based on your financial profile',
+    icon: Target,
+    gradient: 'from-purple-500 to-violet-500',
+    accent: 'text-purple-600'
+  },
+  {
+    text: 'Flexible EMI Options – Choose repayment plans that work for you',
+    icon: CreditCard,
+    gradient: 'from-orange-500 to-amber-500',
+    accent: 'text-orange-600'
+  },
+  {
+    text: '100% Paperless Process – No physical documents needed',
+    icon: FileText,
+    gradient: 'from-teal-500 to-cyan-500',
+    accent: 'text-teal-600'
+  },
+  {
+    text: 'Real-Time Loan Tracking – Stay updated every step of the way',
+    icon: BarChart3,
+    gradient: 'from-pink-500 to-rose-500',
+    accent: 'text-pink-600'
+  },
+  {
+    text: 'Multiple Lender Offers – Compare loans from top banks & NBFCs',
+    icon: Building2,
+    gradient: 'from-indigo-500 to-blue-500',
+    accent: 'text-indigo-600'
+  },
+  {
+    text: 'Business Loans for MSMEs & Self-Employed – Designed for India\'s growth engine',
+    icon: TrendingUp,
+    gradient: 'from-red-500 to-pink-500',
+    accent: 'text-red-600'
   }
 ];
 
@@ -188,7 +200,7 @@ export default function About() {
 
             {/* Main Heading */}
             <motion.h1
-              className="text-4xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-4 sm:mb-6 leading-tight"
+              className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-4 sm:mb-6 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -202,7 +214,7 @@ export default function About() {
 
             {/* Subtitle */}
             <motion.p
-              className="text-xl sm:text-2xl text-gray-700 max-w-4xl mx-auto mb-6 sm:mb-8 leading-relaxed"
+              className="text-base sm:text-lg md:text-xl text-gray-700 max-w-4xl mx-auto mb-6 sm:mb-8 leading-relaxed"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -259,7 +271,7 @@ export default function About() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6">
               Our Mission & Vision
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
@@ -273,8 +285,8 @@ export default function About() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h3 className="text-3xl font-bold text-[#2b004b] mb-6">Our Mission</h3>
-              <p className="text-gray-700 text-lg leading-relaxed mb-6">
+              <h3 className="text-xl sm:text-2xl font-bold text-[#2b004b] mb-6">Our Mission</h3>
+              <p className="text-gray-700 text-sm sm:text-base leading-relaxed mb-6">
                 To democratize access to credit by making borrowing simple, transparent, and accessible to every Indian. 
                 We believe financial inclusion is the key to economic growth and prosperity.
               </p>
@@ -301,8 +313,8 @@ export default function About() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <h3 className="text-3xl font-bold text-[#2b004b] mb-6">Our Vision</h3>
-              <p className="text-gray-700 text-lg leading-relaxed mb-6">
+              <h3 className="text-xl sm:text-2xl font-bold text-[#2b004b] mb-6">Our Vision</h3>
+              <p className="text-gray-700 text-sm sm:text-base leading-relaxed mb-6">
                 To become India's most trusted digital lending platform, empowering millions of individuals 
                 and businesses with smart, flexible, and affordable financing solutions.
               </p>
@@ -338,7 +350,7 @@ export default function About() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6 leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6 leading-tight">
               Why Choose{' '}
               <span className="bg-gradient-to-r from-[#276EF4] to-cyan-500 bg-clip-text text-transparent">
                 Samridhya
@@ -347,40 +359,95 @@ export default function About() {
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto">
             {features.map((feature, idx) => {
               const IconComponent = feature.icon;
               return (
                 <motion.div
                   key={idx}
-                  className="group relative bg-white/95 rounded-3xl p-5 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 text-left border border-blue-200/50 backdrop-blur-sm hover:-translate-y-2"
+                  className="group relative bg-white/80 backdrop-blur-sm border border-white/60 hover:border-white/80 p-4 sm:p-6 md:p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: idx * 0.1 }}
+                  viewport={{ once: true }}
                   whileHover={{ scale: 1.02 }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#276EF4]/10 to-cyan-400/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <div className={`absolute top-0 left-8 right-8 h-1 bg-gradient-to-r ${feature.gradient} rounded-b-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500`}></div>
+                  {/* Background gradient effect */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-3xl`}></div>
+
+                  {/* Top accent line */}
+                  <div className={`absolute top-0 left-6 right-6 h-1 bg-gradient-to-r ${feature.gradient} rounded-b-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500`}></div>
 
                   <div className="relative z-10 flex items-start space-x-5">
-                    <div className={`flex-shrink-0 w-14 h-14 bg-gradient-to-br ${feature.gradient} rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-500`}>
-                      <IconComponent className="text-white w-7 h-7" />
+                    {/* Enhanced icon */}
+                    <div className={`flex-shrink-0 w-14 h-14 bg-gradient-to-br ${feature.gradient} rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 group-hover:rotate-3 transform transition-all duration-500`}>
+                      <IconComponent className="w-7 h-7 text-white" />
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-[#2b004b] text-lg sm:text-xl mb-2 sm:mb-3 group-hover:text-[#276EF4] transition-colors duration-300">
-                        {feature.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm sm:text-base leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
-                        {feature.description}
+                      <p className="text-gray-700 group-hover:text-gray-800 transition-colors duration-300 text-xs sm:text-sm md:text-base leading-relaxed font-medium">
+                        {feature.text}
                       </p>
+
+                      {/* Subtle progress indicator */}
+                      <div className="mt-4 flex items-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <div className={`h-1 bg-gradient-to-r ${feature.gradient} rounded-full flex-1 mr-3`}></div>
+                        <span className={`text-xs font-semibold ${feature.accent}`}>Verified</span>
+                      </div>
                     </div>
+
+                    {/* Check mark positioned absolutely */}
+                    <div className="hidden sm:flex hidden md:flex  w-8 h-8 bg-green-100 group-hover:bg-green-200 rounded-full items-center justify-center transition-all duration-300 group-hover:scale-110">
+                      <CheckCircle2 className="w-5 h-5 text-green-600" />
+                    </div>
+
                   </div>
+
+                  {/* Bottom right accent */}
+                  <div className={`absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl ${feature.gradient} opacity-5 rounded-tl-full transform scale-0 group-hover:scale-100 transition-transform duration-500`}></div>
                 </motion.div>
               );
             })}
           </div>
+
+          {/* Bottom statistics section */}
+          <motion.div
+            className="mt-12 sm:mt-20"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <div className="bg-gradient-to-r from-[#276ef4] to-green-500 rounded-3xl p-6 sm:p-8 md:p-12 text-white shadow-2xl">
+              <div className="text-center mb-6 sm:mb-8">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">
+                  Trusted by Thousands of Happy Customers
+                </h3>
+                <p className="text-white/90 text-lg">
+                  Join the growing community of satisfied borrowers who chose Samridhya
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center">
+                <div>
+                  <div className="text-3xl md:text-4xl font-bold mb-2">50K+</div>
+                  <div className="text-white/80">Loans Disbursed</div>
+                </div>
+                <div>
+                  <div className="text-3xl md:text-4xl font-bold mb-2">₹500Cr+</div>
+                  <div className="text-white/80">Amount Funded</div>
+                </div>
+                <div>
+                  <div className="text-3xl md:text-4xl font-bold mb-2">4.8★</div>
+                  <div className="text-white/80">Customer Rating</div>
+                </div>
+                <div>
+                  <div className="text-3xl md:text-4xl font-bold mb-2">10 Min</div>
+                  <div className="text-white/80">Avg. Approval Time</div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -394,7 +461,7 @@ export default function About() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6">
               Meet Our Leadership
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
@@ -418,9 +485,9 @@ export default function About() {
                   className="rounded-full mx-auto mb-4"
                   unoptimized
                 />
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">{member.name}</h3>
-                <p className="text-blue-600 font-medium mb-3">{member.role}</p>
-                <p className="text-gray-600 text-sm leading-relaxed">{member.description}</p>
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">{member.name}</h3>
+                <p className="text-blue-600 font-medium mb-3 text-sm sm:text-base">{member.role}</p>
+                <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{member.description}</p>
               </motion.div>
             ))}
           </div>
@@ -437,7 +504,7 @@ export default function About() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6">
               What Our Customers Say
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
@@ -489,56 +556,56 @@ export default function About() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6">
               Get in Touch
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             <motion.div
-              className="text-center p-6"
+              className="text-center p-4 sm:p-6"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-8 h-8 text-blue-600" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Call Us</h3>
-              <p className="text-gray-600">1800-123-4567</p>
-              <p className="text-sm text-gray-500">24/7 Support</p>
+              <h3 className="text-sm sm:text-lg md:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">Call Us</h3>
+              <p className="text-xs sm:text-sm md:text-base text-gray-600">1800-123-4567</p>
+              <p className="text-xs text-gray-500">24/7 Support</p>
             </motion.div>
 
             <motion.div
-              className="text-center p-6"
+              className="text-center p-4 sm:p-6"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-8 h-8 text-green-600" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Mail className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Email Us</h3>
-              <p className="text-gray-600">support@samridhya.com</p>
-              <p className="text-sm text-gray-500">Quick Response</p>
+              <h3 className="text-sm sm:text-lg md:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">Email Us</h3>
+              <p className="text-xs sm:text-sm md:text-base text-gray-600">support@samridhya.com</p>
+              <p className="text-xs text-gray-500">Quick Response</p>
             </motion.div>
 
             <motion.div
-              className="text-center p-6"
+              className="text-center p-4 sm:p-6"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-8 h-8 text-purple-600" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Visit Us</h3>
-              <p className="text-gray-600">Mumbai, Maharashtra</p>
-              <p className="text-sm text-gray-500">Head Office</p>
+              <h3 className="text-sm sm:text-lg md:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">Visit Us</h3>
+              <p className="text-xs sm:text-sm md:text-base text-gray-600">Mumbai, Maharashtra</p>
+              <p className="text-xs text-gray-500">Head Office</p>
             </motion.div>
           </div>
         </div>

@@ -6,8 +6,10 @@
     "dev": "next dev --turbopack",
     "dev:https": "NODE_ENV=development node server.js",
     "build": "next build",
+    "build:firebase": "next build && cp public/404.html out/404.html",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "./deploy.sh"
   },
   "dependencies": {
     "@cloudflare/next-on-pages": "^1.13.13",

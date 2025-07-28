@@ -8,6 +8,7 @@ import LoanNavbar from '@/components/LoanNavbar';
 import CTA from '@/components/CTA';
 import EMICalculator from '@/components/EMICalculator';
 import LoanFAQ from '@/components/LoanFAQ';
+import ExploreOtherLoans from '@/components/ExploreOtherLoans';
 import { handleAppDownload } from '@/utils/appStore';
 import Head from 'next/head';
 
@@ -157,7 +158,7 @@ export default function BusinessLoan() {
 
             {/* Main Heading */}
             <motion.h1
-              className="text-4xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-6 leading-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-black text-gray-900 mb-6 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -171,7 +172,7 @@ export default function BusinessLoan() {
 
             {/* Subtitle */}
             <motion.p
-              className="text-xl sm:text-2xl text-gray-700 max-w-3xl mx-auto mb-8 leading-relaxed"
+              className="text-sm sm:text-base md:text-lg lg:text-lg text-gray-700 max-w-3xl mx-auto mb-8 leading-relaxed"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -189,7 +190,7 @@ export default function BusinessLoan() {
             >
               <motion.button
                 onClick={handleAppDownload}
-                className="group relative bg-gradient-to-r from-emerald-500 to-green-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300 text-lg"
+                className="group relative bg-gradient-to-r from-emerald-500 to-green-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -199,7 +200,7 @@ export default function BusinessLoan() {
               
               <motion.button
                 onClick={scrollToCalculator}
-                className="group relative bg-emerald-400/20 backdrop-blur-sm border border-emerald-400/30 text-emerald-700 font-bold px-8 py-4 rounded-2xl hover:bg-emerald-400/30 transition-all duration-300 text-lg"
+                className="group relative bg-emerald-400/20 backdrop-blur-sm border border-emerald-400/30 text-emerald-700 font-bold px-8 py-4 rounded-2xl hover:bg-emerald-400/30 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -209,22 +210,22 @@ export default function BusinessLoan() {
 
             {/* Stats */}
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto"
+              className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <div className="bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-2xl font-bold text-emerald-700 mb-1">₹2Cr</div>
-                <div className="text-emerald-500 text-sm">Maximum Loan</div>
+              <div className="bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-emerald-700 mb-1">₹2Cr</div>
+                <div className="text-emerald-500 text-xs">Maximum Loan</div>
               </div>
-              <div className="bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-2xl font-bold text-emerald-700 mb-1">24 Hrs</div>
-                <div className="text-emerald-500 text-sm">Approval Time</div>
+              <div className="bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-emerald-700 mb-1">24 Hrs</div>
+                <div className="text-emerald-500 text-xs">Approval Time</div>
               </div>
-              <div className="bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-2xl font-bold text-emerald-700 mb-1">12.99%</div>
-                <div className="text-emerald-500 text-sm">Interest Rate</div>
+              <div className="col-span-2 md:col-span-1 bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-emerald-700 mb-1">12.99%</div>
+                <div className="text-emerald-500 text-xs">Interest Rate</div>
               </div>
             </motion.div>
           </div>
@@ -236,7 +237,7 @@ export default function BusinessLoan() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto px-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto px-4">
               <motion.div
                 className="bg-white/80 backdrop-blur-sm border border-emerald-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center shadow-lg"
                 whileHover={{ y: -5, scale: 1.02 }}
@@ -245,32 +246,32 @@ export default function BusinessLoan() {
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                   <Building2 className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
-                <h3 className="text-gray-900 font-bold text-base sm:text-lg mb-2">Business Focused</h3>
-                <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">Tailored for business growth and expansion</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Business Focused</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">Tailored for business growth and expansion</p>
               </motion.div>
 
               <motion.div
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center"
+                className="bg-white/80 backdrop-blur-sm border border-emerald-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center shadow-lg"
                 whileHover={{ y: -5, scale: 1.02 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
               >
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                   <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
-                <h3 className="text-white font-bold text-base sm:text-lg mb-2">Quick Disbursal</h3>
-                <p className="text-white/70 text-xs sm:text-sm leading-relaxed">Funds in your business account within 48 hours</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Quick Disbursal</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">Funds in your business account within 48 hours</p>
               </motion.div>
 
               <motion.div
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center sm:col-span-2 lg:col-span-1"
+                className="col-span-2 md:col-span-1 bg-white/80 backdrop-blur-sm border border-emerald-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center shadow-lg"
                 whileHover={{ y: -5, scale: 1.02 }}
                 transition={{ duration: 0.3, delay: 0.2 }}
               >
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-green-400 to-teal-500 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                   <Briefcase className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
-                <h3 className="text-white font-bold text-base sm:text-lg mb-2">Business Docs</h3>
-                <p className="text-white/70 text-xs sm:text-sm leading-relaxed">Business PAN, GST & financial statements</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Business Docs</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">Business PAN, GST & financial statements</p>
               </motion.div>
             </div>
           </motion.div>
@@ -292,7 +293,7 @@ export default function BusinessLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6 leading-tight">
+            <h2 className="text-lg md:text-xl font-bold text-[#2b004b] mb-6 leading-tight">
               Why Choose Our{' '}
               <span className="bg-gradient-to-r from-[#276EF4] to-cyan-500 bg-clip-text text-transparent">
                 Business Loans
@@ -323,10 +324,10 @@ export default function BusinessLoan() {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-[#2b004b] text-base sm:text-lg lg:text-xl mb-1 sm:mb-2 lg:mb-3 group-hover:text-[#276EF4] transition-colors duration-300">
+                      <h3 className="font-bold text-[#2b004b] text-xs sm:text-base lg:text-lg mb-1 sm:mb-2 lg:mb-3 group-hover:text-[#276EF4] transition-colors duration-300">
                         {feature.title}
                       </h3>
-                      <p className="text-gray-600 text-xs sm:text-sm lg:text-base leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                      <p className="text-gray-600 text-xs sm:text-xs lg:text-sm leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
                         {feature.description}
                       </p>
                     </div>
@@ -363,7 +364,7 @@ export default function BusinessLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-lg md:text-xl font-bold text-[#2b004b] mb-6">
               Business Loan Details
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
@@ -378,18 +379,18 @@ export default function BusinessLoan() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h3 className="text-xl sm:text-2xl font-bold text-[#2b004b] mb-4 sm:mb-6">Business Loan Amounts & EMI</h3>
+              <h3 className="text-base sm:text-lg font-bold text-[#2b004b] mb-4 sm:mb-6">Business Loan Amounts & EMI</h3>
               <div className="space-y-3 sm:space-y-4">
                 {loanAmounts.map((loan, idx) => (
                   <div key={idx} className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-sm">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
                       <div>
-                        <div className="text-lg sm:text-xl font-bold text-[#276EF4]">{loan.amount}</div>
-                        <div className="text-xs sm:text-sm text-gray-600">Tenure: {loan.tenure}</div>
+                        <div className="text-xs sm:text-base font-bold text-[#276EF4]">{loan.amount}</div>
+                        <div className="text-xs text-gray-600">Tenure: {loan.tenure}</div>
                       </div>
                       <div className="text-left sm:text-right">
-                        <div className="text-sm sm:text-lg font-semibold text-gray-800">EMI from</div>
-                        <div className="text-lg sm:text-xl font-bold text-green-600">{loan.emi}</div>
+                        <div className="text-xs sm:text-sm font-semibold text-gray-800">EMI from</div>
+                        <div className="text-xs sm:text-base font-bold text-green-600">{loan.emi}</div>
                       </div>
                     </div>
                   </div>
@@ -406,12 +407,12 @@ export default function BusinessLoan() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
               >
-                <h3 className="text-xl sm:text-2xl font-bold text-[#2b004b] mb-4 sm:mb-6">Business Eligibility Criteria</h3>
+                <h3 className="text-base sm:text-lg font-bold text-[#2b004b] mb-4 sm:mb-6">Business Eligibility Criteria</h3>
                 <ul className="space-y-2 sm:space-y-3">
                   {eligibilityCriteria.map((criteria, idx) => (
                     <li key={idx} className="flex items-start sm:items-center space-x-2 sm:space-x-3">
                       <CheckCircle2 className="text-green-500 w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 mt-0.5 sm:mt-0" />
-                      <span className="text-sm sm:text-base text-gray-700 leading-relaxed">{criteria}</span>
+                      <span className="text-xs sm:text-sm text-gray-700 leading-relaxed">{criteria}</span>
                     </li>
                   ))}
                 </ul>
@@ -424,12 +425,12 @@ export default function BusinessLoan() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <h3 className="text-xl sm:text-2xl font-bold text-[#2b004b] mb-4 sm:mb-6">Business Documents Required</h3>
+                <h3 className="text-base sm:text-lg font-bold text-[#2b004b] mb-4 sm:mb-6">Business Documents Required</h3>
                 <ul className="space-y-2 sm:space-y-3">
                   {documentsRequired.map((doc, idx) => (
                     <li key={idx} className="flex items-start sm:items-center space-x-2 sm:space-x-3">
                       <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-purple-500 rounded-full flex-shrink-0 mt-1.5 sm:mt-0"></div>
-                      <span className="text-sm sm:text-base text-gray-700 leading-relaxed">{doc}</span>
+                      <span className="text-xs sm:text-sm text-gray-700 leading-relaxed">{doc}</span>
                     </li>
                   ))}
                 </ul>
@@ -449,7 +450,7 @@ export default function BusinessLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-lg md:text-xl font-bold text-[#2b004b] mb-6">
               What Our Business Customers Say
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
@@ -474,8 +475,8 @@ export default function BusinessLoan() {
                     className="rounded-full mr-3 sm:mr-4 w-10 h-10 sm:w-12 sm:h-12"
                   />
                   <div>
-                    <h4 className="font-semibold text-gray-800 text-sm sm:text-base">{testimonial.name}</h4>
-                    <p className="text-xs sm:text-sm text-gray-600">{testimonial.role}</p>
+                    <h4 className="font-semibold text-gray-800 text-xs sm:text-base">{testimonial.name}</h4>
+                    <p className="text-xs text-gray-600">{testimonial.role}</p>
                   </div>
                 </div>
                 <div className="flex mb-3 sm:mb-4">
@@ -483,7 +484,7 @@ export default function BusinessLoan() {
                     <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
-                <p className="text-gray-700 italic text-xs sm:text-sm leading-relaxed">"{testimonial.content}"</p>
+                <p className="text-gray-700 italic text-xs leading-relaxed">"{testimonial.content}"</p>
               </motion.div>
             ))}
           </div>
@@ -500,66 +501,69 @@ export default function BusinessLoan() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2b004b] mb-6">
+            <h2 className="text-lg md:text-xl font-bold text-[#2b004b] mb-6">
               Need Business Loan Help? Contact Us
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-4">
+          <div className="grid grid-cols-3 gap-4 px-4">
             <motion.div
-              className="text-center p-4 sm:p-6"
+              className="text-center p-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Phone className="w-6 h-6 text-blue-600" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">Call Us</h3>
-              <p className="text-sm sm:text-base text-gray-600">1800-123-4567</p>
-              <p className="text-xs sm:text-sm text-gray-500">Business Support</p>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Call Us</h3>
+              <p className="text-xs text-gray-600">1800-123-4567</p>
+              <p className="text-xs text-gray-500">Business Support</p>
             </motion.div>
 
             <motion.div
-              className="text-center p-4 sm:p-6"
+              className="text-center p-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <Mail className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Mail className="w-6 h-6 text-green-600" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">Email Us</h3>
-              <p className="text-sm sm:text-base text-gray-600">business@samridhya.com</p>
-              <p className="text-xs sm:text-sm text-gray-500">Quick Response</p>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Email Us</h3>
+              <p className="text-xs text-gray-600">business@samridhya.com</p>
+              <p className="text-xs text-gray-500">Quick Response</p>
             </motion.div>
 
             <motion.div
-              className="text-center p-4 sm:p-6 sm:col-span-2 lg:col-span-1"
+              className="text-center p-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600" />
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <MapPin className="w-6 h-6 text-purple-600" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">Visit Us</h3>
-              <p className="text-sm sm:text-base text-gray-600">Mumbai, Maharashtra</p>
-              <p className="text-xs sm:text-sm text-gray-500">Business Center</p>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Visit Us</h3>
+              <p className="text-xs text-gray-600">Mumbai, Maharashtra</p>
+              <p className="text-xs text-gray-500">Business Center</p>
             </motion.div>
           </div>
         </div>
       </section>
 
+      {/* Explore Other Loans Section */}
+      <ExploreOtherLoans currentLoan="business-loan" />
+
       {/* FAQ Section */}
       <LoanFAQ loanType="business" />
+      </div>
 
       <CTA />
-      </div>
     </div>
     </>
   );

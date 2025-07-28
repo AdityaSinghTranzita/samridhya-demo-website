@@ -36,10 +36,10 @@ export default function LoanCalculatorPage() {
               <Calculator className="w-6 h-6 text-white" />
               <span className="text-white font-semibold">EMI Calculator</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">
               Smart EMI Calculator
             </h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg text-blue-100 max-w-3xl mx-auto leading-relaxed">
               Calculate your monthly EMI payments with our advanced calculator. Get instant results with detailed breakdowns to plan your loan repayment effectively.
             </p>
           </motion.div>
@@ -75,10 +75,10 @@ export default function LoanCalculatorPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
               Why Choose Our EMI Calculator?
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto">
               Experience the best EMI calculation tools with advanced features and accurate results
             </p>
           </motion.div>
@@ -102,24 +102,24 @@ export default function LoanCalculatorPage() {
               <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <TrendingUp className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Detailed Breakdown</h3>
-              <p className="text-gray-600">See total interest, principal, and complete payment schedule</p>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">Detailed Breakdown</h3>
+              <p className="text-gray-600 text-sm sm:text-base">See total interest, principal, and complete payment schedule</p>
             </div>
 
             <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
               <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <Shield className="w-8 h-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Secure & Private</h3>
-              <p className="text-gray-600">Your data stays private - no information is stored</p>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">Secure & Private</h3>
+              <p className="text-gray-600 text-sm sm:text-base">Your data stays private - no information is stored</p>
             </div>
 
             <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
               <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <Clock className="w-8 h-8 text-orange-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Multiple Tenures</h3>
-              <p className="text-gray-600">Compare different loan tenures to find the best option</p>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">Multiple Tenures</h3>
+              <p className="text-gray-600 text-sm sm:text-base">Compare different loan tenures to find the best option</p>
             </div>
           </motion.div>
         </div>
@@ -135,10 +135,10 @@ export default function LoanCalculatorPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
               Understanding EMI Calculation
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto">
               Learn how EMI is calculated and what factors affect your monthly payments
             </p>
           </motion.div>
@@ -152,11 +152,11 @@ export default function LoanCalculatorPage() {
           >
             {/* Card 1: What is EMI? */}
             <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-3">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 flex items-center gap-3">
                 <DollarSign className="w-6 h-6 text-blue-600" />
                 What is EMI?
               </h3>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
                 EMI (Equated Monthly Installment) is the fixed amount you pay each month towards your loan. 
                 It includes both the principal amount and the interest, calculated in a way that the total 
                 amount is paid off by the end of the loan tenure.
@@ -165,11 +165,11 @@ export default function LoanCalculatorPage() {
 
             {/* Card 2: Factors Affecting EMI */}
             <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-3">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 flex items-center gap-3">
                 <TrendingUp className="w-6 h-6 text-purple-600" />
                 Factors Affecting EMI
               </h3>
-              <ul className="text-gray-700 space-y-3">
+              <ul className="text-gray-700 space-y-3 text-sm sm:text-base">
                 <li className="flex items-start gap-3">
                   <span className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></span>
                   <span><strong>Loan Amount:</strong> Higher principal means higher EMI</span>
@@ -191,11 +191,11 @@ export default function LoanCalculatorPage() {
 
             {/* Card 3: EMI Formula */}
             <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-3">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 flex items-center gap-3">
                 <Calculator className="w-6 h-6 text-green-600" />
                 EMI Formula
               </h3>
-              <div className="text-gray-700 leading-relaxed">
+              <div className="text-gray-700 leading-relaxed text-sm sm:text-base">
                 <p className="mb-3 font-mono text-sm bg-white/50 rounded-lg p-3">
                   EMI = P × r × (1 + r)^n / ((1 + r)^n - 1)
                 </p>

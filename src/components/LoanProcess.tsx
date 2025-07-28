@@ -54,7 +54,7 @@ export default function LoanProcess() {
     <section id="process" className="bg-white py-10 sm:py-16 relative overflow-hidden">
       <div className="max-w-2xl mx-auto px-2 sm:px-4 md:px-6">
         <div className="mb-8 sm:mb-12 flex flex-col items-center w-full">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#276ef4] to-purple-600 text-center mb-2 sm:mb-4">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#276ef4] to-purple-600 text-center mb-2 sm:mb-4">
             How to Apply
           </h2>
           <div className="w-16 h-1 bg-gradient-to-r from-[#276ef4] to-purple-600 rounded-full mx-auto mb-4 sm:mb-6" />
@@ -67,12 +67,12 @@ export default function LoanProcess() {
             transition={{ duration: 0.4 }}
           >
             <motion.button
-              className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl font-semibold text-base sm:text-lg transition-all duration-200 focus:outline-none group ${open === 'business' ? 'bg-gradient-to-r from-blue-100/80 to-blue-50/80' : 'bg-white/80 hover:bg-blue-50/60'}`}
+              className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl font-semibold text-xs sm:text-base transition-all duration-200 focus:outline-none group ${open === 'business' ? 'bg-gradient-to-r from-blue-100/80 to-blue-50/80' : 'bg-white/80 hover:bg-blue-50/60'}`}
               onClick={() => setOpen(open === 'business' ? null : 'business')}
               aria-expanded={open === 'business'}
               whileTap={{ scale: 0.98 }}
             >
-              <span className={`text-blue-700 font-semibold text-base sm:text-lg transition-colors duration-200 ${open === 'business' ? 'drop-shadow' : ''}`}>Business Loan Process</span>
+              <span className={`text-blue-700 font-semibold text-xs sm:text-base transition-colors duration-200 ${open === 'business' ? 'drop-shadow' : ''}`}>Business Loan Process</span>
               <Chevron open={open === 'business'} color="#2563eb" />
             </motion.button>
             <AnimatePresence initial={false}>
@@ -101,7 +101,7 @@ export default function LoanProcess() {
                         <span className="w-7 h-7 flex-shrink-0 rounded-full bg-gradient-to-br from-blue-600 to-blue-400 text-white flex items-center justify-center font-bold shadow text-sm">
                           {index + 1}
                         </span>
-                        <span className="text-gray-800 leading-snug text-sm font-medium">{step}</span>
+                        <span className="text-gray-800 leading-snug text-xs font-medium">{step}</span>
                       </motion.li>
                     ))}
                     {/* Animated line */}
@@ -125,12 +125,12 @@ export default function LoanProcess() {
             transition={{ duration: 0.4 }}
           >
             <motion.button
-              className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl font-semibold text-base sm:text-lg transition-all duration-200 focus:outline-none group ${open === 'personal' ? 'bg-gradient-to-r from-purple-100/80 to-purple-50/80' : 'bg-white/80 hover:bg-purple-50/60'}`}
+              className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl font-semibold text-xs sm:text-base transition-all duration-200 focus:outline-none group ${open === 'personal' ? 'bg-gradient-to-r from-purple-100/80 to-purple-50/80' : 'bg-white/80 hover:bg-purple-50/60'}`}
               onClick={() => setOpen(open === 'personal' ? null : 'personal')}
               aria-expanded={open === 'personal'}
               whileTap={{ scale: 0.98 }}
             >
-              <span className={`text-purple-700 font-semibold text-base sm:text-lg transition-colors duration-200 ${open === 'personal' ? 'drop-shadow' : ''}`}>Personal Loan Process</span>
+              <span className={`text-purple-700 font-semibold text-xs sm:text-base transition-colors duration-200 ${open === 'personal' ? 'drop-shadow' : ''}`}>Personal Loan Process</span>
               <Chevron open={open === 'personal'} color="#9333ea" />
             </motion.button>
             <AnimatePresence initial={false}>
@@ -159,7 +159,7 @@ export default function LoanProcess() {
                         <span className="w-7 h-7 flex-shrink-0 rounded-full bg-gradient-to-br from-purple-600 to-purple-400 text-white flex items-center justify-center font-bold shadow text-sm">
                           {index + 1}
                         </span>
-                        <span className="text-gray-800 leading-snug text-sm font-medium">{step}</span>
+                        <span className="text-gray-800 leading-snug text-xs font-medium">{step}</span>
                       </motion.li>
                     ))}
                     {/* Animated line */}

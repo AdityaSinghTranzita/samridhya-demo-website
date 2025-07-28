@@ -11,8 +11,9 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
-  trailingSlash: true,
+  trailingSlash: false,
   skipTrailingSlashRedirect: true,
+  distDir: 'out',
 };
 
 module.exports = nextConfig;

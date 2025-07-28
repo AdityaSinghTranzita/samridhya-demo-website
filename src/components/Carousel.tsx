@@ -108,7 +108,7 @@ export default function Carousel() {
             {/* Right: Text */}
             <div className="w-full md:w-1/2 text-center md:text-left space-y-4 sm:space-y-5 z-10">
               <motion.h1
-                  className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-[#2b004b]"
+                  className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b]"
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3, duration: 0.6 }}
@@ -116,7 +116,7 @@ export default function Carousel() {
                 {slides[current].title}
               </motion.h1>
               <motion.p
-                  className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-700"
+                  className="text-xs xs:text-sm sm:text-base md:text-lg text-gray-700"
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.5, duration: 0.6 }}

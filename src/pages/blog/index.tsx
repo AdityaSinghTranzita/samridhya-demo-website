@@ -38,11 +38,11 @@ export default function BlogWIP() {
               </motion.div>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-6 leading-tight">
               Blog & News
             </h1>
             
-            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
               Stay updated with the latest insights, tips, and news from the world of digital lending.
             </p>
 
@@ -64,11 +64,11 @@ export default function BlogWIP() {
                     <Wrench className="w-10 h-10 text-white" />
                   </motion.div>
                   
-                  <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                  <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4">
                     Work in Progress
                   </h2>
                   
-                  <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                  <p className="text-xs sm:text-sm text-gray-600 mb-8 max-w-2xl mx-auto">
                     We're crafting amazing content to help you make informed financial decisions. 
                     Our blog section is coming soon with expert insights, tips, and the latest industry updates.
                   </p>
@@ -87,7 +87,7 @@ export default function BlogWIP() {
                       <BookOpen className="w-6 h-6 text-blue-600" />
                     </div>
                     <h3 className="text-gray-900 font-semibold mb-2">Expert Insights</h3>
-                    <p className="text-gray-600 text-sm">Financial tips and industry knowledge</p>
+                    <p className="text-gray-600 text-xs">Financial tips and industry knowledge</p>
                   </motion.div>
 
                   <motion.div
@@ -101,7 +101,7 @@ export default function BlogWIP() {
                       <Clock className="w-6 h-6 text-purple-600" />
                     </div>
                     <h3 className="text-gray-900 font-semibold mb-2">Latest Updates</h3>
-                    <p className="text-gray-600 text-sm">Stay informed with current trends</p>
+                    <p className="text-gray-600 text-xs">Stay informed with current trends</p>
                   </motion.div>
 
                   <motion.div
@@ -115,15 +115,15 @@ export default function BlogWIP() {
                       <Users className="w-6 h-6 text-green-600" />
                     </div>
                     <h3 className="text-gray-900 font-semibold mb-2">Community</h3>
-                    <p className="text-gray-600 text-sm">Join our growing community</p>
+                    <p className="text-gray-600 text-xs">Join our growing community</p>
                   </motion.div>
                 </div>
 
                 {/* Progress Bar */}
                 <div className="mb-8">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium text-gray-700">Development Progress</span>
-                    <span className="text-sm font-medium text-blue-600">75%</span>
+                    <span className="text-xs font-medium text-gray-700">Development Progress</span>
+                    <span className="text-xs font-medium text-blue-600">75%</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <motion.div

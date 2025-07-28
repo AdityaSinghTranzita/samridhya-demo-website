@@ -1,37 +1,13 @@
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero1";
-import LazyLoad from "@/components/LazyLoad";
-
-// Dynamic imports for non-critical components
-const WhatWeOffer = dynamic(() => import("@/components/Whatweoffer"), {
-  ssr: true
-});
-
-const Tools = dynamic(() => import("@/components/Tools"), {
-  ssr: true
-});
-
-const WhyChoose = dynamic(() => import("@/components/WhyChoose"), {
-  ssr: true
-});
-
-const KeyFeatures = dynamic(() => import("@/components/KeyFeatures"), {
-  ssr: true
-});
-
-const TestimonialSection = dynamic(() => import("@/components/Testimonials"), {
-  ssr: true
-});
-
-const Faq = dynamic(() => import("@/components/Faq"), {
-  ssr: true
-});
-
-const CTA = dynamic(() => import("@/components/CTA"), {
-  ssr: true
-});
+import WhatWeOffer from "@/components/Whatweoffer";
+import Tools from "@/components/Tools";
+import WhyChoose from "@/components/WhyChoose";
+import KeyFeatures from "@/components/KeyFeatures";
+import Testimonials from "@/components/Testimonials";
+import Faq from "@/components/Faq";
+import CTA from "@/components/CTA";
 
 export default function Home() {
     return (
@@ -54,41 +30,27 @@ export default function Home() {
                 </section>
 
                 <section id="personal" className="py-16">
-                    <LazyLoad>
-                        <WhatWeOffer />
-                    </LazyLoad>
+                    <WhatWeOffer />
                 </section>
 
                 <section>
-                    <LazyLoad>
-                        <Tools />
-                    </LazyLoad>
+                    <Tools />
                 </section>
             
                 <section>
-                    <LazyLoad>
-                        <WhyChoose />
-                    </LazyLoad>
+                    <WhyChoose />
                 </section>
                 <section>
-                    <LazyLoad>
-                        <KeyFeatures />
-                    </LazyLoad>
+                    <KeyFeatures />
                 </section>
                 <section>
-                    <LazyLoad>
-                        <TestimonialSection />
-                    </LazyLoad>
+                    <Testimonials />
                 </section>
                 <section id="faqs" className="py-16 scroll-mt-20">
-                    <LazyLoad>
-                        <Faq />
-                    </LazyLoad>
+                    <Faq />
                 </section>
                 <section>
-                    <LazyLoad>
-                        <CTA />
-                    </LazyLoad>
+                    <CTA />
                 </section>
             </div>
         </>

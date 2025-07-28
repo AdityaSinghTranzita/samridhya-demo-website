@@ -34,7 +34,7 @@ export default function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-4">
               Ready to Start Your
               <br />
               <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
@@ -42,7 +42,7 @@ export default function Footer() {
               </span>
             </h2>
             
-            <p className="text-lg sm:text-xl text-white/80 max-w-3xl mx-auto mb-8 leading-relaxed">
+            <p className="text-xs sm:text-sm text-gray-200 mb-6">
               Join thousands of satisfied customers who have transformed their financial future with Samridhya. 
               Get started in minutes with our seamless digital process.
             </p>
@@ -73,45 +73,45 @@ export default function Footer() {
             {/* Trust Indicators */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
               <motion.div
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center"
+                className="bg-white/15 backdrop-blur-sm border border-white/30 rounded-2xl p-6 text-center shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                <div className="w-12 h-12 bg-white/25 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Shield className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-white font-semibold mb-2">RBI Compliant</h3>
-                <p className="text-white/70 text-sm">100% secure & regulated</p>
+                <h3 className="text-white font-semibold mb-2 text-base">RBI Compliant</h3>
+                <p className="text-white/90 text-sm">100% secure & regulated</p>
               </motion.div>
 
               <motion.div
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center"
+                className="bg-white/15 backdrop-blur-sm border border-white/30 rounded-2xl p-6 text-center shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                <div className="w-12 h-12 bg-white/25 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Users className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-white font-semibold mb-2">50K+ Customers</h3>
-                <p className="text-white/70 text-sm">Trusted by thousands</p>
+                <h3 className="text-white font-semibold mb-2 text-base">50K+ Customers</h3>
+                <p className="text-white/90 text-sm">Trusted by thousands</p>
               </motion.div>
 
               <motion.div
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center"
+                className="bg-white/15 backdrop-blur-sm border border-white/30 rounded-2xl p-6 text-center shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.6 }}
               >
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                <div className="w-12 h-12 bg-white/25 rounded-full flex items-center justify-center mx-auto mb-3">
                   <TrendingUp className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-white font-semibold mb-2">₹500Cr+</h3>
-                <p className="text-white/70 text-sm">Loans disbursed</p>
+                <h3 className="text-white font-semibold mb-2 text-base">₹500Cr+</h3>
+                <p className="text-white/90 text-sm">Loans disbursed</p>
               </motion.div>
             </div>
           </motion.div>
