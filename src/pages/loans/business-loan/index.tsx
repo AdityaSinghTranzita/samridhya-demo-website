@@ -209,21 +209,21 @@ export default function BusinessLoan() {
 
             {/* Stats */}
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto"
+              className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <div className="bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-base font-bold text-emerald-700 mb-1">₹2Cr</div>
+              <div className="bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-emerald-700 mb-1">₹2Cr</div>
                 <div className="text-emerald-500 text-xs">Maximum Loan</div>
               </div>
-              <div className="bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-base font-bold text-emerald-700 mb-1">24 Hrs</div>
+              <div className="bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-emerald-700 mb-1">24 Hrs</div>
                 <div className="text-emerald-500 text-xs">Approval Time</div>
               </div>
-              <div className="bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-base font-bold text-emerald-700 mb-1">12.99%</div>
+              <div className="col-span-2 md:col-span-1 bg-white/90 backdrop-blur-sm border border-emerald-300 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-emerald-700 mb-1">12.99%</div>
                 <div className="text-emerald-500 text-xs">Interest Rate</div>
               </div>
             </motion.div>
@@ -236,7 +236,7 @@ export default function BusinessLoan() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto px-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto px-4">
               <motion.div
                 className="bg-white/80 backdrop-blur-sm border border-emerald-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center shadow-lg"
                 whileHover={{ y: -5, scale: 1.02 }}
@@ -245,32 +245,32 @@ export default function BusinessLoan() {
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                   <Building2 className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
-                <h3 className="text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl font-bold text-gray-900 mb-2">Business Focused</h3>
-                <p className="text-sm sm:text-base md:text-lg lg:text-lg text-gray-700">Tailored for business growth and expansion</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Business Focused</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">Tailored for business growth and expansion</p>
               </motion.div>
 
               <motion.div
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center"
+                className="bg-white/80 backdrop-blur-sm border border-emerald-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center shadow-lg"
                 whileHover={{ y: -5, scale: 1.02 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
               >
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                   <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
-                <h3 className="text-xs font-bold text-white mb-2">Quick Disbursal</h3>
-                <p className="text-xs text-white/70">Funds in your business account within 48 hours</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Quick Disbursal</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">Funds in your business account within 48 hours</p>
               </motion.div>
 
               <motion.div
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center sm:col-span-2 lg:col-span-1"
+                className="col-span-2 md:col-span-1 bg-white/80 backdrop-blur-sm border border-emerald-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center shadow-lg"
                 whileHover={{ y: -5, scale: 1.02 }}
                 transition={{ duration: 0.3, delay: 0.2 }}
               >
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-green-400 to-teal-500 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
                   <Briefcase className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
-                <h3 className="text-xs font-bold text-white mb-2">Business Docs</h3>
-                <p className="text-xs text-white/70">Business PAN, GST & financial statements</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Business Docs</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">Business PAN, GST & financial statements</p>
               </motion.div>
             </div>
           </motion.div>
@@ -506,49 +506,49 @@ export default function BusinessLoan() {
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-4">
+          <div className="grid grid-cols-3 gap-4 px-4">
             <motion.div
-              className="text-center p-4 sm:p-6"
+              className="text-center p-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Phone className="w-6 h-6 text-blue-600" />
               </div>
-              <h3 className="text-xs sm:text-base font-semibold text-gray-800 mb-1 sm:mb-2">Call Us</h3>
-              <p className="text-xs sm:text-xs text-gray-600">1800-123-4567</p>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Call Us</h3>
+              <p className="text-xs text-gray-600">1800-123-4567</p>
               <p className="text-xs text-gray-500">Business Support</p>
             </motion.div>
 
             <motion.div
-              className="text-center p-4 sm:p-6"
+              className="text-center p-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <Mail className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Mail className="w-6 h-6 text-green-600" />
               </div>
-              <h3 className="text-xs sm:text-base font-semibold text-gray-800 mb-1 sm:mb-2">Email Us</h3>
-              <p className="text-xs sm:text-xs text-gray-600">business@samridhya.com</p>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Email Us</h3>
+              <p className="text-xs text-gray-600">business@samridhya.com</p>
               <p className="text-xs text-gray-500">Quick Response</p>
             </motion.div>
 
             <motion.div
-              className="text-center p-4 sm:p-6 sm:col-span-2 lg:col-span-1"
+              className="text-center p-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600" />
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <MapPin className="w-6 h-6 text-purple-600" />
               </div>
-              <h3 className="text-xs sm:text-base font-semibold text-gray-800 mb-1 sm:mb-2">Visit Us</h3>
-              <p className="text-xs sm:text-xs text-gray-600">Mumbai, Maharashtra</p>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Visit Us</h3>
+              <p className="text-xs text-gray-600">Mumbai, Maharashtra</p>
               <p className="text-xs text-gray-500">Business Center</p>
             </motion.div>
           </div>
@@ -557,9 +557,9 @@ export default function BusinessLoan() {
 
       {/* FAQ Section */}
       <LoanFAQ loanType="business" />
+      </div>
 
       <CTA />
-      </div>
     </div>
     </>
   );

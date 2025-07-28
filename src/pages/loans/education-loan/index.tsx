@@ -209,21 +209,21 @@ export default function EducationLoan() {
 
             {/* Stats */}
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto"
+              className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <div className="bg-white/90 backdrop-blur-sm border border-purple-300 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-base font-bold text-purple-700 mb-1">₹1Cr</div>
+              <div className="bg-white/90 backdrop-blur-sm border border-purple-300 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-purple-700 mb-1">₹1Cr</div>
                 <div className="text-purple-500 text-xs">Maximum Loan</div>
               </div>
-              <div className="bg-white/90 backdrop-blur-sm border border-purple-300 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-base font-bold text-purple-700 mb-1">15 Years</div>
+              <div className="bg-white/90 backdrop-blur-sm border border-purple-300 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-purple-700 mb-1">15 Years</div>
                 <div className="text-purple-500 text-xs">Repayment Period</div>
               </div>
-              <div className="bg-white/90 backdrop-blur-sm border border-purple-300 rounded-2xl p-4 text-center shadow-lg">
-                <div className="text-base font-bold text-purple-700 mb-1">8.50%</div>
+              <div className="col-span-2 md:col-span-1 bg-white/90 backdrop-blur-sm border border-purple-300 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-purple-700 mb-1">8.50%</div>
                 <div className="text-purple-500 text-xs">Interest Rate</div>
               </div>
             </motion.div>
@@ -236,41 +236,41 @@ export default function EducationLoan() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-4xl mx-auto">
               <motion.div
-                className="bg-white/95 backdrop-blur-sm border border-purple-300 rounded-3xl p-6 text-center shadow-lg"
+                className="bg-white/95 backdrop-blur-sm border border-purple-300 rounded-3xl p-4 md:p-6 text-center shadow-lg"
                 whileHover={{ y: -10, scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <GraduationCap className="w-8 h-8 text-white" />
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-purple-400 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                  <GraduationCap className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <h3 className="text-base sm:text-lg md:text-xl lg:text-xl xl:text-2xl font-bold text-gray-900 mb-2">Study Abroad</h3>
-                <p className="text-sm sm:text-base md:text-lg lg:text-lg text-gray-700">International education financing</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Study Abroad</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">International education financing</p>
               </motion.div>
 
               <motion.div
-                className="bg-white/95 backdrop-blur-sm border border-purple-300 rounded-3xl p-6 text-center shadow-lg"
+                className="bg-white/95 backdrop-blur-sm border border-purple-300 rounded-3xl p-4 md:p-6 text-center shadow-lg"
                 whileHover={{ y: -10, scale: 1.02 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Clock className="w-8 h-8 text-white" />
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                  <Clock className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <h3 className="text-base font-bold text-gray-900 mb-2">Moratorium Period</h3>
-                <p className="text-xs text-gray-700">No EMI during course duration</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Moratorium Period</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">No EMI during course duration</p>
               </motion.div>
 
               <motion.div
-                className="bg-white/95 backdrop-blur-sm border border-purple-300 rounded-3xl p-6 text-center shadow-lg"
+                className="col-span-2 md:col-span-1 bg-white/95 backdrop-blur-sm border border-purple-300 rounded-3xl p-4 md:p-6 text-center shadow-lg"
                 whileHover={{ y: -10, scale: 1.02 }}
                 transition={{ duration: 0.3, delay: 0.2 }}
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <BookOpen className="w-8 h-8 text-white" />
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                  <BookOpen className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <h3 className="text-base font-bold text-gray-900 mb-2">All Courses</h3>
-                <p className="text-xs text-gray-700">Engineering, Medical, MBA & more</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">All Courses</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">Engineering, Medical, MBA & more</p>
               </motion.div>
             </div>
           </motion.div>
@@ -506,48 +506,48 @@ export default function EducationLoan() {
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-3 gap-4">
             <motion.div
-              className="text-center p-6"
+              className="text-center p-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-8 h-8 text-blue-600" />
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Phone className="w-6 h-6 text-blue-600" />
               </div>
-              <h3 className="text-base font-semibold text-gray-800 mb-2">Call Us</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Call Us</h3>
               <p className="text-xs text-gray-600">1800-123-4567</p>
               <p className="text-xs text-gray-500">24/7 Support</p>
             </motion.div>
 
             <motion.div
-              className="text-center p-6"
+              className="text-center p-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-8 h-8 text-green-600" />
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Mail className="w-6 h-6 text-green-600" />
               </div>
-              <h3 className="text-base font-semibold text-gray-800 mb-2">Email Us</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Email Us</h3>
               <p className="text-xs text-gray-600">support@samridhya.com</p>
               <p className="text-xs text-gray-500">Quick Response</p>
             </motion.div>
 
             <motion.div
-              className="text-center p-6"
+              className="text-center p-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-8 h-8 text-purple-600" />
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <MapPin className="w-6 h-6 text-purple-600" />
               </div>
-              <h3 className="text-base font-semibold text-gray-800 mb-2">Visit Us</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Visit Us</h3>
               <p className="text-xs text-gray-600">Mumbai, Maharashtra</p>
               <p className="text-xs text-gray-500">Head Office</p>
             </motion.div>
@@ -557,9 +557,9 @@ export default function EducationLoan() {
 
       {/* FAQ Section */}
       <LoanFAQ loanType="education" />
+      </div>
 
       <CTA />
-      </div>
     </div>
     </>
   );
