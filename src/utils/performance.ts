@@ -25,7 +25,7 @@ export const measurePerformance = () => {
   const observer = new PerformanceObserver((list) => {
     const entries = list.getEntries();
     const lastEntry = entries[entries.length - 1];
-    console.log('LCP:', lastEntry.startTime);
+    
     
     // Send to analytics if needed
     if (window.gtag) {
@@ -46,7 +46,7 @@ export const measurePerformance = () => {
       const fidEntry = entry as PerformanceEntryWithProcessingStart;
       if (fidEntry.processingStart) {
         const fid = fidEntry.processingStart - fidEntry.startTime;
-        console.log('FID:', fid);
+
         
         if (window.gtag) {
           window.gtag('event', 'FID', {
@@ -70,7 +70,7 @@ export const measurePerformance = () => {
         clsValue += clsEntry.value;
       }
     }
-    console.log('CLS:', clsValue);
+    
     
     if (window.gtag) {
       window.gtag('event', 'CLS', {
@@ -87,7 +87,7 @@ export const measurePerformance = () => {
   const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
   if (navigationEntry) {
     const ttfb = navigationEntry.responseStart - navigationEntry.requestStart;
-    console.log('TTFB:', ttfb);
+    
     
     if (window.gtag) {
       window.gtag('event', 'TTFB', {

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, MessageSquare, Send, CheckCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Navbar from '@/components/Navbar';
 import CTA from '@/components/CTA';
@@ -56,6 +56,19 @@ export default function Contact() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [emailContent, setEmailContent] = useState('');
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -63,6 +76,8 @@ export default function Contact() {
       [e.target.name]: e.target.value
     });
   };
+
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,7 +89,42 @@ export default function Contact() {
     setIsSubmitting(false);
     setIsSubmitted(true);
     
-    // Reset form after 3 seconds
+    // Prepare email content
+    const emailSubject = `Contact Form Submission - ${formData.subject}`;
+    const emailBody = `Dear Samridhya Team,
+
+I would like to get in touch regarding the following:
+
+Name: ${formData.name}
+Email: ${formData.email}
+Phone: ${formData.phone}
+Subject: ${formData.subject}
+
+Message:
+${formData.message}
+
+I look forward to hearing from you.
+
+Best regards,
+${formData.name}`;
+
+    setEmailContent(emailBody);
+
+    // Handle email opening based on device
+    if (isMobile) {
+      // For mobile, copy email content to clipboard and show instructions
+      try {
+        navigator.clipboard.writeText(emailBody);
+      } catch (error) {
+
+      }
+    } else {
+      // For desktop, use Gmail web
+      const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=support@samridhya.com&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+      window.open(gmailLink, '_blank');
+    }
+    
+    // Reset form after 5 seconds
     setTimeout(() => {
       setIsSubmitted(false);
       setFormData({
@@ -84,7 +134,7 @@ export default function Contact() {
         subject: '',
         message: ''
       });
-    }, 3000);
+    }, 5000);
   };
 
   return (
@@ -220,8 +270,35 @@ export default function Contact() {
                   transition={{ duration: 0.5 }}
                 >
                   <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-                  <h3 className="text-green-800 font-bold text-base sm:text-lg mb-2">Message Sent Successfully!</h3>
-                  <p className="text-green-700 text-sm sm:text-base">Thank you for contacting us. We'll get back to you soon.</p>
+                  <h3 className="text-green-800 font-bold text-base sm:text-lg mb-2">Form Submitted Successfully!</h3>
+                  <p className="text-green-700 text-sm sm:text-base mb-3">
+                    {isMobile 
+                      ? "Email content has been copied to your clipboard. Please follow the instructions below."
+                      : "Gmail has been opened with your message. Please send the email to complete your inquiry."
+                    }
+                  </p>
+                  
+                  {isMobile && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
+                      <h4 className="font-semibold text-blue-900 mb-2">📱 Mobile Instructions:</h4>
+                      <ol className="text-sm text-blue-800 space-y-1">
+                        <li>1. Open your email app (Gmail, Mail, etc.)</li>
+                        <li>2. Create a new email</li>
+                        <li>3. Send to: <strong>support@samridhya.com</strong></li>
+                        <li>4. Subject: <strong>Contact Form Submission - {formData.subject}</strong></li>
+                        <li>5. Paste the copied content in the email body</li>
+                        <li>6. Send the email</li>
+                      </ol>
+                      <div className="mt-3 p-2 bg-white rounded border">
+                        <p className="text-xs text-gray-600 mb-1">📋 Copied Email Content:</p>
+                        <textarea
+                          value={emailContent}
+                          readOnly
+                          className="w-full h-20 text-xs border border-gray-300 rounded p-2 resize-none bg-gray-50"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">

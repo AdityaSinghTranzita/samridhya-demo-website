@@ -562,50 +562,50 @@ export default function About() {
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             <motion.div
-              className="text-center p-6"
+              className="text-center p-4 sm:p-6"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-8 h-8 text-blue-600" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Call Us</h3>
-              <p className="text-sm sm:text-base text-gray-600">1800-123-4567</p>
-              <p className="text-xs sm:text-sm text-gray-500">24/7 Support</p>
+              <h3 className="text-sm sm:text-lg md:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">Call Us</h3>
+              <p className="text-xs sm:text-sm md:text-base text-gray-600">1800-123-4567</p>
+              <p className="text-xs text-gray-500">24/7 Support</p>
             </motion.div>
 
             <motion.div
-              className="text-center p-6"
+              className="text-center p-4 sm:p-6"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-8 h-8 text-green-600" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Mail className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Email Us</h3>
-              <p className="text-sm sm:text-base text-gray-600">support@samridhya.com</p>
-              <p className="text-xs sm:text-sm text-gray-500">Quick Response</p>
+              <h3 className="text-sm sm:text-lg md:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">Email Us</h3>
+              <p className="text-xs sm:text-sm md:text-base text-gray-600">support@samridhya.com</p>
+              <p className="text-xs text-gray-500">Quick Response</p>
             </motion.div>
 
             <motion.div
-              className="text-center p-6"
+              className="text-center p-4 sm:p-6"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-8 h-8 text-purple-600" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Visit Us</h3>
-              <p className="text-sm sm:text-base text-gray-600">Mumbai, Maharashtra</p>
-              <p className="text-xs sm:text-sm text-gray-500">Head Office</p>
+              <h3 className="text-sm sm:text-lg md:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">Visit Us</h3>
+              <p className="text-xs sm:text-sm md:text-base text-gray-600">Mumbai, Maharashtra</p>
+              <p className="text-xs text-gray-500">Head Office</p>
             </motion.div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { getAppStoreLink } from '@/utils/appStore';
+import { CreditCard } from 'lucide-react';
 
 const floatingAnimation = (delay = 0) => ({
   y: ['-8px', '8px', '-8px'],
@@ -47,12 +48,21 @@ export default function Hero1() {
           <p className="text-gray-800 mb-6 sm:mb-8 max-w-xl lg:max-w-2xl font-medium text-sm sm:text-base md:text-lg lg:text-lg leading-relaxed">
             Get a quick, paperless loan up to ₹10 Lakhs. Trusted by millions. 100% online, direct bank transfer, and instant approval.
           </p>
-          <button
-            onClick={() => window.open(getAppStoreLink(), '_blank')}
-            className="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-semibold px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg text-center text-sm sm:text-base md:text-lg lg:text-xl mb-4 lg:mb-6 transform hover:scale-102"
-          >
-            Get Loan Now
-          </button>
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto mb-4 lg:mb-6">
+            <button
+              onClick={() => window.open(getAppStoreLink(), '_blank')}
+              className="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-semibold px-4 py-2.5 sm:px-6 sm:py-3 lg:px-8 lg:py-4 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg text-center text-sm sm:text-base md:text-lg transform hover:scale-105"
+            >
+              Get Loan Now
+            </button>
+            <Link
+              href="/calculators/credit-score-checker"
+              className="w-full sm:w-auto bg-blue-50 hover:bg-blue-100 text-[#276ef4] font-medium px-3 py-2 sm:px-4 sm:py-2.5 lg:px-6 lg:py-3 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md text-center text-xs sm:text-sm md:text-base transform hover:scale-105 flex items-center justify-center gap-1.5 border border-[#276ef4] hover:border-blue-600"
+            >
+              <CreditCard className="w-3.5 h-3.5" />
+              Check Credit Score
+            </Link>
+          </div>
           <div className="flex flex-row gap-3 mt-4 sm:mt-6 lg:mt-8 justify-center lg:justify-start w-full lg:w-auto items-center">
             <button
               onClick={() => window.open('https://play.google.com/store/apps/details?id=samridh.consumer', '_blank')}

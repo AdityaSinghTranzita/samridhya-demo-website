@@ -8,6 +8,7 @@ import LoanNavbar from '@/components/LoanNavbar';
 import CTA from '@/components/CTA';
 import EMICalculator from '@/components/EMICalculator';
 import LoanFAQ from '@/components/LoanFAQ';
+import ExploreOtherLoans from '@/components/ExploreOtherLoans';
 import { handleAppDownload } from '@/utils/appStore';
 import Head from 'next/head';
 
@@ -551,6 +552,9 @@ export default function TravelLoan() {
           </div>
         </div>
       </section>
+
+      {/* Explore Other Loans Section */}
+      <ExploreOtherLoans currentLoan="travel-loan" />
 
       {/* FAQ Section */}
       <LoanFAQ loanType="travel" />
