@@ -52,13 +52,14 @@ const features = [
 ];
 
 const eligibilityCriteria = [
-  'Age between 21-65 years',
-  'Minimum monthly income of ₹25,000',
-  'Good credit score (750+)',
-  'Stable employment history',
-  'Valid PAN and Aadhaar card',
-  'Active bank account'
+  'Indian citizen aged 21 to 58 years',
+  'Salaried or self-employed individual',
+  'Valid PAN, Aadhaar, and bank account',
+  'Minimum monthly income: ₹15,000 (may vary by lender)'
 ];
+
+
+
 
 const documentsRequired = [
   'PAN Card (Mandatory)',
@@ -163,10 +164,13 @@ export default function PersonalLoan() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              Personal Loans
+              {/*Personal Loans*/}
+              Instant Personal Loans up to ₹40 Lakhs
               <br />
               <span className="bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 bg-clip-text text-transparent">
-                Made Simple
+                {/*Made Simple*/}
+                100% Digital & Paperless
+
               </span>
             </motion.h1>
 
@@ -178,7 +182,7 @@ export default function PersonalLoan() {
               transition={{ duration: 0.8, delay: 0.4 }}
             >
               Get up to ₹40 Lakhs in just 10 minutes. No collateral, minimal documents, 
-              and competitive rates starting from 10.99% p.a.
+              and competitive rates starting from 9.99% p.a.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -194,7 +198,7 @@ export default function PersonalLoan() {
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span className="relative z-10">Apply Now - Get ₹50,000</span>
+                <span className="relative z-10">Apply Now - Get uto ₹50,000</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </motion.button>
               
@@ -224,7 +228,7 @@ export default function PersonalLoan() {
                 <div className="text-blue-500 text-xs">Approval Time</div>
               </div>
               <div className="col-span-2 md:col-span-1 bg-white/90 backdrop-blur-sm border border-blue-300 rounded-2xl p-3 md:p-4 text-center shadow-lg">
-                <div className="text-base md:text-lg font-bold text-blue-700 mb-1">10.99%</div>
+                <div className="text-base md:text-lg font-bold text-blue-700 mb-1">9.99%</div>
                 <div className="text-blue-500 text-xs">Interest Rate</div>
               </div>
             </motion.div>
@@ -244,10 +248,10 @@ export default function PersonalLoan() {
                 transition={{ duration: 0.3 }}
               >
                 <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
-                  <Shield className="w-6 h-6 md:w-8 md:h-8 text-white" />
+                  <Clock className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">No Collateral</h3>
-                <p className="text-xs md:text-base lg:text-lg text-gray-600">Unsecured loans without any property pledge</p>
+                <h3 className="text-md  md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2 font-bold">Registered on ONDC</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">Samridhya is a verified participant on the ONDC network and fully RBI-compliant.</p>
               </motion.div>
 
               <motion.div
@@ -256,10 +260,11 @@ export default function PersonalLoan() {
                 transition={{ duration: 0.3, delay: 0.1 }}
               >
                 <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
-                  <Clock className="w-6 h-6 md:w-8 md:h-8 text-white" />
+
+                  <Shield className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Quick Disbursal</h3>
-                <p className="text-xs md:text-base lg:text-lg text-gray-600">Funds in your account within 24 hours</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2 font-bold">Secure & Convenient</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">Samridhya ensures your data and money stay safe while offering a user-friendly and hassle-free borrowing process.</p>
               </motion.div>
 
               <motion.div
@@ -270,8 +275,10 @@ export default function PersonalLoan() {
                 <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
                   <Users className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Minimal Docs</h3>
-                <p className="text-xs md:text-base lg:text-lg text-gray-600">Just PAN, Aadhaar & bank statements</p>
+                <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2 font-bold">Instant Personal Loans</h3>
+                <p className="text-xs md:text-base lg:text-lg text-gray-600">Get quick access to personal loans within minutes — no long wait times, just a fast and seamless digital experience.
+
+                </p>
               </motion.div>
             </div>
           </motion.div>

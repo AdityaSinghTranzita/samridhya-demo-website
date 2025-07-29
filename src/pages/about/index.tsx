@@ -112,8 +112,8 @@ const features = [
 ];
 
 const stats = [
-  { number: 50000, label: 'Happy Customers', icon: Users, suffix: '+' },
-  { number: 500, label: 'Loans Disbursed', icon: TrendingUp, suffix: 'Cr+', prefix: '₹' },
+  { number: 100, label: 'Happy Customers', icon: Users, suffix: '+' },
+  { number: 50, label: 'Loans Disbursed', icon: TrendingUp, suffix: 'Lakh+', prefix: '₹' },
   { number: 24, label: 'Customer Support', icon: Phone, suffix: '/7' },
   { number: 4.8, label: 'Customer Rating', icon: Star, suffix: '★', decimal: true }
 ];
@@ -219,8 +219,8 @@ export default function About() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              We're revolutionizing digital lending in India with our ONDC-registered platform, 
-              making borrowing fast, paperless, and hassle-free for everyone.
+              Samridhya is an ONDC-registered, RBI-compliant digital loan platform offering fast, 100% paperless approvals. Compare loan offers from top banks and NBFCs — all in one place. Whether personal, business, or GST loans, we simplify smart financing.
+
             </motion.p>
 
             {/* Stats */}
