@@ -55,7 +55,7 @@ export default function LoanNavbar() {
       case 'travel':
         return 'bg-gradient-to-r from-orange-50 via-amber-50 to-yellow-50';
       case 'medical':
-        return 'bg-gradient-to-r from-red-50 via-pink-50 to-rose-50';
+        return 'bg-gradient-to-r from-teal-50 via-cyan-50 to-blue-50';
       default:
         return 'bg-gradient-to-r from-blue-50 via-cyan-50 to-indigo-50';
     }

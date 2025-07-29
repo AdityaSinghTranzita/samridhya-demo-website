@@ -69,7 +69,7 @@ export default function WhyChoose() {
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
     return (
-        <section className="relative py-8 sm:py-14 md:py-20 px-3 sm:px-4 md:px-12 overflow-hidden">
+        <section className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 overflow-hidden">
             {/* Enhanced background elements */}
             <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#276ef4]/15 to-purple-400/10 rounded-full blur-3xl -z-10 animate-pulse" />
             <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-cyan-400/10 to-green-400/15 rounded-full blur-3xl -z-10 animate-pulse delay-1000" />
@@ -94,14 +94,14 @@ export default function WhyChoose() {
             <div className="max-w-7xl mx-auto relative z-10">
                 {/* Enhanced header section */}
                 <div
-                    className="text-center mb-8 sm:mb-12 md:mb-16"
+                    className="text-center mb-12 sm:mb-16 md:mb-20"
                 >
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#2b004b] mb-4 sm:mb-6">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#2b004b] mb-4 sm:mb-6">
                         Why Choose{' '}
                         <span className="bg-gradient-to-r from-[#276ef4] to-green-500 bg-clip-text text-transparent">
                             Samridhya
                         </span>
-                        <span className="text-2xl sm:text-3xl md:text-4xl">?</span>
+                        <span className="text-xl sm:text-2xl md:text-3xl lg:text-4xl">?</span>
                     </h2>
 
                     <div
@@ -196,9 +196,9 @@ export default function WhyChoose() {
                     })}
                 </div>
 
-                {/* Bottom statistics section */}
+                {/* Bottom statistics section
                 <div
-                    className="mt-8 sm:mt-12 md:mt-20"
+                    className="mt-12 sm:mt-16 md:mt-20"
                 >
                     <div className="bg-gradient-to-r from-[#276ef4] to-green-500 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12 text-white shadow-2xl">
                         <div className="text-center mb-4 sm:mb-6 md:mb-8">
@@ -229,7 +229,7 @@ export default function WhyChoose() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </section>
     );
