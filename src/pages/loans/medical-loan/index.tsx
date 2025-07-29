@@ -17,37 +17,37 @@ const features = [
     title: 'Emergency Medical Support',
     description: 'Quick access to funds for urgent medical treatments and procedures',
     icon: Stethoscope,
-    gradient: 'from-red-500 to-pink-500'
+    gradient: 'from-teal-500 to-cyan-500'
   },
   {
     title: 'No Collateral Required',
     description: 'Unsecured medical loans without any property or asset pledge',
     icon: Shield,
-    gradient: 'from-green-500 to-emerald-500'
+    gradient: 'from-cyan-500 to-blue-500'
   },
   {
     title: 'Competitive Interest Rates',
     description: 'Starting from 11.50% p.a. with flexible repayment options',
     icon: TrendingUp,
-    gradient: 'from-purple-500 to-pink-500'
+    gradient: 'from-teal-500 to-emerald-500'
   },
   {
     title: 'Fast Processing',
     description: 'Receive funds directly in your bank account within 12 hours',
     icon: Clock,
-    gradient: 'from-orange-500 to-red-500'
+    gradient: 'from-cyan-500 to-teal-500'
   },
   {
     title: 'Minimal Documentation',
     description: 'Simple document requirements - PAN, Aadhaar, and bank statements',
     icon: Users,
-    gradient: 'from-indigo-500 to-blue-500'
+    gradient: 'from-emerald-500 to-teal-500'
   },
   {
     title: 'Flexible EMI Options',
     description: 'Choose repayment tenure from 12 to 72 months as per your convenience',
     icon: CheckCircle2,
-    gradient: 'from-teal-500 to-green-500'
+    gradient: 'from-teal-500 to-cyan-500'
   }
 ];
 
@@ -127,12 +127,12 @@ export default function MedicalLoan() {
         <LoanNavbar />
       
       {/* Hero Section */}
-      <section className="relative w-full bg-gradient-to-br from-red-50 via-pink-50 to-rose-50 min-h-screen overflow-hidden pt-20">
+      <section className="relative w-full bg-gradient-to-br from-teal-50 via-cyan-50 to-blue-50 min-h-screen overflow-hidden pt-20">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-red-300/40 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-40 right-20 w-96 h-96 bg-pink-300/40 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-rose-300/40 rounded-full blur-3xl animate-pulse delay-500"></div>
+          <div className="absolute top-20 left-10 w-72 h-72 bg-teal-300/40 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-40 right-20 w-96 h-96 bg-cyan-300/40 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-blue-300/40 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
         
         {/* Grid Pattern Overlay */}
@@ -147,13 +147,13 @@ export default function MedicalLoan() {
           <div className="text-center mb-16">
             {/* Badge */}
             <motion.div
-              className="inline-flex items-center gap-2 bg-red-400/20 backdrop-blur-sm border border-red-400/30 rounded-full px-6 py-3 mb-8"
+              className="inline-flex items-center gap-2 bg-teal-400/20 backdrop-blur-sm border border-teal-400/30 rounded-full px-6 py-3 mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-red-700 font-medium">Emergency Medical Support Available</span>
+              <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+              <span className="text-teal-700 font-medium">Emergency Medical Support Available</span>
             </motion.div>
 
             {/* Main Heading */}
@@ -165,7 +165,7 @@ export default function MedicalLoan() {
             >
               Medical Loans
               <br />
-              <span className="bg-gradient-to-r from-red-500 via-pink-500 to-rose-500 bg-clip-text text-transparent">
+                              <span className="bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500 bg-clip-text text-transparent">
                 For Your Health
               </span>
             </motion.h1>
@@ -190,17 +190,17 @@ export default function MedicalLoan() {
             >
               <motion.button
                 onClick={handleAppDownload}
-                className="group relative bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-red-500/25 transition-all duration-300 text-base"
+                className="group relative bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-teal-500/25 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <span className="relative z-10">Apply Now - Get ₹5 Lakhs</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-pink-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </motion.button>
               
               <motion.button
                 onClick={scrollToCalculator}
-                className="group relative bg-red-400/20 backdrop-blur-sm border border-red-400/30 text-red-700 font-bold px-8 py-4 rounded-2xl hover:bg-red-400/30 transition-all duration-300 text-base"
+                className="group relative bg-teal-400/20 backdrop-blur-sm border border-teal-400/30 text-teal-700 font-bold px-8 py-4 rounded-2xl hover:bg-teal-400/30 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -215,18 +215,18 @@ export default function MedicalLoan() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <div className="bg-white/80 backdrop-blur-sm border border-red-200 rounded-2xl p-3 md:p-4 text-center shadow-lg">
-                <div className="text-base md:text-lg font-bold text-red-800 mb-1">₹25L</div>
-                <div className="text-red-600 text-xs">Maximum Loan</div>
+              <div className="bg-white/80 backdrop-blur-sm border border-teal-200 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-teal-800 mb-1">₹25L</div>
+                <div className="text-teal-600 text-xs">Maximum Loan</div>
               </div>
-              <div className="bg-white/80 backdrop-blur-sm border border-red-200 rounded-2xl p-3 md:p-4 text-center shadow-lg">
-                <div className="text-base md:text-lg font-bold text-red-800 mb-1">12 Hrs</div>
-                <div className="text-red-600 text-xs">Approval Time</div>
+              <div className="bg-white/80 backdrop-blur-sm border border-teal-200 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                <div className="text-base md:text-lg font-bold text-teal-800 mb-1">12 Hrs</div>
+                <div className="text-teal-600 text-xs">Approval Time</div>
               </div>
-              <div className="col-span-2 md:col-span-1 bg-white/80 backdrop-blur-sm border border-red-200 rounded-2xl p-3 md:p-4 text-center shadow-lg">
-                <div className="text-base md:text-lg font-bold text-red-800 mb-1">11.50%</div>
-                <div className="text-red-600 text-xs">Interest Rate</div>
-              </div>
+                              <div className="col-span-2 md:col-span-1 bg-white/80 backdrop-blur-sm border border-teal-200 rounded-2xl p-3 md:p-4 text-center shadow-lg">
+                  <div className="text-base md:text-lg font-bold text-teal-800 mb-1">11.50%</div>
+                  <div className="text-teal-600 text-xs">Interest Rate</div>
+                </div>
             </motion.div>
           </div>
 
@@ -239,11 +239,11 @@ export default function MedicalLoan() {
           >
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-4xl mx-auto">
               <motion.div
-                className="bg-white/80 backdrop-blur-sm border border-red-200 rounded-3xl p-4 md:p-6 text-center shadow-lg"
+                className="bg-white/80 backdrop-blur-sm border border-teal-200 rounded-3xl p-4 md:p-6 text-center shadow-lg"
                 whileHover={{ y: -10, scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
                   <Stethoscope className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
                 <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Emergency Support</h3>
@@ -251,11 +251,11 @@ export default function MedicalLoan() {
               </motion.div>
 
               <motion.div
-                className="bg-white/80 backdrop-blur-sm border border-red-200 rounded-3xl p-4 md:p-6 text-center shadow-lg"
+                className="bg-white/80 backdrop-blur-sm border border-teal-200 rounded-3xl p-4 md:p-6 text-center shadow-lg"
                 whileHover={{ y: -10, scale: 1.02 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
               >
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-green-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-cyan-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
                   <Clock className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
                 <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">Fast Processing</h3>
@@ -263,11 +263,11 @@ export default function MedicalLoan() {
               </motion.div>
 
               <motion.div
-                className="col-span-2 md:col-span-1 bg-white/80 backdrop-blur-sm border border-red-200 rounded-3xl p-4 md:p-6 text-center shadow-lg"
+                className="col-span-2 md:col-span-1 bg-white/80 backdrop-blur-sm border border-teal-200 rounded-3xl p-4 md:p-6 text-center shadow-lg"
                 whileHover={{ y: -10, scale: 1.02 }}
                 transition={{ duration: 0.3, delay: 0.2 }}
               >
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
                   <Heart className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
                 <h3 className="text-sm md:text-lg lg:text-xl xl:text-2xl font-medium text-gray-800 mb-2">All Treatments</h3>
@@ -287,14 +287,14 @@ export default function MedicalLoan() {
         maxTenure={84}
         minRate={11.50}
         maxRate={22.99}
-        primaryColor="from-red-600 to-pink-600"
-        secondaryColor="from-red-50 to-pink-50"
-        accentColor="red"
+        primaryColor="from-teal-600 to-cyan-600"
+        secondaryColor="from-teal-50 to-cyan-50"
+        accentColor="teal"
         id="emi-calculator"
       />
 
       {/* Rest of the page with background */}
-      <div className="bg-gradient-to-br from-slate-50 via-red-50 to-pink-100">
+              <div className="bg-gradient-to-br from-slate-50 via-teal-50 to-cyan-100">
         {/* Key Features Section */}
       <section className="relative py-16 sm:py-24 overflow-hidden">
         <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#276EF4]/20 to-cyan-400/10 rounded-full blur-3xl -z-10 animate-pulse" />
@@ -373,7 +373,7 @@ export default function MedicalLoan() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Loan Amounts */}
             <motion.div
-              className="bg-gradient-to-br from-red-50 to-pink-50 rounded-3xl p-8 shadow-lg"
+              className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-3xl p-8 shadow-lg"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -401,7 +401,7 @@ export default function MedicalLoan() {
             {/* Eligibility & Documents */}
             <div className="space-y-8">
               <motion.div
-                className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-3xl p-8 shadow-lg"
+                className="bg-gradient-to-br from-cyan-50 to-teal-50 rounded-3xl p-8 shadow-lg"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -419,7 +419,7 @@ export default function MedicalLoan() {
               </motion.div>
 
               <motion.div
-                className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-8 shadow-lg"
+                className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl p-8 shadow-lg"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -441,7 +441,7 @@ export default function MedicalLoan() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="relative py-16 sm:py-24 bg-gradient-to-br from-gray-50 to-red-50">
+              <section className="relative py-16 sm:py-24 bg-gradient-to-br from-gray-50 to-teal-50">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 md:px-12">
           <motion.div
             className="text-center mb-12 sm:mb-16"

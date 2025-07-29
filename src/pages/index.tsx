@@ -6,6 +6,7 @@ import Tools from "@/components/Tools";
 import WhyChoose from "@/components/WhyChoose";
 import KeyFeatures from "@/components/KeyFeatures";
 import Testimonials from "@/components/Testimonials";
+import Partners from "@/components/Partners";
 import Faq from "@/components/Faq";
 import CTA from "@/components/CTA";
 
@@ -45,6 +46,9 @@ export default function Home() {
                 </section>
                 <section>
                     <Testimonials />
+                </section>
+                <section>
+                    <Partners />
                 </section>
                 <section id="faqs" className="py-16 scroll-mt-20">
                     <Faq />

@@ -56,62 +56,51 @@ export default function Footer() {
               >
                 <Download size={20} />
                 Download App
-                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform duration-300" />
-              </motion.button>
-
-              <motion.button
-                onClick={handleAppDownload}
-                className="group bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-white/20 transition-all duration-300 flex items-center gap-3"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Apply Now
-                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform duration-300" />
               </motion.button>
             </div>
 
             {/* Trust Indicators */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-4xl mx-auto">
               <motion.div
-                className="bg-white/15 backdrop-blur-sm border border-white/30 rounded-2xl p-6 text-center shadow-lg"
+                className="bg-white/15 backdrop-blur-sm border border-white/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <div className="w-12 h-12 bg-white/25 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Shield className="w-6 h-6 text-white" />
+                <div className="w-8 h-8 sm:w-12 sm:h-12 bg-white/25 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                  <Shield className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <h3 className="text-white font-semibold mb-2 text-base">RBI Compliant</h3>
-                <p className="text-white/90 text-sm">100% secure & regulated</p>
+                <h3 className="text-white font-semibold mb-1 sm:mb-2 text-xs sm:text-base">RBI Compliant</h3>
+                <p className="text-white/90 text-xs sm:text-sm">100% secure & regulated</p>
               </motion.div>
 
               <motion.div
-                className="bg-white/15 backdrop-blur-sm border border-white/30 rounded-2xl p-6 text-center shadow-lg"
+                className="bg-white/15 backdrop-blur-sm border border-white/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
-                <div className="w-12 h-12 bg-white/25 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Users className="w-6 h-6 text-white" />
+                <div className="w-8 h-8 sm:w-12 sm:h-12 bg-white/25 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                  <Users className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <h3 className="text-white font-semibold mb-2 text-base">50K+ Customers</h3>
-                <p className="text-white/90 text-sm">Trusted by thousands</p>
+                <h3 className="text-white font-semibold mb-1 sm:mb-2 text-xs sm:text-base">1K+ Customers</h3>
+                <p className="text-white/90 text-xs sm:text-sm">Trusted by thousands</p>
               </motion.div>
 
               <motion.div
-                className="bg-white/15 backdrop-blur-sm border border-white/30 rounded-2xl p-6 text-center shadow-lg"
+                className="bg-white/15 backdrop-blur-sm border border-white/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.6 }}
               >
-                <div className="w-12 h-12 bg-white/25 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <TrendingUp className="w-6 h-6 text-white" />
+                <div className="w-8 h-8 sm:w-12 sm:h-12 bg-white/25 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                  <TrendingUp className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <h3 className="text-white font-semibold mb-2 text-base">₹500Cr+</h3>
-                <p className="text-white/90 text-sm">Loans disbursed</p>
+                <h3 className="text-white font-semibold mb-1 sm:mb-2 text-xs sm:text-base">1Cr+ Loans</h3>
+                <p className="text-white/90 text-xs sm:text-sm">Loans disbursed</p>
               </motion.div>
             </div>
           </motion.div>

@@ -5,49 +5,127 @@ import type React from "react"
 import { motion } from "framer-motion"
 import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react"
 import { useState, useEffect } from "react"
+import { handleAppDownload } from '@/utils/appStore';
 
 const testimonials = [
   {
-    review: "The loan process was quick and hassle-free. Got approved in just a day!",
-    name: "Amit Sharma",
-    role: "Small Business Owner",
+    review: "This app made getting a loan incredibly easy. The process was quick, straightforward, and completely transparent—no hidden fees or confusing terms. I was approved fast and got the funds I needed without the usual hassle. Highly recommended for anyone looking for quick, stress-free financing!",
+    name: "Ankita Jaiswal",
+    role: "25 July 2025",
+    rating: 5,
+    avatar: "AJ",
+  },
+  {
+    review: "I really like the UI/UX of the Samridhya loan app. The app is clean and super easy to use. The loan process is smooth and quick. Loved the simple design — no confusion, no hassle. Good job!",
+    name: "Manjeet Kumar",
+    role: "24 July 2025",
+    rating: 5,
+    avatar: "MK",
+  },
+  {
+    review: "I recently used the Samridhya app to apply for a loan of ₹4 lakhs, and I must say, I am extremely impressed with the entire process! The application was smooth and user friendly. What amazed me the most was the lightning-fast approval — my loan was approved within just 2 hours!",
+    name: "Unnati Pandey",
+    role: "25 July 2025",
+    rating: 5,
+    avatar: "UP",
+  },
+  {
+    review: "Great app! Smooth interface, user-friendly, reliable performance, useful features, and responsive support. Highly recommended for daily use!",
+    name: "Chandan Pandey",
+    role: "24 July 2025",
+    rating: 5,
+    avatar: "CP",
+  },
+  {
+    review: "The App is fast, secure, and user-friendly for hassle-free loan processing. Quick approval, minimal documentation, and great customer support. Highly recommended",
+    name: "Aditya Kumar",
+    role: "25 July 2025",
+    rating: 5,
+    avatar: "AK",
+  },
+  {
+    review: "Samridhya seems legit! They offer super quick and secure loans through the ONDC network, all paperless and hassle-free. Definitely worth checking out if you need a loan ASAP!",
+    name: "Rajesh",
+    role: "24 July 2025",
+    rating: 4,
+    avatar: "RA",
+  },
+  {
+    review: "This app is a quick, reliable loan app perfect for instant financial help.",
+    name: "Pranshu Agrahari",
+    role: "24 July 2025",
+    rating: 5,
+    avatar: "PA",
+  },
+  {
+    review: "Samridhya made the loan application process smooth and stress-free. The platform felt secure, transparent, and was easy to navigate. With ONDC's backing, trust and accessibility were clearly prioritized.",
+    name: "Abhi Saxena",
+    role: "25 July 2025",
     rating: 5,
     avatar: "AS",
   },
   {
-    review: "I've never experienced such a seamless experience for a personal loan.",
-    name: "Sneha Reddy",
-    role: "IT Professional",
+    review: "Transparent process and smooth experience. No hidden charges, everything clearly explained. A reliable app for instant loans.👍",
+    name: "Priya Yadav",
+    role: "25 July 2025",
     rating: 5,
-    avatar: "SR",
+    avatar: "PY",
   },
   {
-    review: "Great customer service and easy-to-understand terms. Highly recommend!",
-    name: "Ravi Verma",
-    role: "Freelancer",
-    rating: 5,
-    avatar: "RV",
+    review: "Easy KYC, flexible EMIs, and disbursal within hours. Trusted by salaried and self-employed individuals. Great for millennials.",
+    name: "Virat Saxena",
+    role: "24 July 2025",
+    rating: 4,
+    avatar: "VS",
   },
   {
-    review: "The app is super intuitive and helpful. I got my loan in no time.",
-    name: "Meena Joshi",
-    role: "Homemaker",
+    review: "Great app. hassle free loans.",
+    name: "Divyanshu Maurya",
+    role: "25 July 2025",
     rating: 5,
-    avatar: "MJ",
+    avatar: "DM",
   },
   {
-    review: "Simple process, low interest, and instant support. Loved the experience.",
-    name: "Tushar Jain",
-    role: "Startup Founder",
+    review: "Best Instant Personal Loan App - Fast, Secure and Paperless. Its made my loan experience super smooth and hassle-free. The entire process was 100% digital with quick approval and minimal documentation. Its take only 10 mints for approval. If you're looking for instant personal loan or business loan, this app is a great choice. Its Easy to use, safe, and offers multiple lender options with flexible EMIs. Highly recommended for anyone needing a quick and secure digital loan!",
+    name: "Nidawaseem",
+    role: "24 July 2025",
     rating: 5,
-    avatar: "TJ",
+    avatar: "NI",
   },
   {
-    review: "I was hesitant at first, but it was way easier than expected.",
-    name: "Neha Kulkarni",
-    role: "Marketing Manager",
+    review: "Low interest rates. Finally I can get loan offers from all major players in one place. Took a 3 lakhs personal loan and amount was received in my account within an hour. Also I can track my EMI and outstanding amount in the app.",
+    name: "Get2abhi",
+    role: "24 July 2025",
     rating: 5,
-    avatar: "NK",
+    avatar: "GA",
+  },
+  {
+    review: "Samridhya is a really helpful loan app that makes the whole process stress-free. The app is simple to use, with a clean design and no unnecessary steps. Loan approvals are quick, and the entire process feels smooth from start to finish. Definitely a great option if you need quick financial help without any hassle.",
+    name: "RoboJanbaz",
+    role: "25 July 2025",
+    rating: 5,
+    avatar: "RJ",
+  },
+  {
+    review: "Lifesaver during emergencies. I needed urgent money for a medical emergency and this app came through instantly. No long waits, no hidden conditions. Super easy to use and very helpful. Thank you for making the process stress-free.",
+    name: "Madhuri1803",
+    role: "24 July 2025",
+    rating: 5,
+    avatar: "MA",
+  },
+  {
+    review: "Fast & Reliable Loan App! Quick approval, easy-to-use interface, and instant disbursal. No hidden charges and great customer support. Highly recommended!",
+    name: "Nas.sidd",
+    role: "24 July 2025",
+    rating: 5,
+    avatar: "NS",
+  },
+  {
+    review: "FAST AND RELIABLE. User Experience was amazing, Easy to Understand things, without too much explainatory stuff like other banking apps. Features like referral reward was also amazing.",
+    name: "Aditya Kumar Singh",
+    role: "22 July 2025",
+    rating: 5,
+    avatar: "AKS",
   },
 ]
 
@@ -98,7 +176,7 @@ export default function TestimonialSection() {
   }
 
   return (
-    <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-32 px-4 sm:px-10 lg:px-20">
+    <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12">
       {/* Background blobs */}
       <div className="absolute inset-0 overflow-hidden">
         {/*<div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl" />*/}
@@ -112,10 +190,13 @@ export default function TestimonialSection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="mb-16"
+          className="mb-12 sm:mb-16"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-4">
-            What Our Users Say
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#2b004b] mb-4">
+            What Our{' '}
+            <span className="bg-gradient-to-r from-[#276ef4] to-green-500 bg-clip-text text-transparent">
+              Users Say
+            </span>
           </h2>
           <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
             Don&apos;t just take our word for it. Here&apos;s what our satisfied customers have to say about their
@@ -164,27 +245,27 @@ export default function TestimonialSection() {
                 <motion.div
                   key={`${testimonial.originalIndex}-${current}`}
                   initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                  animate={{
-                    x: testimonial.position * 340,
-                    scale: isCenter ? 1 : 0.85,
-                    opacity: isCenter ? 1 : 0.6,
-                    zIndex: isCenter ? 30 : 10,
-                    y: 0,
-                  }}
+                                      animate={{
+                      x: testimonial.position * 400,
+                      scale: isCenter ? 1 : 0.85,
+                      opacity: isCenter ? 1 : 0.6,
+                      zIndex: isCenter ? 30 : 10,
+                      y: 0,
+                    }}
                   transition={{
                     type: "spring",
                     stiffness: 200,
                     damping: 35,
                     mass: 0.8,
                   }}
-                  className="absolute w-80 max-w-sm"
+                  className="absolute w-96 max-w-md"
                 >
                   <div className="bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/50 hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 ease-out group">
-                    {/* Quote Icon */}
+                    {/* Quote Icons */}
                     <motion.div
-                      className="flex justify-center mb-6"
-                      initial={{ scale: 0, rotate: -180 }}
-                      animate={{ scale: 1, rotate: 0 }}
+                      className="flex justify-between items-start mb-4"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{
                         delay: 0.2,
                         type: "spring",
@@ -192,64 +273,88 @@ export default function TestimonialSection() {
                         damping: 20,
                       }}
                     >
-                      <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-full shadow-lg">
-                        <Quote className="w-5 h-5 text-white" />
-                      </div>
+                      <motion.div
+                        className="text-gray-600 opacity-60"
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{
+                          delay: 0.3,
+                          type: "spring",
+                          stiffness: 200,
+                          damping: 20,
+                        }}
+                      >
+                        <Quote className="w-6 h-6 transform rotate-180" />
+                      </motion.div>
+                      <motion.div
+                        className="text-gray-600 opacity-60"
+                        initial={{ scale: 0, rotate: 180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{
+                          delay: 0.4,
+                          type: "spring",
+                          stiffness: 200,
+                          damping: 20,
+                        }}
+                      >
+                        <Quote className="w-6 h-6" />
+                      </motion.div>
                     </motion.div>
-
-                    {/* Stars */}
-                    <motion.div
-                      className="flex justify-center mb-6"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
-                    >
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{
-                            delay: 0.4 + i * 0.1,
-                            type: "spring",
-                            stiffness: 300,
-                            damping: 20,
-                          }}
-                        >
-                          <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                        </motion.div>
-                      ))}
-                    </motion.div>
-
-                    {/* Review Text */}
-                    <motion.p
-                      className="text-gray-700 leading-relaxed mb-8 italic font-medium text-center text-sm sm:text-base"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
-                    >
-                      "{testimonial.review}"
-                    </motion.p>
 
                     {/* User Info */}
                     <motion.div
-                      className="flex items-center justify-center space-x-4"
+                      className="flex flex-col items-center justify-center mb-6"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.6, duration: 0.6, ease: "easeOut" }}
                     >
                       <motion.div
-                        className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg"
+                        className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg mb-3"
                         whileHover={{ scale: 1.1, rotate: 5 }}
                         transition={{ type: "spring", stiffness: 400, damping: 20 }}
                       >
                         {testimonial.avatar}
                       </motion.div>
-                      <div className="text-center">
+                      <div className="text-center mb-3">
                         <h4 className="font-semibold text-gray-800 text-base sm:text-lg">{testimonial.name}</h4>
                         <p className="text-xs sm:text-sm text-gray-600">{testimonial.role}</p>
-                        <p className="text-gray-700 italic text-xs sm:text-sm leading-relaxed">"{testimonial.review}"</p>
                       </div>
+                      
+                      {/* Stars */}
+                      <motion.div
+                        className="flex justify-center"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
+                      >
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <motion.div
+                            key={i}
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{
+                              delay: 0.4 + i * 0.1,
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 20,
+                            }}
+                          >
+                            <Star className="w-5 h-5 text-yellow-400 fill-current" />
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    </motion.div>
+
+                    {/* Review Text */}
+                    <motion.div
+                      className="h-32 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+                    >
+                      <p className="text-gray-700 leading-relaxed italic font-medium text-center text-sm sm:text-base">
+                        "{testimonial.review}"
+                      </p>
                     </motion.div>
 
                     {/* Hover Effect */}
@@ -302,6 +407,7 @@ export default function TestimonialSection() {
         >
           <p className="text-sm sm:text-base text-gray-600 mb-6">Ready to join thousands of satisfied customers?</p>
           <motion.button
+            onClick={handleAppDownload}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"

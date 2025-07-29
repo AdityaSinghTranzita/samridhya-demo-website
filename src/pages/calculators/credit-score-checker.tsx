@@ -59,6 +59,7 @@ export default function CreditScoreChecker() {
   const [creditScoreData, setCreditScoreData] = useState<CreditScoreData | null>(null);
   const [error, setError] = useState('');
   const [mounted, setMounted] = useState(false);
+  const [noCreditRecord, setNoCreditRecord] = useState(false);
 
   // Set mounted state for client-side rendering
   useEffect(() => {
@@ -74,6 +75,7 @@ export default function CreditScoreChecker() {
     const savedToken = getSessionStorage('authToken');
     const savedMobile = getSessionStorage('mobileNumber');
     const savedUserDetails = getSessionStorage('userDetails');
+    const savedNoCreditRecord = getSessionStorage('noCreditRecord');
 
     
 
@@ -104,6 +106,24 @@ export default function CreditScoreChecker() {
         console.error('Error loading saved data:', e);
         removeSessionStorage('cibilReportData');
       }
+    } else if (savedNoCreditRecord === 'true') {
+      // User has no credit record
+      if (savedToken) {
+        setAuthToken(savedToken);
+      }
+      if (savedMobile) {
+        setMobileNumber(savedMobile);
+      }
+      if (savedUserDetails) {
+        try {
+          const userDetails = JSON.parse(savedUserDetails);
+          setUserDetails(userDetails);
+        } catch (e) {
+          console.error('Error parsing saved user details:', e);
+        }
+      }
+      setNoCreditRecord(true);
+      setCurrentStep(6);
     } else if (savedToken && savedMobile && savedUserDetails) {
       // User has token and details but no credit score data, fetch it
       try {
@@ -129,10 +149,10 @@ export default function CreditScoreChecker() {
 
   // Sync session data when important state changes
   useEffect(() => {
-    if (mounted && (authToken || mobileNumber || userDetails.name || creditScoreData)) {
+    if (mounted && (authToken || mobileNumber || userDetails.name || creditScoreData || noCreditRecord)) {
       syncSessionData();
     }
-  }, [authToken, mobileNumber, userDetails, creditScoreData, mounted]);
+  }, [authToken, mobileNumber, userDetails, creditScoreData, noCreditRecord, mounted]);
 
   // OTP Timer effect
   useEffect(() => {
@@ -339,6 +359,15 @@ export default function CreditScoreChecker() {
         scoreData.message.includes('updated successfully')
       );
 
+      // Check for no credit record messages
+      const isNoCreditRecord = scoreData.message && (
+        scoreData.message.toLowerCase().includes('no credit record') ||
+        scoreData.message.toLowerCase().includes('no credit history') ||
+        scoreData.message.toLowerCase().includes('credit record not found') ||
+        scoreData.message.toLowerCase().includes('no data found') ||
+        scoreData.message.toLowerCase().includes('no record found')
+      );
+
       if (isSuccess && scoreData.data) {
         setCreditScoreData(scoreData.data);
         setSessionStorage('cibilReportData', JSON.stringify(scoreData.data));
@@ -355,6 +384,23 @@ export default function CreditScoreChecker() {
         }
         
         setCurrentStep(5);
+      } else if (isNoCreditRecord || (!scoreData.data && isSuccess)) {
+        // Handle no credit record case
+        setNoCreditRecord(true);
+        setSessionStorage('noCreditRecord', 'true');
+        
+        // Store user details for future use
+        if (authToken) {
+          setSessionStorage('authToken', authToken);
+        }
+        if (mobileNumber) {
+          setSessionStorage('mobileNumber', mobileNumber);
+        }
+        if (userDetails.name) {
+          setSessionStorage('userDetails', JSON.stringify(userDetails));
+        }
+        
+        setCurrentStep(6);
       } else {
         throw new Error(scoreData.message || 'Failed to get credit score');
       }
@@ -401,6 +447,9 @@ export default function CreditScoreChecker() {
     if (creditScoreData) {
       setSessionStorage('cibilReportData', JSON.stringify(creditScoreData));
     }
+    if (noCreditRecord) {
+      setSessionStorage('noCreditRecord', 'true');
+    }
   };
 
   const clearAllSessionData = () => {
@@ -408,6 +457,7 @@ export default function CreditScoreChecker() {
     removeSessionStorage('authToken');
     removeSessionStorage('mobileNumber');
     removeSessionStorage('userDetails');
+    removeSessionStorage('noCreditRecord');
   };
 
   const resetForm = () => {
@@ -424,6 +474,7 @@ export default function CreditScoreChecker() {
     setAuthToken('');
     setCreditScoreData(null);
     setError('');
+    setNoCreditRecord(false);
   };
 
   const getScoreCategory = (score: number) => {
@@ -1271,6 +1322,157 @@ export default function CreditScoreChecker() {
 
 
             </motion.div>
+            )}
+
+            {/* Step 6: No Credit Record */}
+            {currentStep === 6 && noCreditRecord && (
+              <motion.div
+                key="step6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="space-y-6"
+              >
+                {/* Back Button */}
+                <div className="flex justify-start">
+                  <button
+                    onClick={resetForm}
+                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    Back to Credit Score Checker
+                  </button>
+                </div>
+
+                {/* No Credit Record Message */}
+                <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
+                  <div className="text-center mb-8">
+                    <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Info className="w-10 h-10 text-orange-600" />
+                    </div>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+                      No Credit Record Found
+                    </h1>
+                    <p className="text-lg text-gray-600 mb-6">
+                      Hey <span className="font-bold text-gray-900">{userDetails.name || 'User'}</span>! We couldn't find any credit history associated with your details.
+                    </p>
+                  </div>
+
+                  {/* What This Means */}
+                  <div className="bg-blue-50 rounded-2xl p-6 mb-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <Info className="w-5 h-5 text-blue-600" />
+                      What This Means
+                    </h3>
+                    <div className="space-y-3 text-gray-700">
+                      <p className="flex items-start gap-2">
+                        <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                        You may be new to credit or haven't taken any loans/credit cards yet
+                      </p>
+                      <p className="flex items-start gap-2">
+                        <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                        This is common for young professionals, students, or those who prefer cash transactions
+                      </p>
+                      <p className="flex items-start gap-2">
+                        <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                        You can still apply for loans, but lenders may need additional documentation
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* How to Build Credit */}
+                  <div className="bg-green-50 rounded-2xl p-6 mb-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <TrendingUp className="w-5 h-5 text-green-600" />
+                      How to Build Your Credit Score
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="bg-white rounded-lg p-4">
+                        <h4 className="font-semibold text-gray-900 mb-2">1. Get a Credit Card</h4>
+                        <p className="text-sm text-gray-600">Start with a secured credit card or a basic credit card with low limits</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-4">
+                        <h4 className="font-semibold text-gray-900 mb-2">2. Pay Bills On Time</h4>
+                        <p className="text-sm text-gray-600">Always pay your credit card bills and loan EMIs before the due date</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-4">
+                        <h4 className="font-semibold text-gray-900 mb-2">3. Keep Low Utilization</h4>
+                        <p className="text-sm text-gray-600">Use only 30% or less of your available credit limit</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-4">
+                        <h4 className="font-semibold text-gray-900 mb-2">4. Mix of Credit</h4>
+                        <p className="text-sm text-gray-600">Have a mix of different types of credit (cards, loans, etc.)</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Next Steps */}
+                  <div className="bg-purple-50 rounded-2xl p-6 mb-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <Star className="w-5 h-5 text-purple-600" />
+                      Next Steps
+                    </h3>
+                    <div className="space-y-4">
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                          1
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">Apply for a Credit Card</h4>
+                          <p className="text-sm text-gray-600">Start building credit history with a basic credit card</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                          2
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">Consider a Small Loan</h4>
+                          <p className="text-sm text-gray-600">Apply for a small personal loan to establish credit history</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                          3
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">Check Again Later</h4>
+                          <p className="text-sm text-gray-600">Your credit score will appear once you have credit history</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Loan Options */}
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
+                      Ready to Start Building Credit?
+                    </h3>
+                    <p className="text-gray-600 text-center mb-6">
+                      Explore our loan options designed for individuals with no credit history
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <Link href="/loans/personal-loan">
+                        <button className="w-full bg-gradient-to-r from-[#276ef4] to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-600 hover:to-[#276ef4] transition-all duration-200">
+                          Apply for Personal Loan
+                        </button>
+                      </Link>
+                      <Link href="/loans/business-loan">
+                        <button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-emerald-600 hover:to-green-600 transition-all duration-200">
+                          Apply for Business Loan
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Report Date */}
+                  <div className="text-center mt-6">
+                    <p className="text-sm text-gray-500">
+                      Report generated on: {new Date().toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>

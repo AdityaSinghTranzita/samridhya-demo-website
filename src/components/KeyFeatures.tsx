@@ -4,8 +4,9 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, Clock, Globe, CreditCard, Smartphone, BarChart3, Shield, Languages } from 'lucide-react';
+import { CheckCircle2, Clock, Globe, CreditCard, Smartphone, BarChart3, Shield, Languages, ArrowRight } from 'lucide-react';
 import { handleAppDownload } from '@/utils/appStore';
+import Link from 'next/link';
 
 const features = [
     {
@@ -62,7 +63,7 @@ export default function KeyFeatures() {
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
     return (
-        <section className="relative py-16 sm:py-24 overflow-hidden">
+        <section className="relative py-16 sm:py-20 md:py-24 overflow-hidden">
             {/* Enhanced background elements */}
             <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#276EF4]/20 to-cyan-400/10 rounded-full blur-3xl -z-10 animate-pulse" />
             <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-[#276EF4]/30 to-purple-400/15 rounded-full blur-2xl -z-10 animate-pulse delay-1000" />
@@ -76,10 +77,10 @@ export default function KeyFeatures() {
                 }}></div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-2 sm:px-6 md:px-12 text-center">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 text-center">
                 {/* Enhanced header */}
                 <motion.div
-                    className="mb-10 sm:mb-16"
+                    className="mb-12 sm:mb-16"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -87,13 +88,13 @@ export default function KeyFeatures() {
                 >
                     
 
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6 leading-tight">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#2b004b] mb-4 sm:mb-6 leading-tight">
                         Key Features of{' '}
                         <span className="bg-gradient-to-r from-[#276EF4] to-cyan-500 bg-clip-text text-transparent">
                             Samridhya
                         </span>
                         <br />
-                        <span className="text-lg sm:text-xl md:text-2xl text-gray-600 font-medium">
+                        <span className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 font-medium">
                             Your Trusted Loan App
                         </span>
                     </h2>
@@ -175,28 +176,36 @@ export default function KeyFeatures() {
 
                 {/* Call-to-action section */}
                 <motion.div
-                    className="mt-12 sm:mt-20"
+                    className="mt-12 sm:mt-16 md:mt-20"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.5 }}
                 >
-                    <div className="bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-3xl p-6 sm:p-8 md:p-12 text-white text-center shadow-2xl">
+                    {/* Desktop Layout */}
+                    <div className="hidden sm:block bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-3xl p-6 sm:p-8 md:p-12 text-white text-center shadow-2xl">
                         <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4">
                             Ready to Experience the Future of Lending?
                         </h3>
                         <p className="text-white/90 text-sm sm:text-base mb-6 sm:mb-8 max-w-2xl mx-auto">
                             Join thousands of satisfied customers who trust Samridhya for their financial needs.
                         </p>
-                        <motion.button
+                        <button
                             onClick={handleAppDownload}
-                            className="bg-white text-[#276EF4] px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold text-base sm:text-lg hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                            className="bg-white text-[#276EF4] px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl"
                         >
                             Get Started Today
-                        </motion.button>
+                        </button>
                     </div>
+
+                    {/* Mobile Layout - Single Row */}
+                    <button
+                        onClick={handleAppDownload}
+                        className="sm:hidden w-full bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-2xl p-4 text-white shadow-2xl flex items-center justify-center text-center active:scale-95 transition-transform duration-200 gap-2"
+                    >
+                        <span className="text-base font-bold">Experience the future of lending</span>
+                        <ArrowRight className="w-6 h-6 text-white" />
+                    </button>
                 </motion.div>
             </div>
         </section>
