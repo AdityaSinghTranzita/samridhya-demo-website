@@ -219,7 +219,10 @@ export default function About() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              Samridhya is an ONDC-registered, RBI-compliant digital loan platform offering fast, 100% paperless approvals. Compare loan offers from top banks and NBFCs — all in one place. Whether personal, business, or GST loans, we simplify smart financing.
+              {/*Samridhya is an ONDC-registered, RBI-compliant digital loan platform offering fast, 100% paperless approvals. Compare loan offers from top banks and NBFCs — all in one place. Whether personal, business, or GST loans, we simplify smart financing.*/}
+              Samridhya is a government-approved, ONDC-registered digital loan platform that follows full RBI compliance. We simplify borrowing with a 100% paperless process, fast approvals, and secure access to credit.
+              What sets us apart? Multiple lender offers from top banks and NBFCs — so you can compare and choose the best loan for your needs, all in one place.
+              From personal to business to GST loans, Samridhya is your one-stop solution for smart, flexible financing.
 
             </motion.p>
 
@@ -262,80 +265,80 @@ export default function About() {
       </section>
 
       {/* Mission & Vision Section */}
-      <section className="relative py-16 sm:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-2 sm:px-6 md:px-12">
-          <motion.div
-            className="text-center mb-12 sm:mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6">
-              Our Mission & Vision
-            </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
-          </motion.div>
+      {/*<section className="relative py-16 sm:py-24 bg-white">*/}
+      {/*  <div className="max-w-7xl mx-auto px-2 sm:px-6 md:px-12">*/}
+      {/*    <motion.div*/}
+      {/*      className="text-center mb-12 sm:mb-16"*/}
+      {/*      initial={{ opacity: 0, y: 30 }}*/}
+      {/*      whileInView={{ opacity: 1, y: 0 }}*/}
+      {/*      viewport={{ once: true }}*/}
+      {/*      transition={{ duration: 0.8 }}*/}
+      {/*    >*/}
+      {/*      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6">*/}
+      {/*        Our Mission & Vision*/}
+      {/*      </h2>*/}
+      {/*      <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>*/}
+      {/*    </motion.div>*/}
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <motion.div
-              className="bg-gradient-to-br from-blue-25 to-cyan-25 rounded-3xl p-8 shadow-lg"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <h3 className="text-xl sm:text-2xl font-bold text-[#2b004b] mb-6">Our Mission</h3>
-              <p className="text-gray-700 text-sm sm:text-base leading-relaxed mb-6">
-                To democratize access to credit by making borrowing simple, transparent, and accessible to every Indian. 
-                We believe financial inclusion is the key to economic growth and prosperity.
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-center space-x-3">
-                  <CheckCircle2 className="text-blue-500 w-5 h-5 flex-shrink-0" />
-                  <span className="text-gray-700">Make credit accessible to all</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <CheckCircle2 className="text-blue-500 w-5 h-5 flex-shrink-0" />
-                  <span className="text-gray-700">Provide transparent and fair lending</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <CheckCircle2 className="text-blue-500 w-5 h-5 flex-shrink-0" />
-                  <span className="text-gray-700">Build trust through technology</span>
-                </li>
-              </ul>
-            </motion.div>
+      {/*    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">*/}
+      {/*      <motion.div*/}
+      {/*        className="bg-gradient-to-br from-blue-25 to-cyan-25 rounded-3xl p-8 shadow-lg"*/}
+      {/*        initial={{ opacity: 0, y: 30 }}*/}
+      {/*        whileInView={{ opacity: 1, y: 0 }}*/}
+      {/*        viewport={{ once: true }}*/}
+      {/*        transition={{ duration: 0.8 }}*/}
+      {/*      >*/}
+      {/*        <h3 className="text-xl sm:text-2xl font-bold text-[#2b004b] mb-6">Our Mission</h3>*/}
+      {/*        <p className="text-gray-700 text-sm sm:text-base leading-relaxed mb-6">*/}
+      {/*          To democratize access to credit by making borrowing simple, transparent, and accessible to every Indian. */}
+      {/*          We believe financial inclusion is the key to economic growth and prosperity.*/}
+      {/*        </p>*/}
+      {/*        <ul className="space-y-3">*/}
+      {/*          <li className="flex items-center space-x-3">*/}
+      {/*            <CheckCircle2 className="text-blue-500 w-5 h-5 flex-shrink-0" />*/}
+      {/*            <span className="text-gray-700">Make credit accessible to all</span>*/}
+      {/*          </li>*/}
+      {/*          <li className="flex items-center space-x-3">*/}
+      {/*            <CheckCircle2 className="text-blue-500 w-5 h-5 flex-shrink-0" />*/}
+      {/*            <span className="text-gray-700">Provide transparent and fair lending</span>*/}
+      {/*          </li>*/}
+      {/*          <li className="flex items-center space-x-3">*/}
+      {/*            <CheckCircle2 className="text-blue-500 w-5 h-5 flex-shrink-0" />*/}
+      {/*            <span className="text-gray-700">Build trust through technology</span>*/}
+      {/*          </li>*/}
+      {/*        </ul>*/}
+      {/*      </motion.div>*/}
 
-            <motion.div
-              className="bg-gradient-to-br from-indigo-25 to-purple-25 rounded-3xl p-8 shadow-lg"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <h3 className="text-xl sm:text-2xl font-bold text-[#2b004b] mb-6">Our Vision</h3>
-              <p className="text-gray-700 text-sm sm:text-base leading-relaxed mb-6">
-                To become India's most trusted digital lending platform, empowering millions of individuals 
-                and businesses with smart, flexible, and affordable financing solutions.
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-center space-x-3">
-                  <CheckCircle2 className="text-indigo-500 w-5 h-5 flex-shrink-0" />
-                  <span className="text-gray-700">Lead the digital lending revolution</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <CheckCircle2 className="text-indigo-500 w-5 h-5 flex-shrink-0" />
-                  <span className="text-gray-700">Enable financial inclusion at scale</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <CheckCircle2 className="text-indigo-500 w-5 h-5 flex-shrink-0" />
-                  <span className="text-gray-700">Create lasting impact on society</span>
-                </li>
-              </ul>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      {/*      <motion.div*/}
+      {/*        className="bg-gradient-to-br from-indigo-25 to-purple-25 rounded-3xl p-8 shadow-lg"*/}
+      {/*        initial={{ opacity: 0, y: 30 }}*/}
+      {/*        whileInView={{ opacity: 1, y: 0 }}*/}
+      {/*        viewport={{ once: true }}*/}
+      {/*        transition={{ duration: 0.8, delay: 0.2 }}*/}
+      {/*      >*/}
+      {/*        <h3 className="text-xl sm:text-2xl font-bold text-[#2b004b] mb-6">Our Vision</h3>*/}
+      {/*        <p className="text-gray-700 text-sm sm:text-base leading-relaxed mb-6">*/}
+      {/*          To become India's most trusted digital lending platform, empowering millions of individuals */}
+      {/*          and businesses with smart, flexible, and affordable financing solutions.*/}
+      {/*        </p>*/}
+      {/*        <ul className="space-y-3">*/}
+      {/*          <li className="flex items-center space-x-3">*/}
+      {/*            <CheckCircle2 className="text-indigo-500 w-5 h-5 flex-shrink-0" />*/}
+      {/*            <span className="text-gray-700">Lead the digital lending revolution</span>*/}
+      {/*          </li>*/}
+      {/*          <li className="flex items-center space-x-3">*/}
+      {/*            <CheckCircle2 className="text-indigo-500 w-5 h-5 flex-shrink-0" />*/}
+      {/*            <span className="text-gray-700">Enable financial inclusion at scale</span>*/}
+      {/*          </li>*/}
+      {/*          <li className="flex items-center space-x-3">*/}
+      {/*            <CheckCircle2 className="text-indigo-500 w-5 h-5 flex-shrink-0" />*/}
+      {/*            <span className="text-gray-700">Create lasting impact on society</span>*/}
+      {/*          </li>*/}
+      {/*        </ul>*/}
+      {/*      </motion.div>*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</section>*/}
 
       {/* Key Features Section */}
       <section className="relative py-16 sm:py-24 overflow-hidden">

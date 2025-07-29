@@ -39,15 +39,43 @@ export default function Hero1() {
         
         {/* Text Section */}
         <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left justify-center max-w-2xl lg:max-w-none">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-extrabold text-gray-900 mb-4 sm:mb-6 leading-tight">
-            Instant Personal Loans
-          </h1>
-          <h2 className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-bold text-blue-700 mb-2 sm:mb-4 tracking-wide uppercase">
-            Get Money in Minutes
-          </h2>
-          <p className="text-gray-800 mb-6 sm:mb-8 max-w-xl lg:max-w-2xl font-medium text-sm sm:text-base md:text-lg lg:text-lg leading-relaxed">
-            Get a quick, paperless loan up to ₹10 Lakhs. Trusted by millions. 100% online, direct bank transfer, and instant approval.
-          </p>
+          {/*<h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-extrabold text-gray-900 mb-4 sm:mb-6 leading-tight">*/}
+          {/*  Instant Personal Loans*/}
+          {/*</h1>*/}
+          {/*<h2 className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-bold text-blue-700 mb-2 sm:mb-4 tracking-wide uppercase">*/}
+          {/*  Get Money in Minutes*/}
+          {/*</h2>*/}
+          {/*<p className="text-gray-800 mb-6 sm:mb-8 max-w-xl lg:max-w-2xl font-medium text-sm sm:text-base md:text-lg lg:text-lg leading-relaxed">*/}
+          {/*  Get a quick, paperless loan up to ₹10 Lakhs. Trusted by millions. 100% online, direct bank transfer, and instant approval.*/}
+          {/*</p>*/}
+
+          <motion.h1
+              className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-4 sm:mb-6 leading-tight"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            Get Instant Personal & Business Loans Online
+            <br />
+            <span className="bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 bg-clip-text text-transparent">
+                Trusted Digital Loan App in India
+
+              </span>
+          </motion.h1>
+
+
+          <motion.p
+              className="text-base sm:text-lg md:text-xl text-gray-700 max-w-4xl mx-auto mb-6 sm:mb-8 leading-relaxed"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            {/*Samridhya is an ONDC-registered, RBI-compliant digital loan platform offering fast, 100% paperless approvals. Compare loan offers from top banks and NBFCs — all in one place. Whether personal, business, or GST loans, we simplify smart financing.*/}
+            Apply for instant loans online with Samridhya – ONDC-registered digital loan app. Get personal and business loans up to ₹40 lakhs, interest rates from 9.99%, fast approval, and 100% paperless process.
+
+
+          </motion.p>
+
           <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto mb-4 lg:mb-6">
             <button
               onClick={() => window.open(getAppStoreLink(), '_blank')}

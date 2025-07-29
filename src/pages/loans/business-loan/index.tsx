@@ -163,10 +163,11 @@ export default function BusinessLoan() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              Business Loans
+              Apply for a Business Loan Online
               <br />
               <span className="bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 bg-clip-text text-transparent">
-                For Growth
+                Fast, Paperless & Low Interest
+
               </span>
             </motion.h1>
 
@@ -177,8 +178,11 @@ export default function BusinessLoan() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              Get up to ₹2 Crores in just 24 hours. Working capital, equipment financing, 
-              and business expansion loans starting from 12.99% p.a.
+              Ideal for MSMEs, startups, and self-employed professionals
+              Looking for fast, flexible funding to take your business to the next level?
+              Samridhya offers Instant Business Loans up to ₹40 Lakhs with minimal documentation, competitive interest rates starting at 9.99% p.a., and a 100% paperless application process.
+              Whether you're a startup, MSME, or a self-employed professional — get the funds you need, when you need them.
+
             </motion.p>
 
             {/* CTA Buttons */}

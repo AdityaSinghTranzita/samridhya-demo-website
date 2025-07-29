@@ -181,8 +181,10 @@ export default function PersonalLoan() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              Get up to ₹40 Lakhs in just 10 minutes. No collateral, minimal documents, 
+              Get up to ₹40 Lakhs in just 10 minutes. No collateral, minimal documents,
               and competitive rates starting from 9.99% p.a.
+
+
             </motion.p>
 
             {/* CTA Buttons */}

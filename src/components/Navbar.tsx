@@ -167,13 +167,25 @@ export default function Navbar() {
         </ul>
 
         {/* Download App Button - Desktop */}
+        {/*<button*/}
+        {/*  onClick={handleAppDownload}*/}
+        {/*  className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium ${*/}
+        {/*    isScrolled */}
+        {/*      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700' */}
+        {/*      : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700'*/}
+        {/*  }`}*/}
+        {/*>*/}
+        {/*  <Download size={16} />*/}
+        {/*  Download App*/}
+        {/*</button>*/}
+
         <button
-          onClick={handleAppDownload}
-          className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium ${
-            isScrolled 
-              ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700' 
-              : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700'
-          }`}
+            onClick={handleAppDownload}
+            className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium ${
+                isScrolled
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700'
+                    : 'bg-blue-600/10 backdrop-blur-sm border border-blue-600/20 text-blue-800 hover:bg-blue-600/20'
+            }`}
         >
           <Download size={16} />
           Download App
