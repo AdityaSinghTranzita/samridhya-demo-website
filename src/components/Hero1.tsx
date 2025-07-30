@@ -350,33 +350,39 @@ export default function Hero1() {
               <span className="text-sm font-medium text-gray-700">ONDC Registered</span>
             </motion.div>
 
+
+
+
             <motion.h1
-                className="text-3xl sm:text-4xl md:text-3xl lg:text-5xl font-bold text-gray-900 mb-6 leading-[1.1] tracking-tight"
+                className="text-xl sm:text-xs md:text-3xl lg:text-5xl font-bold text-gray-900 mb-6 leading-[1.1] tracking-tight "
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
             >
+                <span className="mb-[5px] sm:mb-0">
               Get Instant Personal & Business Loans Online
+                </span>
               <br />
-              <span className="bg-gradient-to-r  lg:text-3xl from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent font-extrabold inline-flex items-center gap-2">
-              Trusted Digital Loan App in India
+              <span className="bg-gradient-to-r text-base sm:text-xl md:text-xl lg:text-3xl from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent font-extrabold inline-flex items-center gap-2">
+    Trusted Digital Loan App in India
 
-              <motion.span
-                  className="text-blue-600"
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    rotate: [0, 5, -5, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: 1,
-                  }}
-              >
-                ₹
-              </motion.span>
-            </span>
+    <motion.span
+        className="text-blue-600"
+        animate={{
+          scale: [1, 1.2, 1],
+          rotate: [0, 5, -5, 0],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          delay: 1,
+        }}
+    >
+      ₹
+    </motion.span>
+  </span>
             </motion.h1>
+
 
             <motion.p
                 className="text-lg sm:text-xl text-gray-600 max-w-2xl mb-8 leading-relaxed font-medium"
@@ -440,7 +446,7 @@ export default function Hero1() {
             >
               <button
                   onClick={() => window.open(getAppStoreLink(), '_blank')}
-                  className="group relative w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-lg transform hover:scale-[1.02] overflow-hidden"
+                  className="cursor-pointer group relative w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-lg transform hover:scale-[1.02] overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <span className="relative flex items-center justify-center gap-2">
@@ -477,7 +483,7 @@ export default function Hero1() {
             >
               <button
                   onClick={() => window.open('https://play.google.com/store/apps/details?id=samridh.consumer', '_blank')}
-                  className="transition-transform hover:scale-105 hover:shadow-md rounded-lg overflow-hidden"
+                  className=" cursor-pointer transition-transform hover:scale-105 hover:shadow-md rounded-lg overflow-hidden"
               >
                 <Image
                     src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
@@ -491,7 +497,7 @@ export default function Hero1() {
               </button>
               <button
                   onClick={() => window.open('https://apps.apple.com/in/app/samridhya/id6745554387', '_blank')}
-                  className="transition-transform hover:scale-105 hover:shadow-md rounded-lg overflow-hidden"
+                  className="cursor-pointer  transition-transform hover:scale-105 hover:shadow-md rounded-lg overflow-hidden"
               >
                 <Image
                     src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"

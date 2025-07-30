@@ -91,7 +91,7 @@ export default function Partners() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-4 leading-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl  font-bold text-[#2b004b] mb-4 leading-tight">
             Our Trusted{' '}
             <span className="bg-gradient-to-r from-[#276ef4] to-green-500 bg-clip-text text-transparent">
               Partners

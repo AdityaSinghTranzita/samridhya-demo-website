@@ -528,7 +528,7 @@ export default function PersonalLoan() {
                 <Phone className="w-6 h-6 text-blue-600" />
               </div>
               <h3 className="text-sm font-semibold text-gray-800 mb-2">Call Us</h3>
-              <p className="text-xs text-gray-600">1800-123-4567</p>
+              <p className="text-xs text-gray-600">+91 63662 34524</p>
               <p className="text-xs text-gray-500">24/7 Support</p>
             </motion.div>
 
@@ -558,7 +558,7 @@ export default function PersonalLoan() {
                 <MapPin className="w-6 h-6 text-purple-600" />
               </div>
               <h3 className="text-sm font-semibold text-gray-800 mb-2">Visit Us</h3>
-              <p className="text-xs text-gray-600">Mumbai, Maharashtra</p>
+              <p className="text-xs text-gray-600">Bangalore, Karnataka</p>
               <p className="text-xs text-gray-500">Head Office</p>
             </motion.div>
           </div>

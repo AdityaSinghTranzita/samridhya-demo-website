@@ -35,7 +35,7 @@ export default function Tools() {
                     transition={{ duration: 0.8 }}
                     viewport={{ once: true }}
                 >
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b]">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl  font-bold text-[#2b004b]">
                         Use Our <span className="bg-gradient-to-r from-[#276ef4] to-green-500 bg-clip-text text-transparent">Free Tools</span>
                     </h2>
                     <p className="text-gray-600 mt-2 sm:mt-4 text-sm sm:text-base">Smart tools to help you borrow better</p>

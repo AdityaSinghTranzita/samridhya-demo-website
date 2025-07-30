@@ -132,9 +132,9 @@ export default function WhatWeOffer() {
         >
           
 
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#2b004b] mb-4 sm:mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl  font-bold text-[#2b004b]">
             What We{' '}
-            <span className="bg-gradient-to-r from-[#276ef4] to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#276ef4] to-green-500 bg-clip-text text-transparent">
               Offer
             </span>
           </h2>

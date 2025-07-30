@@ -414,88 +414,88 @@ export default function About() {
           </div>
 
           {/* Bottom statistics section */}
-          <motion.div
-            className="mt-12 sm:mt-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            <div className="bg-gradient-to-r from-[#276ef4] to-green-500 rounded-3xl p-6 sm:p-8 md:p-12 text-white shadow-2xl">
-              <div className="text-center mb-6 sm:mb-8">
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">
-                  Trusted by Thousands of Happy Customers
-                </h3>
-                <p className="text-white/90 text-lg">
-                  Join the growing community of satisfied borrowers who chose Samridhya
-                </p>
-              </div>
+          {/*<motion.div*/}
+          {/*  className="mt-12 sm:mt-20"*/}
+          {/*  initial={{ opacity: 0, y: 30 }}*/}
+          {/*  whileInView={{ opacity: 1, y: 0 }}*/}
+          {/*  viewport={{ once: true }}*/}
+          {/*  transition={{ duration: 0.8, delay: 0.6 }}*/}
+          {/*>*/}
+          {/*  <div className="bg-gradient-to-r from-[#276ef4] to-green-500 rounded-3xl p-6 sm:p-8 md:p-12 text-white shadow-2xl">*/}
+          {/*    <div className="text-center mb-6 sm:mb-8">*/}
+          {/*      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">*/}
+          {/*        Trusted by Thousands of Happy Customers*/}
+          {/*      </h3>*/}
+          {/*      <p className="text-white/90 text-lg">*/}
+          {/*        Join the growing community of satisfied borrowers who chose Samridhya*/}
+          {/*      </p>*/}
+          {/*    </div>*/}
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center">
-                <div>
-                  <div className="text-3xl md:text-4xl font-bold mb-2">50K+</div>
-                  <div className="text-white/80">Loans Disbursed</div>
-                </div>
-                <div>
-                  <div className="text-3xl md:text-4xl font-bold mb-2">₹500Cr+</div>
-                  <div className="text-white/80">Amount Funded</div>
-                </div>
-                <div>
-                  <div className="text-3xl md:text-4xl font-bold mb-2">4.8★</div>
-                  <div className="text-white/80">Customer Rating</div>
-                </div>
-                <div>
-                  <div className="text-3xl md:text-4xl font-bold mb-2">10 Min</div>
-                  <div className="text-white/80">Avg. Approval Time</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+          {/*    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center">*/}
+          {/*      <div>*/}
+          {/*        <div className="text-3xl md:text-4xl font-bold mb-2">50K+</div>*/}
+          {/*        <div className="text-white/80">Loans Disbursed</div>*/}
+          {/*      </div>*/}
+          {/*      <div>*/}
+          {/*        <div className="text-3xl md:text-4xl font-bold mb-2">₹500Cr+</div>*/}
+          {/*        <div className="text-white/80">Amount Funded</div>*/}
+          {/*      </div>*/}
+          {/*      <div>*/}
+          {/*        <div className="text-3xl md:text-4xl font-bold mb-2">4.8★</div>*/}
+          {/*        <div className="text-white/80">Customer Rating</div>*/}
+          {/*      </div>*/}
+          {/*      <div>*/}
+          {/*        <div className="text-3xl md:text-4xl font-bold mb-2">10 Min</div>*/}
+          {/*        <div className="text-white/80">Avg. Approval Time</div>*/}
+          {/*      </div>*/}
+          {/*    </div>*/}
+          {/*  </div>*/}
+          {/*</motion.div>*/}
         </div>
       </section>
 
       {/* Team Section */}
-      <section className="relative py-16 sm:py-24 bg-gradient-to-br from-gray-25 to-blue-25">
-        <div className="max-w-7xl mx-auto px-2 sm:px-6 md:px-12">
-          <motion.div
-            className="text-center mb-12 sm:mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6">
-              Meet Our Leadership
-            </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
-          </motion.div>
+      {/*<section className="relative py-16 sm:py-24 bg-gradient-to-br from-gray-25 to-blue-25">*/}
+      {/*  <div className="max-w-7xl mx-auto px-2 sm:px-6 md:px-12">*/}
+      {/*    <motion.div*/}
+      {/*      className="text-center mb-12 sm:mb-16"*/}
+      {/*      initial={{ opacity: 0, y: 30 }}*/}
+      {/*      whileInView={{ opacity: 1, y: 0 }}*/}
+      {/*      viewport={{ once: true }}*/}
+      {/*      transition={{ duration: 0.8 }}*/}
+      {/*    >*/}
+      {/*      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b004b] mb-6">*/}
+      {/*        Meet Our Leadership*/}
+      {/*      </h2>*/}
+      {/*      <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>*/}
+      {/*    </motion.div>*/}
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {team.map((member, idx) => (
-              <motion.div
-                key={idx}
-                className="bg-white/95 rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center border border-blue-200/50"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: idx * 0.2 }}
-              >
-                <Image
-                  src={member.avatar}
-                  alt={member.name}
-                  width={120}
-                  height={120}
-                  className="rounded-full mx-auto mb-4"
-                  unoptimized
-                />
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">{member.name}</h3>
-                <p className="text-blue-600 font-medium mb-3 text-sm sm:text-base">{member.role}</p>
-                <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{member.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/*    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">*/}
+      {/*      {team.map((member, idx) => (*/}
+      {/*        <motion.div*/}
+      {/*          key={idx}*/}
+      {/*          className="bg-white/95 rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center border border-blue-200/50"*/}
+      {/*          initial={{ opacity: 0, y: 30 }}*/}
+      {/*          whileInView={{ opacity: 1, y: 0 }}*/}
+      {/*          viewport={{ once: true }}*/}
+      {/*          transition={{ duration: 0.6, delay: idx * 0.2 }}*/}
+      {/*        >*/}
+      {/*          <Image*/}
+      {/*            src={member.avatar}*/}
+      {/*            alt={member.name}*/}
+      {/*            width={120}*/}
+      {/*            height={120}*/}
+      {/*            className="rounded-full mx-auto mb-4"*/}
+      {/*            unoptimized*/}
+      {/*          />*/}
+      {/*          <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">{member.name}</h3>*/}
+      {/*          <p className="text-blue-600 font-medium mb-3 text-sm sm:text-base">{member.role}</p>*/}
+      {/*          <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{member.description}</p>*/}
+      {/*        </motion.div>*/}
+      {/*      ))}*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</section>*/}
 
       {/* Testimonials Section */}
       <section className="relative py-16 sm:py-24 bg-white">
@@ -577,7 +577,7 @@ export default function About() {
                 <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
               </div>
               <h3 className="text-sm sm:text-lg md:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">Call Us</h3>
-              <p className="text-xs sm:text-sm md:text-base text-gray-600">1800-123-4567</p>
+              <p className="text-xs sm:text-sm md:text-base text-gray-600">+91 63662 34524</p>
               <p className="text-xs text-gray-500">24/7 Support</p>
             </motion.div>
 
@@ -607,7 +607,7 @@ export default function About() {
                 <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600" />
               </div>
               <h3 className="text-sm sm:text-lg md:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">Visit Us</h3>
-              <p className="text-xs sm:text-sm md:text-base text-gray-600">Mumbai, Maharashtra</p>
+              <p className="text-xs sm:text-sm md:text-base text-gray-600">Bangalore, Karnataka</p>
               <p className="text-xs text-gray-500">Head Office</p>
             </motion.div>
           </div>

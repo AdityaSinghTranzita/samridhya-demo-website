@@ -51,7 +51,7 @@ export default function Faq() {
             <div className="max-w-4xl mx-auto">
                 <div className="flex flex-col items-center w-full px-2 sm:px-0">
                     <motion.h2
-                        className="text-lg sm:text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#276ef4] to-purple-600 text-center mb-4 sm:mb-6"
+                        className="text-2xl sm:text-3xl md:text-4xl  font-bold text-[#2b004b font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#276ef4] to-green-500 text-center mb-4 sm:mb-6"
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
@@ -137,7 +137,7 @@ export default function Faq() {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <a
-                            href="tel:1800-123-4567"
+                            href="tel:6366234524"
                             className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 shadow-lg hover:shadow-xl"
                         >
                             Call Support

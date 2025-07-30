@@ -181,7 +181,7 @@ export default function Navbar() {
 
         <button
             onClick={handleAppDownload}
-            className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium ${
+            className={`cursor-pointer hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium ${
                 isScrolled
                     ? 'bg-blue-600/10 backdrop-blur-sm border border-blue-600/20 text-blue-800 hover:bg-blue-600/20'
                     : 'bg-blue-600/10 backdrop-blur-sm border border-blue-600/20 text-blue-800 hover:bg-blue-600/20'

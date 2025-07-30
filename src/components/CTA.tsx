@@ -119,7 +119,7 @@ export default function Footer() {
                       alt="Samridhya Logo"
                       width={120}
                       height={31}
-                      className="h-6 sm:h-8 w-auto brightness-0 invert"
+                      className="w-40 h-4 sm:w-32 sm:h-6 brightness-0 invert"
                       priority
                       unoptimized
                   />

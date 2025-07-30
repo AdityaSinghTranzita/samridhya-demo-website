@@ -96,12 +96,12 @@ export default function WhyChoose() {
                 <div
                     className="text-center mb-12 sm:mb-16 md:mb-20"
                 >
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#2b004b] mb-4 sm:mb-6">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl  font-bold text-[#2b004b] mb-4 sm:mb-6">
                         Why Choose{' '}
                         <span className="bg-gradient-to-r from-[#276ef4] to-green-500 bg-clip-text text-transparent">
-                            Samridhya
+                            Samridhya ?
                         </span>
-                        <span className="text-xl sm:text-2xl md:text-3xl lg:text-4xl">?</span>
+                        {/*<span className="text-xl sm:text-2xl md:text-3xl lg:text-4xl">?</span>*/}
                     </h2>
 
                     <div

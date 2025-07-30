@@ -192,7 +192,7 @@ export default function TestimonialSection() {
           viewport={{ once: true }}
           className="mb-12 sm:mb-16"
         >
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#2b004b] mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl  font-bold text-[#2b004b] mb-4">
             What Our{' '}
             <span className="bg-gradient-to-r from-[#276ef4] to-green-500 bg-clip-text text-transparent">
               Users Say

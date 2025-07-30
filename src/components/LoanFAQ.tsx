@@ -252,7 +252,7 @@ export default function LoanFAQ({ loanType, className = '' }: LoanFAQProps) {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl  font-bold text-[#2b004b] mb-6">
             Frequently Asked Questions
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -318,7 +318,7 @@ export default function LoanFAQ({ loanType, className = '' }: LoanFAQProps) {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="tel:1800-123-4567"
+              href="tel:6366234524"
               className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 font-medium"
             >
               Call Us: 1800-123-4567
