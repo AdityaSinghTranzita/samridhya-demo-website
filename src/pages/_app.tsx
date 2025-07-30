@@ -2,10 +2,18 @@ import type { AppProps } from 'next/app'
 import '@/styles/globals.css'
 import Head from 'next/head'
 import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { initPerformanceMonitoring } from '@/utils/performance'
+import { initGA, trackPageView } from '@/utils/analytics'
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
   useEffect(() => {
+    // Initialize Google Analytics
+    initGA();
+    
+    // Initialize performance monitoring
     initPerformanceMonitoring();
     
     // Register service worker
@@ -21,6 +29,18 @@ export default function App({ Component, pageProps }: AppProps) {
       });
     }
   }, []);
+
+  // Track page views on route changes
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      trackPageView(url);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
 
   return (
     <>

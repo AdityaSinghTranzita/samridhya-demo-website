@@ -17,6 +17,26 @@ export default function Document() {
         <meta name="msapplication-TileColor" content="#2563eb" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         
+        {/* Google Analytics */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-GDWZ8WE1JE"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-GDWZ8WE1JE', {
+                page_title: document.title,
+                page_location: window.location.href,
+                send_page_view: true,
+              });
+            `,
+          }}
+        />
+        
         {/* Basic Meta Tags */}
         <meta charSet="utf-8" />
         <meta name="robots" content="index, follow" />

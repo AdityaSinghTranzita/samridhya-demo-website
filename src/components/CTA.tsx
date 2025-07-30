@@ -162,7 +162,7 @@ export default function Footer() {
                     <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
                     FAQs
                   </Link></li>
-                  <li><Link href="#" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 sm:gap-3 group text-sm md:text-base lg:text-base">
+                  <li><Link href="/contact" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 sm:gap-3 group text-sm md:text-base lg:text-base">
                     <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
                     Contact Us
                   </Link></li>

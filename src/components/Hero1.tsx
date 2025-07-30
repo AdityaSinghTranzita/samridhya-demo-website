@@ -135,6 +135,7 @@ import { motion } from 'framer-motion';
 import { getAppStoreLink } from '@/utils/appStore';
 import { CreditCard, Shield, Zap, Award, TrendingUp } from 'lucide-react';
 import { useEffect, useRef } from 'react';
+import { trackButtonClick, trackAppDownload } from '@/utils/analytics';
 
 const floatingAnimation = (delay = 0) => ({
   y: ['-8px', '8px', '-8px'],
@@ -445,7 +446,10 @@ export default function Hero1() {
                 transition={{ duration: 0.6, delay: 0.8 }}
             >
               <button
-                  onClick={() => window.open(getAppStoreLink(), '_blank')}
+                  onClick={() => {
+                    trackButtonClick('apply_loan', 'hero_section');
+                    window.open(getAppStoreLink(), '_blank');
+                  }}
                   className="cursor-pointer group relative w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-lg transform hover:scale-[1.02] overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -467,6 +471,7 @@ export default function Hero1() {
               </button>
               <Link
                   href="/calculators/credit-score-checker"
+                  onClick={() => trackButtonClick('check_credit_score', 'hero_section')}
                   className="group w-full sm:w-auto bg-white/90 backdrop-blur-sm hover:bg-white text-blue-600 font-semibold px-6 py-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg text-center text-lg transform hover:scale-[1.02] flex items-center justify-center gap-2 border-2 border-blue-100 hover:border-blue-200"
               >
                 <CreditCard className="w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -482,7 +487,10 @@ export default function Hero1() {
                 transition={{ duration: 0.6, delay: 1.0 }}
             >
               <button
-                  onClick={() => window.open('https://play.google.com/store/apps/details?id=samridh.consumer', '_blank')}
+                  onClick={() => {
+                    trackAppDownload('android');
+                    window.open('https://play.google.com/store/apps/details?id=samridh.consumer', '_blank');
+                  }}
                   className=" cursor-pointer transition-transform hover:scale-105 hover:shadow-md rounded-lg overflow-hidden"
               >
                 <Image
@@ -496,7 +504,10 @@ export default function Hero1() {
                 />
               </button>
               <button
-                  onClick={() => window.open('https://apps.apple.com/in/app/samridhya/id6745554387', '_blank')}
+                  onClick={() => {
+                    trackAppDownload('ios');
+                    window.open('https://apps.apple.com/in/app/samridhya/id6745554387', '_blank');
+                  }}
                   className="cursor-pointer  transition-transform hover:scale-105 hover:shadow-md rounded-lg overflow-hidden"
               >
                 <Image
