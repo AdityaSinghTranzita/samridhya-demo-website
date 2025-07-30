@@ -25,7 +25,7 @@ const contactInfo = [
   {
     icon: MapPin,
     title: 'Visit Us',
-    details: ['Bangalore, Karnataka'],
+    details: ['No.1207/343 & 1207/1/343/1, Sierra Cartel, 9th Main,7th Sector, HSR Layout, Bengaluru Urban, Karnataka, 560102'],
     gradient: 'from-purple-500 to-pink-500',
     description: 'By appointment only'
   }

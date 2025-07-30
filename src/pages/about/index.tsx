@@ -723,7 +723,7 @@ export default function About() {
                 <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600" />
               </div>
               <h3 className="text-sm sm:text-lg md:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">Visit Us</h3>
-              <p className="text-xs sm:text-sm md:text-base text-gray-600">Bangalore, Karnataka</p>
+              <p className="text-xs sm:text-sm md:text-base text-gray-600">HSR Layout, Bengaluru Urban, Karnataka, 560102</p>
               <p className="text-xs text-gray-500">Head Office</p>
             </motion.div>
           </div>

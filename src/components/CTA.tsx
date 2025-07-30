@@ -205,7 +205,7 @@ export default function Footer() {
                   <li className="flex items-start gap-3 sm:gap-4">
                     <MdPhone className="text-blue-500 mt-1 flex-shrink-0" size={18} />
                     <div>
-                      <p className="text-white font-medium text-sm md:text-base lg:text-base">91 6366234524</p>
+                      <p className="text-white font-medium text-sm md:text-base lg:text-base">+91 6366234524</p>
                       <p className="text-gray-400 text-xs md:text-sm">24/7 Support</p>
                     </div>
                   </li>
@@ -219,7 +219,7 @@ export default function Footer() {
                   <li className="flex items-start gap-3 sm:gap-4">
                     <MdLocationOn className="text-blue-500 mt-1 flex-shrink-0" size={18} />
                     <div>
-                      <p className="text-white font-medium text-sm md:text-base lg:text-base">Bangalore, Karnataka</p>
+                      <p className="text-white font-medium text-sm md:text-base lg:text-base">No.1207/343 & 1207/1/343/1, Sierra Cartel, 9th Main,7th Sector, HSR Layout, Bengaluru Urban, Karnataka, 560102</p>
                       <p className="text-gray-400 text-xs md:text-sm">Head Office</p>
                     </div>
                   </li>
