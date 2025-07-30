@@ -112,7 +112,7 @@ const features = [
 ];
 
 const stats = [
-  { number: 100, label: 'Happy Customers', icon: Users, suffix: '+' },
+  { number: 1000, label: 'Happy Customers', icon: Users, suffix: '+' },
   { number: 50, label: 'Loans Disbursed', icon: TrendingUp, suffix: 'Lakh+', prefix: '₹' },
   { number: 24, label: 'Customer Support', icon: Phone, suffix: '/7' },
   { number: 4.8, label: 'Customer Rating', icon: Star, suffix: '★', decimal: true }
@@ -513,7 +513,94 @@ export default function About() {
             <div className="w-24 h-1 bg-gradient-to-r from-[#276EF4] to-cyan-500 rounded-full mx-auto mb-6"></div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Mobile: Horizontal scrollable cards, Desktop: Grid layout */}
+          <div className="md:hidden">
+                        <div className="relative">
+              {/* Left fade indicator */}
+              <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none"></div>
+              
+              {/* Right fade indicator */}
+              <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none"></div>
+              
+              <div className="flex space-x-4 overflow-x-auto pb-4 scrollbar-hide">
+                {testimonials.map((testimonial, idx) => (
+                  <motion.div
+                    key={idx}
+                    className="flex-shrink-0 w-80 bg-white/95 rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-200/50"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: idx * 0.2 }}
+                  >
+                    <div className="flex items-center mb-4">
+                      <div className="relative mr-4">
+                        <Image
+                          src={testimonial.avatar}
+                          alt={testimonial.name}
+                          width={50}
+                          height={50}
+                          className="rounded-full"
+                          unoptimized
+                          onError={(e) => {
+                            // Create a default avatar with initials when image fails to load
+                            const target = e.target as HTMLImageElement;
+                            const canvas = document.createElement('canvas');
+                            canvas.width = 50;
+                            canvas.height = 50;
+                            const ctx = canvas.getContext('2d');
+                            
+                            if (ctx) {
+                              // Create gradient background
+                              const gradient = ctx.createLinearGradient(0, 0, 50, 50);
+                              gradient.addColorStop(0, '#3B82F6');
+                              gradient.addColorStop(1, '#1D4ED8');
+                              ctx.fillStyle = gradient;
+                              ctx.fillRect(0, 0, 50, 50);
+                              
+                              // Add text (initials)
+                              ctx.fillStyle = 'white';
+                              ctx.font = 'bold 18px Arial';
+                              ctx.textAlign = 'center';
+                              ctx.textBaseline = 'middle';
+                              const initials = testimonial.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                              ctx.fillText(initials, 25, 25);
+                            }
+                            
+                            target.src = canvas.toDataURL();
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
+                        <p className="text-sm text-gray-600">{testimonial.role}</p>
+                      </div>
+                    </div>
+                    <div className="flex mb-4">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                      ))}
+                    </div>
+                    <p className="text-gray-700 italic">"{testimonial.content}"</p>
+                  </motion.div>
+                ))}
+              </div>
+              
+              {/* Scroll indicators at bottom */}
+              <div className="flex justify-center items-center mt-4 px-2">
+                <div className="flex space-x-1">
+                  {testimonials.map((_, idx) => (
+                    <div
+                      key={idx}
+                      className="w-2 h-2 bg-gray-300 rounded-full transition-all duration-300"
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop: Grid layout */}
+          <div className="hidden md:grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, idx) => (
               <motion.div
                 key={idx}
@@ -524,14 +611,43 @@ export default function About() {
                 transition={{ duration: 0.6, delay: idx * 0.2 }}
               >
                 <div className="flex items-center mb-4">
-                  <Image
-                    src={testimonial.avatar}
-                    alt={testimonial.name}
-                    width={50}
-                    height={50}
-                    className="rounded-full mr-4"
-                    unoptimized
-                  />
+                  <div className="relative mr-4">
+                    <Image
+                      src={testimonial.avatar}
+                      alt={testimonial.name}
+                      width={50}
+                      height={50}
+                      className="rounded-full"
+                      unoptimized
+                      onError={(e) => {
+                        // Create a default avatar with initials when image fails to load
+                        const target = e.target as HTMLImageElement;
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 50;
+                        canvas.height = 50;
+                        const ctx = canvas.getContext('2d');
+                        
+                        if (ctx) {
+                          // Create gradient background
+                          const gradient = ctx.createLinearGradient(0, 0, 50, 50);
+                          gradient.addColorStop(0, '#3B82F6');
+                          gradient.addColorStop(1, '#1D4ED8');
+                          ctx.fillStyle = gradient;
+                          ctx.fillRect(0, 0, 50, 50);
+                          
+                          // Add text (initials)
+                          ctx.fillStyle = 'white';
+                          ctx.font = 'bold 18px Arial';
+                          ctx.textAlign = 'center';
+                          ctx.textBaseline = 'middle';
+                          const initials = testimonial.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                          ctx.fillText(initials, 25, 25);
+                        }
+                        
+                        target.src = canvas.toDataURL();
+                      }}
+                    />
+                  </div>
                   <div>
                     <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
                     <p className="text-sm text-gray-600">{testimonial.role}</p>

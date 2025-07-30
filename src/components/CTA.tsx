@@ -99,7 +99,7 @@ export default function Footer() {
                   <div className="w-8 h-8 sm:w-12 sm:h-12 bg-white/25 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
                     <TrendingUp className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
                   </div>
-                  <h3 className="text-white font-semibold mb-1 sm:mb-2 text-xs sm:text-base">1Cr+ Loans</h3>
+                  <h3 className="text-white font-semibold mb-1 sm:mb-2 text-xs sm:text-base">₹50Lakh+ Loans</h3>
                   <p className="text-white/90 text-xs sm:text-sm">Loans disbursed</p>
                 </motion.div>
               </div>

@@ -3,6 +3,7 @@ module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',        // ✅ Pages router
     './components/**/*.{js,ts,jsx,tsx,mdx}',   // ✅ UI components
+    './src/**/*.{js,ts,jsx,tsx,mdx}',          // ✅ Source directory
   ],
   theme: {
     extend: {
@@ -19,6 +20,14 @@ module.exports = {
           '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
           '100%': { transform: 'translate(0px, 0px) scale(1)' },
         },
+      },
+      screens: {
+        'xs': '475px',
+        '3xl': '1600px',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
       },
     },
   },

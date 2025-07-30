@@ -1,13 +1,14 @@
 import type { AppProps } from 'next/app'
 import '@/styles/globals.css'
 import Head from 'next/head'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { initPerformanceMonitoring } from '@/utils/performance'
 import { initGA, trackPageView } from '@/utils/analytics'
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Initialize Google Analytics
@@ -16,6 +17,13 @@ export default function App({ Component, pageProps }: AppProps) {
     // Initialize performance monitoring
     initPerformanceMonitoring();
     
+    // Hide loading state after CSS is loaded
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      document.body.classList.add('loaded');
+      document.body.classList.remove('loading');
+    }, 100);
+
     // Register service worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -28,6 +36,8 @@ export default function App({ Component, pageProps }: AppProps) {
           });
       });
     }
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Track page views on route changes
@@ -74,7 +84,41 @@ export default function App({ Component, pageProps }: AppProps) {
         {/* Disable automatic image scaling */}
         <meta name="format-detection" content="telephone=no" />
       </Head>
-      <Component {...pageProps} />
+      
+      {/* Loading placeholder */}
+      {isLoading && (
+        <div className="loading-placeholder" style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(to bottom right, #f8fafc, #e0f2fe, #e0e7ff)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            border: '3px solid #e5e7eb',
+            borderTop: '3px solid #3b82f6',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite'
+          }} />
+          <style jsx>{`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}</style>
+        </div>
+      )}
+      
+      <div className={isLoading ? 'loading' : 'loaded'}>
+        <Component {...pageProps} />
+      </div>
     </>
   )
 }

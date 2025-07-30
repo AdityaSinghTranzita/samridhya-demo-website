@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Menu, X, Download, ChevronDown, ChevronRight, Phone } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,6 +14,8 @@ export default function Navbar() {
     calculators: false
   });
   const [isScrolled, setIsScrolled] = useState(false);
+  const loansDropdownRef = useRef<HTMLLIElement>(null);
+  const calculatorsDropdownRef = useRef<HTMLLIElement>(null);
 
   const handleDropdown = (menu: 'loans' | 'calculators') => {
     setDropdown(dropdown === menu ? null : menu);
@@ -27,6 +29,26 @@ export default function Navbar() {
   };
 
   const closeMobileMenu = () => setIsOpen(false);
+
+  // Click outside handler to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      
+      // Check if click is outside both dropdowns
+      const isOutsideLoans = loansDropdownRef.current && !loansDropdownRef.current.contains(target);
+      const isOutsideCalculators = calculatorsDropdownRef.current && !calculatorsDropdownRef.current.contains(target);
+      
+      if (isOutsideLoans && isOutsideCalculators) {
+        setDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   // Smooth scroll to section with offset for fixed navbar
   const scrollToSection = (sectionId: string) => {
@@ -100,9 +122,9 @@ export default function Navbar() {
           </li>
 
           {/* Loans Dropdown */}
-          <li className="relative group">
+          <li className="relative group" ref={loansDropdownRef}>
             <button
-              className={`flex items-center gap-1 hover:text-blue-700 transition-colors duration-300 ${
+              className={`flex items-center gap-1 hover:text-blue-700 transition-colors duration-300 focus:outline-none ${
                 isScrolled ? 'text-gray-700' : 'text-gray-700'
               }`}
               aria-haspopup="true"
@@ -124,9 +146,9 @@ export default function Navbar() {
           </li>
 
           {/* Calculators Dropdown */}
-          <li className="relative group">
+          <li className="relative group" ref={calculatorsDropdownRef}>
             <button
-              className={`flex items-center gap-1 hover:text-blue-700 transition-colors duration-300 ${
+              className={`flex items-center gap-1 hover:text-blue-700 transition-colors duration-300 focus:outline-none ${
                 isScrolled ? 'text-gray-700' : 'text-gray-700'
               }`}
               aria-haspopup="true"
@@ -167,21 +189,9 @@ export default function Navbar() {
         </ul>
 
         {/* Download App Button - Desktop */}
-        {/*<button*/}
-        {/*  onClick={handleAppDownload}*/}
-        {/*  className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium ${*/}
-        {/*    isScrolled */}
-        {/*      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700' */}
-        {/*      : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700'*/}
-        {/*  }`}*/}
-        {/*>*/}
-        {/*  <Download size={16} />*/}
-        {/*  Download App*/}
-        {/*</button>*/}
-
         <button
             onClick={handleAppDownload}
-            className={`cursor-pointer hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium ${
+            className={`cursor-pointer hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium focus:outline-none ${
                 isScrolled
                     ? 'bg-blue-600/10 backdrop-blur-sm border border-blue-600/20 text-blue-800 hover:bg-blue-600/20'
                     : 'bg-blue-600/10 backdrop-blur-sm border border-blue-600/20 text-blue-800 hover:bg-blue-600/20'
@@ -194,7 +204,7 @@ export default function Navbar() {
         {/* Mobile Toggle Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 border border-gray-200 bg-white shadow-sm hover:bg-gray-50"
+          className="md:hidden p-3 rounded-xl focus:outline-none transition-all duration-300 border border-gray-200 bg-white shadow-sm hover:bg-gray-50"
           aria-label="Toggle Menu"
         >
           {isOpen ? (
@@ -235,7 +245,7 @@ export default function Navbar() {
               <li>
                 <button
                   onClick={() => toggleMobileDropdown('loans')}
-                  className="w-full flex items-center justify-between py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                  className="w-full flex items-center justify-between py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors text-sm focus:outline-none"
                 >
                   <span>Loans</span>
                   {mobileDropdowns.loans ? (
@@ -297,7 +307,7 @@ export default function Navbar() {
               <li>
                 <button
                   onClick={() => toggleMobileDropdown('calculators')}
-                  className="w-full flex items-center justify-between py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                  className="w-full flex items-center justify-between py-3 px-4 text-gray-800 font-medium hover:bg-gray-50 rounded-lg transition-colors text-sm focus:outline-none"
                 >
                   <span>Calculators</span>
                   {mobileDropdowns.calculators ? (
@@ -355,7 +365,7 @@ export default function Navbar() {
                   handleAppDownload();
                   closeMobileMenu();
                 }}
-                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium"
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium focus:outline-none"
               >
                 <Download size={18} />
                 Download App

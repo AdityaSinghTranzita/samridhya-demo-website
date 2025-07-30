@@ -4,6 +4,40 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        {/* Critical CSS to prevent FOUC */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            /* Critical CSS for initial render */
+            body { margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
+            * { box-sizing: border-box; }
+            html { scroll-behavior: smooth; }
+            body { overflow-x: hidden; }
+            
+            /* Prevent layout shift during CSS load */
+            .navbar-placeholder { height: 80px; }
+            .hero-placeholder { min-height: 100vh; background: linear-gradient(to bottom right, #f8fafc, #e0f2fe, #e0e7ff); }
+            
+            /* Loading state styles */
+            .loading { opacity: 0; transition: opacity 0.3s ease-in; }
+            .loaded { opacity: 1; }
+            
+            /* Ensure images don't cause layout shift */
+            img { max-width: 100%; height: auto; }
+            
+            /* Basic responsive utilities */
+            @media (max-width: 768px) {
+              .container { padding-left: 1rem; padding-right: 1rem; }
+            }
+          `
+        }} />
+        
+        {/* Preload critical CSS */}
+        <link rel="preload" href="/_next/static/css/app.css" as="style" />
+        <link rel="preload" href="/_next/static/css/globals.css" as="style" />
+        
+        {/* Preload critical fonts */}
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" />
+        
         {/* Favicon - Light and Dark Mode Support */}
         <link rel="icon" type="image/png" href="/favicon-light.png" media="(prefers-color-scheme: light)" />
         <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: dark)" />

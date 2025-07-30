@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Menu, X, Download } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,6 +11,8 @@ export default function LoanNavbar() {
   const [dropdown, setDropdown] = useState<'loans' | 'calculators' | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [currentPage, setCurrentPage] = useState('');
+  const loansDropdownRef = useRef<HTMLLIElement>(null);
+  const calculatorsDropdownRef = useRef<HTMLLIElement>(null);
 
   // Smooth scroll function
   const scrollToSection = (sectionId: string) => {
@@ -38,6 +40,26 @@ export default function LoanNavbar() {
   };
 
   const closeMobileMenu = () => setIsOpen(false);
+
+  // Click outside handler to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      
+      // Check if click is outside both dropdowns
+      const isOutsideLoans = loansDropdownRef.current && !loansDropdownRef.current.contains(target);
+      const isOutsideCalculators = calculatorsDropdownRef.current && !calculatorsDropdownRef.current.contains(target);
+      
+      if (isOutsideLoans && isOutsideCalculators) {
+        setDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   // Get gradient based on current page
   const getGradient = () => {
@@ -90,7 +112,7 @@ export default function LoanNavbar() {
         </Link>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex space-x-4 lg:space-x-8 font-medium text-base lg:text-lg items-center">
+        <ul className="hidden md:flex space-x-4 lg:space-x-8 font-medium text-sm lg:text-base items-center">
           <li>
             <Link 
               href="/" 
@@ -113,9 +135,9 @@ export default function LoanNavbar() {
           </li>
 
           {/* Loans Dropdown */}
-          <li className="relative group">
+          <li className="relative group" ref={loansDropdownRef}>
             <button
-              className={`flex items-center gap-1 hover:text-blue-700 transition-colors duration-300 ${
+              className={`flex items-center gap-1 hover:text-blue-700 transition-colors duration-300 focus:outline-none ${
                 isScrolled ? 'text-gray-700' : 'text-gray-900'
               }`}
               aria-haspopup="true"
@@ -137,9 +159,9 @@ export default function LoanNavbar() {
           </li>
 
           {/* Calculators Dropdown */}
-          <li className="relative group">
+          <li className="relative group" ref={calculatorsDropdownRef}>
             <button
-              className={`flex items-center gap-1 hover:text-blue-700 transition-colors duration-300 ${
+              className={`flex items-center gap-1 hover:text-blue-700 transition-colors duration-300 focus:outline-none ${
                 isScrolled ? 'text-gray-700' : 'text-gray-900'
               }`}
               aria-haspopup="true"
@@ -169,7 +191,7 @@ export default function LoanNavbar() {
           <li>
             <button 
               onClick={() => scrollToSection('faqs')}
-              className={`hover:text-blue-700 transition-colors duration-300 ${
+              className={`hover:text-blue-700 transition-colors duration-300 focus:outline-none ${
                 isScrolled ? 'text-gray-700' : 'text-gray-900'
               }`}
             >
@@ -181,7 +203,7 @@ export default function LoanNavbar() {
         {/* Download App Button - Desktop */}
         <button
           onClick={handleAppDownload}
-          className={` cursor-pointer hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium ${
+          className={`cursor-pointer hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium focus:outline-none ${
             isScrolled 
               ? 'bg-blue-600/10 backdrop-blur-sm border border-blue-600/20 text-blue-800 hover:bg-blue-600/20'
               : 'bg-blue-600/10 backdrop-blur-sm border border-blue-600/20 text-blue-800 hover:bg-blue-600/20'
@@ -194,7 +216,7 @@ export default function LoanNavbar() {
         {/* Mobile Toggle Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`md:hidden p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ${
+          className={`md:hidden p-2 rounded-lg focus:outline-none transition-all duration-300 ${
             isScrolled 
               ? 'border border-gray-200' 
               : 'border border-blue-600/20 bg-blue-600/10 backdrop-blur-sm'
@@ -228,12 +250,12 @@ export default function LoanNavbar() {
 
             <li className="font-semibold pt-3">Calculators</li>
             <ul className="ml-4 space-y-1">
-                                                            <li><Link href="/calculators/loan-calculator" onClick={closeMobileMenu} className="block py-1">Loan EMI Calculator</Link></li>
+              <li><Link href="/calculators/loan-calculator" onClick={closeMobileMenu} className="block py-1">Loan EMI Calculator</Link></li>
               <li><Link href="/calculators/credit-score-checker" onClick={closeMobileMenu} className="block py-1">Credit Score Checker</Link></li>
             </ul>
 
             <li><Link href="/blog" onClick={closeMobileMenu} className="block py-2">Blogs & News</Link></li>
-            <li><button onClick={() => scrollToSection('faqs')} className="block py-2 w-full text-left">FAQs</button></li>
+            <li><button onClick={() => scrollToSection('faqs')} className="block py-2 w-full text-left focus:outline-none">FAQs</button></li>
             
             {/* Download App Button - Mobile */}
             <li className="pt-4">
@@ -242,7 +264,7 @@ export default function LoanNavbar() {
                   handleAppDownload();
                   closeMobileMenu();
                 }}
-                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium"
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium focus:outline-none"
               >
                 <Download size={16} />
                 Download App

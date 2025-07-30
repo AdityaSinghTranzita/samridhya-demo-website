@@ -370,13 +370,13 @@ export default function TestimonialSection() {
             })}
           </div>
 
-          {/* Dots Indicator */}
-          <div className="flex justify-center space-x-2 mt-8">
+          {/* Dots Indicator - Hidden on mobile */}
+          <div className="hidden sm:flex justify-center space-x-2 mt-8">
             {testimonials.map((_, idx) => (
               <motion.button
                 key={idx}
                 onClick={() => setCurrent(idx)}
-                className={`w-3 h-3 rounded-full transition-all duration-500 ease-out ${
+                className={`w-1.5 h-1.5 sm:w-2 md:w-3 sm:h-2 md:h-3 rounded-full transition-all duration-500 ease-out ${
                   idx === current ? "bg-gradient-to-r from-blue-500 to-indigo-600" : "bg-gray-300 hover:bg-gray-400"
                 }`}
                 whileHover={{ scale: 1.2 }}
