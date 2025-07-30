@@ -127,11 +127,14 @@
 //   );
 // }
 
-
 'use client';
 
+import Image from 'next/image';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { CreditCard, ArrowRight, Shield, Clock, CheckCircle } from 'lucide-react';
+import { getAppStoreLink } from '@/utils/appStore';
+import { CreditCard, Shield, Zap, Award, TrendingUp } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
 const floatingAnimation = (delay = 0) => ({
   y: ['-8px', '8px', '-8px'],
@@ -145,223 +148,450 @@ const floatingAnimation = (delay = 0) => ({
   },
 });
 
+// Floating Rupee Symbols Component
+const FloatingRupees = () => {
+  const rupeeSymbols = ['₹', '₹', '₹', '₹', '₹', '₹'];
+
+  return (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {rupeeSymbols.map((symbol, index) => (
+            <motion.div
+                key={index}
+                className="absolute text-blue-200/30 text-2xl font-bold"
+                style={{
+                  left: `${10 + (index * 15)}%`,
+                  top: `${20 + (index * 10)}%`,
+                }}
+                animate={{
+                  y: [0, -20, 0],
+                  x: [0, 10, 0],
+                  opacity: [0.3, 0.6, 0.3],
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 4 + index * 0.5,
+                  repeat: Infinity,
+                  delay: index * 0.8,
+                  ease: "easeInOut",
+                }}
+            >
+              {symbol}
+            </motion.div>
+        ))}
+      </div>
+  );
+};
+
+// Particle Animation Component
+const ParticleBackground = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas size
+    const resizeCanvas = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Particle system
+    const particles: Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      opacity: number;
+      color: string;
+    }> = [];
+
+    const colors = ['#3B82F6', '#6366F1', '#8B5CF6', '#06B6D4', '#10B981'];
+
+    // Create particles
+    for (let i = 0; i < 50; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 3 + 1,
+        opacity: Math.random() * 0.5 + 0.2,
+        color: colors[Math.floor(Math.random() * colors.length)],
+      });
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((particle, index) => {
+        // Update position
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+
+        // Bounce off edges
+        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fillStyle = particle.color + Math.floor(particle.opacity * 255).toString(16).padStart(2, '0');
+        ctx.fill();
+
+        // Draw connections
+        particles.forEach((otherParticle, otherIndex) => {
+          if (index !== otherIndex) {
+            const dx = particle.x - otherParticle.x;
+            const dy = particle.y - otherParticle.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 100) {
+              ctx.beginPath();
+              ctx.moveTo(particle.x, particle.y);
+              ctx.lineTo(otherParticle.x, otherParticle.y);
+              ctx.strokeStyle = `#3B82F6${Math.floor((1 - distance / 100) * 50).toString(16).padStart(2, '0')}`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        });
+      });
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, []);
+
+  return (
+      <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          style={{ background: 'transparent' }}
+      />
+  );
+};
+
 export default function Hero1() {
   return (
-      <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Dynamic Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
-          {/* Animated gradient orbs */}
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-cyan-400/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-indigo-400/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
+      <section className="relative w-full bg-gradient-to-br from-slate-50 via-white to-blue-50/30 min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 py-12 md:py-16 lg:py-20 overflow-hidden">
 
-          {/* Grid Pattern Overlay */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+        {/* Particle Background */}
+        <ParticleBackground />
 
-          {/* Floating particles */}
-          <div className="absolute inset-0">
-            {[...Array(20)].map((_, i) => (
-                <motion.div
-                    key={i}
-                    className="absolute w-1 h-1 bg-white/20 rounded-full"
-                    style={{
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                    }}
-                    animate={{
-                      y: [0, -30, 0],
-                      opacity: [0.2, 0.8, 0.2],
-                    }}
-                    transition={{
-                      duration: 3 + Math.random() * 2,
-                      repeat: Infinity,
-                      delay: Math.random() * 2,
-                    }}
-                />
-            ))}
-          </div>
-        </div>
+        {/* Floating Rupee Symbols */}
+        <FloatingRupees />
 
-        <div className="relative z-10 mx-auto max-w-7xl w-full flex flex-col lg:flex-row items-center justify-center gap-8 md:gap-12 lg:gap-16 xl:gap-20 px-4 sm:px-6 md:px-8 lg:px-12 py-6 md:py-12 lg:py-16">
+        {/* Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-100/40 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-100/30 rounded-full blur-3xl"></div>
 
-          {/* Modern 3D Phone Mockup */}
+          {/* Animated Rupee Symbols in Background */}
           <motion.div
-              className="w-full lg:w-1/2 flex justify-center items-center mb-8 lg:mb-0"
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, delay: 0.6 }}
+              className="absolute top-1/4 right-1/4 text-6xl text-blue-100/20 font-bold"
+              animate={{
+                rotate: [0, 360],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                duration: 20,
+                repeat: Infinity,
+                ease: "linear",
+              }}
           >
-            <div className="relative">
-              {/* Phone mockup with glassmorphism effect */}
-              <div className="relative w-[280px] sm:w-[320px] md:w-[350px] lg:w-[380px] h-[560px] sm:h-[640px] md:h-[700px] lg:h-[760px]">
-                {/* Phone frame */}
-                <div className="absolute inset-0 bg-gradient-to-b from-gray-800 to-gray-900 rounded-[3rem] shadow-2xl border border-gray-700">
-                  {/* Screen */}
-                  <div className="absolute top-4 left-4 right-4 bottom-4 bg-gradient-to-b from-blue-50 to-white rounded-[2.5rem] overflow-hidden shadow-inner">
-                    {/* Status bar */}
-                    <div className="h-6 bg-gray-900 flex items-center justify-between px-6 text-white text-xs">
-                      <span>9:41</span>
-                      <div className="flex gap-1">
-                        <div className="w-4 h-2 bg-white rounded-sm"></div>
-                        <div className="w-1 h-2 bg-white rounded-sm"></div>
-                      </div>
-                    </div>
-
-                    {/* App content */}
-                    <div className="p-6 h-full bg-gradient-to-b from-blue-50 to-white">
-                      <div className="text-center mb-8">
-                        <div className="w-16 h-16 bg-blue-500 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg">
-                          <CreditCard className="w-8 h-8 text-white" />
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Samridhya</h3>
-                        <p className="text-sm text-gray-600">Quick Loans</p>
-                      </div>
-
-                      {/* Feature cards */}
-                      <div className="space-y-4">
-                        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-sm border border-blue-100">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                              <CheckCircle className="w-5 h-5 text-green-500" />
-                            </div>
-                            <div>
-                              <p className="font-semibold text-gray-900 text-sm">Instant Approval</p>
-                              <p className="text-xs text-gray-600">Get approved in minutes</p>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-sm border border-blue-100">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                              <Shield className="w-5 h-5 text-blue-500" />
-                            </div>
-                            <div>
-                              <p className="font-semibold text-gray-900 text-sm">100% Secure</p>
-                              <p className="text-xs text-gray-600">Bank-level security</p>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-sm border border-blue-100">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                              <Clock className="w-5 h-5 text-purple-500" />
-                            </div>
-                            <div>
-                              <p className="font-semibold text-gray-900 text-sm">Quick Transfer</p>
-                              <p className="text-xs text-gray-600">Direct to bank account</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Floating elements around phone */}
-                <motion.div
-                    className="absolute -top-8 -right-8 w-20 h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-2xl overflow-hidden shadow-xl border-2 border-white/20"
-                    animate={floatingAnimation(0)}
-                >
-                  <img
-                      src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=200&h=200&fit=crop&crop=center"
-                      alt="Money stack"
-                      className="w-full h-full object-cover"
-                  />
-                </motion.div>
-
-                <motion.div
-                    className="absolute -bottom-8 -left-8 w-16 h-16 lg:w-20 lg:h-20 xl:w-24 xl:h-24 rounded-xl overflow-hidden shadow-xl border-2 border-white/20"
-                    animate={floatingAnimation(0.5)}
-                >
-                  <img
-                      src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=200&h=200&fit=crop&crop=center"
-                      alt="Business graph"
-                      className="w-full h-full object-cover"
-                  />
-                </motion.div>
-
-                <motion.div
-                    className="absolute top-1/2 -right-12 w-14 h-14 lg:w-18 lg:h-18 xl:w-20 xl:h-20 rounded-full overflow-hidden shadow-xl border-2 border-white/20"
-                    animate={floatingAnimation(1)}
-                >
-                  <img
-                      src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=200&h=200&fit=crop&crop=center"
-                      alt="Business analytics"
-                      className="w-full h-full object-cover"
-                  />
-                </motion.div>
-              </div>
-            </div>
+            ₹
           </motion.div>
 
-          {/* Text Section with enhanced styling */}
-          <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left justify-center max-w-2xl lg:max-w-none">
+          <motion.div
+              className="absolute bottom-1/3 left-1/6 text-8xl text-indigo-100/15 font-bold"
+              animate={{
+                rotate: [360, 0],
+                scale: [1, 0.8, 1],
+              }}
+              transition={{
+                duration: 25,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+          >
+            ₹
+          </motion.div>
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl w-full flex flex-col lg:flex-row items-center justify-center gap-12 md:gap-16 lg:gap-20 xl:gap-24">
+
+          {/* Text Section */}
+          <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left justify-center max-w-2xl lg:max-w-none order-2 lg:order-1">
+
+            {/* Trust Badges */}
+            <motion.div
+                className="flex items-center gap-3 mb-6 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg border border-gray-100"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+            >
+              <Shield className="w-4 h-4 text-green-600" />
+              <span className="text-sm font-medium text-gray-700">RBI Compliant</span>
+              <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+              <Award className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-medium text-gray-700">ONDC Registered</span>
+            </motion.div>
+
             <motion.h1
-                className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4 sm:mb-6 leading-tight"
+                className="text-3xl sm:text-4xl md:text-3xl lg:text-5xl font-bold text-gray-900 mb-6 leading-[1.1] tracking-tight"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
             >
               Get Instant Personal & Business Loans Online
               <br />
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r  lg:text-3xl from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent font-extrabold inline-flex items-center gap-2">
               Trusted Digital Loan App in India
+
+              <motion.span
+                  className="text-blue-600"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 5, -5, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    delay: 1,
+                  }}
+              >
+                ₹
+              </motion.span>
             </span>
             </motion.h1>
 
             <motion.p
-                className="text-base sm:text-lg md:text-xl text-blue-100 max-w-4xl mx-auto mb-6 sm:mb-8 leading-relaxed"
+                className="text-lg sm:text-xl text-gray-600 max-w-2xl mb-8 leading-relaxed font-medium"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
             >
-              Apply for instant loans online with Samridhya – ONDC-registered digital loan app. Get personal and business loans up to ₹40 lakhs, interest rates from 9.99%, fast approval, and 100% paperless process.
+              Get personal and business loans up to{' '}
+              <span className="font-bold text-gray-900 inline-flex items-center gap-1">
+              <motion.span
+                  animate={{
+                    color: ['#1F2937', '#3B82F6', '#1F2937'],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                  }}
+              >
+                ₹40 lakhs
+              </motion.span>
+            </span>{' '}
+              with interest rates starting from{' '}
+              <span className="font-semibold text-blue-600">9.99%</span>.
+              100% paperless process with instant approval.
             </motion.p>
 
+            {/* Key Features with Rupee Icons */}
             <motion.div
-                className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mb-6 lg:mb-8"
-                initial={{ opacity: 0, y: 30 }}
+                className="flex flex-wrap gap-4 mb-8"
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
             >
-              <button className="group w-full sm:w-auto bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl text-center text-sm sm:text-base md:text-lg transform hover:scale-105 flex items-center justify-center gap-2 border border-blue-400/20">
-                Get Loan Now
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              <button className="w-full sm:w-auto bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-medium px-4 py-3 sm:px-6 sm:py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-xs sm:text-sm md:text-base transform hover:scale-105 flex items-center justify-center gap-2 border border-white/20 hover:border-white/40">
-                <CreditCard className="w-4 h-4" />
-                Check Credit Score
-              </button>
+              <div className="flex items-center gap-2 bg-green-50 px-4 py-3 rounded-xl border border-green-100 shadow-sm">
+                <Zap className="w-4 h-4 text-green-600" />
+                <span className="text-sm font-medium text-green-700">Instant Approval</span>
+                <motion.span
+                    className="text-green-600 font-bold"
+                    animate={{ scale: [1, 1.3, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                >
+                  ₹
+                </motion.span>
+              </div>
+              <div className="flex items-center gap-2 bg-blue-50 px-4 py-3 rounded-xl border border-blue-100 shadow-sm">
+                <Shield className="w-4 h-4 text-blue-600" />
+                <span className="text-sm font-medium text-blue-700">100% Secure</span>
+              </div>
+              <div className="flex items-center gap-2 bg-purple-50 px-4 py-3 rounded-xl border border-purple-100 shadow-sm">
+                <TrendingUp className="w-4 h-4 text-purple-600" />
+                <span className="text-sm font-medium text-purple-700">Zero Paperwork</span>
+              </div>
             </motion.div>
 
+            {/* CTA Buttons */}
             <motion.div
-                className="flex flex-row gap-4 mt-4 sm:mt-6 lg:mt-8 justify-center lg:justify-start w-full lg:w-auto items-center"
-                initial={{ opacity: 0, y: 30 }}
+                className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mb-8"
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.8 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
             >
-              <button className="group transition-all duration-300 hover:scale-110">
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-3 border border-white/20 hover:border-white/40 hover:bg-white/20 transition-all duration-300">
-                  <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-                      alt="Get it on Google Play"
-                      className="h-10 w-[120px] object-contain opacity-90 group-hover:opacity-100 transition-opacity"
-                  />
-                </div>
+              <button
+                  onClick={() => window.open(getAppStoreLink(), '_blank')}
+                  className="group relative w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-lg transform hover:scale-[1.02] overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <span className="relative flex items-center justify-center gap-2">
+                Apply for Loan
+                <motion.span
+                    animate={{
+                      x: [0, 3, 0],
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                    }}
+                >
+                  ₹
+                </motion.span>
+              </span>
               </button>
+              <Link
+                  href="/calculators/credit-score-checker"
+                  className="group w-full sm:w-auto bg-white/90 backdrop-blur-sm hover:bg-white text-blue-600 font-semibold px-6 py-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg text-center text-lg transform hover:scale-[1.02] flex items-center justify-center gap-2 border-2 border-blue-100 hover:border-blue-200"
+              >
+                <CreditCard className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                Check Credit Score
+              </Link>
+            </motion.div>
 
-              <button className="group transition-all duration-300 hover:scale-110">
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-3 border border-white/20 hover:border-white/40 hover:bg-white/20 transition-all duration-300">
-                  <img
-                      src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-                      alt="Download on the App Store"
-                      className="h-10 w-[120px] object-contain opacity-90 group-hover:opacity-100 transition-opacity"
-                  />
-                </div>
+            {/* App Store Buttons */}
+            <motion.div
+                className="flex flex-row gap-4 justify-center lg:justify-start w-full lg:w-auto items-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.0 }}
+            >
+              <button
+                  onClick={() => window.open('https://play.google.com/store/apps/details?id=samridh.consumer', '_blank')}
+                  className="transition-transform hover:scale-105 hover:shadow-md rounded-lg overflow-hidden"
+              >
+                <Image
+                    src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                    alt="Get it on Google Play"
+                    width={140}
+                    height={42}
+                    className="h-10 w-32 object-contain"
+                    loading="lazy"
+                    unoptimized
+                />
               </button>
+              <button
+                  onClick={() => window.open('https://apps.apple.com/in/app/samridhya/id6745554387', '_blank')}
+                  className="transition-transform hover:scale-105 hover:shadow-md rounded-lg overflow-hidden"
+              >
+                <Image
+                    src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                    alt="Download on the App Store"
+                    width={140}
+                    height={42}
+                    className="h-12 w-auto object-contain"
+                    loading="lazy"
+                    unoptimized
+                />
+              </button>
+            </motion.div>
+          </div>
+
+          {/* Image Section */}
+          <div className="w-full lg:w-1/2 flex justify-center items-center mb-8 lg:mb-0 order-1 lg:order-2">
+            <motion.div
+                className="relative w-full max-w-[300px] sm:max-w-[350px] md:max-w-[450px] lg:max-w-[500px] xl:max-w-[550px]"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay: 0.3 }}
+            >
+              {/* Glow effect behind phone */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-indigo-600/20 rounded-3xl blur-3xl scale-110"></div>
+
+              <div className="relative">
+                <Image
+                    src="https://framerusercontent.com/images/kvNaGEJ2iLiDZTVtaiNCqdyUZM.png"
+                    alt="Samridhya Loan App Interface"
+                    width={550}
+                    height={550}
+                    className="w-full h-auto object-contain drop-shadow-2xl relative z-10"
+                    priority
+                    unoptimized
+                />
+
+                {/* Floating elements with Rupee symbols*/}
+                <motion.div
+                    className="absolute -top-4 -right-4 bg-green-500 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg flex items-center gap-1"
+                    animate={floatingAnimation(0)}
+                >
+                  <span>₹</span> Approved
+                </motion.div>
+
+                <motion.div
+                    className="absolute -bottom-6 -left-6 bg-white px-4 py-3 rounded-xl shadow-lg border border-gray-100"
+                    animate={floatingAnimation(1.5)}
+                >
+                  <div className="flex items-center gap-2">
+                    <motion.div
+                        className="w-3 h-3 bg-green-500 rounded-full"
+                        animate={{
+                          scale: [1, 1.3, 1],
+                          opacity: [1, 0.7, 1],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                        }}
+                    />
+                    <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                    <span className="text-green-600 font-bold">₹</span>
+                    Instant Transfer
+                  </span>
+                  </div>
+                </motion.div>
+
+                {/* Additional floating rupee symbols around phone */}
+                <motion.div
+                    className="absolute top-1/4 -left-8 text-3xl text-blue-500/30 font-bold"
+                    animate={{
+                      y: [0, -15, 0],
+                      rotate: [0, 180, 360],
+                      scale: [1, 1.2, 1],
+                    }}
+                    transition={{
+                      duration: 5,
+                      repeat: Infinity,
+                      delay: 2,
+                    }}
+                >
+                  ₹
+                </motion.div>
+
+                <motion.div
+                    className="absolute bottom-1/3 -right-8 text-2xl text-indigo-500/40 font-bold"
+                    animate={{
+                      y: [0, 20, 0],
+                      rotate: [360, 180, 0],
+                      scale: [1, 0.8, 1],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      delay: 1,
+                    }}
+                >
+                  ₹
+                </motion.div>
+              </div>
             </motion.div>
           </div>
         </div>
