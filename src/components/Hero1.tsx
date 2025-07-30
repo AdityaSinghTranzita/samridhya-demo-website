@@ -519,10 +519,11 @@ export default function Hero1() {
 
               <div className="relative">
                 <Image
-                    src="https://framerusercontent.com/images/kvNaGEJ2iLiDZTVtaiNCqdyUZM.png"
+                    // src="https://framerusercontent.com/images/kvNaGEJ2iLiDZTVtaiNCqdyUZM.png"
+                    src= "/images/Samridhya_Hero.png"
                     alt="Samridhya Loan App Interface"
                     width={550}
-                    height={550}
+                    height={530}
                     className="w-full h-auto object-contain drop-shadow-2xl relative z-10"
                     priority
                     unoptimized

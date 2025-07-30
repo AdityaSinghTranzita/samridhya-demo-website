@@ -464,7 +464,7 @@ export default function PartnersPage() {
                       </div>
                       <div>
                         <h4 className="text-[#2b004b] font-bold text-base mb-1">Email Us</h4>
-                        <p className="text-gray-600 text-base">partnerships@samridhya.com</p>
+                        <p className="text-gray-600 text-base">support@samridhya.com</p>
                       </div>
                     </div>
 
@@ -474,7 +474,7 @@ export default function PartnersPage() {
                       </div>
                       <div>
                         <h4 className="text-[#2b004b] font-bold text-base mb-1">Call Us</h4>
-                        <p className="text-gray-600 text-base">1800-123-4567</p>
+                        <p className="text-gray-600 text-base">+91 63662 34524</p>
                       </div>
                     </div>
 

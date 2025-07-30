@@ -41,9 +41,9 @@ export default function Footer() {
                 Financial Journey?
               </span>
             </h2>
-            
+
             <p className="text-xs sm:text-sm text-gray-200 mb-6">
-              Join thousands of satisfied customers who have transformed their financial future with Samridhya. 
+              Join thousands of satisfied customers who have transformed their financial future with Samridhya.
               Get started in minutes with our seamless digital process.
             </p>
 
@@ -143,57 +143,116 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Quick Links */}
-            <div>
-              <h4 className="text-white font-semibold text-lg mb-6 relative">
-                Quick Links
-                <div className="absolute bottom-0 left-0 w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
-              </h4>
-              <ul className="space-y-3">
-                <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
-                  <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                  About Us
-                </Link></li>
-                <li><Link href="/blog" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
-                  <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                  Blog & News
-                </Link></li>
-                <li><Link href="#faqs" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
-                  <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                  FAQs
-                </Link></li>
-                <li><Link href="#" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
-                  <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                  Contact Us
-                </Link></li>
-              </ul>
+            {/* Mobile Optimized Layout - Quick Links and Services Side by Side */}
+            <div className="grid grid-cols-2 gap-4 md:gap-8">
+            {/*<div className="grid grid
+              {/* Quick Links */}
+              <div>
+                <h4 className="text-white font-semibold text-base md:text-lg mb-4 md:mb-6 relative">
+                  Quick Links
+                  <div className="absolute bottom-0 left-0 w-8 md:w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
+                </h4>
+                <ul className="space-y-2 md:space-y-3">
+                  <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group text-sm md:text-base">
+                    <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                    About Us
+                  </Link></li>
+                  <li><Link href="/blog" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group text-sm md:text-base">
+                    <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                    Blog & News
+                  </Link></li>
+                  <li><Link href="#faqs" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group text-sm md:text-base">
+                    <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                    FAQs
+                  </Link></li>
+                  <li><Link href="#" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group text-sm md:text-base">
+                    <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                    Contact Us
+                  </Link></li>
+                </ul>
+              </div>
+
+              {/* Services */}
+              <div>
+                <h4 className="text-white font-semibold text-base md:text-lg mb-4 md:mb-6 relative">
+                  Our Services
+                  <div className="absolute bottom-0 left-0 w-8 md:w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
+                </h4>
+                <ul className="space-y-2 md:space-y-3">
+                  <li><Link href="/loans/personal-loan" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group text-sm md:text-base">
+                    <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                    Personal Loan
+                  </Link></li>
+                  <li><Link href="/loans/business-loan" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group text-sm md:text-base">
+                    <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                    Business Loan
+                  </Link></li>
+                  <li><Link href="/loans/education-loan" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group text-sm md:text-base">
+                    <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                    Education Loan
+                  </Link></li>
+                  <li><Link href="/loans/wedding-loan" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group text-sm md:text-base">
+                    <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                    Wedding Loan
+                  </Link></li>
+                </ul>
+              </div>
             </div>
 
-            {/* Services */}
-            <div>
-              <h4 className="text-white font-semibold text-lg mb-6 relative">
-                Our Services
-                <div className="absolute bottom-0 left-0 w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
-              </h4>
-              <ul className="space-y-3">
-                <li><Link href="/loans/personal-loan" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
-                  <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                  Personal Loan
-                </Link></li>
-                <li><Link href="/loans/business-loan" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
-                  <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                  Business Loan
-                </Link></li>
-                <li><Link href="/loans/education-loan" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
-                  <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                  Education Loan
-                </Link></li>
-                <li><Link href="/loans/wedding-loan" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
-                  <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
-                  Wedding Loan
-                </Link></li>
-              </ul>
-            </div>
+
+            {/*<div className="flex flex-col md:flex-row md:items-start gap-8 md:gap-12">*/}
+            {/*  /!* Quick Links *!/*/}
+            {/*  <div className="md:flex-1">*/}
+            {/*    <h4 className="text-white font-semibold text-lg mb-6 relative">*/}
+            {/*      Quick Links*/}
+            {/*      <div className="absolute bottom-0 left-0 w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>*/}
+            {/*    </h4>*/}
+            {/*    <ul className="space-y-3">*/}
+            {/*      <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">*/}
+            {/*        <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>*/}
+            {/*        About Us*/}
+            {/*      </Link></li>*/}
+            {/*      <li><Link href="/blog" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">*/}
+            {/*        <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>*/}
+            {/*        Blog & News*/}
+            {/*      </Link></li>*/}
+            {/*      <li><Link href="#faqs" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">*/}
+            {/*        <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>*/}
+            {/*        FAQs*/}
+            {/*      </Link></li>*/}
+            {/*      <li><Link href="#" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">*/}
+            {/*        <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>*/}
+            {/*        Contact Us*/}
+            {/*      </Link></li>*/}
+            {/*    </ul>*/}
+            {/*  </div>*/}
+
+            {/*  /!* Services *!/*/}
+            {/*  <div className="md:flex-1">*/}
+            {/*    <h4 className="text-white font-semibold text-lg mb-6 relative">*/}
+            {/*      Our Services*/}
+            {/*      <div className="absolute bottom-0 left-0 w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>*/}
+            {/*    </h4>*/}
+            {/*    <ul className="space-y-3">*/}
+            {/*      <li><Link href="/loans/personal-loan" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">*/}
+            {/*        <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>*/}
+            {/*        Personal Loan*/}
+            {/*      </Link></li>*/}
+            {/*      <li><Link href="/loans/business-loan" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">*/}
+            {/*        <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>*/}
+            {/*        Business Loan*/}
+            {/*      </Link></li>*/}
+            {/*      <li><Link href="/loans/education-loan" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">*/}
+            {/*        <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>*/}
+            {/*        Education Loan*/}
+            {/*      </Link></li>*/}
+            {/*      <li><Link href="/loans/wedding-loan" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 group">*/}
+            {/*        <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>*/}
+            {/*        Wedding Loan*/}
+            {/*      </Link></li>*/}
+            {/*    </ul>*/}
+            {/*  </div>*/}
+            {/*</div>*/}
 
             {/* Contact Info */}
             <div>
@@ -205,7 +264,7 @@ export default function Footer() {
                 <li className="flex items-start gap-3">
                   <MdPhone className="text-blue-500 mt-1 flex-shrink-0" size={18} />
                   <div>
-                    <p className="text-white font-medium">1800-123-4567</p>
+                    <p className="text-white font-medium">91 6366234524</p>
                     <p className="text-gray-400 text-sm">24/7 Support</p>
                   </div>
                 </li>
