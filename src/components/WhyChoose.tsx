@@ -69,7 +69,7 @@ export default function WhyChoose() {
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
     return (
-        <section className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 overflow-hidden">
+        <section className="relative py-8 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 overflow-hidden">
             {/* Enhanced background elements */}
             <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#276ef4]/15 to-purple-400/10 rounded-full blur-3xl -z-10 animate-pulse" />
             <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-cyan-400/10 to-green-400/15 rounded-full blur-3xl -z-10 animate-pulse delay-1000" />
@@ -94,7 +94,7 @@ export default function WhyChoose() {
             <div className="max-w-7xl mx-auto relative z-10">
                 {/* Enhanced header section */}
                 <div
-                    className="text-center mb-12 sm:mb-16 md:mb-20"
+                    className="text-center mb-8 sm:mb-16 md:mb-20"
                 >
                     <h2 className="text-2xl sm:text-3xl md:text-4xl  font-bold text-[#2b004b] mb-4 sm:mb-6">
                         Why Choose{' '}

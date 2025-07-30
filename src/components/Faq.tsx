@@ -47,7 +47,7 @@ export default function Faq() {
     };
 
     return (
-        <section className="py-12 sm:py-16 px-2 sm:px-4 md:px-12">
+        <section className="py-8 sm:py-16 px-2 sm:px-4 md:px-12">
             <div className="max-w-4xl mx-auto">
                 <div className="flex flex-col items-center w-full px-2 sm:px-0">
                     <motion.h2
@@ -59,7 +59,7 @@ export default function Faq() {
                     >
                         Frequently Asked Questions
                     </motion.h2>
-                    <div className="w-24 h-1 bg-gradient-to-r from-[#276ef4] to-purple-600 rounded-full mx-auto mb-6 sm:mb-8"></div>
+                    <div className="w-24 h-1 bg-gradient-to-r from-[#276ef4] to-purple-600 rounded-full mx-auto mb-4 sm:mb-8"></div>
                     <motion.p
                         className="text-gray-600 text-center mb-8 max-w-2xl text-xs sm:text-sm"
                         initial={{ opacity: 0, y: 20 }}

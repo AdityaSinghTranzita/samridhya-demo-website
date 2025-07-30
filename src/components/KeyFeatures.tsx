@@ -87,7 +87,7 @@ export default function KeyFeatures() {
     };
 
     return (
-        <section className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 overflow-hidden">
+        <section className="relative py-8 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 overflow-hidden">
             {/* Enhanced background elements */}
             <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#276ef4]/15 to-purple-400/10 rounded-full blur-3xl -z-10 animate-pulse" />
             <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-cyan-400/10 to-green-400/15 rounded-full blur-3xl -z-10 animate-pulse delay-1000" />
@@ -111,7 +111,7 @@ export default function KeyFeatures() {
 
             <div className="max-w-7xl mx-auto relative z-10">
                 {/* Enhanced header section */}
-                <div className="text-center mb-12 sm:mb-16 md:mb-20">
+                <div className="text-center mb-8 sm:mb-16 md:mb-20">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl  font-bold text-[#2b004b] mb-4 leading-tight mb-4 sm:mb-6">
                         Key Features of{' '}
                         <span className="bg-gradient-to-r from-[#276ef4] to-green-500 bg-clip-text text-transparent">
@@ -209,41 +209,6 @@ export default function KeyFeatures() {
                     })}
                 </div>
 
-                {/* Enhanced Call-to-action section */}
-                <motion.div
-                    className="mt-12 sm:mt-16 md:mt-20"
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.5 }}
-                >
-                    {/* Desktop Layout */}
-                    <div className="hidden sm:block bg-gradient-to-r from-[#276ef4] to-green-500 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12 text-white shadow-2xl">
-                        <div className="text-center mb-4 sm:mb-6 md:mb-8">
-                            <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-2 sm:mb-4">
-                                Ready to Experience the Future of Lending?
-                            </h3>
-                            <p className="text-white/90 text-sm sm:text-base md:text-lg">
-                                Join thousands of satisfied customers who trust Samridhya for their financial needs.
-                            </p>
-                        </div>
-                        <button
-                            onClick={handleAppDownload}
-                            className="bg-white text-[#276ef4] px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl"
-                        >
-                            Get Started Today
-                        </button>
-                    </div>
-
-                    {/* Mobile Layout - Single Row */}
-                    <button
-                        onClick={handleAppDownload}
-                        className="sm:hidden w-full bg-gradient-to-r from-[#276ef4] to-green-500 rounded-2xl p-4 text-white shadow-2xl flex items-center justify-center text-center active:scale-95 transition-transform duration-200 gap-2"
-                    >
-                        <span className="text-base font-bold">Experience the future of lending</span>
-                        <ArrowRight className="w-6 h-6 text-white" />
-                    </button>
-                </motion.div>
             </div>
         </section>
     );

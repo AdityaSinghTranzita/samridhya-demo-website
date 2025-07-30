@@ -98,7 +98,7 @@ export default function WhatWeOffer() {
   }, []);
 
   return (
-    <section className="relative py-14 sm:py-20 px-2 sm:px-4 md:px-12 overflow-hidden">
+    <section className="relative py-8 sm:py-20 px-2 sm:px-4 md:px-12 overflow-hidden">
       {/* Background gradients */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#276ef4]/10 to-transparent rounded-full blur-3xl -z-10" />
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-purple-400/10 to-transparent rounded-full blur-3xl -z-10" />
@@ -124,7 +124,7 @@ export default function WhatWeOffer() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
-          className="text-center mb-10 sm:mb-16"
+          className="text-center mb-6 sm:mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -260,7 +260,7 @@ export default function WhatWeOffer() {
 
         {/* Bottom CTA */}
         <motion.div
-          className="mt-12 sm:mt-20 text-center"
+          className="mt-8 sm:mt-20 text-center"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

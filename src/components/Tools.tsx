@@ -23,13 +23,13 @@ const tools = [
 
 export default function Tools() {
     return (
-        <section className="relative py-14 sm:py-20 px-2 sm:px-4 md:px-12 overflow-hidden w-full">
+        <section className="relative py-8 sm:py-20 px-2 sm:px-4 md:px-12 overflow-hidden w-full">
             <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#276ef4]/15 to-purple-400/10 rounded-full blur-3xl -z-10 animate-pulse" />
             <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-cyan-400/10 to-green-400/15 rounded-full blur-3xl -z-10 animate-pulse delay-1000" />
 
             <div className="max-w-7xl mx-auto relative z-10 w-full">
                 <motion.div
-                    className="text-center mb-10 sm:mb-16"
+                    className="text-center mb-6 sm:mb-16"
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}

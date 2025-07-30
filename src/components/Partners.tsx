@@ -81,11 +81,11 @@ export default function Partners() {
   };
 
   return (
-    <section className="relative py-12 sm:py-16 overflow-hidden bg-gray-50">
+          <section className="relative py-8 sm:py-16 overflow-hidden bg-gray-50">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
         {/* Header */}
         <motion.div
-          className="text-center mb-10 sm:mb-12"
+          className="text-center mb-6 sm:mb-12"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -106,7 +106,7 @@ export default function Partners() {
         </motion.div>
 
         {/* Partners Scrolling Row */}
-        <div className="relative mb-10 sm:mb-12 overflow-hidden">
+        <div className="relative mb-6 sm:mb-12 overflow-hidden">
           {/* Mobile: Animated Next Indicator */}
           <div className="sm:hidden pointer-events-none select-none absolute right-2 top-0 bottom-0 flex items-center z-10">
             <div className="animate-fade-arrow bg-white/80 rounded-full shadow p-2">

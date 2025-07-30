@@ -18,7 +18,7 @@ export default function Footer() {
   return (
       <footer className="relative overflow-hidden">
         {/* Top CTA Section */}
-        <section className="relative bg-gradient-to-br from-blue-900 via-cyan-900 to-indigo-900 py-16 sm:py-20">
+        <section className="relative bg-gradient-to-br from-blue-900 via-cyan-900 to-indigo-900 py-8 sm:py-20">
           {/* Background Elements */}
           <div className="absolute inset-0">
             <div className="absolute top-10 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl animate-pulse"></div>
@@ -47,7 +47,7 @@ export default function Footer() {
                 Get started in minutes with our seamless digital process.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-12">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-8">
                 <motion.button
                     onClick={handleAppDownload}
                     className="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 flex items-center gap-3"
@@ -128,16 +128,16 @@ export default function Footer() {
                   Your trusted partner for seamless digital lending. Making financial dreams accessible to every Indian.
                 </p>
                 <div className="flex gap-4">
-                  <Link href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300">
+                  <Link href="https://www.facebook.com/SamridhyaInnovations" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300">
                     <FaFacebookF size={16} />
                   </Link>
-                  <Link href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300">
+                  <Link href="https://www.linkedin.com/company/samridhya/" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300">
                     <FaLinkedinIn size={16} />
                   </Link>
-                  <Link href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300">
+                  <Link href="https://x.com/ComSamridh42501" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300">
                     <FaXTwitter size={16} />
                   </Link>
-                  <Link href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300">
+                  <Link href="https://www.instagram.com/samridhya_innovations/" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300">
                     <FaInstagram size={16} />
                   </Link>
                 </div>

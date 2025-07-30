@@ -286,7 +286,7 @@ const ParticleBackground = () => {
 
 export default function Hero1() {
   return (
-      <section className="relative w-full bg-gradient-to-br from-slate-50 via-white to-blue-50/30 min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 py-12 md:py-16 lg:py-20 overflow-hidden">
+      <section className="relative w-full bg-gradient-to-br from-slate-50 via-white to-blue-50/30 min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 py-8 md:py-16 lg:py-20 overflow-hidden">
 
         {/* Particle Background */}
         <ParticleBackground />
@@ -411,29 +411,29 @@ export default function Hero1() {
 
             {/* Key Features with Rupee Icons */}
             <motion.div
-                className="flex flex-wrap gap-4 mb-8"
+                className="flex flex-nowrap gap-2 sm:gap-3 mb-8 overflow-x-auto"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
             >
-              <div className="flex items-center gap-2 bg-green-50 px-4 py-3 rounded-xl border border-green-100 shadow-sm">
-                <Zap className="w-4 h-4 text-green-600" />
-                <span className="text-sm font-medium text-green-700">Instant Approval</span>
+              <div className="flex items-center gap-1.5 sm:gap-2 bg-green-50 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-green-100 shadow-sm flex-shrink-0">
+                <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600" />
+                <span className="text-xs sm:text-sm font-medium text-green-700 whitespace-nowrap">Instant Approval</span>
                 <motion.span
-                    className="text-green-600 font-bold"
+                    className="text-green-600 font-bold text-xs sm:text-sm"
                     animate={{ scale: [1, 1.3, 1] }}
                     transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
                 >
                   ₹
                 </motion.span>
               </div>
-              <div className="flex items-center gap-2 bg-blue-50 px-4 py-3 rounded-xl border border-blue-100 shadow-sm">
-                <Shield className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-medium text-blue-700">100% Secure</span>
+              <div className="flex items-center gap-1.5 sm:gap-2 bg-blue-50 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-blue-100 shadow-sm flex-shrink-0">
+                <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+                <span className="text-xs sm:text-sm font-medium text-blue-700 whitespace-nowrap">100% Secure</span>
               </div>
-              <div className="flex items-center gap-2 bg-purple-50 px-4 py-3 rounded-xl border border-purple-100 shadow-sm">
-                <TrendingUp className="w-4 h-4 text-purple-600" />
-                <span className="text-sm font-medium text-purple-700">Zero Paperwork</span>
+              <div className="flex items-center gap-1.5 sm:gap-2 bg-purple-50 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-purple-100 shadow-sm flex-shrink-0">
+                <TrendingUp className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-600" />
+                <span className="text-xs sm:text-sm font-medium text-purple-700 whitespace-nowrap">Zero Paperwork</span>
               </div>
             </motion.div>
 

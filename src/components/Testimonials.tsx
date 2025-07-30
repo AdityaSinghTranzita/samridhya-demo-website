@@ -176,7 +176,7 @@ export default function TestimonialSection() {
   }
 
   return (
-    <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12">
+          <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-8 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12">
       {/* Background blobs */}
       <div className="absolute inset-0 overflow-hidden">
         {/*<div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl" />*/}

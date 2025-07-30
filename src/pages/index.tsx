@@ -57,7 +57,7 @@ export default function Home() {
                     <Hero/>
                 </section>
 
-                <section id="personal" className="py-16">
+                <section id="personal" className="py-8 sm:py-16">
                     <WhatWeOffer />
                 </section>
 
@@ -77,7 +77,7 @@ export default function Home() {
                 <section>
                     <Partners />
                 </section>
-                <section id="faqs" className="py-16 scroll-mt-20">
+                <section id="faqs" className="py-8 sm:py-16 scroll-mt-20">
                     <Faq />
                 </section>
                 <section>
