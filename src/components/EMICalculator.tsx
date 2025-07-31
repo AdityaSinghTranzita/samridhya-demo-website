@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calculator, TrendingUp, Calendar, DollarSign, Percent, Hash } from 'lucide-react';
+import { trackEvent, trackButtonClick } from '@/utils/analytics';
 
 interface EMICalculatorProps {
   loanType: string;
@@ -79,6 +80,9 @@ export default function EMICalculator({
 
   const handleCalculate = () => {
     setShowResults(true);
+    // Track EMI calculation
+    trackEvent('emi_calculated', 'calculator', loanType, loanAmount);
+    trackButtonClick('calculate_emi', 'emi_calculator');
   };
 
   const handleLoanAmountChange = (value: string) => {

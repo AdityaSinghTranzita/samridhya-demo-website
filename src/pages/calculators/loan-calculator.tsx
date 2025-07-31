@@ -3,6 +3,7 @@ import EMICalculator from "@/components/EMICalculator";
 import { motion } from "framer-motion";
 import { Calculator, TrendingUp, Shield, Clock, DollarSign } from "lucide-react";
 import { handleAppDownload } from "@/utils/appStore";
+import { trackEvent, trackButtonClick } from "@/utils/analytics";
 import Head from "next/head";
 
 export default function LoanCalculatorPage() {

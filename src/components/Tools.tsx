@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Calculator, FileText, BarChart3 } from 'lucide-react';
+import { trackButtonClick } from '@/utils/analytics';
 
 const tools = [
     {
@@ -71,6 +72,7 @@ export default function Tools() {
                                         {tool.href && (
                                             <Link
                                                 href={tool.href}
+                                                onClick={() => trackButtonClick(`try_${tool.title.toLowerCase().replace(' ', '_')}`, 'tools_section')}
                                                 className="inline-block mt-2 sm:mt-3 text-[#276ef4] font-medium hover:underline text-xs sm:text-base"
                                             >
                                                 Try Now →

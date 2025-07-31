@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import LoanNavbar from '@/components/LoanNavbar';
 import CTA from '@/components/CTA';
+import { trackEvent, trackButtonClick } from '@/utils/analytics';
 
 // Custom hook for counting animation
 const useCountUp = (end: number, duration: number = 2000, start: number = 0) => {

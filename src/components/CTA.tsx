@@ -13,6 +13,7 @@ import { MdPhone, MdQuestionAnswer, MdWork, MdOutlineAppShortcut, MdEmail, MdLoc
 import { HiOutlineDocumentText } from 'react-icons/hi';
 import { Download, ArrowRight, Shield, Users, TrendingUp } from 'lucide-react';
 import { handleAppDownload } from '@/utils/appStore';
+import { trackButtonClick, trackAppDownload } from '@/utils/analytics';
 
 export default function Footer() {
   return (
@@ -49,7 +50,11 @@ export default function Footer() {
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-8">
                 <motion.button
-                    onClick={handleAppDownload}
+                    onClick={() => {
+                      handleAppDownload();
+                      trackButtonClick('download_app', 'cta_section');
+                      trackAppDownload('web');
+                    }}
                     className="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 flex items-center gap-3"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}

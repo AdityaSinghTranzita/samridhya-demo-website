@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Shield, Users, FileText, Phone, Mail, MapPin, Lock, Eye, UserCheck } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import CTA from '@/components/CTA';
+import { trackEvent, trackButtonClick } from '@/utils/analytics';
 
 export default function PrivacyPolicy() {
   return (

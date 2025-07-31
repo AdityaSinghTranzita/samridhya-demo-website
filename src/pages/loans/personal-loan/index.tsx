@@ -10,6 +10,7 @@ import EMICalculator from '@/components/EMICalculator';
 import LoanFAQ from '@/components/LoanFAQ';
 import ExploreOtherLoans from '@/components/ExploreOtherLoans';
 import { handleAppDownload } from '@/utils/appStore';
+import { trackButtonClick, trackLoanApplication, trackAppDownload } from '@/utils/analytics';
 import Head from 'next/head';
 
 const features = [
@@ -195,7 +196,12 @@ export default function PersonalLoan() {
               transition={{ duration: 0.8, delay: 0.6 }}
             >
               <motion.button
-                onClick={handleAppDownload}
+                onClick={() => {
+                  handleAppDownload();
+                  trackButtonClick('apply_personal_loan', 'hero_section');
+                  trackLoanApplication('personal_loan', 50000);
+                  trackAppDownload('web');
+                }}
                 className="group relative bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
@@ -205,7 +211,10 @@ export default function PersonalLoan() {
               </motion.button>
               
               <motion.button
-                onClick={scrollToCalculator}
+                onClick={() => {
+                  scrollToCalculator();
+                  trackButtonClick('calculate_emi', 'hero_section');
+                }}
                 className="group relative bg-blue-400/20 backdrop-blur-sm border border-blue-400/30 text-blue-700 font-bold px-8 py-4 rounded-2xl hover:bg-blue-400/30 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}

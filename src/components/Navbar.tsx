@@ -5,6 +5,7 @@ import { Menu, X, Download, ChevronDown, ChevronRight, Phone } from 'lucide-reac
 import Image from 'next/image';
 import Link from 'next/link';
 import { handleAppDownload } from '@/utils/appStore';
+import { trackButtonClick, trackAppDownload } from '@/utils/analytics';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -190,7 +191,11 @@ export default function Navbar() {
 
         {/* Download App Button - Desktop */}
         <button
-            onClick={handleAppDownload}
+            onClick={() => {
+              handleAppDownload();
+              trackButtonClick('download_app', 'navbar');
+              trackAppDownload('web');
+            }}
             className={`cursor-pointer hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium focus:outline-none ${
                 isScrolled
                     ? 'bg-blue-600/10 backdrop-blur-sm border border-blue-600/20 text-blue-800 hover:bg-blue-600/20'
@@ -363,6 +368,8 @@ export default function Navbar() {
               <button
                 onClick={() => {
                   handleAppDownload();
+                  trackButtonClick('download_app', 'navbar_mobile');
+                  trackAppDownload('web');
                   closeMobileMenu();
                 }}
                 className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium focus:outline-none"

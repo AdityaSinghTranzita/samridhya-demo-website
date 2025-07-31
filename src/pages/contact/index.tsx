@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Navbar from '@/components/Navbar';
 import CTA from '@/components/CTA';
+import { trackEvent, trackButtonClick } from '@/utils/analytics';
 
 const contactInfo = [
   {
@@ -82,6 +83,10 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    // Track contact form submission
+    trackEvent('contact_form_submitted', 'contact', formData.subject);
+    trackButtonClick('submit_contact_form', 'contact_page');
     
     // Simulate form submission
     await new Promise(resolve => setTimeout(resolve, 2000));

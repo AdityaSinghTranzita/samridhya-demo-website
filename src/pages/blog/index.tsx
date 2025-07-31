@@ -5,6 +5,7 @@ import { Wrench, BookOpen, Clock, Users, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import CTA from '@/components/CTA';
+import { trackEvent, trackButtonClick } from '@/utils/analytics';
 
 export default function BlogWIP() {
   return (

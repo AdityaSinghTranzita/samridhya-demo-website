@@ -22,6 +22,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import CTA from '@/components/CTA';
+import { trackCreditScoreCheck, trackEvent, trackButtonClick } from '@/utils/analytics';
 
 interface CreditScoreData {
   credit_score: number;
@@ -200,11 +201,17 @@ export default function CreditScoreChecker() {
       if (data.message === 'Success') {
         setCurrentStep(2);
         setOtpTimer(30);
+        // Track OTP generation success
+        trackEvent('otp_generated', 'credit_score_check', 'mobile_verification');
       } else {
         setError(data.message || 'Failed to send OTP');
+        // Track OTP generation failure
+        trackEvent('otp_generation_failed', 'credit_score_check', data.message || 'unknown_error');
       }
     } catch (error) {
       setError('An error occurred. Please try again.');
+      // Track OTP generation error
+      trackEvent('otp_generation_error', 'credit_score_check', 'network_error');
     } finally {
       setIsLoading(false);
     }
@@ -216,6 +223,7 @@ export default function CreditScoreChecker() {
       setError('Please enter the complete 6-digit OTP');
       return;
     }
+
 
     setIsLoading(true);
     setError('');
@@ -239,6 +247,9 @@ export default function CreditScoreChecker() {
         // Store token for future use
         setSessionStorage('authToken', token);
         setSessionStorage('mobileNumber', mobileNumber);
+
+        // Track OTP verification success
+        trackEvent('otp_verified', 'credit_score_check', 'mobile_verification');
 
         // Check if user details exist in the response
         // The API might return user details in different structures
@@ -269,6 +280,8 @@ export default function CreditScoreChecker() {
         setOtp(['', '', '', '', '', '']);
       } else {
         setError(data.message || 'Invalid OTP. Please try again.');
+        // Track OTP verification failure
+        trackEvent('otp_verification_failed', 'credit_score_check', data.message || 'invalid_otp');
       }
     } catch (error) {
       console.error('OTP verification error:', error);
@@ -372,6 +385,10 @@ export default function CreditScoreChecker() {
         setCreditScoreData(scoreData.data);
         setSessionStorage('cibilReportData', JSON.stringify(scoreData.data));
 
+        // Track successful credit score retrieval
+        trackCreditScoreCheck();
+        trackEvent('credit_score_retrieved', 'credit_score_check', 'success', scoreData.data.credit_score);
+
         // Ensure all session data is stored for future use
         if (authToken) {
           setSessionStorage('authToken', authToken);
@@ -388,6 +405,9 @@ export default function CreditScoreChecker() {
         // Handle no credit record case
         setNoCreditRecord(true);
         setSessionStorage('noCreditRecord', 'true');
+
+        // Track no credit record found
+        trackEvent('credit_score_no_record', 'credit_score_check', 'no_credit_history');
 
         // Store user details for future use
         if (authToken) {
@@ -608,7 +628,7 @@ export default function CreditScoreChecker() {
       const year = date.substring(0, 4);
       const month = date.substring(4, 6);
       const day = date.substring(6, 8);
-      return new Date(`${year}-${month}-${day}`).toLocaleDateString();
+      return `${day}/${month}/${year}`;
     }
     return 'N/A';
   };
@@ -1233,7 +1253,7 @@ export default function CreditScoreChecker() {
                         <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
                           <h3 className="text-xl font-semibold text-gray-900 mb-6">Account Holder Details</h3>
 
-                          {creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Details.map((holder: any, holderIndex: number) => (
+                          {Array.isArray(creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Details) ? creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Details.map((holder: any, holderIndex: number) => (
                               <div key={holderIndex} className="mb-6 border border-gray-200 rounded-lg p-4">
                                 <h4 className="text-lg font-semibold text-gray-900 mb-4">Holder {holderIndex + 1}</h4>
 
@@ -1284,7 +1304,7 @@ export default function CreditScoreChecker() {
                                   <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
                                     <h5 className="text-sm font-medium text-gray-600 uppercase tracking-wide mb-3">Contact Information</h5>
                                     <div className="space-y-2">
-                                      {creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Phone_Details &&
+                                      {Array.isArray(creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Phone_Details) &&
                                           creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Phone_Details.map((phone: any, phoneIndex: number) => (
                                               <div key={phoneIndex} className="border-b border-gray-200 pb-2">
                                                 <div className="flex justify-between">
@@ -1312,7 +1332,7 @@ export default function CreditScoreChecker() {
                                 </div>
 
                                 {/* Address Details */}
-                                {creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Address_Details && (
+                                {Array.isArray(creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Address_Details) && (
                                     <div className="mt-6">
                                       <h5 className="text-lg font-semibold text-gray-900 mb-4">Address Details</h5>
                                       {creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Address_Details.map((address: any, addressIndex: number) => (
@@ -1359,7 +1379,7 @@ export default function CreditScoreChecker() {
                                     </div>
                                 )}
                               </div>
-                          ))}
+                          )) : null}
                         </div>
                     )}
 
@@ -1439,7 +1459,7 @@ export default function CreditScoreChecker() {
                           <h3 className="text-xl font-semibold text-gray-900 mb-6">Account Details</h3>
 
                           {/* All Accounts */}
-                          {creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS.map((account: any, accountIndex: number) => (
+                          {Array.isArray(creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS) ? creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS.map((account: any, accountIndex: number) => (
                               <div key={accountIndex} className="mb-8 border border-gray-200 rounded-lg p-6">
                                 <div className="flex items-center justify-between mb-4">
                                   <h4 className="text-lg font-semibold text-gray-900">
@@ -1544,7 +1564,7 @@ export default function CreditScoreChecker() {
                                           </tr>
                                           </thead>
                                           <tbody>
-                                          {account.Account_Review_Data.slice(0, 12).map((entry: any, index: number) => (
+                                          {Array.isArray(account.Account_Review_Data) ? account.Account_Review_Data.slice(0, 12).map((entry: any, index: number) => (
                                               <tr key={index} className="border-b border-gray-100">
                                                 <td className="px-4 py-2 text-gray-900">{entry.Month}/{entry.Year}</td>
                                                 <td className="px-4 py-2">
@@ -1563,14 +1583,14 @@ export default function CreditScoreChecker() {
                                                 <td className="px-4 py-2 text-gray-900">₹{entry.Actual_Payment_Amount || '0'}</td>
                                                 <td className="px-4 py-2 text-gray-900">₹{entry.EMI_Amount || '0'}</td>
                                               </tr>
-                                          ))}
+                                          )) : null}
                                           </tbody>
                                         </table>
                                       </div>
                                     </div>
                                 )}
                               </div>
-                          ))}
+                          )) : null}
                         </div>
                     )}
 
@@ -1640,21 +1660,38 @@ export default function CreditScoreChecker() {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {creditScoreData.report.CAPS.CAPS_Application_Details.slice(0, 10).map((enquiry: any, index: number) => (
-                                    <tr key={index} className="border-b border-gray-100">
-                                      <td className="px-4 py-2 text-gray-900">
-                                        {formatDateFromYYYYMMDD(enquiry.Date_of_Request)}
-                                      </td>
-                                      <td className="px-4 py-2 text-gray-900">{enquiry.Subscriber_Name || 'N/A'}</td>
-                                      <td className="px-4 py-2 text-gray-900">
-                                        {enquiry.Enquiry_Reason === '7' ? 'Personal Loan' :
-                                            enquiry.Enquiry_Reason === '6' ? 'Credit Card' :
-                                                enquiry.Enquiry_Reason === '13' ? 'Credit Card' : 'Other'}
-                                      </td>
-                                      <td className="px-4 py-2 text-gray-900">₹{enquiry.Amount_Financed || '0'}</td>
-                                      <td className="px-4 py-2 text-gray-900">{enquiry.Duration_Of_Agreement || '0'} months</td>
-                                    </tr>
-                                ))}
+                                {Array.isArray(creditScoreData.report.CAPS.CAPS_Application_Details) 
+                                  ? creditScoreData.report.CAPS.CAPS_Application_Details.slice(0, 10).map((enquiry: any, index: number) => (
+                                      <tr key={index} className="border-b border-gray-100">
+                                        <td className="px-4 py-2 text-gray-900">
+                                          {formatDateFromYYYYMMDD(enquiry.Date_of_Request)}
+                                        </td>
+                                        <td className="px-4 py-2 text-gray-900">{enquiry.Subscriber_Name || 'N/A'}</td>
+                                        <td className="px-4 py-2 text-gray-900">
+                                          {enquiry.Enquiry_Reason === '7' ? 'Personal Loan' :
+                                              enquiry.Enquiry_Reason === '6' ? 'Credit Card' :
+                                                  enquiry.Enquiry_Reason === '13' ? 'Credit Card' : 'Other'}
+                                        </td>
+                                        <td className="px-4 py-2 text-gray-900">₹{enquiry.Amount_Financed || '0'}</td>
+                                        <td className="px-4 py-2 text-gray-900">{enquiry.Duration_Of_Agreement || '0'} months</td>
+                                      </tr>
+                                    ))
+                                  : creditScoreData.report.CAPS.CAPS_Application_Details ? (
+                                      <tr className="border-b border-gray-100">
+                                        <td className="px-4 py-2 text-gray-900">
+                                          {formatDateFromYYYYMMDD(creditScoreData.report.CAPS.CAPS_Application_Details.Date_of_Request)}
+                                        </td>
+                                        <td className="px-4 py-2 text-gray-900">{creditScoreData.report.CAPS.CAPS_Application_Details.Subscriber_Name || 'N/A'}</td>
+                                        <td className="px-4 py-2 text-gray-900">
+                                          {creditScoreData.report.CAPS.CAPS_Application_Details.Enquiry_Reason === '7' ? 'Personal Loan' :
+                                              creditScoreData.report.CAPS.CAPS_Application_Details.Enquiry_Reason === '6' ? 'Credit Card' :
+                                                  creditScoreData.report.CAPS.CAPS_Application_Details.Enquiry_Reason === '13' ? 'Credit Card' : 'Other'}
+                                        </td>
+                                        <td className="px-4 py-2 text-gray-900">₹{creditScoreData.report.CAPS.CAPS_Application_Details.Amount_Financed || '0'}</td>
+                                        <td className="px-4 py-2 text-gray-900">{creditScoreData.report.CAPS.CAPS_Application_Details.Duration_Of_Agreement || '0'} months</td>
+                                      </tr>
+                                    ) : null
+                                }
                                 </tbody>
                               </table>
                             </div>
