@@ -44,6 +44,62 @@ const VERIFY_OTP_URL = `${API_BASE_URL}/verify-otp`;
 const SUBMIT_DETAILS_URL = `${API_BASE_URL}/submit-details`;
 const GET_SCORE_URL = `${API_BASE_URL}/get-score`;
 
+// Add data validation helper functions
+const validateCreditScoreData = (data: any): boolean => {
+  if (!data || typeof data !== 'object') return false;
+  if (!data.credit_score || typeof data.credit_score !== 'number') return false;
+  return true;
+};
+
+const safeGet = (obj: any, path: string, defaultValue: any = 'N/A') => {
+  try {
+    const keys = path.split('.');
+    let result = obj;
+    
+    for (const key of keys) {
+      if (result === null || result === undefined || typeof result !== 'object') {
+        return defaultValue;
+      }
+      result = result[key];
+    }
+    
+    // Handle different data types
+    if (result === null || result === undefined) return defaultValue;
+    if (typeof result === 'number') return result === 0 ? '0' : result.toString();
+    if (typeof result === 'string') return result.trim() === '' ? defaultValue : result;
+    return result.toString();
+  } catch (error) {
+    console.warn(`Error accessing path ${path}:`, error);
+    return defaultValue;
+  }
+};
+
+const safeGetNumber = (obj: any, path: string, defaultValue: number = 0): number => {
+  try {
+    const value = safeGet(obj, path, defaultValue);
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string') {
+      const num = parseFloat(value);
+      return isNaN(num) ? defaultValue : num;
+    }
+    return defaultValue;
+  } catch (error) {
+    console.warn(`Error getting number for path ${path}:`, error);
+    return defaultValue;
+  }
+};
+
+const hasValidReportData = (creditScoreData: CreditScoreData | null): boolean => {
+  if (!creditScoreData || !creditScoreData.report) return false;
+  
+  // Check if we have any meaningful data in the report
+  const hasPersonalInfo = !!creditScoreData.report.Current_Application?.Current_Application_Details?.Current_Applicant_Details;
+  const hasAccountData = !!creditScoreData.report.CAIS_Account?.CAIS_Account_DETAILS;
+  const hasSummaryData = !!creditScoreData.report.CAIS_Account?.CAIS_Summary;
+  
+  return hasPersonalInfo || hasAccountData || hasSummaryData;
+};
+
 export default function CreditScoreChecker() {
   const [currentStep, setCurrentStep] = useState(1);
   const [mobileNumber, setMobileNumber] = useState('');
@@ -352,7 +408,7 @@ export default function CreditScoreChecker() {
 
   const fetchCreditScore = async (token: string) => {
     try {
-
+      console.log('Fetching credit score with token:', token);
 
       // Get credit score
       const scoreResponse = await fetch(GET_SCORE_URL, {
@@ -363,7 +419,7 @@ export default function CreditScoreChecker() {
       });
 
       const scoreData = await scoreResponse.json();
-
+      console.log('Credit score API response:', scoreData);
 
       // Check for various success messages
       const isSuccess = scoreData.message && (
@@ -382,6 +438,22 @@ export default function CreditScoreChecker() {
       );
 
       if (isSuccess && scoreData.data) {
+        // Validate the credit score data
+        if (!validateCreditScoreData(scoreData.data)) {
+          console.error('Invalid credit score data structure:', scoreData.data);
+          throw new Error('Invalid credit score data received');
+        }
+
+        // Log the data structure for debugging
+        console.log('Credit score data structure:', {
+          credit_score: scoreData.data.credit_score,
+          has_report: !!scoreData.data.report,
+          report_keys: scoreData.data.report ? Object.keys(scoreData.data.report) : [],
+          has_personal_info: !!scoreData.data.report?.Current_Application?.Current_Application_Details?.Current_Applicant_Details,
+          has_account_data: !!scoreData.data.report?.CAIS_Account?.CAIS_Account_DETAILS,
+          has_summary: !!scoreData.data.report?.CAIS_Account?.CAIS_Summary
+        });
+
         setCreditScoreData(scoreData.data);
         setSessionStorage('cibilReportData', JSON.stringify(scoreData.data));
 
@@ -422,6 +494,7 @@ export default function CreditScoreChecker() {
 
         setCurrentStep(6);
       } else {
+        console.error('Credit score API error:', scoreData);
         throw new Error(scoreData.message || 'Failed to get credit score');
       }
     } catch (error) {
@@ -972,15 +1045,35 @@ export default function CreditScoreChecker() {
                   </motion.div>
               )}
 
-              {/* Step 5: Credit Score Dashboard */}
+                            {/* Step 5: Credit Score Dashboard */}
               {currentStep === 5 && creditScoreData && (
-                  <motion.div
-                      key="step5"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="space-y-6"
-                  >
+                  <>
+                    {/* Data Validation Warning */}
+                    {!hasValidReportData(creditScoreData) && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg"
+                        >
+                          <div className="flex items-center gap-2">
+                            <AlertCircle className="w-5 h-5 text-yellow-600" />
+                            <div>
+                              <h3 className="text-sm font-medium text-yellow-800">Limited Report Data</h3>
+                              <p className="text-sm text-yellow-700 mt-1">
+                                We received your credit score but some detailed information is not available. This may be due to limited credit history or data availability.
+                              </p>
+                            </div>
+                          </div>
+                        </motion.div>
+                    )}
+                    
+                    <motion.div
+                        key="step5"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="space-y-6"
+                    >
                     {/* Back Button */}
                     <div className="flex justify-start">
                       <button
@@ -1390,25 +1483,25 @@ export default function CreditScoreChecker() {
                         <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
                           <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Credit Accounts</h4>
                           <p className="text-2xl font-bold text-gray-900">
-                            {creditScoreData.report?.CAIS_Account?.CAIS_Summary?.Credit_Account?.CreditAccountTotal || '0'}
+                            {safeGet(creditScoreData.report, 'CAIS_Account.CAIS_Summary.Credit_Account.CreditAccountTotal', '0')}
                           </p>
                         </div>
                         <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
                           <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Active Accounts</h4>
                           <p className="text-2xl font-bold text-gray-900">
-                            {creditScoreData.report?.CAIS_Account?.CAIS_Summary?.Credit_Account?.CreditAccountActive || '0'}
+                            {safeGet(creditScoreData.report, 'CAIS_Account.CAIS_Summary.Credit_Account.CreditAccountActive', '0')}
                           </p>
                         </div>
                         <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400">
                           <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Closed Accounts</h4>
                           <p className="text-2xl font-bold text-gray-900">
-                            {creditScoreData.report?.CAIS_Account?.CAIS_Summary?.Credit_Account?.CreditAccountClosed || '0'}
+                            {safeGet(creditScoreData.report, 'CAIS_Account.CAIS_Summary.Credit_Account.CreditAccountClosed', '0')}
                           </p>
                         </div>
                         <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-400">
                           <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Enquiries</h4>
                           <p className="text-2xl font-bold text-gray-900">
-                            {creditScoreData.report?.TotalCAPS_Summary?.TotalCAPSLast180Days || '0'}
+                            {safeGet(creditScoreData.report, 'TotalCAPS_Summary.TotalCAPSLast180Days', '0')}
                           </p>
                         </div>
                       </div>
@@ -1420,15 +1513,15 @@ export default function CreditScoreChecker() {
                           <div className="space-y-2">
                             <div className="flex justify-between">
                               <span className="text-sm text-gray-700 font-medium">Secured Balance:</span>
-                              <span className="font-semibold text-gray-900">₹{creditScoreData.report?.CAIS_Account?.CAIS_Summary?.Total_Outstanding_Balance?.Outstanding_Balance_Secured || '0'}</span>
+                              <span className="font-semibold text-gray-900">₹{safeGet(creditScoreData.report, 'CAIS_Account.CAIS_Summary.Total_Outstanding_Balance.Outstanding_Balance_Secured', '0')}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-sm text-gray-700 font-medium">Unsecured Balance:</span>
-                              <span className="font-semibold text-gray-900">₹{creditScoreData.report?.CAIS_Account?.CAIS_Summary?.Total_Outstanding_Balance?.Outstanding_Balance_UnSecured || '0'}</span>
+                              <span className="font-semibold text-gray-900">₹{safeGet(creditScoreData.report, 'CAIS_Account.CAIS_Summary.Total_Outstanding_Balance.Outstanding_Balance_UnSecured', '0')}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-sm text-gray-700 font-medium">Total Balance:</span>
-                              <span className="font-semibold text-gray-900">₹{creditScoreData.report?.CAIS_Account?.CAIS_Summary?.Total_Outstanding_Balance?.Outstanding_Balance_All || '0'}</span>
+                              <span className="font-semibold text-gray-900">₹{safeGet(creditScoreData.report, 'CAIS_Account.CAIS_Summary.Total_Outstanding_Balance.Outstanding_Balance_All', '0')}</span>
                             </div>
                           </div>
                         </div>
@@ -1438,15 +1531,15 @@ export default function CreditScoreChecker() {
                           <div className="space-y-2">
                             <div className="flex justify-between">
                               <span className="text-sm text-gray-700 font-medium">Last 7 Days:</span>
-                              <span className="font-semibold text-gray-900">{creditScoreData.report?.TotalCAPS_Summary?.TotalCAPSLast7Days || '0'}</span>
+                              <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'TotalCAPS_Summary.TotalCAPSLast7Days', '0')}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-sm text-gray-700 font-medium">Last 30 Days:</span>
-                              <span className="font-semibold text-gray-900">{creditScoreData.report?.TotalCAPS_Summary?.TotalCAPSLast30Days || '0'}</span>
+                              <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'TotalCAPS_Summary.TotalCAPSLast30Days', '0')}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-sm text-gray-700 font-medium">Last 90 Days:</span>
-                              <span className="font-semibold text-gray-900">{creditScoreData.report?.TotalCAPS_Summary?.TotalCAPSLast90Days || '0'}</span>
+                              <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'TotalCAPS_Summary.TotalCAPSLast90Days', '0')}</span>
                             </div>
                           </div>
                         </div>
@@ -1701,6 +1794,7 @@ export default function CreditScoreChecker() {
 
 
                   </motion.div>
+                  </>
               )}
 
               {/* Step 6: No Credit Record */}
