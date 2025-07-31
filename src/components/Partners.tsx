@@ -123,6 +123,7 @@ export default function Partners() {
               onMouseLeave={handleSpeedDown}
               onTouchStart={handleSpeedUp}
               onTouchEnd={handleSpeedDown}
+              aria-label="Scroll partners left"
               className="absolute left-2 top-1/2 transform -translate-y-1/2 z-20 w-10 h-10 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"
             >
               <ChevronLeft className="w-5 h-5 text-[#276ef4] group-hover:text-[#276ef4]/80" />
@@ -135,6 +136,7 @@ export default function Partners() {
               onMouseLeave={handleSpeedDown}
               onTouchStart={handleSpeedUp}
               onTouchEnd={handleSpeedDown}
+              aria-label="Scroll partners right"
               className="absolute right-2 top-1/2 transform -translate-y-1/2 z-20 w-10 h-10 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"
             >
               <ChevronRight className="w-5 h-5 text-[#276ef4] group-hover:text-[#276ef4]/80" />

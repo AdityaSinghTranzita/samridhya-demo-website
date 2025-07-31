@@ -479,7 +479,7 @@ export default function BusinessLoan() {
                     className="rounded-full mr-3 sm:mr-4 w-10 h-10 sm:w-12 sm:h-12"
                   />
                   <div>
-                    <h4 className="font-semibold text-gray-800 text-xs sm:text-base">{testimonial.name}</h4>
+                    <h3 className="font-semibold text-gray-800 text-xs sm:text-base">{testimonial.name}</h3>
                     <p className="text-xs text-gray-600">{testimonial.role}</p>
                   </div>
                 </div>

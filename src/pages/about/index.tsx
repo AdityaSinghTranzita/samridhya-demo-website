@@ -657,7 +657,7 @@ export default function About() {
                         />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
+                        <h3 className="font-semibold text-gray-800">{testimonial.name}</h3>
                         <p className="text-sm text-gray-600">{testimonial.role}</p>
                       </div>
                     </div>
@@ -735,7 +735,7 @@ export default function About() {
                     />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
+                    <h3 className="font-semibold text-gray-800">{testimonial.name}</h3>
                     <p className="text-sm text-gray-600">{testimonial.role}</p>
                   </div>
                 </div>

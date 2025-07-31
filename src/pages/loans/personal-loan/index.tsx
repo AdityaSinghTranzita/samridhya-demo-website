@@ -493,7 +493,7 @@ export default function PersonalLoan() {
                     className="rounded-full mr-4"
                   />
                   <div>
-                    <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
+                    <h3 className="font-semibold text-gray-800">{testimonial.name}</h3>
                     <p className="text-xs text-gray-600">{testimonial.role}</p>
                   </div>
                 </div>

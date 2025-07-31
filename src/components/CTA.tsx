@@ -133,16 +133,32 @@ export default function Footer() {
                   Your trusted partner for seamless digital lending. Making financial dreams accessible to every Indian.
                 </p>
                 <div className="flex gap-4">
-                  <Link href="https://www.facebook.com/SamridhyaInnovations" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300">
+                  <Link 
+                    href="https://www.facebook.com/SamridhyaInnovations" 
+                    aria-label="Follow us on Facebook"
+                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
+                  >
                     <FaFacebookF size={16} />
                   </Link>
-                  <Link href="https://www.linkedin.com/company/samridhya/" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300">
+                  <Link 
+                    href="https://www.linkedin.com/company/samridhya/" 
+                    aria-label="Follow us on LinkedIn"
+                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
+                  >
                     <FaLinkedinIn size={16} />
                   </Link>
-                  <Link href="https://x.com/ComSamridh42501" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300">
+                  <Link 
+                    href="https://x.com/ComSamridh42501" 
+                    aria-label="Follow us on X (Twitter)"
+                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
+                  >
                     <FaXTwitter size={16} />
                   </Link>
-                  <Link href="https://www.instagram.com/samridhya_innovations/" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300">
+                  <Link 
+                    href="https://www.instagram.com/samridhya_innovations/" 
+                    aria-label="Follow us on Instagram"
+                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
+                  >
                     <FaInstagram size={16} />
                   </Link>
                 </div>
