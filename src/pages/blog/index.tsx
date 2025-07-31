@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Head from 'next/head';
 import { Wrench, BookOpen, Clock, Users, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
@@ -9,8 +10,76 @@ import { trackEvent, trackButtonClick } from '@/utils/analytics';
 
 export default function BlogWIP() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      <Navbar />
+    <>
+      <Head>
+        <title>Blog & News - Samridhya | Financial Insights & Tips</title>
+        <meta name="description" content="Stay updated with the latest insights, tips, and news from the world of digital lending. Expert financial advice and industry updates from Samridhya." />
+        <meta name="keywords" content="financial blog, loan tips, financial advice, digital lending news, financial insights, money management tips" />
+        <meta name="author" content="Samridhya" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, follow" />
+        
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content="Blog & News - Samridhya | Financial Insights & Tips" />
+        <meta property="og:description" content="Stay updated with the latest insights, tips, and news from the world of digital lending. Expert financial advice and industry updates." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://samridhya.com/blog" />
+        <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Samridhya Blog - Financial Insights" />
+        <meta property="og:site_name" content="Samridhya" />
+        <meta property="og:locale" content="en_US" />
+        
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Blog & News - Samridhya | Financial Insights & Tips" />
+        <meta name="twitter:description" content="Stay updated with the latest insights, tips, and news from the world of digital lending." />
+        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta name="twitter:image:alt" content="Samridhya Blog - Financial Insights" />
+        <meta name="twitter:site" content="@samridhya" />
+        <meta name="twitter:creator" content="@samridhya" />
+        
+        {/* Additional Meta Tags */}
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow" />
+        <link rel="canonical" href="https://samridhya.com/blog" />
+        
+        {/* Mobile Meta Tags */}
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Samridhya" />
+        
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Blog",
+              "name": "Samridhya Blog",
+              "description": "Financial insights, tips, and news from the world of digital lending",
+              "url": "https://samridhya.com/blog",
+              "publisher": {
+                "@type": "Organization",
+                "name": "Samridhya",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://samridhya.com/favicon.svg"
+                }
+              },
+              "mainEntity": {
+                "@type": "Organization",
+                "name": "Samridhya",
+                "description": "Digital lending platform providing financial insights and tips"
+              }
+            })
+          }}
+        />
+      </Head>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <Navbar />
       
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-32 pb-16 sm:pt-40 sm:pb-20">
@@ -161,5 +230,6 @@ export default function BlogWIP() {
       {/* Footer */}
       <CTA />
     </div>
+    </>
   );
 }

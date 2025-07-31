@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Head from 'next/head';
 import { ArrowLeft, Shield, Users, FileText, Phone, Mail, MapPin, Lock, Eye, UserCheck } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import CTA from '@/components/CTA';
@@ -9,8 +10,68 @@ import { trackEvent, trackButtonClick } from '@/utils/analytics';
 
 export default function PrivacyPolicy() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      <Navbar />
+    <>
+      <Head>
+        <title>Privacy Policy - Samridhya | Data Protection & Security</title>
+        <meta name="description" content="Read Samridhya's privacy policy to understand how we protect your personal information. Learn about data collection, usage, security measures, and your rights." />
+        <meta name="keywords" content="privacy policy, data protection, personal information, data security, samridhya privacy, loan privacy, financial privacy" />
+        <meta name="author" content="Samridhya" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, follow" />
+        
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content="Privacy Policy - Samridhya | Data Protection & Security" />
+        <meta property="og:description" content="Read Samridhya's privacy policy to understand how we protect your personal information. Learn about data collection, usage, and security measures." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://samridhya.com/privacy-policy" />
+        <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Samridhya Privacy Policy - Data Protection" />
+        <meta property="og:site_name" content="Samridhya" />
+        <meta property="og:locale" content="en_US" />
+        
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Privacy Policy - Samridhya | Data Protection & Security" />
+        <meta name="twitter:description" content="Read Samridhya's privacy policy to understand how we protect your personal information." />
+        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta name="twitter:image:alt" content="Samridhya Privacy Policy - Data Protection" />
+        <meta name="twitter:site" content="@samridhya" />
+        <meta name="twitter:creator" content="@samridhya" />
+        
+        {/* Additional Meta Tags */}
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow" />
+        <link rel="canonical" href="https://samridhya.com/privacy-policy" />
+        
+        {/* Mobile Meta Tags */}
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Samridhya" />
+        
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "name": "Privacy Policy",
+              "description": "Samridhya's privacy policy explaining how we protect your personal information",
+              "url": "https://samridhya.com/privacy-policy",
+              "mainEntity": {
+                "@type": "Organization",
+                "name": "Samridhya",
+                "description": "Digital lending platform with strong privacy protection"
+              }
+            })
+          }}
+        />
+      </Head>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <Navbar />
       
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-32 pb-16 sm:pt-40 sm:pb-20">
@@ -494,5 +555,6 @@ export default function PrivacyPolicy() {
       {/* Footer */}
       <CTA />
     </div>
+    </>
   );
 } 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Head from 'next/head';
 import {
   CreditCard,
   Shield,
@@ -722,6 +723,27 @@ export default function CreditScoreChecker() {
 
   return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-16">
+        <Head>
+          <title>Free Credit Score Checker | Samridhya</title>
+          <meta name="description" content="Check your credit score instantly and securely. Our advanced system provides accurate credit insights and personalized recommendations based on your financial profile." />
+          <meta name="keywords" content="credit score, credit score checker, free credit score, credit score check, credit score calculator, credit score analysis, credit score report, credit score prediction, credit score improvement" />
+          <meta name="author" content="Samridhya" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <meta name="robots" content="index, follow" />
+          <meta name="google-site-verification" content="your-google-site-verification-code" />
+          <meta name="bing-site-verification" content="your-bing-site-verification-code" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:site" content="@samridhya" />
+          <meta name="twitter:title" content="Free Credit Score Checker | Samridhya" />
+          <meta name="twitter:description" content="Check your credit score instantly and securely. Our advanced system provides accurate credit insights and personalized recommendations based on your financial profile." />
+          <meta name="twitter:image" content="https://www.samridhya.com/images/credit-score-checker.jpg" />
+          <meta name="og:title" content="Free Credit Score Checker | Samridhya" />
+          <meta name="og:description" content="Check your credit score instantly and securely. Our advanced system provides accurate credit insights and personalized recommendations based on your financial profile." />
+          <meta name="og:image" content="https://www.samridhya.com/images/credit-score-checker.jpg" />
+          <meta name="og:url" content="https://www.samridhya.com/credit-score-checker" />
+          <meta name="og:site_name" content="Samridhya" />
+          <link rel="canonical" href="https://www.samridhya.com/credit-score-checker" />
+        </Head>
         <Navbar />
 
         {/* Hero Section */}

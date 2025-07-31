@@ -1,0 +1,71 @@
+# Robots.txt for Samridhya - Digital Lending Platform
+# https://samridhya.com
+
+User-agent: *
+Allow: /
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /functions/
+
+# Disallow temporary and development files
+Disallow: /temp/
+Disallow: /test/
+Disallow: /dev/
+Disallow: /staging/
+
+# Disallow file types that don't need indexing
+Disallow: /*.json$
+Disallow: /*.xml$
+Disallow: /*.txt$
+Disallow: /*.log$
+
+# Allow important pages
+Allow: /about
+Allow: /contact
+Allow: /privacy-policy
+Allow: /partners
+Allow: /blog
+Allow: /calculators/
+Allow: /loans/
+
+# Allow static assets
+Allow: /images/
+Allow: /favicon.ico
+Allow: /favicon.svg
+Allow: /apple-touch-icon.png
+Allow: /android-chrome-*.png
+Allow: /mstile-*.png
+Allow: /site.webmanifest
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://samridhya.com/sitemap.xml
+
+# Additional sitemaps for different content types
+Sitemap: https://samridhya.com/sitemap-loans.xml
+Sitemap: https://samridhya.com/sitemap-calculators.xml 

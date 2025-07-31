@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Head from 'next/head';
 import { CheckCircle2, Shield, Users, TrendingUp, Star, Phone, Mail, MapPin, Award, Clock, Zap, Globe, Percent, Target, CreditCard, FileText, BarChart3, Building2 } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
@@ -166,8 +167,92 @@ const team = [
 
 export default function About() {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-16">
-      <LoanNavbar />
+    <>
+      <Head>
+        <title>About Samridhya - Leading Digital Lending Platform | Instant Loans</title>
+        <meta name="description" content="Learn about Samridhya, India's leading digital lending platform. We provide instant personal loans, business loans, and more with competitive rates and quick approval." />
+        <meta name="keywords" content="about samridhya, digital lending platform, instant loans, personal loans, business loans, online lending, fintech company, loan provider" />
+        <meta name="author" content="Samridhya" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, follow" />
+        
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content="About Samridhya - Leading Digital Lending Platform" />
+        <meta property="og:description" content="Learn about Samridhya, India's leading digital lending platform. We provide instant personal loans, business loans, and more with competitive rates and quick approval." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://samridhya.com/about" />
+        <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="About Samridhya - Digital Lending Platform" />
+        <meta property="og:site_name" content="Samridhya" />
+        <meta property="og:locale" content="en_US" />
+        
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="About Samridhya - Leading Digital Lending Platform" />
+        <meta name="twitter:description" content="Learn about Samridhya, India's leading digital lending platform. We provide instant personal loans, business loans, and more." />
+        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta name="twitter:image:alt" content="About Samridhya - Digital Lending Platform" />
+        <meta name="twitter:site" content="@samridhya" />
+        <meta name="twitter:creator" content="@samridhya" />
+        
+        {/* Additional Meta Tags */}
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow" />
+        <link rel="canonical" href="https://samridhya.com/about" />
+        
+        {/* Mobile Meta Tags */}
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Samridhya" />
+        
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Samridhya",
+              "description": "India's leading digital lending platform providing instant personal loans, business loans, and more",
+              "url": "https://samridhya.com",
+              "logo": "https://samridhya.com/favicon.svg",
+              "image": "https://samridhya.com/samridhya-preview.png",
+              "sameAs": [
+                "https://twitter.com/samridhya",
+                "https://facebook.com/samridhya"
+              ],
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+91-6366234524",
+                "contactType": "customer service",
+                "email": "support@samridhya.com"
+              },
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "No.1207/343 & 1207/1/343/1, Sierra Cartel, 9th Main,7th Sector, HSR Layout",
+                "addressLocality": "Bengaluru Urban",
+                "addressRegion": "Karnataka",
+                "postalCode": "560102",
+                "addressCountry": "IN"
+              },
+              "areaServed": "India",
+              "serviceType": [
+                "Personal Loan",
+                "Business Loan", 
+                "Education Loan",
+                "Wedding Loan",
+                "Travel Loan",
+                "Medical Loan"
+              ]
+            })
+          }}
+        />
+      </Head>
+      <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-16">
+        <LoanNavbar />
       
       {/* Hero Section */}
       <section className="relative w-full bg-gradient-to-br from-blue-50 via-cyan-50 to-indigo-50 min-h-[calc(100vh-4rem)] overflow-hidden">
@@ -733,5 +818,6 @@ export default function About() {
 
       <CTA />
     </div>
+    </>
   );
 } 
