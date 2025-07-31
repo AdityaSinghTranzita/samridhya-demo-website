@@ -160,7 +160,7 @@ export default function PersonalLoan() {
 
             {/* Main Heading */}
             <motion.h1
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-black text-gray-900 mb-6 leading-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-bold text-gray-900 font-black text-gray-900 mb-6 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -168,7 +168,7 @@ export default function PersonalLoan() {
               {/*Personal Loans*/}
               Instant Personal Loans up to ₹40 Lakhs
               <br />
-              <span className="bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 bg-clip-text text-transparent">
+              <span className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 bg-clip-text text-transparent">
                 {/*Made Simple*/}
                 100% Digital & Paperless
 

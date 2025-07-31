@@ -187,7 +187,7 @@ ${formData.name}`;
 
               {/* Main Heading */}
               <motion.h1
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-4 sm:mb-6 leading-tight"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-black text-gray-900 mb-4 sm:mb-6 leading-tight"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -195,7 +195,7 @@ ${formData.name}`;
               >
                 Get in Touch
                 <br />
-                <span className="bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 bg-clip-text text-transparent">
+                <span className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 bg-clip-text text-transparent">
                   We're Here to Help
                 </span>
               </motion.h1>
@@ -520,36 +520,36 @@ ${formData.name}`;
         </section>
 
         {/* FAQ Section */}
-        <section className="py-16 sm:py-20 bg-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
-              <p className="text-gray-600 text-sm sm:text-base">Find answers to common questions about our services</p>
-            </motion.div>
+        {/*<section className="py-16 sm:py-20 bg-white">*/}
+        {/*  <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">*/}
+        {/*    <motion.div*/}
+        {/*      className="text-center mb-12"*/}
+        {/*      initial={{ opacity: 0, y: 30 }}*/}
+        {/*      whileInView={{ opacity: 1, y: 0 }}*/}
+        {/*      viewport={{ once: true }}*/}
+        {/*      transition={{ duration: 0.8 }}*/}
+        {/*    >*/}
+        {/*      <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>*/}
+        {/*      <p className="text-gray-600 text-sm sm:text-base">Find answers to common questions about our services</p>*/}
+        {/*    </motion.div>*/}
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {faqs.map((faq, idx) => (
-                <motion.div
-                  key={idx}
-                  className="bg-gray-50 rounded-2xl p-6"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: idx * 0.1 }}
-                >
-                  <h4 className="font-bold text-gray-900 mb-3 text-sm sm:text-base">{faq.question}</h4>
-                  <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">{faq.answer}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/*    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">*/}
+        {/*      {faqs.map((faq, idx) => (*/}
+        {/*        <motion.div*/}
+        {/*          key={idx}*/}
+        {/*          className="bg-gray-50 rounded-2xl p-6"*/}
+        {/*          initial={{ opacity: 0, y: 20 }}*/}
+        {/*          whileInView={{ opacity: 1, y: 0 }}*/}
+        {/*          viewport={{ once: true }}*/}
+        {/*          transition={{ duration: 0.5, delay: idx * 0.1 }}*/}
+        {/*        >*/}
+        {/*          <h4 className="font-bold text-gray-900 mb-3 text-sm sm:text-base">{faq.question}</h4>*/}
+        {/*          <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">{faq.answer}</p>*/}
+        {/*        </motion.div>*/}
+        {/*      ))}*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*</section>*/}
 
         {/* CTA Section */}
         <CTA />
