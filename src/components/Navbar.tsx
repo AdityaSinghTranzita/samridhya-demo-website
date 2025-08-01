@@ -193,8 +193,14 @@ export default function Navbar() {
         <button
             onClick={() => {
               handleAppDownload();
-              trackButtonClick('download_app', 'navbar');
-              trackAppDownload('web');
+              trackButtonClick('download_app', 'navbar', {
+                button_position: 'navbar_desktop',
+                nav_section: 'desktop'
+              });
+              trackAppDownload('web', 'navbar', {
+                download_source: 'navbar_desktop',
+                nav_section: 'desktop'
+              });
             }}
             className={`cursor-pointer hidden md:flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-medium focus:outline-none ${
                 isScrolled
@@ -368,8 +374,14 @@ export default function Navbar() {
               <button
                 onClick={() => {
                   handleAppDownload();
-                  trackButtonClick('download_app', 'navbar_mobile');
-                  trackAppDownload('web');
+                  trackButtonClick('download_app', 'navbar_mobile', {
+                    button_position: 'navbar_mobile',
+                    nav_section: 'mobile'
+                  });
+                  trackAppDownload('web', 'navbar_mobile', {
+                    download_source: 'navbar_mobile',
+                    nav_section: 'mobile'
+                  });
                   closeMobileMenu();
                 }}
                 className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium focus:outline-none"

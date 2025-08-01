@@ -198,22 +198,35 @@ export default function PersonalLoan() {
               <motion.button
                 onClick={() => {
                   handleAppDownload();
-                  trackButtonClick('apply_personal_loan', 'hero_section');
-                  trackLoanApplication('personal_loan', 50000);
-                  trackAppDownload('web');
+                  trackButtonClick('apply_personal_loan', 'hero_section', {
+                    loan_type: 'personal_loan',
+                    loan_amount: 'up_to_40_lakhs',
+                    button_position: 'primary_cta'
+                  });
+                  trackLoanApplication('personal_loan', 50000, 'hero_section', {
+                    loan_amount: 50000,
+                    application_source: 'hero_section'
+                  });
+                  trackAppDownload('web', 'personal_loan_page', {
+                    loan_type: 'personal_loan',
+                    download_source: 'personal_loan_page'
+                  });
                 }}
                 className="group relative bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span className="relative z-10">Apply Now - Get uto ₹50,000</span>
+                <span className="relative z-10">Apply Now - Get up to ₹50,000</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </motion.button>
               
               <motion.button
                 onClick={() => {
                   scrollToCalculator();
-                  trackButtonClick('calculate_emi', 'hero_section');
+                  trackButtonClick('calculate_emi', 'hero_section', {
+                    calculator_type: 'emi_calculator',
+                    button_position: 'secondary_cta'
+                  });
                 }}
                 className="group relative bg-blue-400/20 backdrop-blur-sm border border-blue-400/30 text-blue-700 font-bold px-8 py-4 rounded-2xl hover:bg-blue-400/30 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}

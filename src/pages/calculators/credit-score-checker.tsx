@@ -23,7 +23,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import CTA from '@/components/CTA';
-import { trackCreditScoreCheck, trackEvent, trackButtonClick } from '@/utils/analytics';
+import { trackCreditScoreCheck, trackEvent, trackButtonClick, trackCalculatorUsage } from '@/utils/analytics';
 
 interface CreditScoreData {
   credit_score: number;
@@ -224,12 +224,15 @@ export default function CreditScoreChecker() {
   }, [currentStep, otpTimer]);
 
   const handleOtpChange = (index: number, value: string) => {
+    // Only allow numeric characters
+    const numericValue = value.replace(/[^0-9]/g, '');
+    
     const newOtp = [...otp];
-    newOtp[index] = value;
+    newOtp[index] = numericValue;
     setOtp(newOtp);
 
     // Auto-focus next input
-    if (value && index < 5) {
+    if (numericValue && index < 5) {
       const nextInput = document.querySelector(`input[data-index="${index + 1}"]`) as HTMLInputElement;
       if (nextInput) nextInput.focus();
     }
@@ -259,16 +262,33 @@ export default function CreditScoreChecker() {
         setCurrentStep(2);
         setOtpTimer(30);
         // Track OTP generation success
-        trackEvent('otp_generated', 'credit_score_check', 'mobile_verification');
+        trackEvent('otp_generated', {
+          user_mobile: mobileNumber,
+          event_category: 'engagement',
+          event_label: 'otp_generated_mobile_verification'
+        });
       } else {
         setError(data.message || 'Failed to send OTP');
+        
         // Track OTP generation failure
-        trackEvent('otp_generation_failed', 'credit_score_check', data.message || 'unknown_error');
+        trackEvent('otp_generation_failed', {
+          user_mobile: mobileNumber,
+          error_message: data.message || 'unknown_error',
+          event_category: 'error',
+          event_label: 'otp_generation_failed'
+        });
       }
     } catch (error) {
-      setError('An error occurred. Please try again.');
-      // Track OTP generation error
-      trackEvent('otp_generation_error', 'credit_score_check', 'network_error');
+      console.error('OTP generation network error:', error);
+      setError('Network error. Please check your connection and try again.');
+      
+      // Track OTP generation network error
+      trackEvent('otp_generation_error', {
+        user_mobile: mobileNumber,
+        error_type: 'network_error',
+        event_category: 'error',
+        event_label: 'otp_generation_network_error'
+      });
     } finally {
       setIsLoading(false);
     }
@@ -306,7 +326,11 @@ export default function CreditScoreChecker() {
         setSessionStorage('mobileNumber', mobileNumber);
 
         // Track OTP verification success
-        trackEvent('otp_verified', 'credit_score_check', 'mobile_verification');
+        trackEvent('otp_verified', {
+          user_mobile: mobileNumber,
+          event_category: 'engagement',
+          event_label: 'otp_verified_mobile_verification'
+        });
 
         // Check if user details exist in the response
         // The API might return user details in different structures
@@ -338,11 +362,24 @@ export default function CreditScoreChecker() {
       } else {
         setError(data.message || 'Invalid OTP. Please try again.');
         // Track OTP verification failure
-        trackEvent('otp_verification_failed', 'credit_score_check', data.message || 'invalid_otp');
+        trackEvent('otp_verification_failed', {
+          user_mobile: mobileNumber,
+          error_message: data.message || 'invalid_otp',
+          event_category: 'error',
+          event_label: 'otp_verification_failed'
+        });
       }
     } catch (error) {
       console.error('OTP verification error:', error);
-      setError('An error occurred. Please try again.');
+      setError('Network error. Please try again.');
+      
+      // Track OTP verification network error
+      trackEvent('otp_verification_error', {
+        user_mobile: mobileNumber,
+        error_type: 'network_error',
+        event_category: 'error',
+        event_label: 'otp_verification_network_error'
+      });
     } finally {
       setIsLoading(false);
     }
@@ -459,8 +496,17 @@ export default function CreditScoreChecker() {
         setSessionStorage('cibilReportData', JSON.stringify(scoreData.data));
 
         // Track successful credit score retrieval
-        trackCreditScoreCheck();
-        trackEvent('credit_score_retrieved', 'credit_score_check', 'success', scoreData.data.credit_score);
+        trackCreditScoreCheck('credit_score_checker', {
+          credit_score: scoreData.data.credit_score,
+          user_mobile: mobileNumber,
+          step: 'step_5'
+        });
+        trackEvent('credit_score_retrieved', {
+          credit_score: scoreData.data.credit_score,
+          user_mobile: mobileNumber,
+          event_category: 'conversion',
+          event_label: 'credit_score_retrieved_success'
+        });
 
         // Ensure all session data is stored for future use
         if (authToken) {
@@ -480,7 +526,11 @@ export default function CreditScoreChecker() {
         setSessionStorage('noCreditRecord', 'true');
 
         // Track no credit record found
-        trackEvent('credit_score_no_record', 'credit_score_check', 'no_credit_history');
+        trackEvent('credit_score_no_record', {
+          user_mobile: mobileNumber,
+          event_category: 'engagement',
+          event_label: 'credit_score_no_record_found'
+        });
 
         // Store user details for future use
         if (authToken) {
@@ -890,12 +940,15 @@ export default function CreditScoreChecker() {
                           {otp.map((digit, index) => (
                               <input
                                   key={index}
-                                  type="text"
+                                  type="number"
+                                  inputMode="numeric"
                                   value={digit}
                                   onChange={(e) => handleOtpChange(index, e.target.value)}
                                   onKeyDown={(e) => handleOtpKeyDown(index, e)}
                                   data-index={index}
                                   maxLength={1}
+                                  min="0"
+                                  max="9"
                                   className="w-12 h-12 text-center border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg font-semibold text-gray-900"
                               />
                           ))}

@@ -1,12 +1,5 @@
 // Performance monitoring utilities
 
-// Extend Window interface for gtag
-declare global {
-  interface Window {
-    gtag?: (command: string, targetId: string, config: any) => void;
-  }
-}
-
 // Extend PerformanceEntry for FID
 interface PerformanceEntryWithProcessingStart extends PerformanceEntry {
   processingStart?: number;

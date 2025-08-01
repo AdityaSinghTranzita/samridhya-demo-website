@@ -50,15 +50,21 @@ export default function Footer() {
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-8">
                 <motion.button
-                    onClick={() => {
-                      handleAppDownload();
-                      trackButtonClick('download_app', 'cta_section');
-                      trackAppDownload('web');
-                    }}
-                    className="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 flex items-center gap-3"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                >
+                onClick={() => {
+                  handleAppDownload();
+                  trackButtonClick('download_app', 'cta_section', {
+                    button_position: 'cta_section',
+                    cta_type: 'primary'
+                  });
+                  trackAppDownload('web', 'cta_section', {
+                    download_source: 'cta_section',
+                    cta_type: 'primary'
+                  });
+                }}
+                className="group relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 text-base"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
                   <Download size={20} />
                   Download App
                 </motion.button>
