@@ -61,11 +61,11 @@ export default function Footer() {
                     cta_type: 'primary'
                   });
                 }}
-                className="group relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 text-base"
+                className=" flex justify-between items-center group relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
-                  <Download size={20} />
+                  <Download size={20} className="mr-2" />
                   Download App
                 </motion.button>
               </div>
