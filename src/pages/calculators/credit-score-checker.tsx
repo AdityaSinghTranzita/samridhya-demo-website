@@ -255,10 +255,10 @@ export default function CreditScoreChecker() {
     setError('');
 
     try {
-      const response = await fetch(`${GENERATE_OTP_URL}/${mobileNumber}`);
+      const response = await fetch(`${GENERATE_OTP_URL}?phone=${mobileNumber}`);
       const data = await response.json();
 
-      if (data.message === 'Success') {
+      if (data.success === true) {
         setCurrentStep(2);
         setOtpTimer(30);
         // Track OTP generation success
@@ -306,7 +306,7 @@ export default function CreditScoreChecker() {
     setError('');
 
     try {
-      const response = await fetch(`${VERIFY_OTP_URL}/${mobileNumber}`, {
+      const response = await fetch(`${VERIFY_OTP_URL}?phone=${mobileNumber}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -317,8 +317,8 @@ export default function CreditScoreChecker() {
       const data = await response.json();
 
 
-      if (data.message === 'Success') {
-        const token = data.data;
+      if (data.success === true) {
+        const token = data.access_token;
         setAuthToken(token);
 
         // Store token for future use
@@ -412,14 +412,15 @@ export default function CreditScoreChecker() {
         },
         body: JSON.stringify({
           name: userDetails.name,
-          pan: userDetails.pan
+          pan: userDetails.pan,
+          email: userDetails.email
         }),
       });
 
       const submitData = await submitResponse.json();
 
 
-      // Check for various success messages
+      // Check for success response
       const isSuccess = submitData.message && (
           submitData.message.includes('Success') ||
           submitData.message.includes('successfully') ||

@@ -71,9 +71,7 @@ export default function Document() {
           }}
         />
         
-        {/* ==========================================
-           FACEBOOK META PIXEL CODE - TRACKING ID: 1014691167229448
-           ========================================== */}
+        {/* Meta Pixel Code */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -90,19 +88,15 @@ export default function Document() {
             `,
           }}
         />
-        {/* Meta Pixel NoScript Fallback */}
         <noscript>
           <img 
             height="1" 
             width="1" 
             style={{display: 'none'}}
             src="https://www.facebook.com/tr?id=1014691167229448&ev=PageView&noscript=1"
-            alt=""
           />
         </noscript>
-        {/* ==========================================
-           END FACEBOOK META PIXEL CODE
-           ========================================== */}
+        {/* End Meta Pixel Code */}
         
         {/* Basic Meta Tags */}
         <meta charSet="utf-8" />
