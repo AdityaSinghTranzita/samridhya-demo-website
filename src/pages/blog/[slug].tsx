@@ -3,12 +3,13 @@
 import { motion } from 'framer-motion';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { ArrowLeft, Calendar, Clock, User, Tag, Share2, BookOpen, Eye, Heart, MessageCircle, Facebook, Twitter, Linkedin, Copy, Check } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, User, Tag, Share2, BookOpen, Eye, Heart, MessageCircle, Facebook, Twitter, Linkedin, Copy, Check, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import CTA from '@/components/CTA';
 import BlogGrid from '@/components/BlogGrid';
+import BlogPostSidebar from '@/components/BlogPostSidebar';
 import { blogService, BlogPost } from '@/services/blogService';
 
 export default function BlogPostPage() {
@@ -19,17 +20,56 @@ export default function BlogPostPage() {
   const [loading, setLoading] = useState(true);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [processedContent, setProcessedContent] = useState<string>('');
+
+  // Function to add IDs to headings for table of contents
+  const processContentForTOC = (content: string): string => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, 'text/html');
+    const headings = doc.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    
+    headings.forEach((heading, index) => {
+      if (!heading.id) {
+        const text = heading.textContent || '';
+        const id = text.toLowerCase()
+          .replace(/[^\w\s-]/g, '') // Remove special characters
+          .replace(/\s+/g, '-') // Replace spaces with hyphens
+          .replace(/--+/g, '-') // Replace multiple hyphens with single
+          .trim() || `heading-${index}`;
+        heading.id = id;
+      }
+    });
+    
+    return doc.body.innerHTML;
+  };
 
   useEffect(() => {
-    if (slug && typeof slug === 'string') {
-      const post = blogService.getPostBySlug(slug);
-      if (post) {
-        setBlogPost(post);
-        const related = blogService.getRelatedPosts(post, 3);
-        setRelatedPosts(related);
+    const loadPost = async () => {
+      if (slug && typeof slug === 'string') {
+        try {
+          setLoading(true);
+          const post = await blogService.getPostBySlug(slug);
+          if (post) {
+            setBlogPost(post);
+            // Process content to add IDs to headings
+            setProcessedContent(processContentForTOC(post.content));
+            
+            const related = await blogService.getFeaturedPosts();
+            // Get up to 3 related posts (excluding current post)
+            const filteredRelated = related
+              .filter(p => p.id !== post.id)
+              .slice(0, 3);
+            setRelatedPosts(filteredRelated);
+          }
+        } catch (error) {
+          console.error('Error loading blog post:', error);
+        } finally {
+          setLoading(false);
+        }
       }
-      setLoading(false);
-    }
+    };
+
+    loadPost();
   }, [slug]);
 
   // Close share menu when clicking outside
@@ -91,7 +131,11 @@ export default function BlogPostPage() {
     );
   }
 
-  const formattedDate = blogService.formatDate(blogPost.date);
+  const formattedDate = (blogPost.publishedAt || blogPost.updatedAt).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 
   // Share functions
   const shareUrl = `https://samridhya.com/blog/${blogPost.slug}`;
@@ -130,26 +174,26 @@ export default function BlogPostPage() {
   return (
     <>
       <Head>
-        <title>{blogPost.title} - Samridhya Blog</title>
-        <meta name="description" content={blogPost.excerpt} />
-        <meta name="keywords" content={`${blogPost.category}, financial advice, loan tips, ${blogPost.title.toLowerCase()}`} />
+        <title>{blogPost.seoTitle || blogPost.title} - Samridhya Blog</title>
+        <meta name="description" content={blogPost.seoDescription || blogPost.excerpt} />
+        <meta name="keywords" content={blogPost.seoKeywords?.join(', ') || `${blogPost.category}, financial advice, loan tips, ${blogPost.title.toLowerCase()}`} />
         <meta name="author" content={blogPost.author} />
         
         {/* Open Graph Meta Tags */}
-        <meta property="og:title" content={blogPost.title} />
-        <meta property="og:description" content={blogPost.excerpt} />
+        <meta property="og:title" content={blogPost.seoTitle || blogPost.title} />
+        <meta property="og:description" content={blogPost.seoDescription || blogPost.excerpt} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={`https://samridhya.com/blog/${blogPost.slug}`} />
-        <meta property="og:image" content={blogPost.image || "https://samridhya.com/samridhya-preview.png"} />
+        <meta property="og:image" content={blogPost.featuredImage || "https://samridhya.com/samridhya-preview.png"} />
         
         {/* Twitter Card Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={blogPost.title} />
-        <meta name="twitter:description" content={blogPost.excerpt} />
-        <meta name="twitter:image" content={blogPost.image || "https://samridhya.com/samridhya-preview.png"} />
+        <meta name="twitter:title" content={blogPost.seoTitle || blogPost.title} />
+        <meta name="twitter:description" content={blogPost.seoDescription || blogPost.excerpt} />
+        <meta name="twitter:image" content={blogPost.featuredImage || "https://samridhya.com/samridhya-preview.png"} />
         
         {/* Article Meta Tags */}
-        <meta property="article:published_time" content={blogPost.date} />
+        <meta property="article:published_time" content={(blogPost.publishedAt || blogPost.updatedAt).toISOString()} />
         <meta property="article:author" content={blogPost.author} />
         <meta property="article:section" content={blogPost.category} />
         
@@ -178,7 +222,7 @@ export default function BlogPostPage() {
             </motion.div>
 
             {/* Cover Image */}
-            {blogPost.image && (
+            {blogPost.featuredImage && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -187,7 +231,7 @@ export default function BlogPostPage() {
                 className="relative w-full h-72 sm:h-80 lg:h-96 mb-12 rounded-3xl overflow-hidden shadow-2xl"
               >
                 <img
-                  src={blogPost.image}
+                  src={blogPost.featuredImage}
                   alt={blogPost.title}
                   className="w-full h-full object-cover"
                 />
@@ -305,71 +349,35 @@ export default function BlogPostPage() {
           </div>
         </section>
 
-        {/* Article Content */}
-        <section className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-          <motion.div
-            className="bg-white/90 backdrop-blur-md border border-white/30 rounded-3xl p-8 sm:p-12 shadow-xl"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div 
-              className="prose prose-lg prose-headings:text-gray-900 prose-headings:font-bold prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:text-blue-700 prose-strong:text-gray-900 prose-strong:font-semibold prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-gray-700 prose-ul:text-gray-700 prose-ol:text-gray-700 prose-li:text-gray-700 max-w-none"
-              dangerouslySetInnerHTML={{ __html: blogPost.content }}
-            />
-            
-            {/* Article Footer */}
-            <div className="mt-16 pt-8 border-t border-gray-200">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
-                <div className="flex items-center space-x-6">
-                  <span className="text-sm font-semibold text-gray-700">Share this article:</span>
-                  <div className="flex space-x-3">
-                    <button 
-                      onClick={shareToFacebook}
-                      className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg"
-                      title="Share on Facebook"
-                    >
-                      <Facebook className="w-5 h-5" />
-                    </button>
-                    <button 
-                      onClick={shareToTwitter}
-                      className="w-10 h-10 bg-blue-400 text-white rounded-full flex items-center justify-center hover:bg-blue-500 transition-all duration-300 shadow-md hover:shadow-lg"
-                      title="Share on Twitter"
-                    >
-                      <Twitter className="w-5 h-5" />
-                    </button>
-                    <button 
-                      onClick={shareToLinkedIn}
-                      className="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-all duration-300 shadow-md hover:shadow-lg"
-                      title="Share on LinkedIn"
-                    >
-                      <Linkedin className="w-5 h-5" />
-                    </button>
-                    <button 
-                      onClick={copyToClipboard}
-                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-md hover:shadow-lg ${
-                        copied 
-                          ? 'bg-green-600 text-white hover:bg-green-700' 
-                          : 'bg-gray-600 text-white hover:bg-gray-700'
-                      }`}
-                      title={copied ? 'Copied!' : 'Copy Link'}
-                    >
-                      {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-                    </button>
-                  </div>
-                </div>
-                
-                <Link
-                  href="/blog"
-                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 shadow-md hover:shadow-lg"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Blog
-                </Link>
+        {/* Sidebar Only */}
+        <section className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+          <div className="w-full">
+            {/* Sidebar - Narrower width */}
+            <div className="w-full">
+              <div>
+                <BlogPostSidebar 
+                  currentPost={blogPost ? { ...blogPost, content: processedContent || blogPost.content } : undefined}
+                  relatedPosts={relatedPosts}
+                  onShare={(platform) => {
+                    switch (platform) {
+                      case 'facebook':
+                        shareToFacebook();
+                        break;
+                      case 'twitter':
+                        shareToTwitter();
+                        break;
+                      case 'linkedin':
+                        shareToLinkedIn();
+                        break;
+                      case 'copy':
+                        copyToClipboard();
+                        break;
+                    }
+                  }}
+                />
               </div>
             </div>
-          </motion.div>
+          </div>
         </section>
 
         {/* Related Posts */}

@@ -13,6 +13,7 @@ interface BlogGridProps {
   className?: string;
   emptyMessage?: string;
   emptyIcon?: React.ReactNode;
+  isLoading?: boolean;
 }
 
 export default function BlogGrid({
@@ -23,7 +24,8 @@ export default function BlogGrid({
   columns = 2,
   className = '',
   emptyMessage = 'No articles found',
-  emptyIcon
+  emptyIcon,
+  isLoading = false
 }: BlogGridProps) {
   const gridCols = {
     1: 'grid-cols-1',
@@ -64,7 +66,22 @@ export default function BlogGrid({
       )}
 
       {/* Blog Grid */}
-      {posts.length > 0 ? (
+      {isLoading ? (
+        <div className={`grid ${gridCols[columns]} ${gapSizes[columns]}`}>
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 animate-pulse">
+              <div className="w-full h-48 bg-gray-200 rounded-lg mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+              <div className="h-3 bg-gray-200 rounded w-full mb-2"></div>
+              <div className="h-3 bg-gray-200 rounded w-2/3 mb-4"></div>
+              <div className="flex items-center space-x-4">
+                <div className="h-3 bg-gray-200 rounded w-16"></div>
+                <div className="h-3 bg-gray-200 rounded w-20"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : posts.length > 0 ? (
         <div className={`grid ${gridCols[columns]} ${gapSizes[columns]}`}>
           {posts.map((post, index) => (
             <motion.div
@@ -78,12 +95,17 @@ export default function BlogGrid({
                 title={post.title}
                 excerpt={post.excerpt}
                 author={post.author}
-                date={post.date}
-                readTime={post.readTime}
+                date={(post.publishedAt || post.updatedAt).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+                readTime={`${Math.ceil(post.content.split(' ').length / 200)} min read`}
                 category={post.category}
-                slug={post.slug}
-                image={post.image}
-                featured={post.featured}
+                subcategory={post.subcategory}
+                slug={post.slug!}
+                image={post.featuredImage}
+                featured={false}
               />
             </motion.div>
           ))}
