@@ -225,31 +225,72 @@ html {
   text-align: justify;
 }
 
-/* List styles */
-.ProseMirror ul {
-  list-style-type: disc;
+/* List styles - Enhanced for both editor and rendered content */
+.ProseMirror ul,
+.prose ul,
+.blog-content ul,
+.preview-content ul {
+  list-style-type: disc !important;
+  padding-left: 1.5em !important;
+  margin: 0.5em 0 !important;
 }
 
-.ProseMirror ul ul {
-  list-style-type: circle;
-  margin: 0.25rem 0;
+.ProseMirror ul ul,
+.prose ul ul,
+.blog-content ul ul,
+.preview-content ul ul {
+  list-style-type: circle !important;
+  margin: 0.25em 0 !important;
 }
 
-.ProseMirror ul ul ul {
-  list-style-type: square;
+.ProseMirror ul ul ul,
+.prose ul ul ul,
+.blog-content ul ul ul,
+.preview-content ul ul ul {
+  list-style-type: square !important;
+  margin: 0.25em 0 !important;
 }
 
-.ProseMirror ol {
-  list-style-type: decimal;
+.ProseMirror ol,
+.prose ol,
+.blog-content ol,
+.preview-content ol {
+  list-style-type: decimal !important;
+  padding-left: 1.5em !important;
+  margin: 0.5em 0 !important;
 }
 
-.ProseMirror ol ol {
-  list-style-type: lower-alpha;
-  margin: 0.25rem 0;
+.ProseMirror ol ol,
+.prose ol ol,
+.blog-content ol ol,
+.preview-content ol ol {
+  list-style-type: lower-alpha !important;
+  margin: 0.25em 0 !important;
 }
 
-.ProseMirror ol ol ol {
-  list-style-type: lower-roman;
+.ProseMirror ol ol ol,
+.prose ol ol ol,
+.blog-content ol ol ol,
+.preview-content ol ol ol {
+  list-style-type: lower-roman !important;
+  margin: 0.25em 0 !important;
+}
+
+.ProseMirror li,
+.prose li,
+.blog-content li,
+.preview-content li {
+  margin: 0.25em 0 !important;
+  display: list-item !important;
+  line-height: 1.6 !important;
+}
+
+.ProseMirror li::marker,
+.prose li::marker,
+.blog-content li::marker,
+.preview-content li::marker {
+  color: #6b7280 !important;
+  font-weight: 500 !important;
 }
 
 /* Table styles */

@@ -429,9 +429,9 @@ export default function BlogPage() {
 
         {/* Main Content */}
         <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-7 gap-6 lg:gap-8">
             {/* Blog Posts */}
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-5">
               {/* Results Header */}
               <motion.div
                 className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg"
@@ -550,7 +550,7 @@ export default function BlogPage() {
 
             {/* Sidebar with Features - Hidden on mobile */}
             <div className="hidden lg:block lg:col-span-2">
-              <div className="sticky top-16 sm:top-20 h-fit">
+              <div className="sticky top-16 sm:top-20 h-fit max-w-xs">
                 <BlogSidebar
                   onSearchChange={handleSearchChange}
                   onCategoryChange={handleCategoryChange}

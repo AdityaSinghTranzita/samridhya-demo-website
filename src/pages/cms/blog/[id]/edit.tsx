@@ -390,11 +390,11 @@ const EditBlogPost: React.FC = () => {
   };
 
   const BlogPreview = () => (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-3 sm:p-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center space-x-2 text-sm text-gray-500 mb-4">
+        <div className="mb-6">
+          <div className="flex items-center space-x-2 text-sm text-gray-500 mb-3">
             <Globe className="w-4 h-4" />
             <span>Preview</span>
             <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
@@ -416,23 +416,35 @@ const EditBlogPost: React.FC = () => {
           {post?.excerpt && (
             <p className="text-xl text-gray-600 leading-relaxed mb-6">{post.excerpt}</p>
           )}
-          <div className="flex items-center space-x-4 text-sm text-gray-500">
-            <div className="flex items-center space-x-1">
-              <User className="w-4 h-4" />
-              <span>{post?.author || 'Unknown Author'}</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Clock className="w-4 h-4" />
-              <span>{new Date().toLocaleDateString()}</span>
-            </div>
-            {post?.tags && post.tags.length > 0 && (
+          <div className="space-y-4">
+            {/* Author and Date */}
+            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
               <div className="flex items-center space-x-1">
-                <Tag className="w-4 h-4" />
-                <div className="flex space-x-1">
+                <User className="w-4 h-4" />
+                <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-medium">
+                  {post?.author || 'Unknown Author'}
+                </span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Clock className="w-4 h-4" />
+                <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-medium">
+                  {new Date().toLocaleDateString()}
+                </span>
+              </div>
+            </div>
+            
+            {/* Tags */}
+            {post?.tags && post.tags.length > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center space-x-1">
+                  <Tag className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm font-medium text-gray-700">Tags:</span>
+                </div>
+                <div className="flex flex-wrap gap-2 max-w-full">
                   {post.tags.map((tag, index) => (
                     <span
                       key={index}
-                      className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                      className="px-3 py-1.5 bg-blue-100 text-blue-800 text-sm rounded-full border border-blue-200 hover:bg-blue-200 transition-colors duration-200 whitespace-nowrap flex-shrink-0"
                     >
                       {tag}
                     </span>
@@ -521,84 +533,151 @@ const EditBlogPost: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             onSubmit={handleSubmit}
-            className="space-y-6"
+            className="space-y-6 max-h-screen overflow-y-auto pr-2"
           >
-            {/* Title */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-6">
-              <label htmlFor="title" className="block text-sm font-semibold text-gray-900 mb-2">
-                Title *
-              </label>
-              <div className="relative">
-                <FileText className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  id="title"
-                  value={post.title}
-                  onChange={handleTitleChange}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
-                    errors.title ? 'border-red-300' : 'border-gray-300'
-                  }`}
-                  placeholder="Enter post title"
-                  required
-                />
-              </div>
-              {errors.title && (
-                <p className="text-red-500 text-sm mt-1">{errors.title}</p>
-              )}
-            </div>
-
-            {/* Author */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-6">
-              <label className="block text-sm font-semibold text-gray-900 mb-2">
-                Author *
-              </label>
-              <div className="space-y-3">
-                {/* Author Type Selection */}
-                <div className="flex items-center space-x-4">
-                  <label className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      checked={!useCustomAuthor}
-                      onChange={() => {
-                        setUseCustomAuthor(false);
-                        setPost(prev => prev ? ({
-                          ...prev,
-                          author: user?.displayName || user?.email || '',
-                        }) : null);
-                      }}
-                      className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-                    />
-                    <span className="text-sm text-gray-700">Use current user</span>
-                  </label>
-                  <label className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      checked={useCustomAuthor}
-                      onChange={() => setUseCustomAuthor(true)}
-                      className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-                    />
-                    <span className="text-sm text-gray-700">Enter custom author</span>
-                  </label>
-                </div>
-
-                {/* Author Input */}
+            {/* Top Section */}
+            <div className=" bg-gradient-to-b from-white/95 to-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6 space-y-3">
+              
+              
+              {/* Title */}
+              <div>
+                <label htmlFor="title" className="block text-sm font-semibold text-gray-900 mb-2">
+                  Title *
+                </label>
                 <div className="relative">
-                  <PenTool className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <FileText className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     type="text"
-                    value={post.author}
-                    onChange={handleAuthorChange}
-                    disabled={!useCustomAuthor}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
-                      errors.author ? 'border-red-300' : 'border-gray-300'
-                    } ${!useCustomAuthor ? 'bg-gray-50 text-gray-500' : ''}`}
-                    placeholder="Enter author name"
+                    id="title"
+                    value={post.title}
+                    onChange={handleTitleChange}
+                    className={`w-full pl-10 pr-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+                      errors.title ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                    placeholder="Enter post title"
                     required
                   />
                 </div>
-                {errors.author && (
-                  <p className="text-red-500 text-sm mt-1">{errors.author}</p>
+                {errors.title && (
+                  <p className="text-red-500 text-sm mt-1">{errors.title}</p>
                 )}
+              </div>
+
+              {/* Author */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Author *
+                </label>
+                <div className="space-y-2">
+                  {/* Author Type Selection */}
+                  <div className="flex flex-wrap items-center gap-3">
+                    <label className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        checked={!useCustomAuthor}
+                        onChange={() => {
+                          setUseCustomAuthor(false);
+                          setPost(prev => prev ? ({
+                            ...prev,
+                            author: user?.displayName || user?.email || '',
+                          }) : null);
+                        }}
+                        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">Use current user</span>
+                    </label>
+                    <label className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        checked={useCustomAuthor}
+                        onChange={() => setUseCustomAuthor(true)}
+                        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">Enter custom author</span>
+                    </label>
+                  </div>
+
+                  {/* Author Input */}
+                  <div className="relative">
+                    <PenTool className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input
+                      type="text"
+                      value={post.author}
+                      onChange={handleAuthorChange}
+                      disabled={!useCustomAuthor}
+                      className={`w-full pl-10 pr-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+                        errors.author ? 'border-red-300' : 'border-gray-300'
+                      } ${!useCustomAuthor ? 'bg-gray-50 text-gray-500' : ''}`}
+                      placeholder="Enter author name"
+                      required
+                    />
+                  </div>
+                  {errors.author && (
+                    <p className="text-red-500 text-sm mt-1">{errors.author}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Excerpt */}
+              <div>
+                <label htmlFor="excerpt" className="block text-sm font-semibold text-gray-900 mb-2">
+                  Excerpt * <span className="text-xs text-gray-500">({post.excerpt.length}/160)</span>
+                </label>
+                <textarea
+                  id="excerpt"
+                  value={post.excerpt}
+                  onChange={handleExcerptChange}
+                  rows={2}
+                  className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none ${
+                    errors.excerpt ? 'border-red-300' : 'border-gray-300'
+                  }`}
+                  placeholder="Brief description of the post (max 160 characters)"
+                  maxLength={160}
+                />
+                {errors.excerpt && (
+                  <p className="text-red-500 text-sm mt-1">{errors.excerpt}</p>
+                )}
+              </div>
+
+              {/* Category and Status Row */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor="category" className="block text-sm font-semibold text-gray-900 mb-2">
+                    Category *
+                  </label>
+                  <div className="relative">
+                    <Hash className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <select
+                      id="category"
+                      value={post.category}
+                      onChange={handleCategoryChange}
+                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 appearance-none bg-white"
+                    >
+                      <option value="Blog">Blog</option>
+                      <option value="News">News</option>
+                    </select>
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                      <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="status" className="block text-sm font-semibold text-gray-900 mb-2">
+                    Status
+                  </label>
+                  <select
+                    id="status"
+                    value={post.status}
+                    onChange={handleStatusChange}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                  >
+                    <option value="draft">Draft</option>
+                    <option value="published">Published</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -620,26 +699,7 @@ const EditBlogPost: React.FC = () => {
               </div>
             </div>
 
-            {/* Excerpt */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-6">
-              <label htmlFor="excerpt" className="block text-sm font-semibold text-gray-900 mb-2">
-                Excerpt * <span className="text-xs text-gray-500">({post.excerpt.length}/160)</span>
-              </label>
-              <textarea
-                id="excerpt"
-                value={post.excerpt}
-                onChange={handleExcerptChange}
-                rows={3}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none ${
-                  errors.excerpt ? 'border-red-300' : 'border-gray-300'
-                }`}
-                placeholder="Brief description of the post (max 160 characters)"
-                maxLength={160}
-              />
-              {errors.excerpt && (
-                <p className="text-red-500 text-sm mt-1">{errors.excerpt}</p>
-              )}
-            </div>
+
 
             {/* Category */}
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-6">
@@ -951,17 +1011,19 @@ const EditBlogPost: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="lg:col-span-1"
             >
-              <div className="sticky top-6">
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-6 mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center space-x-2">
+              <div className="sticky top-6 max-h-screen overflow-y-auto">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6 mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center space-x-2">
                     <Eye className="w-5 h-5 text-blue-600" />
                     <span>Preview</span>
                   </h3>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-gray-600 mb-3">
                     This is how your post will appear to readers.
                   </p>
                 </div>
-                <BlogPreview />
+                <div className="pr-2">
+                  <BlogPreview />
+                </div>
               </div>
             </motion.div>
           )}

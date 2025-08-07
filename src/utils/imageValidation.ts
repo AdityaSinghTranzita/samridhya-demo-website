@@ -296,7 +296,7 @@ export const processImage = async (
   error?: string;
 }> => {
   const config = IMAGE_CONFIGS[configType];
-  const { autoCompress = true, convertToWebP = false } = options;
+  const { autoCompress = true, convertToWebP: shouldConvertToWebP = false } = options;
   
   try {
     // First, validate the original image
@@ -326,9 +326,9 @@ export const processImage = async (
     }
     
     // Convert to WebP if requested and beneficial
-    if (convertToWebP && file.type !== 'image/webp') {
+    if (shouldConvertToWebP && processedFile.type !== 'image/webp') {
       try {
-        const webpFile = await convertToWebP(processedFile);
+        const webpFile = await convertToWebP(processedFile, config.compressionQuality);
         if (webpFile) {
           processedFile = webpFile;
         }
