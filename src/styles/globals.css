@@ -54,6 +54,305 @@ html {
   opacity: 1;
 }
 
+/* TipTap Editor Styles */
+.ProseMirror {
+  outline: none;
+  min-height: 200px;
+  padding: 1.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+  color: #374151;
+  background-color: white !important;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #9ca3af;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  font-style: italic;
+}
+
+.ProseMirror h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin: 1.5rem 0 1rem 0;
+  color: #111827;
+  line-height: 1.2;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+.ProseMirror h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin: 1.25rem 0 0.75rem 0;
+  color: #111827;
+  line-height: 1.3;
+}
+
+.ProseMirror h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem 0;
+  color: #111827;
+  line-height: 1.4;
+}
+
+.ProseMirror h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0.75rem 0 0.5rem 0;
+  color: #111827;
+  line-height: 1.4;
+}
+
+.ProseMirror p {
+  margin: 0.75rem 0;
+  line-height: 1.7;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  padding-left: 1.75rem;
+  margin: 0.75rem 0;
+}
+
+.ProseMirror li {
+  margin: 0.25rem 0;
+  line-height: 1.6;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #3b82f6;
+  margin: 1.25rem 0;
+  padding: 0.75rem 1.25rem;
+  background-color: #f8fafc;
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-style: italic;
+  color: #4b5563;
+}
+
+.ProseMirror blockquote p {
+  margin: 0;
+}
+
+.ProseMirror code {
+  background-color: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 0.875rem;
+  color: #dc2626;
+  border: 1px solid #e5e7eb;
+}
+
+.ProseMirror pre {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border: 1px solid #374151;
+}
+
+.ProseMirror pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+  border: none;
+  font-size: 0.875rem;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  margin: 1.25rem 0;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.ProseMirror a {
+  color: #3b82f6;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.ProseMirror a:hover {
+  color: #1d4ed8;
+  text-decoration-thickness: 2px;
+}
+
+.ProseMirror strong {
+  font-weight: 600;
+  color: #111827;
+}
+
+.ProseMirror em {
+  font-style: italic;
+  color: #4b5563;
+}
+
+.ProseMirror s {
+  text-decoration: line-through;
+  color: #6b7280;
+}
+
+.ProseMirror u {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+/* Text alignment classes */
+.ProseMirror .text-left {
+  text-align: left;
+}
+
+.ProseMirror .text-center {
+  text-align: center;
+}
+
+.ProseMirror .text-right {
+  text-align: right;
+}
+
+.ProseMirror .text-justify {
+  text-align: justify;
+}
+
+/* List styles - Enhanced for both editor and rendered content */
+.ProseMirror ul,
+.prose ul,
+.blog-content ul,
+.preview-content ul {
+  list-style-type: disc !important;
+  padding-left: 1.5em !important;
+  margin: 0.5em 0 !important;
+}
+
+.ProseMirror ul ul,
+.prose ul ul,
+.blog-content ul ul,
+.preview-content ul ul {
+  list-style-type: circle !important;
+  margin: 0.25em 0 !important;
+}
+
+.ProseMirror ul ul ul,
+.prose ul ul ul,
+.blog-content ul ul ul,
+.preview-content ul ul ul {
+  list-style-type: square !important;
+  margin: 0.25em 0 !important;
+}
+
+.ProseMirror ol,
+.prose ol,
+.blog-content ol,
+.preview-content ol {
+  list-style-type: decimal !important;
+  padding-left: 1.5em !important;
+  margin: 0.5em 0 !important;
+}
+
+.ProseMirror ol ol,
+.prose ol ol,
+.blog-content ol ol,
+.preview-content ol ol {
+  list-style-type: lower-alpha !important;
+  margin: 0.25em 0 !important;
+}
+
+.ProseMirror ol ol ol,
+.prose ol ol ol,
+.blog-content ol ol ol,
+.preview-content ol ol ol {
+  list-style-type: lower-roman !important;
+  margin: 0.25em 0 !important;
+}
+
+.ProseMirror li,
+.prose li,
+.blog-content li,
+.preview-content li {
+  margin: 0.25em 0 !important;
+  display: list-item !important;
+  line-height: 1.6 !important;
+}
+
+.ProseMirror li::marker,
+.prose li::marker,
+.blog-content li::marker,
+.preview-content li::marker {
+  color: #6b7280 !important;
+  font-weight: 500 !important;
+}
+
+/* Table styles */
+.ProseMirror table {
+  border-collapse: collapse;
+  margin: 1rem 0;
+  width: 100%;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.ProseMirror th,
+.ProseMirror td {
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.ProseMirror th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #111827;
+}
+
+.ProseMirror tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.ProseMirror tr:hover {
+  background-color: #f3f4f6;
+}
+
+/* Focus styles */
+.ProseMirror:focus {
+  outline: none;
+}
+
+.ProseMirror:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Selection styles */
+.ProseMirror ::selection {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.ProseMirror ::-moz-selection {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+/* Rich Text Editor Placeholder */
+[contenteditable]:empty:before {
+  content: attr(data-placeholder);
+  color: #9ca3af;
+  pointer-events: none;
+  position: absolute;
+}
+
 /* Responsive utilities */
 @media (min-width: 640px) {
   .xs\:w-32 {
@@ -96,6 +395,114 @@ html, body {
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
+}
+
+/* Line clamp utilities for blog cards */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Prose styling for blog content */
+.prose {
+  color: #374151;
+  max-width: 65ch;
+  line-height: 1.75;
+}
+
+.prose h2 {
+  color: #111827;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.3333333;
+}
+
+.prose h3 {
+  color: #111827;
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.prose p {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose ul {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  padding-left: 1.625rem;
+}
+
+.prose li {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+.prose a {
+  color: #2563eb;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.prose a:hover {
+  color: #1d4ed8;
+}
+
+/* Blog specific responsive improvements */
+@media (max-width: 768px) {
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .blog-sidebar {
+    order: 2;
+  }
+  
+  .blog-main {
+    order: 1;
+  }
+}
+
+/* Enhanced focus states for blog components */
+.blog-card:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.blog-search:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for blog interactions */
+.blog-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Blog card hover effects */
+.blog-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 ::-webkit-scrollbar-thumb:hover {

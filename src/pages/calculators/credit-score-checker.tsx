@@ -931,7 +931,7 @@ export default function CreditScoreChecker() {
                       <button
                           onClick={generateOtp}
                           disabled={isLoading}
-                          className="w-full bg-gradient-to-r from-[#276ef4] to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-600 hover:to-[#276ef4] transition-all duration-200 disabled:opacity-50"
+                          className=" cursor-pointer w-full bg-gradient-to-r from-[#276ef4] to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-600 hover:to-[#276ef4] transition-all duration-200 disabled:opacity-50"
                       >
                         {isLoading ? 'Sending OTP...' : 'Get Free Credit Report'}
                       </button>
@@ -1010,7 +1010,7 @@ export default function CreditScoreChecker() {
                       <button
                           onClick={verifyOtp}
                           disabled={isLoading}
-                          className="w-full bg-gradient-to-r from-[#276ef4] to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-600 hover:to-[#276ef4] transition-all duration-200 disabled:opacity-50"
+                          className=" cursor-pointer w-full bg-gradient-to-r from-[#276ef4] to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-600 hover:to-[#276ef4] transition-all duration-200 disabled:opacity-50"
                       >
                         {isLoading ? 'Verifying...' : 'Verify & Continue'}
                       </button>

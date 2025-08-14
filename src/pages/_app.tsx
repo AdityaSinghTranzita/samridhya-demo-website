@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { initPerformanceMonitoring } from '@/utils/performance'
 import { initGA, trackPageView } from '@/utils/analytics'
+import { AuthProvider } from '@/contexts/AuthContext'
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -53,7 +54,7 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [router.events]);
 
   return (
-    <>
+    <AuthProvider>
       <Head>
         {/* Preload critical resources */}
         <link
@@ -119,6 +120,6 @@ export default function App({ Component, pageProps }: AppProps) {
       <div className={isLoading ? 'loading' : 'loaded'}>
         <Component {...pageProps} />
       </div>
-    </>
+    </AuthProvider>
   )
 }
