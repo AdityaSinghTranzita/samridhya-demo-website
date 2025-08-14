@@ -6,12 +6,22 @@ import { useRouter } from 'next/router'
 import { initPerformanceMonitoring } from '@/utils/performance'
 import { initGA, trackPageView } from '@/utils/analytics'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { initCacheManagement, preserveLocalStorage, restoreLocalStorage } from '@/utils/cacheUtils'
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Preserve local storage before cache clearing
+    const preservedData = preserveLocalStorage();
+    
+    // Initialize cache management
+    initCacheManagement();
+    
+    // Restore local storage after cache clearing
+    restoreLocalStorage(preservedData);
+    
     // Initialize Google Analytics
     initGA();
     
@@ -56,6 +66,14 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <Head>
+        {/* Cache-busting meta tags */}
+        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta httpEquiv="Pragma" content="no-cache" />
+        <meta httpEquiv="Expires" content="0" />
+        <meta name="cache-control" content="no-cache, no-store, must-revalidate" />
+        <meta name="pragma" content="no-cache" />
+        <meta name="expires" content="0" />
+        
         {/* Preload critical resources */}
         <link
           rel="preload"

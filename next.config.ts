@@ -16,6 +16,11 @@ const nextConfig = {
   skipTrailingSlashRedirect: true,
   distDir: 'out',
   
+  // Disable caching completely
+  generateBuildId: async () => {
+    return `build-${Date.now()}`;
+  },
+  
   // Performance optimizations
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',

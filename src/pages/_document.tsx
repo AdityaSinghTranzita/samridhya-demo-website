@@ -4,6 +4,14 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        {/* Cache-busting meta tags */}
+        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta httpEquiv="Pragma" content="no-cache" />
+        <meta httpEquiv="Expires" content="0" />
+        <meta name="cache-control" content="no-cache, no-store, must-revalidate" />
+        <meta name="pragma" content="no-cache" />
+        <meta name="expires" content="0" />
+        
         {/* Critical CSS to prevent FOUC */}
         <style dangerouslySetInnerHTML={{
           __html: `
