@@ -1,18 +1,31 @@
-import { Request, Response } from 'express';
+import cors from 'cors';
 
-// CORS configuration
+// CORS configuration - allow specific origins
 const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'http://localhost:3002',
-    // Production domains - configure via environment variables
-    process.env.ALLOWED_ORIGIN_1 || 'https://your-domain-1.com',
-    process.env.ALLOWED_ORIGIN_2 || 'https://your-domain-2.com',
-    process.env.ALLOWED_ORIGIN_3 || 'https://your-domain-3.com',
-    process.env.ALLOWED_ORIGIN_4 || 'https://your-domain-4.com'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:3002',
+      'https://samridhya.com',
+      'https://www.samridhya.com',
+      'https://samridhya-website.web.app',
+      'https://samridhya-website.firebaseapp.com',
+      'https://samridhya-website.vercel.app',
+      'https://samridhya.vercel.app'
+    ];
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('CORS: Origin not allowed:', origin);
+      callback(null, true); // Allow all origins for now, but log for debugging
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: [
     'Content-Type',
     'Authorization',
@@ -20,45 +33,46 @@ const corsOptions = {
     'Accept',
     'Origin',
     'Access-Control-Request-Method',
-    'Access-Control-Request-Headers'
+    'Access-Control-Request-Headers',
+    'Cache-Control',
+    'Pragma',
+    'Expires'
   ],
   credentials: true,
-  maxAge: 86400 // 24 hours
+  maxAge: 86400, // 24 hours
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 };
 
-export function corsMiddleware(req: Request, res: Response, next?: () => void) {
-  const origin = req.headers.origin;
-  
-  // Check if origin is allowed
-  if (origin && corsOptions.origin.includes(origin)) {
-    res.set('Access-Control-Allow-Origin', origin);
-  } else if (corsOptions.origin.includes('*')) {
-    res.set('Access-Control-Allow-Origin', '*');
-  }
-
-  // Set other CORS headers
-  res.set('Access-Control-Allow-Methods', corsOptions.methods.join(', '));
-  res.set('Access-Control-Allow-Headers', corsOptions.allowedHeaders.join(', '));
-  res.set('Access-Control-Allow-Credentials', corsOptions.credentials.toString());
-  res.set('Access-Control-Max-Age', corsOptions.maxAge.toString());
-
-  // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    res.status(204).send('');
-    return;
-  }
-
-  // Continue to next middleware if provided
-  if (next) {
-    next();
-  }
-}
+// Create CORS middleware (exported for potential use)
+export const corsMiddleware = cors(corsOptions);
 
 // Wrapper function for Firebase Functions
 export function withCors(handler: (req: any, res: any) => void | Promise<void>) {
-  return (req: any, res: any) => {
-    corsMiddleware(req, res, () => {
-      handler(req, res);
-    });
+  return async (req: any, res: any) => {
+    // Set CORS headers manually
+    const origin = req.headers.origin;
+    if (origin) {
+      res.set('Access-Control-Allow-Origin', origin);
+    }
+    res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+    res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Cache-Control, Pragma, Expires');
+    res.set('Access-Control-Allow-Credentials', 'true');
+    res.set('Access-Control-Max-Age', '86400');
+
+    // Security headers
+    res.set('X-Content-Type-Options', 'nosniff');
+    res.set('X-Frame-Options', 'DENY');
+    res.set('X-XSS-Protection', '1; mode=block');
+    res.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+      res.status(204).send('');
+      return;
+    }
+
+    // Call the original handler
+    await handler(req, res);
   };
 } 

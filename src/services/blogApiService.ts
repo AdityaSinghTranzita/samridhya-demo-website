@@ -1,5 +1,6 @@
 import { apiService } from './apiService';
 import { BlogPost, Category } from './blogService';
+import { toISOString, toDate } from '@/utils/dateUtils';
 
 // Blog API Service Class for public-facing operations
 class BlogApiService {
@@ -280,7 +281,7 @@ class BlogApiService {
 
       // Filter posts by date
       const filteredPosts = posts.filter(post => {
-        const postDate = new Date(post.publishedAt || post.createdAt);
+        const postDate = toDate(post.publishedAt || post.createdAt) || new Date();
         const postYear = postDate.getFullYear();
         const postMonth = postDate.getMonth() + 1; // getMonth() returns 0-11
 
@@ -317,7 +318,7 @@ class BlogApiService {
       const archiveMap = new Map<string, number>();
 
       posts.forEach(post => {
-        const postDate = new Date(post.publishedAt || post.createdAt);
+        const postDate = toDate(post.publishedAt || post.createdAt) || new Date();
         const year = postDate.getFullYear();
         const month = postDate.getMonth() + 1;
 
@@ -372,8 +373,8 @@ class BlogApiService {
       description: post.seoDescription || post.excerpt,
       keywords: post.seoKeywords || post.tags,
       ogImage: post.featuredImage,
-      publishedTime: post.publishedAt?.toISOString(),
-      modifiedTime: post.updatedAt.toISOString()
+      publishedTime: toISOString(post.publishedAt),
+      modifiedTime: toISOString(post.updatedAt)
     };
   }
 
@@ -397,8 +398,8 @@ class BlogApiService {
           "url": "https://samridhya.com/logo.png"
         }
       },
-      "datePublished": post.publishedAt?.toISOString(),
-      "dateModified": post.updatedAt.toISOString(),
+      "datePublished": toISOString(post.publishedAt),
+      "dateModified": toISOString(post.updatedAt),
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": `https://samridhya.com/blog/${post.slug}`

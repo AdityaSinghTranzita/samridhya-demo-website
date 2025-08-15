@@ -9,7 +9,7 @@
 
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { withCors } from './middleware/cors';
+import express from 'express';
 
 // Initialize Firebase Admin SDK
 admin.initializeApp();
@@ -31,123 +31,127 @@ import {
   getPopularPosts
 } from './routes/blogRoutes';
 
+// Create Express app
+const app = express();
+
+// Comprehensive CORS configuration
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  
+  // Define allowed origins
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'https://samridhya.com',
+    'https://www.samridhya.com',
+    'https://samridhya-website.web.app',
+    'https://samridhya-website.firebaseapp.com',
+    'https://samridhya-website.vercel.app',
+    'https://samridhya.vercel.app'
+  ];
+  
+  // Set CORS headers for all requests
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Cache-Control, Pragma, Expires');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Max-Age', '86400');
+  
+  // Security headers
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    res.status(204).end();
+    return;
+  }
+  
+  next();
+});
+
+// Body parsing middleware
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
 // Main API handler
-export const api = functions.https.onRequest(
-  withCors(async (req: any, res: any) => {
-    const { method, url } = req;
+export const api = functions.https.onRequest(app);
 
-    // Add debugging
-    console.log(`API Request: ${method} ${url}`);
+// Add routes to Express app
+app.get('/health', async (req: any, res: any) => {
+  await healthCheck(req, res);
+});
 
-    try {
-      // Health check
-      if (method === 'GET' && url === '/health') {
-        await healthCheck(req, res);
-        return;
-      }
+app.get('/api/blog/posts', async (req: any, res: any) => {
+  await getPosts(req, res);
+});
 
+app.get('/api/blog/posts/:id', async (req: any, res: any) => {
+  await getPostById(req, res);
+});
 
+app.get('/api/blog/posts/slug/:slug', async (req: any, res: any) => {
+  await getPostBySlug(req, res);
+});
 
-      // Blog routes
-      if (method === 'GET' && url.startsWith('/api/blog/posts')) {
-        if (url === '/api/blog/posts' || url.startsWith('/api/blog/posts?')) {
-          await getPosts(req, res);
-          return;
-        }
+app.post('/api/blog/posts', async (req: any, res: any) => {
+  await createPost(req, res);
+});
 
+app.put('/api/blog/posts/:id', async (req: any, res: any) => {
+  await updatePost(req, res);
+});
 
+app.delete('/api/blog/posts/:id', async (req: any, res: any) => {
+  await deletePost(req, res);
+});
 
-        // Extract ID from URL like /api/blog/posts/123
-        const idMatch = url.match(/^\/api\/blog\/posts\/([^\/]+)$/);
-        if (idMatch) {
-          req.params = { id: idMatch[1] };
-          await getPostById(req, res);
-          return;
-        }
+app.get('/api/blog/search', async (req: any, res: any) => {
+  await searchPosts(req, res);
+});
 
-        // Extract slug from URL like /api/blog/posts/slug/my-post
-        const slugMatch = url.match(/^\/api\/blog\/posts\/slug\/(.+)$/);
-        if (slugMatch) {
-          req.params = { slug: slugMatch[1] };
-          await getPostBySlug(req, res);
-          return;
-        }
-      }
+app.post('/api/blog/posts/:id/like', async (req: any, res: any) => {
+  await likePost(req, res);
+});
 
-      if (method === 'POST' && url === '/api/blog/posts') {
-        await createPost(req, res);
-        return;
-      }
+app.get('/api/blog/categories', async (req: any, res: any) => {
+  await getCategories(req, res);
+});
 
-      if (method === 'PUT' && url.match(/^\/api\/blog\/posts\/[^\/]+$/)) {
-        const idMatch = url.match(/^\/api\/blog\/posts\/([^\/]+)$/);
-        if (idMatch) {
-          req.params = { id: idMatch[1] };
-          await updatePost(req, res);
-          return;
-        }
-      }
+app.get('/api/blog/tags', async (req: any, res: any) => {
+  await getTags(req, res);
+});
 
-      if (method === 'DELETE' && url.match(/^\/api\/blog\/posts\/[^\/]+$/)) {
-        const idMatch = url.match(/^\/api\/blog\/posts\/([^\/]+)$/);
-        if (idMatch) {
-          req.params = { id: idMatch[1] };
-          await deletePost(req, res);
-          return;
-        }
-      }
+app.get('/api/blog/featured', async (req: any, res: any) => {
+  await getFeaturedPosts(req, res);
+});
 
-      // Search and analytics
-      if (method === 'GET' && (url === '/api/blog/search' || url.startsWith('/api/blog/search?'))) {
-        await searchPosts(req, res);
-        return;
-      }
+app.get('/api/blog/popular', async (req: any, res: any) => {
+  await getPopularPosts(req, res);
+});
 
-      if (method === 'POST' && url.match(/^\/api\/blog\/posts\/[^\/]+\/like$/)) {
-        const idMatch = url.match(/^\/api\/blog\/posts\/([^\/]+)\/like$/);
-        if (idMatch) {
-          req.params = { id: idMatch[1] };
-          await likePost(req, res);
-          return;
-        }
-      }
+// 404 handler
+app.use('*', (req: any, res: any) => {
+  res.status(404).json({
+    success: false,
+    error: 'Route not found'
+  });
+});
 
-      // Categories and tags
-      if (method === 'GET' && (url === '/api/blog/categories' || url.startsWith('/api/blog/categories?'))) {
-        await getCategories(req, res);
-        return;
-      }
-
-      if (method === 'GET' && (url === '/api/blog/tags' || url.startsWith('/api/blog/tags?'))) {
-        await getTags(req, res);
-        return;
-      }
-
-      // Featured and popular posts
-      if (method === 'GET' && (url === '/api/blog/featured' || url.startsWith('/api/blog/featured?'))) {
-        await getFeaturedPosts(req, res);
-        return;
-      }
-
-      if (method === 'GET' && (url === '/api/blog/popular' || url.startsWith('/api/blog/popular?'))) {
-        await getPopularPosts(req, res);
-        return;
-      }
-
-      // 404 handler
-      res.status(404).json({
-        success: false,
-        error: 'Route not found'
-      });
-
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        error: 'Internal server error'
-      });
-    }
-  })
-);
+// Error handler
+app.use((error: any, req: any, res: any, next: any) => {
+  console.error('Error:', error);
+  res.status(500).json({
+    success: false,
+    error: 'Internal server error'
+  });
+});
 
 // Firestore Triggers - Temporarily commented out for deployment
 /*

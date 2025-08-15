@@ -11,6 +11,12 @@ class ApiService {
   constructor() {
     this.config = getApiConfig();
     this.baseUrl = this.config.BASE_URL;
+    
+    // Handle server-side rendering
+    if (typeof window === 'undefined') {
+      // We're on the server side
+      this.baseUrl = process.env.NEXT_PUBLIC_FIREBASE_FUNCTIONS_URL || 'https://api-brz76cmlca-uc.a.run.app';
+    }
   }
 
   // Generic request method with retry logic
@@ -24,8 +30,11 @@ class ApiService {
         ...options,
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
           ...options.headers,
         },
+        credentials: 'include', // Include credentials for CORS
       });
 
       return response;
@@ -188,7 +197,9 @@ class ApiService {
 
   // Get a single blog post by slug
   async getBlogPostBySlug(slug: string): Promise<BlogPost> {
-    const response = await this.getRequest<BlogPost>(`${this.config.ENDPOINTS.GET_BLOG_POST_BY_SLUG}/${slug}`);
+    // URL encode the slug to handle special characters like &, ?, etc.
+    const encodedSlug = encodeURIComponent(slug);
+    const response = await this.getRequest<BlogPost>(`${this.config.ENDPOINTS.GET_BLOG_POST_BY_SLUG}/${encodedSlug}`);
 
     if (!response.success || !response.data) {
       throw new Error(response.error || 'Failed to fetch blog post');

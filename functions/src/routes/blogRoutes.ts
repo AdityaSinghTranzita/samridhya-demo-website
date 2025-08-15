@@ -74,7 +74,9 @@ export const getPostById = async (req: Request, res: Response) => {
 export const getPostBySlug = async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
-    const post = await blogService.getPostBySlug(slug);
+    // Decode the URL-encoded slug to handle special characters like &, ?, etc.
+    const decodedSlug = decodeURIComponent(slug);
+    const post = await blogService.getPostBySlug(decodedSlug);
     
     if (!post) {
       return sendResponse(res, false, undefined, undefined, 'Post not found', 404);

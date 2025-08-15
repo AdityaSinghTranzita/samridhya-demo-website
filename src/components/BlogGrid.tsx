@@ -1,5 +1,3 @@
-'use client';
-
 import { motion } from 'framer-motion';
 import { BlogPost, blogService } from '@/services/blogService';
 import BlogCard from './BlogCard';

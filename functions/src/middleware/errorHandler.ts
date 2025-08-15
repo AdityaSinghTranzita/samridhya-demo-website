@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { ApiError } from '../utils/ApiError';
 import { Logger } from '../utils/Logger';
-import { corsMiddleware } from './cors';
 
 const logger = new Logger('ErrorHandler');
 
@@ -17,8 +16,7 @@ export interface ErrorResponse {
 }
 
 export function errorHandler(error: any, req: Request, res: Response): void {
-  // Apply CORS headers first
-  corsMiddleware(req, res);
+  // CORS headers are now handled by Express CORS middleware
 
   let statusCode = 500;
   let message = 'Internal server error';

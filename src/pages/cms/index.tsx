@@ -6,6 +6,7 @@ import CMSLayout from '@/components/CMSLayout';
 import { motion } from 'framer-motion';
 import { FileText, Plus, Image } from 'lucide-react';
 import { blogService, BlogPost } from '@/services/blogService';
+import { toDate } from '@/utils/dateUtils';
 
 interface DashboardStats {
   totalPosts: number;
@@ -46,9 +47,9 @@ const CMSDashboard: React.FC = () => {
         // Get recent posts (last 5)
         const recentPosts = allPosts
           .sort((a, b) => {
-            const dateA = a.updatedAt || a.createdAt || new Date();
-            const dateB = b.updatedAt || b.createdAt || new Date();
-            return new Date(dateB).getTime() - new Date(dateA).getTime();
+            const dateA = toDate(a.updatedAt || a.createdAt) || new Date();
+            const dateB = toDate(b.updatedAt || b.createdAt) || new Date();
+            return dateB.getTime() - dateA.getTime();
           })
           .slice(0, 5);
 

@@ -1,5 +1,6 @@
 import { apiService } from './apiService';
 import { BlogPost, Category } from './blogService';
+import { toDate } from '@/utils/dateUtils';
 
 // CMS Service Class
 class CMSService {
@@ -345,8 +346,8 @@ class CMSService {
       // Get recent activity (last 10 updated posts)
       const recentActivity = posts
         .sort((a, b) => {
-          const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
-          const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+          const dateA = a.updatedAt ? toDate(a.updatedAt)?.getTime() || 0 : 0;
+          const dateB = b.updatedAt ? toDate(b.updatedAt)?.getTime() || 0 : 0;
           return dateB - dateA;
         })
         .slice(0, 10);

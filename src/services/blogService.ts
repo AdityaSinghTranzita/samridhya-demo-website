@@ -1,5 +1,7 @@
 import { apiService, PaginatedResponse } from './apiService';
 
+import { DateValue } from '@/utils/dateUtils';
+
 export interface BlogPost {
   id?: string;
   title: string;
@@ -20,9 +22,9 @@ export interface BlogPost {
   seoTitle?: string;
   seoDescription?: string;
   seoKeywords?: string[];
-  publishedAt?: Date;
-  createdAt?: Date;
-  updatedAt?: Date;
+  publishedAt?: DateValue;
+  createdAt?: DateValue;
+  updatedAt?: DateValue;
 }
 
 export interface Category {
@@ -352,6 +354,18 @@ class BlogService {
     } catch (error) {
       console.error('Error formatting date:', error, date);
       return 'Unknown date';
+    }
+  }
+
+  // Helper method to convert date string back to Date object if needed
+  parseDate(dateString: string | null): Date | null {
+    if (!dateString) return null;
+    try {
+      const date = new Date(dateString);
+      return isNaN(date.getTime()) ? null : date;
+    } catch (error) {
+      console.error('Error parsing date:', error, dateString);
+      return null;
     }
   }
 

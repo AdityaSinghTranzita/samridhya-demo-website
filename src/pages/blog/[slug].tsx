@@ -1,4 +1,4 @@
-'use client';
+// Remove 'use client' directive since we're using getServerSideProps
 
 import { motion } from 'framer-motion';
 import Head from 'next/head';
@@ -12,119 +12,188 @@ import BlogGrid from '@/components/BlogGrid';
 import BlogSidebar from '@/components/BlogSidebar';
 import { blogService, BlogPost, Category } from '@/services/blogService';
 import { trackEvent, trackButtonClick } from '@/utils/analytics';
+import { toISOString } from '@/utils/dateUtils';
 
-export default function BlogPostPage() {
+// Use static generation for Firebase Hosting compatibility
+
+// Generate static paths for all blog posts
+export async function getStaticPaths() {
+  try {
+    // Fetch all published posts to generate static paths
+    const posts = await blogService.getPublishedPosts();
+    
+    const paths = posts.map((post) => ({
+      params: { slug: post.slug },
+    }));
+
+    return {
+      paths,
+      fallback: false, // Return 404 for any paths not returned by getStaticPaths
+    };
+  } catch (error) {
+    console.error('Error generating static paths:', error);
+    return {
+      paths: [],
+      fallback: false,
+    };
+  }
+}
+
+// Generate static props for each blog post
+export async function getStaticProps({ params }: { params: { slug: string } }) {
+  const { slug } = params;
+  
+  try {
+    // Fetch the blog post data
+    const post = await blogService.getPostBySlug(slug);
+    
+    if (!post) {
+      return {
+        notFound: true,
+      };
+    }
+    
+    // Fetch related posts
+    const relatedPosts = await blogService.getFeaturedPosts();
+    const filteredRelated = relatedPosts
+      .filter((p: BlogPost) => p.id !== post.id)
+      .slice(0, 3);
+    
+    // Fetch categories and tags
+    const allPosts = await blogService.getPublishedPosts();
+    const categoryMap = new Map<string, number>();
+    const subcategoryMap = new Map<string, number>();
+    const tagSet = new Set<string>();
+
+    allPosts.forEach((p: BlogPost) => {
+      if (p.category) {
+        categoryMap.set(p.category, (categoryMap.get(p.category) || 0) + 1);
+      }
+      if (p.subcategory) {
+        subcategoryMap.set(p.subcategory, (subcategoryMap.get(p.subcategory) || 0) + 1);
+      }
+      if (p.tags && p.tags.length > 0) {
+        p.tags.forEach(tag => tagSet.add(tag));
+      }
+    });
+
+    const categories = [
+      { name: 'All', count: allPosts.length },
+      ...Array.from(categoryMap.entries()).map(([name, count]) => ({
+        name,
+        count
+      }))
+    ];
+
+    const subcategories = [
+      { name: 'All', count: allPosts.length },
+      ...Array.from(subcategoryMap.entries()).map(([name, count]) => ({
+        name,
+        count
+      }))
+    ];
+
+    const popularTags = Array.from(tagSet).slice(0, 10);
+
+    // Clean up post to ensure no undefined values and convert Date objects to strings
+    const cleanedPost = {
+      ...post,
+      subcategory: post.subcategory || null,
+      category: post.category || 'Uncategorized',
+      tags: post.tags || [],
+      featuredImage: post.featuredImage || null,
+      seoTitle: post.seoTitle || null,
+      seoDescription: post.seoDescription || null,
+      seoKeywords: post.seoKeywords || [],
+      readTime: post.readTime || null,
+      views: post.views || 0,
+      likes: post.likes || 0,
+      shares: post.shares || 0,
+      featured: post.featured || false,
+      // Convert Date objects to ISO strings for JSON serialization
+      publishedAt: toISOString(post.publishedAt),
+      createdAt: toISOString(post.createdAt),
+      updatedAt: toISOString(post.updatedAt),
+    };
+
+    // Clean up related posts
+    const cleanedRelatedPosts = filteredRelated.map(relatedPost => ({
+      ...relatedPost,
+      subcategory: relatedPost.subcategory || null,
+      category: relatedPost.category || 'Uncategorized',
+      tags: relatedPost.tags || [],
+      featuredImage: relatedPost.featuredImage || null,
+      seoTitle: relatedPost.seoTitle || null,
+      seoDescription: relatedPost.seoDescription || null,
+      seoKeywords: relatedPost.seoKeywords || [],
+      readTime: relatedPost.readTime || null,
+      views: relatedPost.views || 0,
+      likes: relatedPost.likes || 0,
+      shares: relatedPost.shares || 0,
+      featured: relatedPost.featured || false,
+      // Convert Date objects to ISO strings for JSON serialization
+      publishedAt: toISOString(relatedPost.publishedAt) || null,
+      createdAt: toISOString(relatedPost.createdAt) || null,
+      updatedAt: toISOString(relatedPost.updatedAt) || null,
+    }));
+
+    return {
+      props: {
+        blogPost: cleanedPost,
+        relatedPosts: cleanedRelatedPosts,
+        categories,
+        subcategories,
+        popularTags,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching blog post:', error);
+    return {
+      notFound: true,
+    };
+  }
+}
+
+export default function BlogPostPage({ 
+  blogPost: initialBlogPost, 
+  relatedPosts: initialRelatedPosts, 
+  categories: initialCategories, 
+  subcategories: initialSubcategories, 
+  popularTags: initialPopularTags 
+}: {
+  blogPost: BlogPost;
+  relatedPosts: BlogPost[];
+  categories: Category[];
+  subcategories: Category[];
+  popularTags: string[];
+}) {
   const router = useRouter();
   const { slug } = router.query;
-  const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
-  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [blogPost, setBlogPost] = useState<BlogPost | null>(initialBlogPost);
+  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>(initialRelatedPosts);
+  const [loading, setLoading] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [subcategories, setSubcategories] = useState<Category[]>([]);
-  const [popularTags, setPopularTags] = useState<string[]>([]);
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [subcategories, setSubcategories] = useState<Category[]>(initialSubcategories);
+  const [popularTags, setPopularTags] = useState<string[]>(initialPopularTags);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  // Track page view for static generated posts
   useEffect(() => {
-    const loadPost = async () => {
-      if (slug && typeof slug === 'string') {
-        try {
-          setLoading(true);
-          const post = await blogService.getPostBySlug(slug);
-          if (post) {
-            setBlogPost(post);
-            
-            // Track page view
-            if (isClient) {
-              trackEvent('blog_post_view', {
-                post_id: post.id,
-                post_title: post.title,
-                post_category: post.category,
-                post_author: post.author
-              });
-            }
-            
-            // Load related posts
-            try {
-              const related = await blogService.getFeaturedPosts();
-              // Get up to 3 related posts (excluding current post)
-              const filteredRelated = related
-                .filter(p => p.id !== post.id)
-                .slice(0, 3);
-              setRelatedPosts(filteredRelated);
-            } catch (error) {
-              console.error('Error loading related posts:', error);
-              setRelatedPosts([]);
-            }
-
-            // Load categories and tags for sidebar
-            try {
-              const allPosts = await blogService.getPublishedPosts();
-              
-              // Generate categories and subcategories from posts
-              const categoryMap = new Map<string, number>();
-              const subcategoryMap = new Map<string, number>();
-              const tagSet = new Set<string>();
-
-              allPosts.forEach(post => {
-                // Count categories
-                if (post.category) {
-                  categoryMap.set(post.category, (categoryMap.get(post.category) || 0) + 1);
-                }
-
-                // Count subcategories
-                if (post.subcategory) {
-                  subcategoryMap.set(post.subcategory, (subcategoryMap.get(post.subcategory) || 0) + 1);
-                }
-
-                // Collect tags
-                if (post.tags && post.tags.length > 0) {
-                  post.tags.forEach(tag => tagSet.add(tag));
-                }
-              });
-
-              // Convert to arrays
-              const categoriesArray = [
-                { name: 'All', count: allPosts.length },
-                ...Array.from(categoryMap.entries()).map(([name, count]) => ({
-                  name,
-                  count
-                }))
-              ];
-
-              const subcategoriesArray = [
-                { name: 'All', count: allPosts.length },
-                ...Array.from(subcategoryMap.entries()).map(([name, count]) => ({
-                  name,
-                  count
-                }))
-              ];
-
-              setCategories(categoriesArray);
-              setSubcategories(subcategoriesArray);
-              setPopularTags(Array.from(tagSet).slice(0, 10)); // Top 10 tags
-            } catch (error) {
-              console.error('Error loading categories:', error);
-              setCategories([{ name: 'All', count: 0 }]);
-              setSubcategories([{ name: 'All', count: 0 }]);
-              setPopularTags([]);
-            }
-          }
-        } catch (error) {
-          console.error('Error loading blog post:', error);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    loadPost();
-  }, [slug, isClient]);
+    if (isClient && blogPost) {
+      trackEvent('blog_post_view', {
+        post_id: blogPost.id,
+        post_title: blogPost.title,
+        post_category: blogPost.category,
+        post_author: blogPost.author
+      });
+    }
+  }, [isClient, blogPost]);
 
   // Close share menu when clicking outside
   useEffect(() => {
@@ -279,8 +348,8 @@ export default function BlogPostPage() {
         <meta property="og:type" content="article" />
         <meta property="og:url" content={`https://samridhya.in/blog/${blogPost.slug}`} />
         <meta property="og:image" content={blogPost.featuredImage || 'https://samridhya.in/images/samridhya-preview.png'} />
-        <meta property="article:published_time" content={blogPost.publishedAt?.toISOString()} />
-        <meta property="article:modified_time" content={blogPost.updatedAt?.toISOString()} />
+        <meta property="article:published_time" content={toISOString(blogPost.publishedAt)} />
+        <meta property="article:modified_time" content={toISOString(blogPost.updatedAt)} />
         <meta property="article:author" content={blogPost.author} />
         <meta property="article:section" content={blogPost.category} />
         {blogPost.tags?.map(tag => (
@@ -312,8 +381,8 @@ export default function BlogPostPage() {
                 "name": "Samridhya",
                 "url": "https://samridhya.in"
               },
-              "datePublished": blogPost.publishedAt?.toISOString(),
-              "dateModified": blogPost.updatedAt?.toISOString(),
+              "datePublished": toISOString(blogPost.publishedAt),
+              "dateModified": toISOString(blogPost.updatedAt),
               "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": `https://samridhya.in/blog/${blogPost.slug}`

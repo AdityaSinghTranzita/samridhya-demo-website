@@ -1,8 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Enable static export for Firebase Hosting
   output: 'export',
+  trailingSlash: true,
   images: {
     unoptimized: true,
+    domains: [
+      'firebasestorage.googleapis.com',
+      'samridhya.in',
+      'www.samridhya.in'
+    ],
   },
   experimental: {
     optimizeCss: true,
@@ -12,21 +19,14 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
-  trailingSlash: false,
   skipTrailingSlashRedirect: true,
-  distDir: 'out',
-  
-  // Disable caching completely
-  generateBuildId: async () => {
-    return `build-${Date.now()}`;
-  },
   
   // Performance optimizations
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // Webpack optimizations for static export
+  // Webpack optimizations
   webpack: (config, { dev, isServer }) => {
     if (!dev && !isServer) {
       // Optimize bundle size

@@ -1,4 +1,4 @@
-'use client';
+// Remove 'use client' directive since we're using getServerSideProps
 
 import { motion } from 'framer-motion';
 import Head from 'next/head';
@@ -12,6 +12,101 @@ import BlogSidebar from '@/components/BlogSidebar';
 import PromotionalBanner from '@/components/PromotionalBanner';
 import { blogService, BlogPost, Category } from '@/services/blogService';
 import { trackEvent, trackButtonClick } from '@/utils/analytics';
+import { toISOString, toDate } from '@/utils/dateUtils';
+
+// Use getStaticProps for static export compatibility
+export async function getStaticProps() {
+  
+  try {
+    // Fetch all published posts
+    const allPosts = await blogService.getPublishedPosts();
+    
+    // Generate categories and subcategories from posts
+    const categoryMap = new Map<string, number>();
+    const subcategoryMap = new Map<string, number>();
+    const tagSet = new Set<string>();
+
+    allPosts.forEach(post => {
+      if (post.category) {
+        categoryMap.set(post.category, (categoryMap.get(post.category) || 0) + 1);
+      }
+      if (post.subcategory) {
+        subcategoryMap.set(post.subcategory, (subcategoryMap.get(post.subcategory) || 0) + 1);
+      }
+      if (post.tags && post.tags.length > 0) {
+        post.tags.forEach(tag => tagSet.add(tag));
+      }
+    });
+
+    const categories = [
+      { name: 'All', count: allPosts.length },
+      ...Array.from(categoryMap.entries()).map(([name, count]) => ({
+        name,
+        count
+      }))
+    ];
+
+    const subcategories = [
+      { name: 'All', count: allPosts.length },
+      ...Array.from(subcategoryMap.entries()).map(([name, count]) => ({
+        name,
+        count
+      }))
+    ];
+
+    const popularTags = Array.from(tagSet).slice(0, 10);
+
+    // Clean up posts to ensure no undefined values and convert Date objects to strings
+    const cleanedPosts = allPosts.map(post => ({
+      ...post,
+      subcategory: post.subcategory || null,
+      category: post.category || 'Uncategorized',
+      tags: post.tags || [],
+      featuredImage: post.featuredImage || null,
+      seoTitle: post.seoTitle || null,
+      seoDescription: post.seoDescription || null,
+      seoKeywords: post.seoKeywords || [],
+      readTime: post.readTime || null,
+      views: post.views || 0,
+      likes: post.likes || 0,
+      shares: post.shares || 0,
+      featured: post.featured || false,
+      // Convert Date objects to ISO strings for JSON serialization
+      publishedAt: toISOString(post.publishedAt),
+      createdAt: toISOString(post.createdAt),
+      updatedAt: toISOString(post.updatedAt),
+    }));
+
+    return {
+      props: {
+        initialPosts: cleanedPosts,
+        categories,
+        subcategories,
+        popularTags,
+      },
+    };
+  } catch (error) {
+    console.error('Error loading posts:', error);
+    return {
+      props: {
+        initialPosts: [],
+        categories: [{ name: 'All', count: 0 }],
+        subcategories: [{ name: 'All', count: 0 }],
+        popularTags: [],
+        initialCategory: 'All',
+        initialSubcategory: 'All',
+        initialSearchQuery: '',
+      },
+    };
+  }
+}
+
+interface BlogPageProps {
+  initialPosts: BlogPost[];
+  categories: Category[];
+  subcategories: Category[];
+  popularTags: string[];
+}
 
 // Helper function to get subcategory icons
 const getSubcategoryIcon = (subcategory: string): string => {
@@ -29,32 +124,37 @@ const getSubcategoryIcon = (subcategory: string): string => {
   return '🏷️'; // Default icon
 };
 
-export default function BlogPage() {
+export default function BlogPage({ 
+  initialPosts, 
+  categories: initialCategories, 
+  subcategories: initialSubcategories, 
+  popularTags: initialPopularTags
+}: BlogPageProps) {
   const router = useRouter();
   const { category, subcategory, tag } = router.query;
   
-  // Initialize state with URL query parameters or default values
+  // Initialize state with server-side props or URL query parameters
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [showMobileSearch, setShowMobileSearch] = useState(false);
-  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
-  const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>(initialPosts);
+  const [allPosts, setAllPosts] = useState<BlogPost[]>(initialPosts);
   const [sortBy, setSortBy] = useState<'Latest' | 'Popular' | 'Oldest'>('Latest');
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(6);
   const [isClient, setIsClient] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [subcategories, setSubcategories] = useState<Category[]>([]);
-  const [popularTags, setPopularTags] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [subcategories, setSubcategories] = useState<Category[]>(initialSubcategories);
+  const [popularTags, setPopularTags] = useState<string[]>(initialPopularTags);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedSubcategory, setSelectedSubcategory] = useState('All');
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
 
-  // Set client flag and load URL parameters on mount
+  // Set client flag and update state from URL parameters
   useEffect(() => {
     setIsClient(true);
     
-    // Set initial values from URL query parameters
+    // Update state from URL query parameters if they exist
     if (category && typeof category === 'string') {
       setSelectedCategory(category);
     }
@@ -105,75 +205,7 @@ export default function BlogPage() {
 
   }, [selectedCategory, selectedSubcategory, searchQuery, isClient, router]);
 
-  // Load published blog posts on component mount
-  useEffect(() => {
-    const loadPosts = async () => {
-      try {
-        setIsLoading(true);
-        
-        // Use the proper API call to get published posts
-        const posts = await blogService.getPublishedPosts();
-        setAllPosts(posts);
-        setFilteredPosts(posts);
-
-        // Generate categories and subcategories from posts
-        const categoryMap = new Map<string, number>();
-        const subcategoryMap = new Map<string, number>();
-        const tagSet = new Set<string>();
-
-        posts.forEach(post => {
-          // Count categories
-          if (post.category) {
-            categoryMap.set(post.category, (categoryMap.get(post.category) || 0) + 1);
-          }
-
-          // Count subcategories
-          if (post.subcategory) {
-            subcategoryMap.set(post.subcategory, (subcategoryMap.get(post.subcategory) || 0) + 1);
-          }
-
-          // Collect tags
-          if (post.tags && post.tags.length > 0) {
-            post.tags.forEach(tag => tagSet.add(tag));
-          }
-        });
-
-        // Convert to arrays
-        const categoriesArray = [
-          { name: 'All', count: posts.length },
-          ...Array.from(categoryMap.entries()).map(([name, count]) => ({
-            name,
-            count
-          }))
-        ];
-
-        const subcategoriesArray = [
-          { name: 'All', count: posts.length },
-          ...Array.from(subcategoryMap.entries()).map(([name, count]) => ({
-            name,
-            count
-          }))
-        ];
-
-        setCategories(categoriesArray);
-        setSubcategories(subcategoriesArray);
-        setPopularTags(Array.from(tagSet).slice(0, 10)); // Top 10 tags
-
-      } catch (error) {
-        console.error('Error loading posts:', error);
-        // Set empty arrays on error to prevent crashes
-        setAllPosts([]);
-        setFilteredPosts([]);
-        setCategories([{ name: 'All', count: 0 }]);
-        setSubcategories([{ name: 'All', count: 0 }]);
-        setPopularTags([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadPosts();
-  }, []);
+  // No need to load posts again since we have them from server-side props
 
   // Save state to localStorage whenever it changes
   useEffect(() => {
@@ -217,8 +249,8 @@ export default function BlogPage() {
     switch (sortBy) {
       case 'Latest':
         filtered.sort((a, b) => {
-          const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
-          const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+          const dateA = a.publishedAt ? toDate(a.publishedAt)?.getTime() || 0 : 0;
+          const dateB = b.publishedAt ? toDate(b.publishedAt)?.getTime() || 0 : 0;
           return dateB - dateA;
         });
         break;
@@ -227,8 +259,8 @@ export default function BlogPage() {
         break;
       case 'Oldest':
         filtered.sort((a, b) => {
-          const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
-          const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+          const dateA = a.publishedAt ? toDate(a.publishedAt)?.getTime() || 0 : 0;
+          const dateB = b.publishedAt ? toDate(b.publishedAt)?.getTime() || 0 : 0;
           return dateA - dateB;
         });
         break;
