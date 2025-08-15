@@ -54,6 +54,21 @@ export const addCacheBuster = (url: string): string => {
   return `${url}${separator}_cb=${Date.now()}`;
 };
 
+// Check if URL should be excluded from cache busting
+export const shouldExcludeFromCacheBusting = (url: string): boolean => {
+  // Exclude Firebase Functions API calls
+  if (url.includes('cloudfunctions.net/api') || url.includes('localhost:5001')) {
+    return true;
+  }
+  
+  // Exclude other API calls that shouldn't be cached
+  if (url.includes('/api/') || url.includes('/graphql')) {
+    return true;
+  }
+  
+  return false;
+};
+
 // Preserve local storage data during cache clearing
 export const preserveLocalStorage = (): Record<string, any> => {
   if (typeof window !== 'undefined' && 'localStorage' in window) {
@@ -91,13 +106,38 @@ export const initCacheManagement = (): void => {
       forceReload();
     }
 
-    // Add cache-busting to all fetch requests
+    // Temporarily disabled fetch interception to fix Firebase Functions API issues
+    // TODO: Re-enable with proper API exclusion logic when needed
+    /*
+    // Add cache-busting to all fetch requests (except API calls)
     const originalFetch = window.fetch;
     window.fetch = function(input: RequestInfo | URL, init?: RequestInit) {
+      let url: string;
+      
       if (typeof input === 'string') {
-        input = addCacheBuster(input);
+        url = input;
+      } else if (input instanceof URL) {
+        url = input.toString();
+      } else if (input instanceof Request) {
+        url = input.url;
+      } else {
+        url = input.toString();
       }
-      return originalFetch.call(this, input, init);
+      
+      // Don't add cache buster to API calls
+      if (!shouldExcludeFromCacheBusting(url)) {
+        if (typeof input === 'string') {
+          input = addCacheBuster(input);
+        } else if (input instanceof URL) {
+          input = new URL(addCacheBuster(input.toString()));
+        } else if (input instanceof Request) {
+          input = new Request(addCacheBuster(input.url), input);
+        }
+      }
+      
+      // Use proper context binding
+      return originalFetch.call(window, input, init);
     };
+    */
   }
 }; 

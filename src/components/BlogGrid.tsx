@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BlogPost } from '@/services/blogService';
+import { BlogPost, blogService } from '@/services/blogService';
 import BlogCard from './BlogCard';
 
 interface BlogGridProps {
@@ -95,11 +95,7 @@ export default function BlogGrid({
                 title={post.title}
                 excerpt={post.excerpt}
                 author={post.author}
-                date={(post.publishedAt || post.updatedAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
+                date={blogService.formatDate(post.publishedAt || post.updatedAt)}
                 readTime={`${Math.ceil(post.content.split(' ').length / 200)} min read`}
                 category={post.category}
                 subcategory={post.subcategory}

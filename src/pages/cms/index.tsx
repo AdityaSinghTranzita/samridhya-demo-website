@@ -45,7 +45,11 @@ const CMSDashboard: React.FC = () => {
         
         // Get recent posts (last 5)
         const recentPosts = allPosts
-          .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+          .sort((a, b) => {
+            const dateA = a.updatedAt || a.createdAt || new Date();
+            const dateB = b.updatedAt || b.createdAt || new Date();
+            return new Date(dateB).getTime() - new Date(dateA).getTime();
+          })
           .slice(0, 5);
 
         setStats({
@@ -313,7 +317,7 @@ const CMSDashboard: React.FC = () => {
                         {post.status}
                       </span>
                       <span className="text-xs text-gray-500">
-                        {new Date(post.updatedAt).toLocaleDateString()}
+                        {blogService.formatDate(post.updatedAt)}
                       </span>
                     </div>
                   </div>

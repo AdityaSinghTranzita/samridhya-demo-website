@@ -48,11 +48,9 @@ const NewBlogPost: React.FC = () => {
     seoTitle: '',
     seoDescription: '',
     seoKeywords: [],
-    meta: {
-      views: 0,
-      likes: 0,
-      shares: 0
-    }
+    views: 0,
+    likes: 0,
+    shares: 0
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -81,6 +79,16 @@ const NewBlogPost: React.FC = () => {
       }));
     }
   }, [user]);
+
+  // Set default tag if none exists
+  useEffect(() => {
+    if (post.tags.length === 0) {
+      setPost(prev => ({
+        ...prev,
+        tags: ['blog'],
+      }));
+    }
+  }, []);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value;
@@ -285,6 +293,10 @@ const NewBlogPost: React.FC = () => {
         tags: [...prev.tags, tag],
       }));
       setTagInput('');
+      // Clear tags error
+      if (errors.tags) {
+        setErrors(prev => ({ ...prev, tags: '' }));
+      }
     }
   };
 
@@ -376,6 +388,10 @@ const NewBlogPost: React.FC = () => {
       newErrors.author = 'Author is required';
     }
 
+    if (!post.tags || post.tags.length === 0) {
+      newErrors.tags = 'At least one tag is required';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -400,6 +416,7 @@ const NewBlogPost: React.FC = () => {
         status: post.status,
         author: post.author,
         category: post.category || 'Blog',
+        subcategory: post.subcategory || null,
         meta: {
           views: 0,
           likes: 0,
@@ -1014,12 +1031,17 @@ const NewBlogPost: React.FC = () => {
                     value={tagInput}
                     onChange={handleTagInputChange}
                     onKeyDown={handleTagInputKeyDown}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                    className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+                      errors.tags ? 'border-red-300' : 'border-gray-300'
+                    }`}
                     placeholder="Type a tag and press Enter or comma"
                     maxLength={20}
                     disabled={post.tags.length >= 10}
                   />
                 </div>
+                {errors.tags && (
+                  <p className="text-red-500 text-sm mt-1">{errors.tags}</p>
+                )}
                 
                 {/* Tag Display */}
                 {post.tags.length > 0 && (

@@ -1,21 +1,4 @@
-import { 
-  collection, 
-  doc, 
-  getDocs, 
-  getDoc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
-  limit, 
-  startAfter,
-  Timestamp,
-  serverTimestamp,
-  deleteField
-} from 'firebase/firestore';
-import { db } from '@/firebase/config';
+import { apiService, PaginatedResponse } from './apiService';
 
 export interface BlogPost {
   id?: string;
@@ -31,25 +14,22 @@ export interface BlogPost {
   subcategory?: string;
   readTime?: string;
   featured?: boolean;
-  // SEO fields
+  views?: number;
+  likes?: number;
+  shares?: number;
   seoTitle?: string;
   seoDescription?: string;
   seoKeywords?: string[];
-  meta?: {
-    views: number;
-    likes: number;
-    shares: number;
-  };
   publishedAt?: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Category {
   name: string;
-  slug: string;
   count: number;
-  icon: string;
+  slug?: string;
+  icon?: string;
 }
 
 export interface BlogData {
@@ -59,30 +39,78 @@ export interface BlogData {
 }
 
 class BlogService {
-  private collectionName = 'blog-posts';
+  // Normalize blog post data to handle both old and new structures
+  private normalizeBlogPost(post: any): BlogPost {
+    // Helper function to convert date strings to Date objects
+    const convertToDate = (dateValue: any): Date | undefined => {
+      if (!dateValue) return undefined;
+      if (dateValue instanceof Date) return dateValue;
+      if (typeof dateValue === 'string') {
+        const parsed = new Date(dateValue);
+        return isNaN(parsed.getTime()) ? undefined : parsed;
+      }
+      // Handle Firestore timestamp objects
+      if (dateValue && typeof dateValue === 'object') {
+        if (dateValue.toDate && typeof dateValue.toDate === 'function') {
+          return dateValue.toDate();
+        }
+        if (dateValue._seconds) {
+          return new Date(dateValue._seconds * 1000);
+        }
+        if (dateValue.seconds) {
+          return new Date(dateValue.seconds * 1000);
+        }
+      }
+      return undefined;
+    };
+
+    // Helper function to normalize numeric values
+    const normalizeNumber = (value: any, defaultValue: number = 0): number => {
+      if (typeof value === 'number') return value;
+      if (typeof value === 'string') {
+        const parsed = parseInt(value, 10);
+        return isNaN(parsed) ? defaultValue : parsed;
+      }
+      return defaultValue;
+    };
+
+    return {
+      id: post.id || '',
+      title: post.title || 'Untitled',
+      slug: post.slug || '',
+      excerpt: post.excerpt || '',
+      content: post.content || '',
+      author: post.author || 'Unknown',
+      status: post.status || 'draft',
+      featuredImage: post.featuredImage,
+      tags: Array.isArray(post.tags) ? post.tags : [],
+      category: post.category || 'Uncategorized',
+      subcategory: post.subcategory,
+      readTime: post.readTime,
+      featured: Boolean(post.featured),
+      // Handle both old (meta object) and new (direct properties) structures
+      views: normalizeNumber(post.views || post.meta?.views),
+      likes: normalizeNumber(post.likes || post.meta?.likes),
+      shares: normalizeNumber(post.shares || post.meta?.shares),
+      seoTitle: post.seoTitle,
+      seoDescription: post.seoDescription,
+      seoKeywords: Array.isArray(post.seoKeywords) ? post.seoKeywords : [],
+      publishedAt: convertToDate(post.publishedAt),
+      createdAt: convertToDate(post.createdAt),
+      updatedAt: convertToDate(post.updatedAt)
+    };
+  }
+
+  // Normalize array of blog posts
+  private normalizeBlogPosts(posts: any[]): BlogPost[] {
+    return posts.map(post => this.normalizeBlogPost(post));
+  }
 
   // Create a new blog post
   async createPost(postData: Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
     try {
-      // Filter out undefined values to avoid Firebase errors
-      const filteredData = Object.fromEntries(
-        Object.entries(postData).filter(([_, value]) => value !== undefined)
-      );
-
-      const post: any = {
-        ...filteredData,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        meta: postData.meta || { views: 0, likes: 0, shares: 0 }
-      };
-
-      // Only set publishedAt if the post is being published
-      if (postData.status === 'published') {
-        post.publishedAt = serverTimestamp();
-      }
-
-      const docRef = await addDoc(collection(db, this.collectionName), post);
-      return docRef.id;
+      const post = await apiService.createBlogPost(postData);
+      return post.id || '';
     } catch (error) {
       console.error('Error creating post:', error);
       throw error;
@@ -92,21 +120,8 @@ class BlogService {
   // Get all blog posts
   async getAllPosts(): Promise<BlogPost[]> {
     try {
-      const querySnapshot = await getDocs(collection(db, this.collectionName));
-      const posts: BlogPost[] = [];
-      
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        posts.push({
-          id: doc.id,
-          ...data,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date(),
-          publishedAt: data.publishedAt?.toDate() || undefined,
-        } as BlogPost);
-      });
-
-      return posts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      const response = await apiService.getBlogPosts();
+      return this.normalizeBlogPosts(response.posts);
     } catch (error) {
       console.error('Error getting posts:', error);
       throw error;
@@ -116,63 +131,10 @@ class BlogService {
   // Get published posts only
   async getPublishedPosts(): Promise<BlogPost[]> {
     try {
-      const q = query(
-        collection(db, this.collectionName),
-        where('status', '==', 'published'),
-        orderBy('publishedAt', 'desc')
-      );
-      
-      const querySnapshot = await getDocs(q);
-      const posts: BlogPost[] = [];
-      
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        posts.push({
-          id: doc.id,
-          ...data,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date(),
-          publishedAt: data.publishedAt?.toDate() || undefined,
-        } as BlogPost);
-      });
-
-      return posts;
+      const response = await apiService.getPublishedPosts();
+      return this.normalizeBlogPosts(response.posts);
     } catch (error) {
       console.error('Error getting published posts:', error);
-      // If there's an index error, try without ordering
-      if (error instanceof Error && (error.message.includes('index') || error.message.includes('requires an index'))) {
-        console.log('Index not found, falling back to unordered query...');
-        try {
-          const q = query(
-            collection(db, this.collectionName),
-            where('status', '==', 'published')
-          );
-          
-          const querySnapshot = await getDocs(q);
-          const posts: BlogPost[] = [];
-          
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            posts.push({
-              id: doc.id,
-              ...data,
-              createdAt: data.createdAt?.toDate() || new Date(),
-              updatedAt: data.updatedAt?.toDate() || new Date(),
-              publishedAt: data.publishedAt?.toDate() || undefined,
-            } as BlogPost);
-          });
-
-          return posts.sort((a, b) => {
-            if (a.publishedAt && b.publishedAt) {
-              return b.publishedAt.getTime() - a.publishedAt.getTime();
-            }
-            return b.updatedAt.getTime() - a.updatedAt.getTime();
-          });
-        } catch (fallbackError) {
-          console.error('Error in fallback query:', fallbackError);
-          throw fallbackError;
-        }
-      }
       throw error;
     }
   }
@@ -180,23 +142,14 @@ class BlogService {
   // Get a single post by ID
   async getPostById(id: string): Promise<BlogPost | null> {
     try {
-      const docRef = doc(db, this.collectionName, id);
-      const docSnap = await getDoc(docRef);
-      
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        return {
-          id: docSnap.id,
-          ...data,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date(),
-          publishedAt: data.publishedAt?.toDate() || undefined,
-        } as BlogPost;
-      } else {
-        return null;
-      }
+      const post = await apiService.getBlogPostById(id);
+      return this.normalizeBlogPost(post);
     } catch (error) {
       console.error('Error getting post:', error);
+      // If post not found, return null instead of throwing
+      if (error instanceof Error && (error.message.includes('not found') || error.message.includes('404'))) {
+        return null;
+      }
       throw error;
     }
   }
@@ -204,24 +157,14 @@ class BlogService {
   // Get a single post by slug
   async getPostBySlug(slug: string): Promise<BlogPost | null> {
     try {
-      const q = query(collection(db, this.collectionName), where('slug', '==', slug));
-      const querySnapshot = await getDocs(q);
-      
-      if (!querySnapshot.empty) {
-        const doc = querySnapshot.docs[0];
-        const data = doc.data();
-        return {
-          id: doc.id,
-          ...data,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date(),
-          publishedAt: data.publishedAt?.toDate() || undefined,
-        } as BlogPost;
-      } else {
-        return null;
-      }
+      const post = await apiService.getBlogPostBySlug(slug);
+      return this.normalizeBlogPost(post);
     } catch (error) {
       console.error('Error getting post by slug:', error);
+      // If post not found, return null instead of throwing
+      if (error instanceof Error && (error.message.includes('not found') || error.message.includes('404'))) {
+        return null;
+      }
       throw error;
     }
   }
@@ -229,30 +172,7 @@ class BlogService {
   // Update a blog post
   async updatePost(id: string, postData: Partial<BlogPost>): Promise<void> {
     try {
-      const docRef = doc(db, this.collectionName, id);
-      
-      // Filter out undefined values to avoid Firebase errors
-      const filteredData = Object.fromEntries(
-        Object.entries(postData).filter(([_, value]) => value !== undefined)
-      );
-
-      const updateData: any = {
-        ...filteredData,
-        updatedAt: serverTimestamp(),
-      };
-
-      // Handle publishedAt field based on status
-      if (postData.status === 'published') {
-        // If publishing and no publishedAt exists, set it
-        if (!postData.publishedAt) {
-          updateData.publishedAt = serverTimestamp();
-        }
-      } else if (postData.status === 'draft') {
-        // If unpublishing, remove the publishedAt field
-        updateData.publishedAt = deleteField();
-      }
-
-      await updateDoc(docRef, updateData);
+      await apiService.updateBlogPost(id, postData);
     } catch (error) {
       console.error('Error updating post:', error);
       throw error;
@@ -262,8 +182,7 @@ class BlogService {
   // Delete a blog post
   async deletePost(id: string): Promise<void> {
     try {
-      const docRef = doc(db, this.collectionName, id);
-      await deleteDoc(docRef);
+      await apiService.deleteBlogPost(id);
     } catch (error) {
       console.error('Error deleting post:', error);
       throw error;
@@ -273,58 +192,10 @@ class BlogService {
   // Get posts by status
   async getPostsByStatus(status: 'draft' | 'published'): Promise<BlogPost[]> {
     try {
-      const q = query(
-        collection(db, this.collectionName),
-        where('status', '==', status),
-        orderBy('updatedAt', 'desc')
-      );
-      
-      const querySnapshot = await getDocs(q);
-      const posts: BlogPost[] = [];
-      
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        posts.push({
-          id: doc.id,
-          ...data,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date(),
-          publishedAt: data.publishedAt?.toDate() || undefined,
-        } as BlogPost);
-      });
-
-      return posts;
+      const response = await apiService.getBlogPosts({ status });
+      return this.normalizeBlogPosts(response.posts);
     } catch (error) {
       console.error('Error getting posts by status:', error);
-      // If there's an index error, try without ordering
-      if (error instanceof Error && (error.message.includes('index') || error.message.includes('requires an index'))) {
-        console.log('Index not found, falling back to unordered query...');
-        try {
-          const q = query(
-            collection(db, this.collectionName),
-            where('status', '==', status)
-          );
-          
-          const querySnapshot = await getDocs(q);
-          const posts: BlogPost[] = [];
-          
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            posts.push({
-              id: doc.id,
-              ...data,
-              createdAt: data.createdAt?.toDate() || new Date(),
-              updatedAt: data.updatedAt?.toDate() || new Date(),
-              publishedAt: data.publishedAt?.toDate() || undefined,
-            } as BlogPost);
-          });
-
-          return posts.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
-        } catch (fallbackError) {
-          console.error('Error in fallback query:', fallbackError);
-          throw fallbackError;
-        }
-      }
       throw error;
     }
   }
@@ -332,65 +203,10 @@ class BlogService {
   // Get featured posts
   async getFeaturedPosts(): Promise<BlogPost[]> {
     try {
-      const q = query(
-        collection(db, this.collectionName),
-        where('featured', '==', true),
-        where('status', '==', 'published'),
-        orderBy('publishedAt', 'desc')
-      );
-      
-      const querySnapshot = await getDocs(q);
-      const posts: BlogPost[] = [];
-      
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        posts.push({
-          id: doc.id,
-          ...data,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date(),
-          publishedAt: data.publishedAt?.toDate() || undefined,
-        } as BlogPost);
-      });
-
-      return posts;
+      const posts = await apiService.getFeaturedPosts();
+      return this.normalizeBlogPosts(posts);
     } catch (error) {
       console.error('Error getting featured posts:', error);
-      // If there's an index error, try without ordering
-      if (error instanceof Error && (error.message.includes('index') || error.message.includes('requires an index'))) {
-        console.log('Index not found, falling back to unordered query...');
-        try {
-          const q = query(
-            collection(db, this.collectionName),
-            where('featured', '==', true),
-            where('status', '==', 'published')
-          );
-          
-          const querySnapshot = await getDocs(q);
-          const posts: BlogPost[] = [];
-          
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            posts.push({
-              id: doc.id,
-              ...data,
-              createdAt: data.createdAt?.toDate() || new Date(),
-              updatedAt: data.updatedAt?.toDate() || new Date(),
-              publishedAt: data.publishedAt?.toDate() || undefined,
-            } as BlogPost);
-          });
-
-          return posts.sort((a, b) => {
-            if (a.publishedAt && b.publishedAt) {
-              return b.publishedAt.getTime() - a.publishedAt.getTime();
-            }
-            return b.updatedAt.getTime() - a.updatedAt.getTime();
-          });
-        } catch (fallbackError) {
-          console.error('Error in fallback query:', fallbackError);
-          throw fallbackError;
-        }
-      }
       throw error;
     }
   }
@@ -398,65 +214,10 @@ class BlogService {
   // Get posts by category
   async getPostsByCategory(category: string): Promise<BlogPost[]> {
     try {
-      const q = query(
-        collection(db, this.collectionName),
-        where('category', '==', category),
-        where('status', '==', 'published'),
-        orderBy('publishedAt', 'desc')
-      );
-      
-      const querySnapshot = await getDocs(q);
-      const posts: BlogPost[] = [];
-      
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        posts.push({
-          id: doc.id,
-          ...data,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date(),
-          publishedAt: data.publishedAt?.toDate() || undefined,
-        } as BlogPost);
-      });
-
-      return posts;
+      const response = await apiService.getPostsByCategory(category);
+      return this.normalizeBlogPosts(response.posts);
     } catch (error) {
       console.error('Error getting posts by category:', error);
-      // If there's an index error, try without ordering
-      if (error instanceof Error && (error.message.includes('index') || error.message.includes('requires an index'))) {
-        console.log('Index not found, falling back to unordered query...');
-        try {
-          const q = query(
-            collection(db, this.collectionName),
-            where('category', '==', category),
-            where('status', '==', 'published')
-          );
-          
-          const querySnapshot = await getDocs(q);
-          const posts: BlogPost[] = [];
-          
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            posts.push({
-              id: doc.id,
-              ...data,
-              createdAt: data.createdAt?.toDate() || new Date(),
-              updatedAt: data.updatedAt?.toDate() || new Date(),
-              publishedAt: data.publishedAt?.toDate() || undefined,
-            } as BlogPost);
-          });
-
-          return posts.sort((a, b) => {
-            if (a.publishedAt && b.publishedAt) {
-              return b.publishedAt.getTime() - a.publishedAt.getTime();
-            }
-            return b.updatedAt.getTime() - a.updatedAt.getTime();
-          });
-        } catch (fallbackError) {
-          console.error('Error in fallback query:', fallbackError);
-          throw fallbackError;
-        }
-      }
       throw error;
     }
   }
@@ -464,85 +225,21 @@ class BlogService {
   // Get posts by search query
   async getPostsBySearch(query: string): Promise<BlogPost[]> {
     try {
-      // Note: Firestore doesn't support full-text search natively
-      // This is a simple implementation - for production, consider using Algolia or similar
-      const allPosts = await this.getPublishedPosts();
-      const lowercaseQuery = query.toLowerCase();
-      
-      return allPosts.filter(post => 
-        post.title.toLowerCase().includes(lowercaseQuery) ||
-        post.excerpt.toLowerCase().includes(lowercaseQuery) ||
-        post.content.toLowerCase().includes(lowercaseQuery) ||
-        post.tags.some(tag => tag.toLowerCase().includes(lowercaseQuery))
-      );
+      const posts = await apiService.searchBlogPosts(query);
+      return this.normalizeBlogPosts(posts);
     } catch (error) {
       console.error('Error searching posts:', error);
       throw error;
     }
   }
 
-  // Get recent posts
-  async getRecentPosts(limitCount: number = 5): Promise<BlogPost[]> {
+  // Get popular posts
+  async getPopularPosts(limitCount: number = 5): Promise<BlogPost[]> {
     try {
-      const q = query(
-        collection(db, this.collectionName),
-        where('status', '==', 'published'),
-        orderBy('publishedAt', 'desc'),
-        limit(limitCount)
-      );
-      
-      const querySnapshot = await getDocs(q);
-      const posts: BlogPost[] = [];
-      
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        posts.push({
-          id: doc.id,
-          ...data,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date(),
-          publishedAt: data.publishedAt?.toDate() || undefined,
-        } as BlogPost);
-      });
-
-      return posts;
+      const posts = await apiService.getPopularPosts(limitCount);
+      return this.normalizeBlogPosts(posts);
     } catch (error) {
-      console.error('Error getting recent posts:', error);
-      // If there's an index error, try without ordering
-      if (error instanceof Error && (error.message.includes('index') || error.message.includes('requires an index'))) {
-        console.log('Index not found, falling back to unordered query...');
-        try {
-          const q = query(
-            collection(db, this.collectionName),
-            where('status', '==', 'published'),
-            limit(limitCount)
-          );
-          
-          const querySnapshot = await getDocs(q);
-          const posts: BlogPost[] = [];
-          
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            posts.push({
-              id: doc.id,
-              ...data,
-              createdAt: data.createdAt?.toDate() || new Date(),
-              updatedAt: data.updatedAt?.toDate() || new Date(),
-              publishedAt: data.publishedAt?.toDate() || undefined,
-            } as BlogPost);
-          });
-
-          return posts.sort((a, b) => {
-            if (a.publishedAt && b.publishedAt) {
-              return b.publishedAt.getTime() - a.publishedAt.getTime();
-            }
-            return b.updatedAt.getTime() - a.updatedAt.getTime();
-          }).slice(0, limitCount);
-        } catch (fallbackError) {
-          console.error('Error in fallback query:', fallbackError);
-          throw fallbackError;
-        }
-      }
+      console.error('Error getting popular posts:', error);
       throw error;
     }
   }
@@ -550,34 +247,23 @@ class BlogService {
   // Get all categories
   async getCategories(): Promise<Category[]> {
     try {
-      const posts = await this.getPublishedPosts();
-      const categoryCounts = new Map<string, number>();
+      const categories = await apiService.getCategories();
       
-      posts.forEach(post => {
-        if (post.category) {
-          categoryCounts.set(post.category, (categoryCounts.get(post.category) || 0) + 1);
-        }
-      });
-      
-      const categories: Category[] = [
-        {
-          name: 'All',
-          slug: 'all',
-          count: posts.length,
-          icon: 'BookOpen'
-        }
-      ];
-      
-      categoryCounts.forEach((count, name) => {
-        categories.push({
-          name,
-          slug: name.toLowerCase().replace(/\s+/g, '-'),
-          count,
-          icon: this.getCategoryIcon(name)
-        });
-      });
-      
-      return categories;
+      // Add "All" category at the beginning
+      const allCategory: Category = {
+        name: 'All',
+        count: 0, // This will be calculated below
+      };
+
+      // Get total count of published posts for "All" category
+      try {
+        const publishedPosts = await this.getPublishedPosts();
+        allCategory.count = publishedPosts.length;
+      } catch (error) {
+        console.warn('Could not get post count for "All" category:', error);
+      }
+
+      return [allCategory, ...categories];
     } catch (error) {
       console.error('Error getting categories:', error);
       throw error;
@@ -587,41 +273,86 @@ class BlogService {
   // Get all tags
   async getTags(): Promise<string[]> {
     try {
-      const posts = await this.getPublishedPosts();
-      const tagSet = new Set<string>();
-      
-      posts.forEach(post => {
-        post.tags.forEach(tag => tagSet.add(tag));
-      });
-      
-      return Array.from(tagSet);
+      return await apiService.getTags();
     } catch (error) {
       console.error('Error getting tags:', error);
       throw error;
     }
   }
 
-  // Helper method to get icon for category
-  private getCategoryIcon(category: string): string {
-    const iconMap: { [key: string]: string } = {
-      'Personal Loan': 'TrendingUp',
-      'Business Loan': 'Users',
-      'Credit Score': 'TrendingDown',
-      'EMI Calculator': 'Calculator',
-      'Digital Gold': 'BookOpen',
-      'Financial Advice': 'Shield',
-      'Loan Tips': 'Shield'
-    };
-    return iconMap[category] || 'BookOpen';
+  // Like a blog post
+  async likePost(id: string): Promise<void> {
+    try {
+      await apiService.likeBlogPost(id);
+    } catch (error) {
+      console.error('Error liking post:', error);
+      throw error;
+    }
   }
 
-  // Format date
-  formatDate(date: Date): string {
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+  // Get posts with pagination
+  async getPostsWithPagination(params: {
+    status?: 'draft' | 'published';
+    category?: string;
+    featured?: boolean;
+    limit?: number;
+    offset?: number;
+  } = {}): Promise<PaginatedResponse<BlogPost>> {
+    try {
+      const response = await apiService.getBlogPosts(params);
+      return {
+        ...response,
+        posts: this.normalizeBlogPosts(response.posts)
+      };
+    } catch (error) {
+      console.error('Error getting posts with pagination:', error);
+      throw error;
+    }
+  }
+
+  // Format date - Improved to handle various date formats
+  formatDate(date: Date | string | any): string {
+    try {
+      let dateObj: Date;
+      
+      // Handle different date formats
+      if (date instanceof Date) {
+        dateObj = date;
+      } else if (typeof date === 'string') {
+        dateObj = new Date(date);
+      } else if (date && typeof date === 'object') {
+        if (date.toDate && typeof date.toDate === 'function') {
+          // Handle Firestore timestamp
+          dateObj = date.toDate();
+        } else if (date._seconds) {
+          // Handle Firestore timestamp with _seconds
+          dateObj = new Date(date._seconds * 1000);
+        } else if (date.seconds) {
+          // Handle Firestore timestamp with seconds
+          dateObj = new Date(date.seconds * 1000);
+        } else {
+          // Try to convert to Date
+          dateObj = new Date(date);
+        }
+      } else {
+        // Fallback to current date
+        dateObj = new Date();
+      }
+      
+      // Check if the date is valid
+      if (isNaN(dateObj.getTime())) {
+        return 'Invalid date';
+      }
+      
+      return dateObj.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch (error) {
+      console.error('Error formatting date:', error, date);
+      return 'Unknown date';
+    }
   }
 
   // Get reading time estimate
@@ -630,6 +361,31 @@ class BlogService {
     const wordCount = content.split(' ').length;
     const readingTime = Math.ceil(wordCount / wordsPerMinute);
     return `${readingTime} min read`;
+  }
+
+  // Generate slug from title
+  generateSlug(title: string): string {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
+  }
+
+  // Validate blog post data
+  validateBlogPost(postData: Partial<BlogPost>): { isValid: boolean; errors: string[] } {
+    return apiService.validateBlogPost(postData);
+  }
+
+  // Health check
+  async healthCheck(): Promise<{ message: string; timestamp: string }> {
+    try {
+      return await apiService.healthCheck();
+    } catch (error) {
+      console.error('Error checking API health:', error);
+      throw error;
+    }
   }
 }
 

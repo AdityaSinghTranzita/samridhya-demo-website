@@ -9,8 +9,12 @@ import Link from 'next/link';
 interface BlogSidebarProps {
   onSearchChange?: (query: string) => void;
   onCategoryChange?: (category: string) => void;
+  onSubcategoryChange?: (subcategory: string) => void;
+  onTagClick?: (tag: string) => void;
   selectedCategory?: string;
+  selectedSubcategory?: string;
   categories?: Category[];
+  subcategories?: Category[];
   popularTags?: string[];
   className?: string;
 }
@@ -26,8 +30,12 @@ const defaultPopularTags = [
 export default function BlogSidebar({ 
   onSearchChange, 
   onCategoryChange, 
+  onSubcategoryChange,
+  onTagClick,
   selectedCategory = 'All',
+  selectedSubcategory = 'All',
   categories = defaultCategories,
+  subcategories = defaultCategories,
   popularTags = defaultPopularTags,
   className = ""
 }: BlogSidebarProps) {
