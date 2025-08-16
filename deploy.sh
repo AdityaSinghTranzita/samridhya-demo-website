@@ -3,7 +3,7 @@
 # Exit on any error
 set -e
 
-echo "🚀 Starting deployment process..."
+echo "🚀 Starting Firebase hosting deployment process..."
 
 # Clean previous build
 echo "🧹 Cleaning previous build..."
@@ -14,17 +14,28 @@ rm -rf .next
 echo "📦 Installing dependencies..."
 npm install
 
-# Build the project
-echo "🔨 Building the project..."
-npm run build
+# Build the project for Firebase hosting
+echo "🔨 Building the project for Firebase hosting..."
+npm run build:firebase
 
-# Copy 404.html to out directory for client-side routing
-echo "📄 Setting up client-side routing..."
-cp public/404.html out/404.html
+# Verify build output
+echo "✅ Verifying build output..."
+if [ ! -d "out" ]; then
+    echo "❌ Build failed: 'out' directory not found"
+    exit 1
+fi
+
+if [ ! -f "out/index.html" ]; then
+    echo "❌ Build failed: 'out/index.html' not found"
+    exit 1
+fi
+
+echo "✅ Build verification passed"
 
 # Deploy to Firebase
-echo "🚀 Deploying to Firebase..."
+echo "🚀 Deploying to Firebase hosting..."
 firebase deploy --only hosting
 
 echo "✅ Deployment completed successfully!"
-echo "🌐 Your site should be live at: https://your-project-id.web.app" 
+echo "🌐 Your site should be live at: https://samridhya-v2.web.app"
+echo "📊 Check Firebase console for deployment details" 

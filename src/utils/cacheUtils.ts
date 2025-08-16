@@ -98,12 +98,15 @@ export const restoreLocalStorage = (data: Record<string, any>): void => {
 // Initialize cache management
 export const initCacheManagement = (): void => {
   if (typeof window !== 'undefined') {
-    // Clear cache on page load
-    clearBrowserCache();
+    // Only clear cache in development mode to avoid redirect loops
+    if (process.env.NODE_ENV === 'development') {
+      // Clear cache on page load (only in development)
+      clearBrowserCache();
 
-    // Force reload if loaded from cache
-    if (isLoadedFromCache()) {
-      forceReload();
+      // Force reload if loaded from cache (only in development)
+      if (isLoadedFromCache()) {
+        forceReload();
+      }
     }
 
     // Temporarily disabled fetch interception to fix Firebase Functions API issues

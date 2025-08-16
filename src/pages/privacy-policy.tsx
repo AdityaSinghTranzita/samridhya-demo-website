@@ -540,11 +540,7 @@ export default function PrivacyPolicy() {
               {/* Last Updated */}
               <div className="text-center pt-8 border-t border-gray-200">
                 <p className="text-gray-500 text-xs">
-                  Last updated: {new Date().toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                  })}
+                  Last updated: August 16, 2024
                 </p>
               </div>
             </div>

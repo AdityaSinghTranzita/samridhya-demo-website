@@ -1,4 +1,4 @@
-// Remove 'use client' directive since we're using getServerSideProps
+// Client-side rendering for static export compatibility
 
 import { motion } from 'framer-motion';
 import Head from 'next/head';
@@ -14,141 +14,103 @@ import { blogService, BlogPost, Category } from '@/services/blogService';
 import { trackEvent, trackButtonClick } from '@/utils/analytics';
 import { toISOString, toDate } from '@/utils/dateUtils';
 
-// Use getStaticProps for static export compatibility
-export async function getStaticProps() {
-  
-  try {
-    // Fetch all published posts
-    const allPosts = await blogService.getPublishedPosts();
-    
-    // Generate categories and subcategories from posts
-    const categoryMap = new Map<string, number>();
-    const subcategoryMap = new Map<string, number>();
-    const tagSet = new Set<string>();
-
-    allPosts.forEach(post => {
-      if (post.category) {
-        categoryMap.set(post.category, (categoryMap.get(post.category) || 0) + 1);
-      }
-      if (post.subcategory) {
-        subcategoryMap.set(post.subcategory, (subcategoryMap.get(post.subcategory) || 0) + 1);
-      }
-      if (post.tags && post.tags.length > 0) {
-        post.tags.forEach(tag => tagSet.add(tag));
-      }
-    });
-
-    const categories = [
-      { name: 'All', count: allPosts.length },
-      ...Array.from(categoryMap.entries()).map(([name, count]) => ({
-        name,
-        count
-      }))
-    ];
-
-    const subcategories = [
-      { name: 'All', count: allPosts.length },
-      ...Array.from(subcategoryMap.entries()).map(([name, count]) => ({
-        name,
-        count
-      }))
-    ];
-
-    const popularTags = Array.from(tagSet).slice(0, 10);
-
-    // Clean up posts to ensure no undefined values and convert Date objects to strings
-    const cleanedPosts = allPosts.map(post => ({
-      ...post,
-      subcategory: post.subcategory || null,
-      category: post.category || 'Uncategorized',
-      tags: post.tags || [],
-      featuredImage: post.featuredImage || null,
-      seoTitle: post.seoTitle || null,
-      seoDescription: post.seoDescription || null,
-      seoKeywords: post.seoKeywords || [],
-      readTime: post.readTime || null,
-      views: post.views || 0,
-      likes: post.likes || 0,
-      shares: post.shares || 0,
-      featured: post.featured || false,
-      // Convert Date objects to ISO strings for JSON serialization
-      publishedAt: toISOString(post.publishedAt),
-      createdAt: toISOString(post.createdAt),
-      updatedAt: toISOString(post.updatedAt),
-    }));
-
-    return {
-      props: {
-        initialPosts: cleanedPosts,
-        categories,
-        subcategories,
-        popularTags,
-      },
-    };
-  } catch (error) {
-    console.error('Error loading posts:', error);
-    return {
-      props: {
-        initialPosts: [],
-        categories: [{ name: 'All', count: 0 }],
-        subcategories: [{ name: 'All', count: 0 }],
-        popularTags: [],
-        initialCategory: 'All',
-        initialSubcategory: 'All',
-        initialSearchQuery: '',
-      },
-    };
-  }
-}
-
 interface BlogPageProps {
-  initialPosts: BlogPost[];
-  categories: Category[];
-  subcategories: Category[];
-  popularTags: string[];
+  // No server-side props for static export
 }
 
-// Helper function to get subcategory icons
-const getSubcategoryIcon = (subcategory: string): string => {
-  const subcategoryLower = subcategory.toLowerCase();
-  if (subcategoryLower.includes('personal loan')) return '👤';
-  if (subcategoryLower.includes('business loan')) return '🏢';
-  if (subcategoryLower.includes('home loan')) return '🏠';
-  if (subcategoryLower.includes('education loan')) return '🎓';
-  if (subcategoryLower.includes('travel loan')) return '✈️';
-  if (subcategoryLower.includes('credit score')) return '📊';
-  if (subcategoryLower.includes('emi calculator')) return '🧮';
-  if (subcategoryLower.includes('digital gold')) return '🥇';
-  if (subcategoryLower.includes('investment')) return '📈';
-  if (subcategoryLower.includes('credit card')) return '💳';
-  return '🏷️'; // Default icon
-};
-
-export default function BlogPage({ 
-  initialPosts, 
-  categories: initialCategories, 
-  subcategories: initialSubcategories, 
-  popularTags: initialPopularTags
-}: BlogPageProps) {
+export default function BlogPage({}: BlogPageProps) {
   const router = useRouter();
   const { category, subcategory, tag } = router.query;
   
-  // Initialize state with server-side props or URL query parameters
+  // Initialize state
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [showMobileSearch, setShowMobileSearch] = useState(false);
-  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>(initialPosts);
-  const [allPosts, setAllPosts] = useState<BlogPost[]>(initialPosts);
+  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
+  const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
   const [sortBy, setSortBy] = useState<'Latest' | 'Popular' | 'Oldest'>('Latest');
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(6);
   const [isClient, setIsClient] = useState(false);
-  const [categories, setCategories] = useState<Category[]>(initialCategories);
-  const [subcategories, setSubcategories] = useState<Category[]>(initialSubcategories);
-  const [popularTags, setPopularTags] = useState<string[]>(initialPopularTags);
-  const [isLoading, setIsLoading] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([{ name: 'All', count: 0 }]);
+  const [subcategories, setSubcategories] = useState<Category[]>([{ name: 'All', count: 0 }]);
+  const [popularTags, setPopularTags] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [selectedSubcategory, setSelectedSubcategory] = useState('All');
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [apiError, setApiError] = useState<string | undefined>();
+
+  // Load data on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        setApiError(undefined);
+        
+        console.log('🔄 Loading blog data...');
+        
+        // Load data in parallel
+        const [posts, categoriesData, tagsData] = await Promise.all([
+          blogService.getPublishedPosts(),
+          blogService.getCategories(),
+          blogService.getTags()
+        ]);
+
+        console.log(`✅ Loaded ${posts.length} posts, ${categoriesData.length} categories, ${tagsData.length} tags`);
+
+        // Clean up posts to ensure no undefined values and convert Date objects to strings
+        const cleanedPosts = posts.map(post => ({
+          ...post,
+          subcategory: post.subcategory || null,
+          category: post.category || 'Uncategorized',
+          tags: post.tags || [],
+          featuredImage: post.featuredImage || null,
+          seoTitle: post.seoTitle || null,
+          seoDescription: post.seoDescription || null,
+          seoKeywords: post.seoKeywords || [],
+          readTime: post.readTime || null,
+          views: post.views || 0,
+          likes: post.likes || 0,
+          shares: post.shares || 0,
+          featured: post.featured || false,
+          // Convert Date objects to ISO strings for JSON serialization
+          publishedAt: toISOString(post.publishedAt),
+          createdAt: toISOString(post.createdAt),
+          updatedAt: toISOString(post.updatedAt),
+        }));
+
+        // Generate subcategories from posts
+        const subcategoryMap = new Map<string, number>();
+        cleanedPosts.forEach(post => {
+          if (post.subcategory) {
+            subcategoryMap.set(post.subcategory, (subcategoryMap.get(post.subcategory) || 0) + 1);
+          }
+        });
+
+        const subcategoriesData = [
+          { name: 'All', count: cleanedPosts.length },
+          ...Array.from(subcategoryMap.entries()).map(([name, count]) => ({
+            name,
+            count
+          }))
+        ];
+
+        setAllPosts(cleanedPosts);
+        setCategories(categoriesData);
+        setSubcategories(subcategoriesData);
+        setPopularTags(tagsData.slice(0, 10));
+        
+      } catch (error) {
+        console.error('❌ Error loading blog data:', error);
+        setApiError(error instanceof Error ? error.message : 'Failed to load blog posts');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
 
   // Set client flag and update state from URL parameters
   useEffect(() => {
@@ -165,36 +127,41 @@ export default function BlogPage({
       setSearchQuery(tag);
     }
     
+    // Temporarily disabled localStorage loading to fix redirect loops
     // Load localStorage values after component mounts (if no URL params)
-    if (!category && !subcategory && !tag) {
-      const savedCategory = localStorage.getItem('blog_selectedCategory');
-      const savedSubcategory = localStorage.getItem('blog_selectedSubcategory');
-      const savedSearchQuery = localStorage.getItem('blog_searchQuery');
-      const savedSortBy = localStorage.getItem('blog_sortBy');
-      const savedCurrentPage = localStorage.getItem('blog_currentPage');
-      
-      if (savedCategory) setSelectedCategory(savedCategory);
-      if (savedSubcategory) setSelectedSubcategory(savedSubcategory);
-      if (savedSearchQuery) setSearchQuery(savedSearchQuery);
-      if (savedSortBy) setSortBy(savedSortBy as 'Latest' | 'Popular' | 'Oldest');
-      if (savedCurrentPage) setCurrentPage(parseInt(savedCurrentPage));
-    }
+    // if (!category && !subcategory && !tag) {
+    //   const savedCategory = localStorage.getItem('blog_selectedCategory');
+    //   const savedSubcategory = localStorage.getItem('blog_selectedSubcategory');
+    //   const savedSearchQuery = localStorage.getItem('blog_searchQuery');
+    //   const savedSortBy = localStorage.getItem('blog_sortBy');
+    //   const savedCurrentPage = localStorage.getItem('blog_currentPage');
+    //   
+    //   if (savedCategory) setSelectedCategory(savedCategory);
+    //   if (savedSubcategory) setSelectedSubcategory(savedSubcategory);
+    //   if (savedSearchQuery) setSearchQuery(savedSearchQuery);
+    //   if (savedSortBy) setSortBy(savedSortBy as 'Latest' | 'Popular' | 'Oldest');
+    //   if (savedCurrentPage) setCurrentPage(parseInt(savedCurrentPage));
+    // }
   }, [category, subcategory, tag]);
 
   // Update URL when filters change
   useEffect(() => {
     if (!isClient) return;
 
-    const query: any = {};
-    if (selectedCategory !== 'All') query.category = selectedCategory;
-    if (selectedSubcategory !== 'All') query.subcategory = selectedSubcategory;
-    if (searchQuery.trim()) query.tag = searchQuery.trim();
+    // Temporarily disabled URL updates to fix redirect loops
+    // const query: any = {};
+    // if (selectedCategory !== 'All') query.category = selectedCategory;
+    // if (selectedSubcategory !== 'All') query.subcategory = selectedSubcategory;
+    // if (searchQuery.trim()) query.tag = searchQuery.trim();
 
-    // Update URL without page reload
-    router.push({
-      pathname: router.pathname,
-      query: Object.keys(query).length > 0 ? query : {}
-    }, undefined, { shallow: true });
+    // Update URL without page reload - only if we're not already on the blog page
+    // and only in development mode to avoid redirect loops
+    // if (router.pathname === '/blog' && process.env.NODE_ENV === 'development') {
+    //   router.replace({
+    //     pathname: router.pathname,
+    //     query: Object.keys(query).length > 0 ? query : {}
+    //   }, undefined, { shallow: true });
+    // }
 
     // Update active filters for display
     const filters = [];
@@ -205,17 +172,16 @@ export default function BlogPage({
 
   }, [selectedCategory, selectedSubcategory, searchQuery, isClient, router]);
 
-  // No need to load posts again since we have them from server-side props
-
   // Save state to localStorage whenever it changes
   useEffect(() => {
-    if (isClient) {
-      localStorage.setItem('blog_selectedCategory', selectedCategory);
-      localStorage.setItem('blog_selectedSubcategory', selectedSubcategory);
-      localStorage.setItem('blog_searchQuery', searchQuery);
-      localStorage.setItem('blog_sortBy', sortBy);
-      localStorage.setItem('blog_currentPage', currentPage.toString());
-    }
+    // Temporarily disabled localStorage updates to fix redirect loops
+    // if (isClient) {
+    //   localStorage.setItem('blog_selectedCategory', selectedCategory);
+    //   localStorage.setItem('blog_selectedSubcategory', selectedSubcategory);
+    //   localStorage.setItem('blog_searchQuery', searchQuery);
+    //   localStorage.setItem('blog_sortBy', sortBy);
+    //   localStorage.setItem('blog_currentPage', currentPage.toString());
+    // }
   }, [isClient, selectedCategory, selectedSubcategory, searchQuery, sortBy, currentPage]);
 
   // Filter and sort posts whenever relevant state changes
@@ -337,7 +303,7 @@ export default function BlogPage({
 
   // Track page view
   useEffect(() => {
-    if (isClient) {
+    if (isClient && !isLoading) {
       trackEvent('page_view', {
         page_title: 'Blog',
         page_location: window.location.href,
@@ -346,13 +312,19 @@ export default function BlogPage({
         search_query: searchQuery
       });
     }
-  }, [isClient, allPosts.length, selectedCategory, searchQuery]);
+  }, [isClient, isLoading, allPosts.length, selectedCategory, searchQuery]);
 
-  if (!isClient) {
+  // Loading state
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <Navbar />
+        <div className="pt-16 sm:pt-20"></div>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading blog posts...</p>
+          </div>
         </div>
       </div>
     );
@@ -482,6 +454,30 @@ export default function BlogPage({
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Main Content - Always First */}
             <div className="flex-1 order-1 lg:order-1">
+              {/* Error Display */}
+              {apiError && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-red-800">
+                        Unable to load blog posts
+                      </h3>
+                      <div className="mt-2 text-sm text-red-700">
+                        <p>There was an error loading the blog posts. Please try refreshing the page.</p>
+                        {process.env.NODE_ENV === 'development' && (
+                          <p className="mt-1 text-xs">Error: {apiError}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Active Filters Display */}
               {activeFilters.length > 0 && (
                 <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
@@ -548,18 +544,7 @@ export default function BlogPage({
               </div>
 
               {/* Blog Grid */}
-              {isLoading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {[...Array(6)].map((_, index) => (
-                    <div key={index} className="bg-white rounded-lg shadow-md p-6 animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded mb-4"></div>
-                      <div className="h-6 bg-gray-200 rounded mb-2"></div>
-                      <div className="h-4 bg-gray-200 rounded mb-4"></div>
-                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    </div>
-                  ))}
-                </div>
-              ) : currentPosts.length > 0 ? (
+              {currentPosts.length > 0 ? (
                 <BlogGrid posts={currentPosts} />
               ) : (
                 <div className="text-center py-12">

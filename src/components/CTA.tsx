@@ -309,7 +309,7 @@ export default function Footer() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 lg:gap-8">
                 <p className="text-gray-400 text-sm lg:text-base">
-                  © {new Date().getFullYear()} Samridhya. All rights reserved.
+                  © 2024 Samridhya. All rights reserved.
                 </p>
                 <div className="flex gap-6 lg:gap-8 text-sm lg:text-base">
                   <Link href="/privacy-policy" className="text-gray-400 hover:text-white transition-colors duration-300">Privacy Policy</Link>

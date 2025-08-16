@@ -3,14 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "NODE_ENV=development next dev",
     "dev:https": "NODE_ENV=development node server.js",
     "build": "next build",
-    "build:firebase": "next build && cp public/404.html out/404.html",
+    "build:firebase": "next build && npm run post-build",
+    "post-build": "cp public/404.html out/404.html && cp public/index.html out/index.html",
     "start": "next start",
     "lint": "next lint",
     "deploy": "./deploy.sh",
-    "create-indexes": "node scripts/create-firestore-indexes.js"
+    "deploy:firebase": "npm run build:firebase && firebase deploy --only hosting",
+    "create-indexes": "node scripts/create-firestore-indexes.js",
+    "analyze": "ANALYZE=true npm run build"
   },
   "dependencies": {
     "@cloudflare/next-on-pages": "^1.13.13",
@@ -33,7 +36,7 @@
     "framer-motion": "^12.23.6",
     "lucide-react": "^0.525.0",
     "next": "^15.4.2",
-    "node-fetch": "^3.3.2",
+    "node-fetch": "^2.7.0",
     "postcss": "^8.5.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -49,6 +52,7 @@
     "critters": "^0.0.23",
     "firebase-tools": "^14.11.1",
     "tailwindcss": "^4.1.11",
-    "typescript": "^5"
+    "typescript": "^5",
+    "webpack-bundle-analyzer": "^4.10.1"
   }
 }
