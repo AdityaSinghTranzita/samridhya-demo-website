@@ -44,6 +44,7 @@ const GENERATE_OTP_URL = `${API_BASE_URL}/generate-otp`;
 const VERIFY_OTP_URL = `${API_BASE_URL}/verify-otp`;
 const SUBMIT_DETAILS_URL = `${API_BASE_URL}/submit-details`;
 const GET_SCORE_URL = `${API_BASE_URL}/get-score`;
+const CHECK_EXISTING_URL = `${API_BASE_URL}/check-existing`;
 
 // Add data validation helper functions
 const validateCreditScoreData = (data: any): boolean => {
@@ -97,13 +98,8 @@ const hasValidReportData = (creditScoreData: CreditScoreData | null): boolean =>
   const hasPersonalInfo = !!creditScoreData.report.Current_Application?.Current_Application_Details?.Current_Applicant_Details;
   const hasAccountData = !!creditScoreData.report.CAIS_Account?.CAIS_Account_DETAILS;
   const hasSummaryData = !!creditScoreData.report.CAIS_Account?.CAIS_Summary;
-  const hasCAPSData = !!creditScoreData.report.CAPS?.CAPS_Application_Details;
-  const hasNonCreditCAPSData = !!creditScoreData.report.NonCreditCAPS?.NonCreditCAPS_Application_Details;
-  const hasTotalCAPSSummary = !!creditScoreData.report.TotalCAPS_Summary;
-  const hasAnyReportData = Object.keys(creditScoreData.report).length > 0;
   
-  // Return true if we have any of the expected data structures OR if the report object exists with any data
-  return hasPersonalInfo || hasAccountData || hasSummaryData || hasCAPSData || hasNonCreditCAPSData || hasTotalCAPSSummary || hasAnyReportData;
+  return hasPersonalInfo || hasAccountData || hasSummaryData;
 };
 
 export default function CreditScoreChecker() {
@@ -111,8 +107,9 @@ export default function CreditScoreChecker() {
   const [mobileNumber, setMobileNumber] = useState('');
   const [authToken, setAuthToken] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [otpTimer, setOtpTimer] = useState(30);
+  const [otpTimer, setOtpTimer] = useState(60);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingExisting, setIsCheckingExisting] = useState(false);
   const [userDetails, setUserDetails] = useState<UserDetails>({
     name: '',
     pan: '',
@@ -187,24 +184,79 @@ export default function CreditScoreChecker() {
       }
       setNoCreditRecord(true);
       setCurrentStep(6);
-    } else if (savedToken && savedMobile && savedUserDetails) {
-      // User has token and details but no credit score data, fetch it
-      try {
-        const userDetails = JSON.parse(savedUserDetails);
-        setAuthToken(savedToken);
-        setMobileNumber(savedMobile);
-        setUserDetails(userDetails);
-        setCurrentStep(4);
+    } else if (savedToken && savedMobile) {
+      // User has token but we need to verify if details exist
+      setAuthToken(savedToken);
+      setMobileNumber(savedMobile);
+      
+      // Check if user details exist using the backend endpoint
+      setIsCheckingExisting(true);
+      const checkExistingUser = async () => {
+        try {
+          const checkExistingResponse = await fetch(CHECK_EXISTING_URL, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${savedToken}`,
+              'Content-Type': 'application/json',
+            },
+          });
 
-        // Use setTimeout to ensure state is set before calling fetchCreditScore
-        setTimeout(() => {
-          fetchCreditScore(savedToken);
-        }, 100);
-      } catch (e) {
-        console.error('Error loading saved user data:', e);
-        // Clear invalid data
-        clearAllSessionData();
-      }
+          const existingData = await checkExistingResponse.json();
+
+          if (existingData.message === 'User exists' && existingData.data) {
+            // User details exist, populate the form and fetch credit score directly
+            const userData = {
+              name: existingData.data.nickname || '',
+              pan: existingData.data.pan || '',
+              email: existingData.data.email || '',
+              gender: existingData.data.gender || 'male'
+            };
+
+            setUserDetails(userData);
+            setSessionStorage('userDetails', JSON.stringify(userData));
+
+            // Automatically fetch credit score
+            setCurrentStep(4);
+            await fetchCreditScore(savedToken);
+          } else {
+            // No user details found, check if we have saved user details
+            if (savedUserDetails) {
+              try {
+                const userDetails = JSON.parse(savedUserDetails);
+                setUserDetails(userDetails);
+                setCurrentStep(4);
+                await fetchCreditScore(savedToken);
+              } catch (e) {
+                console.error('Error parsing saved user data:', e);
+                clearAllSessionData();
+              }
+            } else {
+              // No user details at all, go to step 3
+              setCurrentStep(3);
+            }
+          }
+        } catch (checkError) {
+          console.error('Error checking existing user details:', checkError);
+          // If check fails, try to use saved user details
+          if (savedUserDetails) {
+            try {
+              const userDetails = JSON.parse(savedUserDetails);
+              setUserDetails(userDetails);
+              setCurrentStep(4);
+              await fetchCreditScore(savedToken);
+            } catch (e) {
+              console.error('Error parsing saved user data:', e);
+              clearAllSessionData();
+            }
+          } else {
+            setCurrentStep(3);
+          }
+        } finally {
+          setIsCheckingExisting(false);
+        }
+      };
+
+      checkExistingUser();
     } else {
 
     }
@@ -215,7 +267,7 @@ export default function CreditScoreChecker() {
     if (mounted && (authToken || mobileNumber || userDetails.name || creditScoreData || noCreditRecord)) {
       syncSessionData();
     }
-  }, [authToken, mobileNumber, userDetails, creditScoreData, noCreditRecord, mounted]);
+  }, [authToken, mobileNumber, userDetails, creditScoreData, noCreditRecord, mounted, isCheckingExisting]);
 
   // OTP Timer effect
   useEffect(() => {
@@ -337,30 +389,46 @@ export default function CreditScoreChecker() {
           event_label: 'otp_verified_mobile_verification'
         });
 
-        // Check if user details exist in the response
-        // The API might return user details in different structures
-        const userDetails = data.userDetails || data.data?.userDetails || data.user_details;
+        // Check if user details exist using the new backend endpoint
+        setIsCheckingExisting(true);
+        try {
+          const checkExistingResponse = await fetch(CHECK_EXISTING_URL, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
 
-        if (userDetails && userDetails.name && userDetails.pan) {
-          // User details exist, automatically fetch credit score
-          const userData = {
-            name: userDetails.name,
-            pan: userDetails.pan,
-            email: userDetails.email || '',
-            gender: userDetails.gender || ''
-          };
+          const existingData = await checkExistingResponse.json();
 
-          setUserDetails(userData);
+          if (existingData.message === 'User exists' && existingData.data) {
+            // User details exist, populate the form and fetch credit score directly
+            const userData = {
+              name: existingData.data.nickname || '',
+              pan: existingData.data.pan || '',
+              email: existingData.data.email || '',
+              gender: existingData.data.gender || 'male'
+            };
 
-          // Store user details for future use
-          setSessionStorage('userDetails', JSON.stringify(userData));
+            setUserDetails(userData);
 
-          // Automatically fetch credit score
-          setCurrentStep(4);
-          await fetchCreditScore(token);
-        } else {
-          // No user details, proceed to step 3 for manual input
+            // Store user details for future use
+            setSessionStorage('userDetails', JSON.stringify(userData));
+
+            // Automatically fetch credit score
+            setCurrentStep(4);
+            await fetchCreditScore(token);
+          } else {
+            // No user details found, proceed to step 3 for manual input
+            setCurrentStep(3);
+          }
+        } catch (checkError) {
+          console.error('Error checking existing user details:', checkError);
+          // If check fails, proceed to step 3 for manual input
           setCurrentStep(3);
+        } finally {
+          setIsCheckingExisting(false);
         }
 
         setOtp(['', '', '', '', '', '']);
@@ -406,6 +474,8 @@ export default function CreditScoreChecker() {
     setCurrentStep(4);
 
     try {
+
+
       // Submit user details
       const submitResponse = await fetch(SUBMIT_DETAILS_URL, {
         method: 'POST',
@@ -422,19 +492,12 @@ export default function CreditScoreChecker() {
 
       const submitData = await submitResponse.json();
 
+
       // Check for success response
       const isSuccess = submitData.message && (
           submitData.message.includes('Success') ||
           submitData.message.includes('successfully') ||
           submitData.message.includes('updated successfully')
-      );
-
-      // Check for PAN already registered error
-      const isPanAlreadyRegistered = submitData.message && (
-          submitData.message.toLowerCase().includes('pan is already registered') ||
-          submitData.message.toLowerCase().includes('pan already registered') ||
-          submitData.message.toLowerCase().includes('already registered') ||
-          submitData.message.toLowerCase().includes('registered with another')
       );
 
       if (isSuccess) {
@@ -443,29 +506,13 @@ export default function CreditScoreChecker() {
 
         // Fetch credit score using the new function
         await fetchCreditScore(authToken);
-      } else if (isPanAlreadyRegistered) {
-        // Handle PAN already registered case
-        setCurrentStep(3);
-        setError('This PAN is already registered with another mobile number. Credit score data can only be checked using the mobile number that was originally registered with this PAN. Please use the correct mobile number or contact support for assistance.');
       } else {
         throw new Error(submitData.message || 'Failed to submit details');
       }
     } catch (error) {
       console.error('Submit details error:', error);
       setCurrentStep(3);
-      
-      // Check if the error message contains PAN registration info
-      const errorMessage = error instanceof Error ? error.message : 'Error submitting details. Please try again.';
-      const isPanAlreadyRegistered = errorMessage.toLowerCase().includes('pan is already registered') ||
-                                    errorMessage.toLowerCase().includes('pan already registered') ||
-                                    errorMessage.toLowerCase().includes('already registered') ||
-                                    errorMessage.toLowerCase().includes('registered with another');
-      
-      if (isPanAlreadyRegistered) {
-        setError('This PAN is already registered with another mobile number. Credit score data can only be checked using the mobile number that was originally registered with this PAN. Please use the correct mobile number or contact support for assistance.');
-      } else {
-        setError('Error submitting details. Please try again.');
-      }
+      setError('Error submitting details. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -646,6 +693,7 @@ export default function CreditScoreChecker() {
     setCreditScoreData(null);
     setError('');
     setNoCreditRecord(false);
+    setIsCheckingExisting(false);
   };
 
   const getScoreCategory = (score: number) => {
@@ -921,9 +969,9 @@ export default function CreditScoreChecker() {
 
                       {error && (
                           <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded">
-                            <div className="flex items-start gap-2">
-                              <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
-                              <span className="text-sm text-red-800 leading-relaxed">{error}</span>
+                            <div className="flex items-center gap-2">
+                              <AlertCircle className="w-5 h-5 text-red-600" />
+                              <span className="text-sm text-red-800">{error}</span>
                             </div>
                           </div>
                       )}
@@ -1000,9 +1048,9 @@ export default function CreditScoreChecker() {
 
                       {error && (
                           <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded">
-                            <div className="flex items-start gap-2">
-                              <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
-                              <span className="text-sm text-red-800 leading-relaxed">{error}</span>
+                            <div className="flex items-center gap-2">
+                              <AlertCircle className="w-5 h-5 text-red-600" />
+                              <span className="text-sm text-red-800">{error}</span>
                             </div>
                           </div>
                       )}
@@ -1110,9 +1158,9 @@ export default function CreditScoreChecker() {
 
                       {error && (
                           <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded">
-                            <div className="flex items-start gap-2">
-                              <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
-                              <span className="text-sm text-red-800 leading-relaxed">{error}</span>
+                            <div className="flex items-center gap-2">
+                              <AlertCircle className="w-5 h-5 text-red-600" />
+                              <span className="text-sm text-red-800">{error}</span>
                             </div>
                           </div>
                       )}
@@ -1140,8 +1188,12 @@ export default function CreditScoreChecker() {
                     <div className="flex flex-col items-center space-y-6">
                       <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
                       <div>
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">Fetching your credit score...</h3>
-                        <p className="text-gray-600">This may take a few moments</p>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                          {isCheckingExisting ? 'Checking your details...' : 'Fetching your credit score...'}
+                        </h3>
+                        <p className="text-gray-600">
+                          {isCheckingExisting ? 'Verifying your existing information' : 'This may take a few moments'}
+                        </p>
                       </div>
                     </div>
                   </motion.div>
@@ -1155,16 +1207,14 @@ export default function CreditScoreChecker() {
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="mb-6 bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg"
+                            className="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg"
                         >
                           <div className="flex items-center gap-2">
-                            <Info className="w-5 h-5 text-blue-600" />
+                            <AlertCircle className="w-5 h-5 text-yellow-600" />
                             <div>
-                              <h3 className="text-sm font-medium text-blue-800">Credit Score Available</h3>
-                              <p className="text-sm text-blue-700 mt-1">
-                                Your credit score of <strong>{creditScoreData.credit_score}</strong> has been successfully retrieved. 
-                                While some detailed report information may not be available due to limited credit history or data structure differences, 
-                                your credit score is accurate and can be used for loan applications and credit decisions.
+                              <h3 className="text-sm font-medium text-yellow-800">Limited Report Data</h3>
+                              <p className="text-sm text-yellow-700 mt-1">
+                                We received your credit score but some detailed information is not available. This may be due to limited credit history or data availability.
                               </p>
                             </div>
                           </div>
@@ -1347,40 +1397,32 @@ export default function CreditScoreChecker() {
                               <div className="mt-3 space-y-2">
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Full Name:</span>
-                                  <span className="font-semibold text-sm text-gray-900">
-                                    {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Details.First_Name', '')} {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Details.Last_Name', '')}
-                                  </span>
+                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.First_Name} {creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.Last_Name}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">PAN:</span>
-                                  <span className="font-semibold text-sm text-gray-900">
-                                    {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Details.IncomeTaxPan', 'N/A')}
-                                  </span>
+                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.IncomeTaxPan}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Date of Birth:</span>
                                   <span className="font-semibold text-sm text-gray-900">
-                                    {formatDateFromYYYYMMDD(safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Details.Date_Of_Birth_Applicant', ''))}
-                                  </span>
+                                   {formatDateFromYYYYMMDD(creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.Date_Of_Birth_Applicant)}
+                                 </span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Gender:</span>
                                   <span className="font-semibold text-sm text-gray-900">
-                                    {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Details.Gender_Code', '') === '1' ? 'Male' :
-                                     safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Details.Gender_Code', '') === '2' ? 'Female' : 'Other'}
-                                  </span>
+                               {creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.Gender_Code === '1' ? 'Male' :
+                                   creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.Gender_Code === '2' ? 'Female' : 'Other'}
+                             </span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Mobile:</span>
-                                  <span className="font-semibold text-sm text-gray-900">
-                                    {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Details.Telephone_Number_Applicant_1st', 'N/A')}
-                                  </span>
+                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.Telephone_Number_Applicant_1st}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Email:</span>
-                                  <span className="font-semibold text-sm text-gray-900">
-                                    {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Details.EMailId', 'N/A')}
-                                  </span>
+                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.EMailId || 'N/A'}</span>
                                 </div>
                               </div>
                             </div>
@@ -1390,77 +1432,61 @@ export default function CreditScoreChecker() {
                               <div className="mt-3 space-y-2">
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Address:</span>
-                                  <span className="font-semibold text-sm text-gray-900 text-right">
-                                    {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Address_Details.FlatNoPlotNoHouseNo', 'N/A')}
-                                  </span>
+                                  <span className="font-semibold text-sm text-gray-900 text-right">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.FlatNoPlotNoHouseNo}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Building/Society:</span>
-                                  <span className="font-semibold text-sm text-gray-900">
-                                    {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Address_Details.BldgNoSocietyName', 'N/A')}
-                                  </span>
+                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.BldgNoSocietyName || 'N/A'}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Road/Area:</span>
-                                  <span className="font-semibold text-sm text-gray-900">
-                                    {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Address_Details.RoadNoNameAreaLocality', 'N/A')}
-                                  </span>
+                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.RoadNoNameAreaLocality || 'N/A'}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">City:</span>
-                                  <span className="font-semibold text-sm text-gray-900">
-                                    {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Address_Details.City', 'N/A')}
-                                  </span>
+                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.City || 'N/A'}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Landmark:</span>
-                                  <span className="font-semibold text-sm text-gray-900">
-                                    {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Address_Details.Landmark', 'N/A')}
-                                  </span>
+                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.Landmark || 'N/A'}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">State:</span>
-                                  <span className="font-semibold text-sm text-gray-900">
-                                    {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Address_Details.State', 'N/A')}
-                                  </span>
+                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.State || 'N/A'}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">PIN Code:</span>
-                                  <span className="font-semibold text-sm text-gray-900">
-                                    {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Address_Details.PINCode', 'N/A')}
-                                  </span>
+                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.PINCode}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Country:</span>
-                                  <span className="font-semibold text-sm text-gray-900">
-                                    {safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Applicant_Address_Details.Country_Code', 'N/A')}
-                                  </span>
+                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.Country_Code || 'N/A'}</span>
                                 </div>
                               </div>
                             </div>
                           </div>
 
                           {/* Additional Information */}
-                          {creditScoreData.report?.Current_Application?.Current_Application_Details?.Current_Other_Details && (
+                          {creditScoreData.report.Current_Application.Current_Application_Details.Current_Other_Details && (
                               <div className="mt-6">
                                 <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide mb-3">Additional Information</h4>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                   <div className="bg-blue-50 p-3 rounded-lg">
                                     <div className="flex justify-between">
                                       <span className="text-sm text-gray-700 font-medium">Income:</span>
-                                      <span className="font-semibold text-sm text-gray-900">₹{safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Other_Details.Income', '0')}</span>
+                                      <span className="font-semibold text-sm text-gray-900">₹{creditScoreData.report.Current_Application.Current_Application_Details.Current_Other_Details.Income || '0'}</span>
                                     </div>
                                   </div>
                                   <div className="bg-green-50 p-3 rounded-lg">
                                     <div className="flex justify-between">
                                       <span className="text-sm text-gray-700 font-medium">Marital Status:</span>
-                                      <span className="font-semibold text-sm text-gray-900">{safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Other_Details.Marital_Status', 'N/A')}</span>
+                                      <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Other_Details.Marital_Status || 'N/A'}</span>
                                     </div>
                                   </div>
                                   <div className="bg-purple-50 p-3 rounded-lg">
                                     <div className="flex justify-between">
                                       <span className="text-sm text-gray-700 font-medium">Employment Status:</span>
-                                      <span className="font-semibold text-sm text-gray-900">{safeGet(creditScoreData.report, 'Current_Application.Current_Application_Details.Current_Other_Details.Employment_Status', 'N/A')}</span>
+                                      <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Other_Details.Employment_Status || 'N/A'}</span>
                                     </div>
                                   </div>
                                 </div>
@@ -1826,19 +1852,19 @@ export default function CreditScoreChecker() {
                               <div className="space-y-2">
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Last 7 Days:</span>
-                                  <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'CAPS.CAPS_Summary.CAPSLast7Days', '0')}</span>
+                                  <span className="font-semibold text-gray-900">{creditScoreData.report.CAPS.CAPS_Summary.CAPSLast7Days || '0'}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Last 30 Days:</span>
-                                  <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'CAPS.CAPS_Summary.CAPSLast30Days', '0')}</span>
+                                  <span className="font-semibold text-gray-900">{creditScoreData.report.CAPS.CAPS_Summary.CAPSLast30Days || '0'}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Last 90 Days:</span>
-                                  <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'CAPS.CAPS_Summary.CAPSLast90Days', '0')}</span>
+                                  <span className="font-semibold text-gray-900">{creditScoreData.report.CAPS.CAPS_Summary.CAPSLast90Days || '0'}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Last 180 Days:</span>
-                                  <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'CAPS.CAPS_Summary.CAPSLast180Days', '0')}</span>
+                                  <span className="font-semibold text-gray-900">{creditScoreData.report.CAPS.CAPS_Summary.CAPSLast180Days || '0'}</span>
                                 </div>
                               </div>
                             </div>
@@ -1848,19 +1874,19 @@ export default function CreditScoreChecker() {
                               <div className="space-y-2">
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Last 7 Days:</span>
-                                  <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'NonCreditCAPS.NonCreditCAPS_Summary.NonCreditCAPSLast7Days', '0')}</span>
+                                  <span className="font-semibold text-gray-900">{creditScoreData.report.NonCreditCAPS.NonCreditCAPS_Summary.NonCreditCAPSLast7Days || '0'}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Last 30 Days:</span>
-                                  <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'NonCreditCAPS.NonCreditCAPS_Summary.NonCreditCAPSLast30Days', '0')}</span>
+                                  <span className="font-semibold text-gray-900">{creditScoreData.report.NonCreditCAPS.NonCreditCAPS_Summary.NonCreditCAPSLast30Days || '0'}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Last 90 Days:</span>
-                                  <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'NonCreditCAPS.NonCreditCAPS_Summary.NonCreditCAPSLast90Days', '0')}</span>
+                                  <span className="font-semibold text-gray-900">{creditScoreData.report.NonCreditCAPS.NonCreditCAPS_Summary.NonCreditCAPSLast90Days || '0'}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-sm text-gray-700 font-medium">Last 180 Days:</span>
-                                  <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'NonCreditCAPS.NonCreditCAPS_Summary.NonCreditCAPSLast180Days', '0')}</span>
+                                  <span className="font-semibold text-gray-900">{creditScoreData.report.NonCreditCAPS.NonCreditCAPS_Summary.NonCreditCAPSLast180Days || '0'}</span>
                                 </div>
                               </div>
                             </div>
@@ -1881,7 +1907,7 @@ export default function CreditScoreChecker() {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {Array.isArray(creditScoreData.report?.CAPS?.CAPS_Application_Details) 
+                                {Array.isArray(creditScoreData.report.CAPS.CAPS_Application_Details) 
                                   ? creditScoreData.report.CAPS.CAPS_Application_Details.slice(0, 10).map((enquiry: any, index: number) => (
                                       <tr key={index} className="border-b border-gray-100">
                                         <td className="px-4 py-2 text-gray-900">
@@ -1897,19 +1923,19 @@ export default function CreditScoreChecker() {
                                         <td className="px-4 py-2 text-gray-900">{enquiry.Duration_Of_Agreement || '0'} months</td>
                                       </tr>
                                     ))
-                                  : creditScoreData.report?.CAPS?.CAPS_Application_Details ? (
+                                  : creditScoreData.report.CAPS.CAPS_Application_Details ? (
                                       <tr className="border-b border-gray-100">
                                         <td className="px-4 py-2 text-gray-900">
-                                          {formatDateFromYYYYMMDD(safeGet(creditScoreData.report, 'CAPS.CAPS_Application_Details.Date_of_Request', ''))}
+                                          {formatDateFromYYYYMMDD(creditScoreData.report.CAPS.CAPS_Application_Details.Date_of_Request)}
                                         </td>
-                                        <td className="px-4 py-2 text-gray-900">{safeGet(creditScoreData.report, 'CAPS.CAPS_Application_Details.Subscriber_Name', 'N/A')}</td>
+                                        <td className="px-4 py-2 text-gray-900">{creditScoreData.report.CAPS.CAPS_Application_Details.Subscriber_Name || 'N/A'}</td>
                                         <td className="px-4 py-2 text-gray-900">
-                                          {safeGet(creditScoreData.report, 'CAPS.CAPS_Application_Details.Enquiry_Reason', '') === '7' ? 'Personal Loan' :
-                                              safeGet(creditScoreData.report, 'CAPS.CAPS_Application_Details.Enquiry_Reason', '') === '6' ? 'Credit Card' :
-                                                  safeGet(creditScoreData.report, 'CAPS.CAPS_Application_Details.Enquiry_Reason', '') === '13' ? 'Credit Card' : 'Other'}
+                                          {creditScoreData.report.CAPS.CAPS_Application_Details.Enquiry_Reason === '7' ? 'Personal Loan' :
+                                              creditScoreData.report.CAPS.CAPS_Application_Details.Enquiry_Reason === '6' ? 'Credit Card' :
+                                                  creditScoreData.report.CAPS.CAPS_Application_Details.Enquiry_Reason === '13' ? 'Credit Card' : 'Other'}
                                         </td>
-                                        <td className="px-4 py-2 text-gray-900">₹{safeGet(creditScoreData.report, 'CAPS.CAPS_Application_Details.Amount_Financed', '0')}</td>
-                                        <td className="px-4 py-2 text-gray-900">{safeGet(creditScoreData.report, 'CAPS.CAPS_Application_Details.Duration_Of_Agreement', '0')} months</td>
+                                        <td className="px-4 py-2 text-gray-900">₹{creditScoreData.report.CAPS.CAPS_Application_Details.Amount_Financed || '0'}</td>
+                                        <td className="px-4 py-2 text-gray-900">{creditScoreData.report.CAPS.CAPS_Application_Details.Duration_Of_Agreement || '0'} months</td>
                                       </tr>
                                     ) : null
                                 }
