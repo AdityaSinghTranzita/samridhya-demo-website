@@ -26,9 +26,10 @@ import CTA from '@/components/CTA';
 import { trackCreditScoreCheck, trackEvent, trackButtonClick, trackCalculatorUsage } from '@/utils/analytics';
 
 interface CreditScoreData {
-  credit_score: number;
+  credit_score: number | null;
   report?: any;
   fetched_at?: any;
+  status?: number;
 }
 
 interface UserDetails {
@@ -49,7 +50,8 @@ const CHECK_EXISTING_URL = `${API_BASE_URL}/check-existing`;
 // Add data validation helper functions
 const validateCreditScoreData = (data: any): boolean => {
   if (!data || typeof data !== 'object') return false;
-  if (!data.credit_score || typeof data.credit_score !== 'number') return false;
+  // Allow null credit_score for cases where no credit record exists
+  if (data.credit_score !== null && (typeof data.credit_score !== 'number')) return false;
   return true;
 };
 
@@ -540,17 +542,45 @@ export default function CreditScoreChecker() {
           scoreData.message.includes('updated successfully')
       );
 
-      // Check for no credit record messages
+      // Check for no credit record messages or status code 2
       const isNoCreditRecord = scoreData.message && (
           scoreData.message.toLowerCase().includes('no credit record') ||
           scoreData.message.toLowerCase().includes('no credit history') ||
           scoreData.message.toLowerCase().includes('credit record not found') ||
           scoreData.message.toLowerCase().includes('no data found') ||
           scoreData.message.toLowerCase().includes('no record found')
-      );
+      ) || (scoreData.data && scoreData.data.status === 2);
 
       if (isSuccess && scoreData.data) {
-        // Validate the credit score data
+        // Check if this is a no credit record case first
+        if (isNoCreditRecord || scoreData.data.status === 2 || scoreData.data.credit_score === null) {
+          // Handle no credit record case
+          setNoCreditRecord(true);
+          setSessionStorage('noCreditRecord', 'true');
+
+          // Track no credit record found
+          trackEvent('credit_score_no_record', {
+            user_mobile: mobileNumber,
+            event_category: 'engagement',
+            event_label: 'credit_score_no_record_found'
+          });
+
+          // Store user details for future use
+          if (authToken) {
+            setSessionStorage('authToken', authToken);
+          }
+          if (mobileNumber) {
+            setSessionStorage('mobileNumber', mobileNumber);
+          }
+          if (userDetails.name) {
+            setSessionStorage('userDetails', JSON.stringify(userDetails));
+          }
+
+          setCurrentStep(6);
+          return;
+        }
+
+        // Validate the credit score data for cases with actual credit scores
         if (!validateCreditScoreData(scoreData.data)) {
           console.error('Invalid credit score data structure:', scoreData.data);
           throw new Error('Invalid credit score data received');
@@ -571,12 +601,12 @@ export default function CreditScoreChecker() {
 
         // Track successful credit score retrieval
         trackCreditScoreCheck('credit_score_checker', {
-          credit_score: scoreData.data.credit_score,
+          credit_score: scoreData.data.credit_score || 0,
           user_mobile: mobileNumber,
           step: 'step_5'
         });
         trackEvent('credit_score_retrieved', {
-          credit_score: scoreData.data.credit_score,
+          credit_score: scoreData.data.credit_score || 0,
           user_mobile: mobileNumber,
           event_category: 'conversion',
           event_label: 'credit_score_retrieved_success'
@@ -696,7 +726,8 @@ export default function CreditScoreChecker() {
     setIsCheckingExisting(false);
   };
 
-  const getScoreCategory = (score: number) => {
+  const getScoreCategory = (score: number | null) => {
+    if (score === null) return { label: 'No Credit Record', color: '#95a5a6' };
     if (score >= 800) return { label: 'Excellent Credit Score', color: '#27ae60' };
     if (score >= 750) return { label: 'Very Good Credit Score', color: '#2ecc71' };
     if (score >= 700) return { label: 'Good Credit Score', color: '#f1c40f' };
@@ -704,7 +735,8 @@ export default function CreditScoreChecker() {
     return { label: 'Poor Credit Score', color: '#e74c3c' };
   };
 
-  const getNeedleAngle = (score: number) => {
+  const getNeedleAngle = (score: number | null) => {
+    if (score === null) return 0; // Center position for no credit record
     // Map score to angle (0-900 score range to -90 to 90 degrees)
     // Poor: 0-300 (-90 to -54 degrees)
     // Uncertain: 300-500 (-54 to -18 degrees)
@@ -717,7 +749,8 @@ export default function CreditScoreChecker() {
     return angle;
   };
 
-  const getNeedleAngleNew = (score: number) => {
+  const getNeedleAngleNew = (score: number | null) => {
+    if (score === null) return 0; // Center position for no credit record
     // Map score to angle (300-850 score range to -90 to 90 degrees)
     // Poor: 300-579 (-90 to -54 degrees)
     // Fair: 580-669 (-54 to -18 degrees)
@@ -730,7 +763,8 @@ export default function CreditScoreChecker() {
     return angle;
   };
 
-  const getScoreCategoryNew = (score: number) => {
+  const getScoreCategoryNew = (score: number | null) => {
+    if (score === null) return { label: 'NO RECORD', color: '#6b7280' };
     if (score >= 800) return { label: 'EXCELLENT', color: '#dc2626' };
     if (score >= 740) return { label: 'VERY GOOD', color: '#f97316' };
     if (score >= 670) return { label: 'GOOD', color: '#eab308' };
@@ -739,7 +773,8 @@ export default function CreditScoreChecker() {
   };
 
   // New functions for the image-based meter design
-  const getNeedleAngleImage = (score: number): number => {
+  const getNeedleAngleImage = (score: number | null): number => {
+    if (score === null) return 0; // Center position for no credit record
     // Map score from 300-850 to angle -90 to 90 degrees
     const minScore = 300;
     const maxScore = 850;
@@ -752,7 +787,8 @@ export default function CreditScoreChecker() {
     return angle;
   };
 
-  const getScoreRange = (score: number): string => {
+  const getScoreRange = (score: number | null): string => {
+    if (score === null) return 'No Record';
     if (score >= 750) return '750 - 850';
     if (score >= 700) return '700 - 750';
     if (score >= 650) return '650 - 700';
@@ -760,7 +796,8 @@ export default function CreditScoreChecker() {
     return '300 - 560';
   };
 
-  const getScoreCategoryImage = (score: number): string => {
+  const getScoreCategoryImage = (score: number | null): string => {
+    if (score === null) return 'No Record';
     if (score >= 750) return 'Excellent';
     if (score >= 700) return 'Good';
     if (score >= 650) return 'Fair';
@@ -768,7 +805,8 @@ export default function CreditScoreChecker() {
     return 'Very Bad';
   };
 
-  const getProgressCircumference = (score: number): number => {
+  const getProgressCircumference = (score: number | null): number => {
+    if (score === null) return 0; // No progress for no credit record
     // Calculate progress percentage (300-850 range)
     const minScore = 300;
     const maxScore = 850;
@@ -781,7 +819,8 @@ export default function CreditScoreChecker() {
   };
 
   // Semi-circle progress functions
-  const getSemiCircleProgress = (score: number): number => {
+  const getSemiCircleProgress = (score: number | null): number => {
+    if (score === null) return 0; // No progress for no credit record
     // Calculate progress percentage (300-850 range)
     const minScore = 300;
     const maxScore = 850;
@@ -793,7 +832,8 @@ export default function CreditScoreChecker() {
     return (percentage / 100) * arcLength;
   };
 
-  const getMarkerX = (score: number): number => {
+  const getMarkerX = (score: number | null): number => {
+    if (score === null) return 60; // Center position for no credit record
     // Calculate marker position on semi-circle (300-850 range)
     const minScore = 300;
     const maxScore = 850;
@@ -805,7 +845,8 @@ export default function CreditScoreChecker() {
     return x;
   };
 
-  const getMarkerY = (score: number): number => {
+  const getMarkerY = (score: number | null): number => {
+    if (score === null) return 70; // Bottom center position for no credit record
     // Calculate marker position on semi-circle (300-850 range)
     const minScore = 300;
     const maxScore = 850;
@@ -832,8 +873,10 @@ export default function CreditScoreChecker() {
     return 'N/A';
   };
 
-  const getScoreDescription = (score: number) => {
-    if (score >= 800) {
+  const getScoreDescription = (score: number | null) => {
+    if (score === null) {
+      return 'You don\'t have a credit score yet. This means you haven\'t taken any loans or credit cards in the past. You can start building your credit history by applying for a credit card or a small loan.';
+    } else if (score >= 800) {
       return 'Congratulations! You have an excellent credit score. You are eligible for the best loan and credit card offers with lowest interest rates.';
     } else if (score >= 750) {
       return 'Great job! You have a very good credit score. You qualify for most credit products at competitive rates.';
@@ -1204,7 +1247,7 @@ export default function CreditScoreChecker() {
               {currentStep === 5 && creditScoreData && (
                   <>
                     {/* Data Validation Warning */}
-                    {!hasValidReportData(creditScoreData) && (
+                    {!hasValidReportData(creditScoreData) && creditScoreData.credit_score !== null && (
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -1244,7 +1287,7 @@ export default function CreditScoreChecker() {
                     <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
                       <div className="text-left mb-6">
                         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                          Hey {creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.First_Name || userDetails.name || 'User'}!
+                          Hey {userDetails.name || 'User'}!
                         </h1>
                         <p className="text-gray-600">
                           Here's your Credit Score for {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
@@ -1314,7 +1357,7 @@ export default function CreditScoreChecker() {
                             <div className="absolute inset-0 flex items-center justify-center" style={{ top: '40px' }}>
                               <div className="text-center">
                                 <div className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-1 sm:mb-2">
-                                  {creditScoreData.credit_score}
+                                  {creditScoreData.credit_score !== null ? creditScoreData.credit_score : 'N/A'}
                                 </div>
                                 <div className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-700 mb-1">
                                   {getScoreCategoryImage(creditScoreData.credit_score)}
@@ -1388,7 +1431,7 @@ export default function CreditScoreChecker() {
                     </div>
 
                     {/* Personal Information */}
-                    {creditScoreData.report?.Current_Application?.Current_Application_Details?.Current_Applicant_Details && (
+                    {creditScoreData.report?.Current_Application?.Current_Application_Details?.Current_Applicant_Details && creditScoreData.credit_score !== null && (
                         <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
                           <h3 className="text-xl font-semibold text-gray-900 mb-6">Personal Information</h3>
 
@@ -1497,7 +1540,7 @@ export default function CreditScoreChecker() {
                     )}
 
                     {/* Account Holder Details */}
-                    {creditScoreData.report?.CAIS_Account?.CAIS_Account_DETAILS?.[0]?.CAIS_Holder_Details && (
+                    {creditScoreData.report?.CAIS_Account?.CAIS_Account_DETAILS?.[0]?.CAIS_Holder_Details && creditScoreData.credit_score !== null && (
                         <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
                           <h3 className="text-xl font-semibold text-gray-900 mb-6">Account Holder Details</h3>
 
@@ -1632,6 +1675,7 @@ export default function CreditScoreChecker() {
                     )}
 
                     {/* Credit Report Summary */}
+                    {creditScoreData.credit_score !== null && (
                     <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
                       <h3 className="text-xl font-semibold text-gray-900 mb-6">Credit Report Summary</h3>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -1700,9 +1744,10 @@ export default function CreditScoreChecker() {
                         </div>
                       </div>
                     </div>
+                    )}
 
                     {/* Account Details */}
-                    {creditScoreData.report?.CAIS_Account?.CAIS_Account_DETAILS?.[0] && (
+                    {creditScoreData.report?.CAIS_Account?.CAIS_Account_DETAILS?.[0] && creditScoreData.credit_score !== null && (
                         <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
                           <h3 className="text-xl font-semibold text-gray-900 mb-6">Account Details</h3>
 
@@ -1843,7 +1888,7 @@ export default function CreditScoreChecker() {
                     )}
 
                     {/* Enquiry Details */}
-                    {creditScoreData.report?.CAPS?.CAPS_Application_Details && (
+                    {creditScoreData.report?.CAPS?.CAPS_Application_Details && creditScoreData.credit_score !== null && (
                         <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
                           <h3 className="text-xl font-semibold text-gray-900 mb-6">Credit Enquiry Details</h3>
 
@@ -1982,7 +2027,7 @@ export default function CreditScoreChecker() {
                           No Credit Record Found
                         </h1>
                         <p className="text-lg text-gray-600 mb-6">
-                          Hey <span className="font-bold text-gray-900">{ creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.First_Name || userDetails.name }</span>! We couldn't find any credit history associated with your details.
+                          Hey <span className="font-bold text-gray-900">{ userDetails.name }</span>! We couldn't find any credit history associated with your details.
                         </p>
                       </div>
 
