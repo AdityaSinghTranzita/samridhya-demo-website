@@ -1,0 +1,42 @@
+[debug] [2025-08-21T06:49:42.275Z] ----------------------------------------------------------------------
+[debug] [2025-08-21T06:49:42.280Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy --only hosting
+[debug] [2025-08-21T06:49:42.280Z] CLI Version:   14.12.1
+[debug] [2025-08-21T06:49:42.280Z] Platform:      darwin
+[debug] [2025-08-21T06:49:42.280Z] Node Version:  v22.16.0
+[debug] [2025-08-21T06:49:42.280Z] Time:          Thu Aug 21 2025 12:19:42 GMT+0530 (India Standard Time)
+[debug] [2025-08-21T06:49:42.280Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-08-21T06:49:42.281Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2025-08-21T06:49:42.409Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-08-21T06:49:42.410Z] > authorizing via signed-in user (saaditya17@gmail.com)
+[debug] [2025-08-21T06:49:42.410Z] [iam] checking project samridhya-website for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-08-21T06:49:42.410Z] Checked if tokens are valid: false, expires at: 1755522831636
+[debug] [2025-08-21T06:49:42.410Z] Checked if tokens are valid: false, expires at: 1755522831636
+[debug] [2025-08-21T06:49:42.410Z] > refreshing access token with scopes: []
+[debug] [2025-08-21T06:49:42.411Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-08-21T06:49:42.411Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-08-21T06:49:42.724Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-08-21T06:49:42.725Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-08-21T06:49:42.742Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/samridhya-website:testIamPermissions [none]
+[debug] [2025-08-21T06:49:42.742Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/samridhya-website:testIamPermissions x-goog-quota-user=projects/samridhya-website
+[debug] [2025-08-21T06:49:42.742Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/samridhya-website:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-08-21T06:49:43.085Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2025-08-21T06:49:43.085Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2025-08-21T06:49:44.420Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/samridhya-website:testIamPermissions 200
+[debug] [2025-08-21T06:49:44.420Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/samridhya-website:testIamPermissions {}
+[debug] [2025-08-21T06:49:44.420Z] [iam] error while checking permissions, command may fail: Authorization failed. This account is missing the following required permissions on project samridhya-website:
+
+  firebase.projects.get
+  firebasehosting.sites.update
+[debug] [2025-08-21T06:49:44.421Z] Checked if tokens are valid: true, expires at: 1755762581725
+[debug] [2025-08-21T06:49:44.421Z] Checked if tokens are valid: true, expires at: 1755762581725
+[debug] [2025-08-21T06:49:44.422Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/samridhya-website [none]
+[debug] [2025-08-21T06:49:44.924Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/samridhya-website 403
+[debug] [2025-08-21T06:49:44.924Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/samridhya-website {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2025-08-21T06:49:44.925Z] Request to https://firebase.googleapis.com/v1beta1/projects/samridhya-website had HTTP Error: 403, The caller does not have permission
+[debug] [2025-08-21T06:49:45.091Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/samridhya-website had HTTP Error: 403, The caller does not have permission
+    at responseToError (/usr/local/lib/node_modules/firebase-tools/lib/responseToError.js:52:12)
+    at RetryOperation._fn (/usr/local/lib/node_modules/firebase-tools/lib/apiv2.js:312:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[error] 
+[error] Error: Failed to get Firebase project samridhya-website. Please make sure the project exists and your account has permission to access it.

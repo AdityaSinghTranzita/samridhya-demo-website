@@ -534,6 +534,8 @@ export default function CreditScoreChecker() {
 
       const scoreData = await scoreResponse.json();
       console.log('Credit score API response:', scoreData);
+      console.log('Credit score value:', scoreData.data?.credit_score);
+      console.log('Message:', scoreData.message);
 
       // Check for various success messages
       const isSuccess = scoreData.message && (
@@ -541,6 +543,9 @@ export default function CreditScoreChecker() {
           scoreData.message.includes('successfully') ||
           scoreData.message.includes('updated successfully')
       );
+
+      // Check if this is a success but with no credit score (null credit_score)
+      const isSuccessWithNoCreditScore = isSuccess && scoreData.data && scoreData.data.credit_score === null;
 
       // Check for no credit record messages or status code 2
       const isNoCreditRecord = scoreData.message && (
@@ -553,7 +558,14 @@ export default function CreditScoreChecker() {
 
       if (isSuccess && scoreData.data) {
         // Check if this is a no credit record case first
-        if (isNoCreditRecord || scoreData.data.status === 2 || scoreData.data.credit_score === null) {
+        // Handle cases where credit_score is null regardless of the message
+        if (isNoCreditRecord || scoreData.data.status === 2 || scoreData.data.credit_score === null || isSuccessWithNoCreditScore) {
+          console.log('Handling no credit record case. Reason:', {
+            isNoCreditRecord,
+            statusIs2: scoreData.data.status === 2,
+            creditScoreIsNull: scoreData.data.credit_score === null,
+            isSuccessWithNoCreditScore
+          });
           // Handle no credit record case
           setNoCreditRecord(true);
           setSessionStorage('noCreditRecord', 'true');
@@ -581,6 +593,7 @@ export default function CreditScoreChecker() {
         }
 
         // Validate the credit score data for cases with actual credit scores
+        console.log('Processing credit score data with actual score:', scoreData.data.credit_score);
         if (!validateCreditScoreData(scoreData.data)) {
           console.error('Invalid credit score data structure:', scoreData.data);
           throw new Error('Invalid credit score data received');
@@ -1287,7 +1300,7 @@ export default function CreditScoreChecker() {
                     <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
                       <div className="text-left mb-6">
                         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                          Hey {userDetails.name || 'User'}!
+                          Hey { creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.First_Name|| userDetails.name || 'User'}!
                         </h1>
                         <p className="text-gray-600">
                           Here's your Credit Score for {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
@@ -2027,7 +2040,7 @@ export default function CreditScoreChecker() {
                           No Credit Record Found
                         </h1>
                         <p className="text-lg text-gray-600 mb-6">
-                          Hey <span className="font-bold text-gray-900">{ userDetails.name }</span>! We couldn't find any credit history associated with your details.
+                          Hey <span className="font-bold text-gray-900">{ creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.First_Name || userDetails.name }</span>! We couldn't find any credit history associated with your details.
                         </p>
                       </div>
 
