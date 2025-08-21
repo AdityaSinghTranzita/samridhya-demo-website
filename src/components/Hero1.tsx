@@ -317,13 +317,18 @@ export default function Hero1() {
                 transition={{ duration: 0.6, delay: 0.8 }}
             >
               <button
-                  onClick={() => {
+                  onClick={
+                    () => {
                     trackButtonClick('apply_loan', 'hero_section', {
                       loan_amount: 'up_to_40_lakhs',
                       button_position: 'primary_cta'
                     });
-                    window.open(getAppStoreLink(), '_blank');
-                  }}
+                  //   window.open(getAppStoreLink(), '_blank');
+                    window.open('https://apply.samridhya.com', '_blank');
+
+                  }
+
+                  }
                   className="cursor-pointer group relative w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-base sm:text-lg transform hover:scale-[1.02] overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

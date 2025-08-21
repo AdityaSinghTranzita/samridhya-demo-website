@@ -216,7 +216,7 @@ export default function PersonalLoan() {
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span className="relative z-10">Apply Now - Get up to ₹50,000</span>
+                <span className="relative z-10"> - Get up to ₹50,000</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </motion.button>
               

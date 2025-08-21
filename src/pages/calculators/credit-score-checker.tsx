@@ -1015,8 +1015,9 @@ export default function CreditScoreChecker() {
                           {otp.map((digit, index) => (
                               <input
                                   key={index}
-                                  type="number"
+                                  type="text"
                                   inputMode="numeric"
+                                  pattern='[0-9]*'
                                   value={digit}
                                   onChange={(e) => handleOtpChange(index, e.target.value)}
                                   onKeyDown={(e) => handleOtpKeyDown(index, e)}
@@ -1243,7 +1244,7 @@ export default function CreditScoreChecker() {
                     <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
                       <div className="text-left mb-6">
                         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                          Hey {userDetails.name || 'User'}!
+                          Hey {creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.First_Name || userDetails.name || 'User'}!
                         </h1>
                         <p className="text-gray-600">
                           Here's your Credit Score for {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
@@ -1981,7 +1982,7 @@ export default function CreditScoreChecker() {
                           No Credit Record Found
                         </h1>
                         <p className="text-lg text-gray-600 mb-6">
-                          Hey <span className="font-bold text-gray-900">{userDetails.name || 'User'}</span>! We couldn't find any credit history associated with your details.
+                          Hey <span className="font-bold text-gray-900">{ creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.First_Name || userDetails.name }</span>! We couldn't find any credit history associated with your details.
                         </p>
                       </div>
 
