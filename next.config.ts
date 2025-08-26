@@ -14,6 +14,8 @@ const nextConfig = {
       'samridhya.com',
       'www.samridhya.com',
       'lh3.googleusercontent.com', // For Firebase Auth profile images
+      'upload.wikimedia.org', // For Google Play Store badge
+      'developer.apple.com', // For App Store badge
     ],
   },
   

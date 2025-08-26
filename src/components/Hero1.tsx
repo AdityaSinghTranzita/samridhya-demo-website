@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { getAppStoreLink } from '@/utils/appStore';
 import { CreditCard, Shield, Zap, Award, TrendingUp } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { trackButtonClick, trackAppDownload } from '@/utils/analytics';
+import { debugImageLoading } from '@/utils/imageUtils';
 
 const floatingAnimation = (delay = 0) => ({
   y: ['-8px', '8px', '-8px'],
@@ -161,6 +162,16 @@ const ParticleBackground = () => {
 };
 
 export default function Hero1() {
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
+
+  useEffect(() => {
+    // Debug image loading in development
+    if (process.env.NODE_ENV === 'development') {
+      debugImageLoading('/images/Samridhya_Hero.png');
+    }
+  }, []);
+
   return (
       <section className="relative w-full bg-gradient-to-br from-slate-50 via-white to-blue-50/30 min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 py-8 md:py-16 lg:py-20 overflow-hidden">
 
@@ -324,7 +335,8 @@ export default function Hero1() {
                       button_position: 'primary_cta'
                     });
                   //   window.open(getAppStoreLink(), '_blank');
-                    window.open('https://apply.samridhya.com', '_blank');
+                    // window.open('https://apply.samridhya.com', '_blank');
+                       window.location.href = 'https://apply.samridhya.com';
 
                   }
 
@@ -423,15 +435,38 @@ export default function Hero1() {
               <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-indigo-600/20 rounded-3xl blur-3xl scale-110"></div>
 
               <div className="relative">
-                <Image
-                    src= "/images/Samridhya_Hero.webp"
-                    alt="Samridhya Loan App Interface"
-                    width={550}
-                    height={530}
-                    className="w-full h-auto object-contain drop-shadow-2xl relative z-10"
-                    priority
-                    unoptimized
-                />
+                {imageLoading && !imageError && (
+                  <div className="w-full h-[530px] bg-gradient-to-br from-blue-100 to-indigo-200 rounded-3xl flex items-center justify-center drop-shadow-2xl relative z-10 animate-pulse">
+                    <div className="text-center">
+                      <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+                      <p className="text-gray-600">Loading app preview...</p>
+                    </div>
+                  </div>
+                )}
+                
+                {!imageError ? (
+                  <Image
+                      src= "/images/Samridhya_Hero.png"
+                      alt="Samridhya Loan App Interface"
+                      width={550}
+                      height={530}
+                      className={`w-full h-auto object-contain drop-shadow-2xl relative z-10 transition-opacity duration-300 ${
+                        imageLoading ? 'opacity-0' : 'opacity-100'
+                      }`}
+                      priority
+                      unoptimized
+                      onError={() => setImageError(true)}
+                      onLoad={() => setImageLoading(false)}
+                  />
+                ) : (
+                  <div className="w-full h-[530px] bg-gradient-to-br from-blue-100 to-indigo-200 rounded-3xl flex items-center justify-center drop-shadow-2xl relative z-10">
+                    <div className="text-center">
+                      <div className="text-6xl mb-4">📱</div>
+                      <h3 className="text-xl font-semibold text-gray-700 mb-2">Samridhya App</h3>
+                      <p className="text-gray-600">Instant Loan Application</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Floating elements with Rupee symbols - Mobile responsive positioning */}
                 <motion.div

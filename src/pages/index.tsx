@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { useEffect, useState } from 'react';
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero1";
 import WhatWeOffer from "@/components/Whatweoffer";
@@ -11,6 +12,17 @@ import Faq from "@/components/Faq";
 import CTA from "@/components/CTA";
 
 export default function Home() {
+    const [isPageReady, setIsPageReady] = useState(false);
+
+    useEffect(() => {
+        // Ensure the page is ready after a short delay
+        const timer = setTimeout(() => {
+            setIsPageReady(true);
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
         <>
             <Head>
@@ -51,7 +63,11 @@ export default function Home() {
                 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
                 <meta name="apple-mobile-web-app-title" content="Samridhya" />
             </Head>
-            <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-20">
+            <div 
+                className={`min-h-screen w-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-20 transition-opacity duration-300 ${
+                    isPageReady ? 'opacity-100' : 'opacity-0'
+                }`}
+            >
                 <Navbar/>
                 <section id="home" className="scroll-mt-24">
                     <Hero/>
