@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calculator, TrendingUp, Calendar, DollarSign, Percent, Hash } from 'lucide-react';
+import { Calculator, TrendingUp, Calendar, Percent, Hash } from 'lucide-react';
 import { trackEvent, trackButtonClick, trackCalculatorUsage } from '@/utils/analytics';
 
 interface EMICalculatorProps {

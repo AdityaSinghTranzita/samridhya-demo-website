@@ -395,7 +395,7 @@ export default function Hero1() {
                     alt="Get it on Google Play"
                     width={140}
                     height={42}
-                    className="h-8 sm:h-10 w-24 sm:w-32 object-contain"
+                    className="h-12 sm:h-12 w-32 sm:w-36 object-contain"
                     loading="lazy"
                     unoptimized
                 />
@@ -415,7 +415,7 @@ export default function Hero1() {
                     alt="Download on the App Store"
                     width={140}
                     height={42}
-                    className="h-10 sm:h-12 w-auto object-contain"
+                    className="h-12 sm:h-12 w-32 sm:w-36 object-contain"
                     loading="lazy"
                     unoptimized
                 />
