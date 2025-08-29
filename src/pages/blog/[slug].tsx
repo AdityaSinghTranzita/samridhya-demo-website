@@ -1,51 +1,176 @@
-'use client';
+// Static generation for blog posts
 
 import { motion } from 'framer-motion';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { ArrowLeft, Calendar, Clock, User, Tag, Share2, BookOpen, Eye, Heart, MessageCircle, Facebook, Twitter, Linkedin, Copy, Check, CheckCircle, Calculator } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, User, Tag, Share2, BookOpen, Eye, MessageCircle, Facebook, Twitter, Linkedin, Copy, Check, CheckCircle, Calculator } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import CTA from '@/components/CTA';
 import BlogGrid from '@/components/BlogGrid';
-import { blogService, BlogPost } from '@/services/blogService';
+import BlogSidebar from '@/components/BlogSidebar';
+import { blogService, BlogPost, Category } from '@/services/blogService';
+import { trackEvent, trackButtonClick } from '@/utils/analytics';
+import { toISOString } from '@/utils/dateUtils';
+import { GetStaticPaths, GetStaticProps } from 'next';
 
-export default function BlogPostPage() {
+interface BlogPostPageProps {
+  blogPost: BlogPost | null;
+  relatedPosts: BlogPost[];
+  categories: Category[];
+  subcategories: Category[];
+  popularTags: string[];
+  error?: string;
+}
+
+export default function BlogPostPage({ 
+  blogPost: initialBlogPost, 
+  relatedPosts: initialRelatedPosts, 
+  categories: initialCategories, 
+  subcategories: initialSubcategories, 
+  popularTags: initialPopularTags,
+  error: initialError 
+}: BlogPostPageProps) {
   const router = useRouter();
   const { slug } = router.query;
-  const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
-  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [blogPost, setBlogPost] = useState<BlogPost | null>(initialBlogPost);
+  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>(initialRelatedPosts);
+  const [loading, setLoading] = useState(!initialBlogPost);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [subcategories, setSubcategories] = useState<Category[]>(initialSubcategories);
+  const [popularTags, setPopularTags] = useState<string[]>(initialPopularTags);
+  const [error, setError] = useState<string | null>(initialError || null);
 
+  // Load blog post data when slug changes (only for fallback cases)
   useEffect(() => {
-    const loadPost = async () => {
-      if (slug && typeof slug === 'string') {
-        try {
-          setLoading(true);
-          const post = await blogService.getPostBySlug(slug);
-          if (post) {
-            setBlogPost(post);
-            
-            const related = await blogService.getFeaturedPosts();
-            // Get up to 3 related posts (excluding current post)
-            const filteredRelated = related
-              .filter(p => p.id !== post.id)
-              .slice(0, 3);
-            setRelatedPosts(filteredRelated);
-          }
-        } catch (error) {
-          console.error('Error loading blog post:', error);
-        } finally {
-          setLoading(false);
+    const loadBlogPost = async () => {
+      // Only load if we don't have initial data (fallback case)
+      if (initialBlogPost || !slug || typeof slug !== 'string') return;
+
+      try {
+        setLoading(true);
+        setError(null);
+        
+        console.log(`🔄 Loading blog post: ${slug}`);
+        
+        // Load blog post and related data in parallel
+        const [post, allPosts, categoriesData, tagsData] = await Promise.all([
+          blogService.getPostBySlug(slug),
+          blogService.getPublishedPosts(),
+          blogService.getCategories(),
+          blogService.getTags()
+        ]);
+
+        if (!post) {
+          console.log(`❌ Blog post not found: ${slug}`);
+          setError('Blog post not found');
+          return;
         }
+
+        console.log(`✅ Found blog post: ${post.title}`);
+
+        // Clean up post to ensure no undefined values and convert Date objects to strings
+        const cleanedPost = {
+          ...post,
+          subcategory: post.subcategory || null,
+          category: post.category || 'Uncategorized',
+          tags: post.tags || [],
+          featuredImage: post.featuredImage || null,
+          seoTitle: post.seoTitle || null,
+          seoDescription: post.seoDescription || null,
+          seoKeywords: post.seoKeywords || [],
+          readTime: post.readTime || null,
+          views: post.views || 0,
+          likes: post.likes || 0,
+          shares: post.shares || 0,
+          featured: post.featured || false,
+          // Convert Date objects to ISO strings for JSON serialization
+          publishedAt: toISOString(post.publishedAt),
+          createdAt: toISOString(post.createdAt),
+          updatedAt: toISOString(post.updatedAt),
+        };
+
+        // Get related posts (featured posts excluding current post)
+        const featuredPosts = await blogService.getFeaturedPosts();
+        const filteredRelated = featuredPosts
+          .filter((p: BlogPost) => p.id !== post.id)
+          .slice(0, 3);
+
+        // Clean up related posts
+        const cleanedRelatedPosts = filteredRelated.map(relatedPost => ({
+          ...relatedPost,
+          subcategory: relatedPost.subcategory || null,
+          category: relatedPost.category || 'Uncategorized',
+          tags: relatedPost.tags || [],
+          featuredImage: relatedPost.featuredImage || null,
+          seoTitle: relatedPost.seoTitle || null,
+          seoDescription: relatedPost.seoDescription || null,
+          seoKeywords: relatedPost.seoKeywords || [],
+          readTime: relatedPost.readTime || null,
+          views: relatedPost.views || 0,
+          likes: relatedPost.likes || 0,
+          shares: relatedPost.shares || 0,
+          featured: relatedPost.featured || false,
+          // Convert Date objects to ISO strings for JSON serialization
+          publishedAt: toISOString(relatedPost.publishedAt) || null,
+          createdAt: toISOString(relatedPost.createdAt) || null,
+          updatedAt: toISOString(relatedPost.updatedAt) || null,
+        }));
+
+        // Generate subcategories from all posts
+        const subcategoryMap = new Map<string, number>();
+        allPosts.forEach((p: BlogPost) => {
+          if (p.subcategory) {
+            subcategoryMap.set(p.subcategory, (subcategoryMap.get(p.subcategory) || 0) + 1);
+          }
+        });
+
+        const subcategoriesData = [
+          { name: 'All', count: allPosts.length },
+          ...Array.from(subcategoryMap.entries()).map(([name, count]) => ({
+            name,
+            count
+          }))
+        ];
+
+        setBlogPost(cleanedPost);
+        setRelatedPosts(cleanedRelatedPosts);
+        setCategories(categoriesData);
+        setSubcategories(subcategoriesData);
+        setPopularTags(tagsData.slice(0, 10));
+
+        console.log(`✅ Processed blog post with ${cleanedRelatedPosts.length} related posts`);
+
+      } catch (error) {
+        console.error(`❌ Error loading blog post ${slug}:`, error);
+        setError('Failed to load blog post');
+      } finally {
+        setLoading(false);
       }
     };
 
-    loadPost();
-  }, [slug]);
+    loadBlogPost();
+  }, [slug, initialBlogPost]);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Track page view for blog post
+  useEffect(() => {
+    if (isClient && blogPost && !loading) {
+      trackEvent('blog_post_view', {
+        post_id: blogPost.id,
+        post_title: blogPost.title,
+        post_category: blogPost.category,
+        post_author: blogPost.author
+      });
+    }
+  }, [isClient, blogPost, loading]);
 
   // Close share menu when clicking outside
   useEffect(() => {
@@ -62,12 +187,83 @@ export default function BlogPostPage() {
     };
   }, [showShareMenu]);
 
+  // Handle share
+  const handleShare = async (platform: string) => {
+    if (!blogPost) return;
+    
+    const url = window.location.href;
+    const title = blogPost.title;
+    const text = blogPost.excerpt;
+    
+    try {
+      switch (platform) {
+        case 'facebook':
+          window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+          break;
+        case 'twitter':
+          window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, '_blank');
+          break;
+        case 'linkedin':
+          window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
+          break;
+        case 'copy':
+          await navigator.clipboard.writeText(url);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+          break;
+      }
+      
+      trackButtonClick('blog_post_share', platform);
+    } catch (error) {
+      console.error('Error sharing post:', error);
+    }
+  };
+
+  // Handle sidebar interactions
+  const handleCategorySelect = (category: string) => {
+    trackButtonClick('blog_post_sidebar_category', category);
+    // Navigate to blog page with category filter
+    if (category !== 'All') {
+      router.push(`/blog?category=${encodeURIComponent(category)}`);
+    } else {
+      router.push('/blog');
+    }
+  };
+
+  const handleSubcategorySelect = (subcategory: string) => {
+    trackButtonClick('blog_post_sidebar_subcategory', subcategory);
+    // Navigate to blog page with subcategory filter
+    if (subcategory !== 'All') {
+      const currentCategory = blogPost?.category || 'All';
+      if (currentCategory !== 'All') {
+        router.push(`/blog?category=${encodeURIComponent(currentCategory)}&subcategory=${encodeURIComponent(subcategory)}`);
+      } else {
+        router.push(`/blog?subcategory=${encodeURIComponent(subcategory)}`);
+      }
+    } else {
+      const currentCategory = blogPost?.category || 'All';
+      if (currentCategory !== 'All') {
+        router.push(`/blog?category=${encodeURIComponent(currentCategory)}`);
+      } else {
+        router.push('/blog');
+      }
+    }
+  };
+
+  const handleTagClick = (tag: string) => {
+    trackButtonClick('blog_post_sidebar_tag', tag);
+    // Navigate to blog page with tag search
+    router.push(`/blog?tag=${encodeURIComponent(tag)}`);
+  };
+
+  // Loading state
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
         <Navbar />
-        <div className="pt-32 pb-20">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="pt-16 sm:pt-20"></div>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
             <p className="text-gray-600">Loading article...</p>
           </div>
@@ -76,21 +272,26 @@ export default function BlogPostPage() {
     );
   }
 
-  if (!blogPost) {
+  // Error state
+  if (error || !blogPost) {
     return (
       <>
         <Head>
           <title>Blog Post Not Found - Samridhya</title>
+          <meta name="description" content="The blog post you're looking for doesn't exist." />
         </Head>
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
           <Navbar />
-          <div className="pt-32 pb-20">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="pt-16 sm:pt-20"></div>
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="text-center">
               <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <BookOpen className="w-10 h-10 text-gray-400" />
               </div>
               <h1 className="text-3xl font-bold text-gray-900 mb-4">Blog Post Not Found</h1>
-              <p className="text-gray-600 mb-8">The blog post you're looking for doesn't exist.</p>
+              <p className="text-gray-600 mb-8">
+                {error || 'The blog post you\'re looking for doesn\'t exist.'}
+              </p>
               <Link
                 href="/blog"
                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all duration-300"
@@ -100,527 +301,403 @@ export default function BlogPostPage() {
               </Link>
             </div>
           </div>
-          <CTA />
         </div>
       </>
     );
   }
 
-  const formattedDate = (blogPost.publishedAt || blogPost.updatedAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-
-  // Share functions
-  const shareUrl = `https://samridhya.com/blog/${blogPost.slug}`;
-  const shareTitle = blogPost.title;
-  const shareText = blogPost.excerpt;
-
-  const shareToFacebook = () => {
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareTitle)}`;
-    window.open(url, '_blank', 'width=600,height=400');
-    setShowShareMenu(false);
-  };
-
-  const shareToTwitter = () => {
-    const url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}&via=samridhya`;
-    window.open(url, '_blank', 'width=600,height=400');
-    setShowShareMenu(false);
-  };
-
-  const shareToLinkedIn = () => {
-    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
-    window.open(url, '_blank', 'width=600,height=400');
-    setShowShareMenu(false);
-  };
-
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-      setShowShareMenu(false);
-    } catch (err) {
-      console.error('Failed to copy: ', err);
-    }
-  };
-
   return (
     <>
       <Head>
-        <title>{blogPost.seoTitle || blogPost.title} - Samridhya Blog</title>
-        <meta name="description" content={blogPost.seoDescription || blogPost.excerpt} />
-        <meta name="keywords" content={blogPost.seoKeywords?.join(', ') || `${blogPost.category}, financial advice, loan tips, ${blogPost.title.toLowerCase()}`} />
+        <title>{blogPost.title} - Samridhya</title>
+        <meta name="description" content={blogPost.excerpt} />
+        <meta name="keywords" content={blogPost.tags?.join(', ')} />
         <meta name="author" content={blogPost.author} />
+        <meta name="robots" content="index, follow" />
         
-        {/* Open Graph Meta Tags */}
-        <meta property="og:title" content={blogPost.seoTitle || blogPost.title} />
-        <meta property="og:description" content={blogPost.seoDescription || blogPost.excerpt} />
+        {/* Open Graph */}
+        <meta property="og:title" content={blogPost.title} />
+        <meta property="og:description" content={blogPost.excerpt} />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://samridhya.com/blog/${blogPost.slug}`} />
-        <meta property="og:image" content={blogPost.featuredImage || "https://samridhya.com/samridhya-preview.png"} />
-        
-        {/* Twitter Card Meta Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={blogPost.seoTitle || blogPost.title} />
-        <meta name="twitter:description" content={blogPost.seoDescription || blogPost.excerpt} />
-        <meta name="twitter:image" content={blogPost.featuredImage || "https://samridhya.com/samridhya-preview.png"} />
-        
-        {/* Article Meta Tags */}
-        <meta property="article:published_time" content={(blogPost.publishedAt || blogPost.updatedAt).toISOString()} />
+        <meta property="og:url" content={`https://samridhya.in/blog/${blogPost.slug}`} />
+        <meta property="og:image" content={blogPost.featuredImage || 'https://samridhya.in/images/samridhya-preview.png'} />
+        <meta property="article:published_time" content={toISOString(blogPost.publishedAt)} />
+        <meta property="article:modified_time" content={toISOString(blogPost.updatedAt)} />
         <meta property="article:author" content={blogPost.author} />
         <meta property="article:section" content={blogPost.category} />
+        {blogPost.tags?.map(tag => (
+          <meta key={tag} property="article:tag" content={tag} />
+        ))}
         
-        <link rel="canonical" href={`https://samridhya.com/blog/${blogPost.slug}`} />
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={blogPost.title} />
+        <meta name="twitter:description" content={blogPost.excerpt} />
+        <meta name="twitter:image" content={blogPost.featuredImage || 'https://samridhya.in/images/samridhya-preview.png'} />
+        
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BlogPosting",
+              "headline": blogPost.title,
+              "description": blogPost.excerpt,
+              "image": blogPost.featuredImage || 'https://samridhya.in/images/samridhya-preview.png',
+              "author": {
+                "@type": "Person",
+                "name": blogPost.author
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "Samridhya",
+                "url": "https://samridhya.in"
+              },
+              "datePublished": toISOString(blogPost.publishedAt),
+              "dateModified": toISOString(blogPost.updatedAt),
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": `https://samridhya.in/blog/${blogPost.slug}`
+              },
+              "articleSection": blogPost.category,
+              "keywords": blogPost.tags?.join(', ')
+            })
+          }}
+        />
       </Head>
-      
+
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
         <Navbar />
         
-        {/* Hero Image Section */}
-        <section className="relative pt-24 pb-12 sm:pt-28 sm:pb-16">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Breadcrumb */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="flex items-center text-sm text-gray-500 mb-6"
+        {/* Back Button */}
+        <div className="pt-20 pb-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Link
+              href="/blog"
+              className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors duration-300"
             >
-              <Link href="/" className="hover:text-blue-600 transition-colors font-medium">Home</Link>
-              <span className="mx-2 text-gray-400">/</span>
-              <Link href="/blog" className="hover:text-blue-600 transition-colors font-medium">Blog</Link>
-              <span className="mx-2 text-gray-400">/</span>
-              <span className="text-gray-700 font-small truncate">{blogPost.title}</span>
-            </motion.div>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Blog
+            </Link>
+          </div>
+        </div>
 
-            {/* Cover Image */}
-            {blogPost.featuredImage && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="relative w-full h-72 sm:h-80 lg:h-96 mb-12 rounded-3xl overflow-hidden shadow-2xl"
-              >
-                <img
-                  src={blogPost.featuredImage}
-                  alt={blogPost.title}
-                  className="w-full h-full object-cover"
-                />
-                {/* Overlay gradient for better text readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
-              </motion.div>
-            )}
-
-            {/* Article Header */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="bg-white/90 backdrop-blur-md border border-white/30 rounded-3xl p-8 sm:p-12 shadow-xl"
-            >
-              {/* Category and Featured Badges */}
-              <div className="flex items-center gap-3 mb-8">
-                <span className="inline-flex items-center px-4 py-2 text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-full">
-                  <Tag className="w-4 h-4 mr-2" />
-                  {blogPost.category}
-                </span>
-                {blogPost.featured && (
-                  <span className="inline-flex items-center px-4 py-2 text-sm font-semibold text-purple-700 bg-purple-50 border border-purple-200 rounded-full">
-                    <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
-                    Featured
-                  </span>
-                )}
-              </div>
-
-              {/* Title */}
-              <h1 className="text-3xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-8 leading-tight tracking-tight">
-                {blogPost.title}
-              </h1>
-
-
-              {/* Meta Information */}
-              <div className="flex flex-wrap items-center gap-8 text-sm text-gray-600 border-t border-gray-200 pt-8">
-                <div className="flex items-center">
-                  <User className="w-5 h-5 mr-3 text-gray-400" />
-                  <span className="font-medium">{blogPost.author}</span>
-                </div>
-                <div className="flex items-center">
-                  <Calendar className="w-5 h-5 mr-3 text-gray-400" />
-                  <span className="font-medium">{formattedDate}</span>
-                </div>
-        
-                <div className="relative ml-auto share-menu z-10">
-                  <button 
-                    onClick={() => setShowShareMenu(!showShareMenu)}
-                    className="flex items-center text-blue-600 hover:text-blue-700 font-semibold transition-colors"
-                  >
-                    <Share2 className="w-5 h-5 mr-2" />
-                    Share Article
-                  </button>
-                  
-                  {/* Share Menu Dropdown */}
-                  {showShareMenu && (
-                    <>
-                      {/* Backdrop */}
-                      <div className="fixed inset-0 z-[9998]" onClick={() => setShowShareMenu(false)}></div>
-                      <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-[9999] transform translate-y-1">
-                        <button
-                          onClick={shareToFacebook}
-                          className="w-full flex items-center px-4 py-3 text-left hover:bg-gray-50 transition-colors"
-                        >
-                          <Facebook className="w-5 h-5 mr-3 text-blue-600" />
-                          <span className="text-sm font-medium">Share on Facebook</span>
-                        </button>
-                        <button
-                          onClick={shareToTwitter}
-                          className="w-full flex items-center px-4 py-3 text-left hover:bg-gray-50 transition-colors"
-                        >
-                          <Twitter className="w-5 h-5 mr-3 text-blue-400" />
-                          <span className="text-sm font-medium">Share on Twitter</span>
-                        </button>
-                        <button
-                          onClick={shareToLinkedIn}
-                          className="w-full flex items-center px-4 py-3 text-left hover:bg-gray-50 transition-colors"
-                        >
-                          <Linkedin className="w-5 h-5 mr-3 text-blue-700" />
-                          <span className="text-sm font-medium">Share on LinkedIn</span>
-                        </button>
-                        <div className="border-t border-gray-200 my-1"></div>
-                        <button
-                          onClick={copyToClipboard}
-                          className="w-full flex items-center px-4 py-3 text-left hover:bg-gray-50 transition-colors"
-                        >
-                          {copied ? (
-                            <Check className="w-5 h-5 mr-3 text-green-600" />
-                          ) : (
-                            <Copy className="w-5 h-5 mr-3 text-gray-600" />
-                          )}
-                          <span className="text-sm font-medium">
-                            {copied ? 'Copied!' : 'Copy Link'}
-                          </span>
-                        </button>
-                      </div>
-                    </>
+        {/* Blog Post Content with Sidebar */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Main Content - Always First */}
+            <div className="flex-1 order-1 lg:order-1">
+              <article>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="bg-white rounded-2xl shadow-lg overflow-hidden"
+                >
+                  {/* Featured Image */}
+                  {blogPost.featuredImage && (
+                    <div className="relative h-64 sm:h-80 overflow-hidden">
+                      <img
+                        src={blogPost.featuredImage}
+                        alt={blogPost.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                    </div>
                   )}
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
 
-        {/* Main Content */}
-        <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white/90 backdrop-blur-md border border-white/30 rounded-3xl p-8 sm:p-12 shadow-xl"
-          >
-            {/* Blog Content with Sidebar */}
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-              {/* Main Content */}
-              <div className="lg:col-span-3">
-                <div className="prose prose-lg prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg prose-a:text-blue-600 prose-a:no-underline hover:prose-a:text-blue-700 prose-strong:text-gray-900 prose-strong:font-semibold prose-blockquote:border-l-4 prose-blockquote:border-blue-200 prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-gray-600 max-w-none blog-content">
-                  <div 
-                    dangerouslySetInnerHTML={{ 
-                      __html: blogPost.content || '<p>No content available...</p>' 
-                    }} 
-                    className="text-gray-800 leading-relaxed"
-                  />
-                </div>
-              </div>
-
-              {/* Sidebar */}
-              <div className="lg:col-span-1 space-y-6">
-                {/* Article Info */}
-                <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/20">
-                  <h3 className="text-base font-bold text-gray-900 mb-3">Article Info</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-gray-500" />
-                      <span className="text-gray-600">{blogPost.readTime || '5 min read'}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-gray-500" />
-                      <span className="text-gray-600">By {blogPost.author}</span>
-                    </div>
-                    {blogPost.category && (
-                      <div className="flex items-center gap-2">
-                        <BookOpen className="w-4 h-4 text-gray-500" />
-                        <span className="text-gray-600">{blogPost.category}</span>
+                  {/* Content */}
+                  <div className="p-6 sm:p-8">
+                    {/* Meta Information */}
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
+                      <div className="flex items-center">
+                        <User className="w-4 h-4 mr-2 text-blue-500" />
+                        <span className="font-medium">{blogPost.author}</span>
                       </div>
-                    )}
-                    {blogPost.tags && blogPost.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {blogPost.tags.slice(0, 3).map((tag, index) => (
-                          <span
-                            key={index}
-                            className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full"
-                          >
-                            #{tag}
-                          </span>
-                        ))}
+                      <div className="flex items-center">
+                        <Calendar className="w-4 h-4 mr-2 text-green-500" />
+                        <span>{blogService.formatDate(blogPost.publishedAt || blogPost.updatedAt)}</span>
                       </div>
-                    )}
-                  </div>
-                </div>
+                      <div className="flex items-center">
+                        <Clock className="w-4 h-4 mr-2 text-purple-500" />
+                        <span>{blogService.getReadingTime(blogPost.content)}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Eye className="w-4 h-4 mr-2 text-orange-500" />
+                        <span>{blogPost.views || 0} views</span>
+                      </div>
+                    </div>
 
-                {/* Quick Share */}
-                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-4 shadow-lg border border-blue-100">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Share2 className="w-4 h-4 text-blue-600" />
-                    <h3 className="text-base font-bold text-gray-900">Share Article</h3>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={shareToFacebook}
-                      className="flex-1 flex items-center justify-center p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                      title="Share on Facebook"
-                    >
-                      <Facebook className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={shareToTwitter}
-                      className="flex-1 flex items-center justify-center p-2 bg-blue-400 text-white rounded-lg hover:bg-blue-500 transition-colors"
-                      title="Share on Twitter"
-                    >
-                      <Twitter className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={shareToLinkedIn}
-                      className="flex-1 flex items-center justify-center p-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
-                      title="Share on LinkedIn"
-                    >
-                      <Linkedin className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={copyToClipboard}
-                      className="flex-1 flex items-center justify-center p-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-                      title="Copy Link"
-                    >
-                      {copied ? (
-                        <Check className="w-4 h-4" />
-                      ) : (
-                        <Copy className="w-4 h-4" />
+                    {/* Title */}
+                    <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6 leading-tight">
+                      {blogPost.title}
+                    </h1>
+
+                    {/* Categories and Tags */}
+                    <div className="flex flex-wrap items-center gap-3 mb-8">
+                      {blogPost.category && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                          <Tag className="w-3 h-3 mr-1" />
+                          {blogPost.category}
+                        </span>
                       )}
-                    </button>
+                      {blogPost.subcategory && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                          {blogPost.subcategory}
+                        </span>
+                      )}
+                      {blogPost.tags?.map(tag => (
+                        <span key={tag} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Excerpt */}
+                    <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
+                      <p className="text-gray-700 italic">{blogPost.excerpt}</p>
+                    </div>
+
+                    {/* Content */}
+                    <div 
+                      className="prose prose-lg max-w-none mb-8"
+                      dangerouslySetInnerHTML={{ __html: blogPost.content }}
+                    />
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-wrap items-center justify-between gap-4 pt-8 border-t border-gray-200">
+                      <div className="flex items-center gap-4">
+                        <div className="relative share-menu">
+                          <button
+                            onClick={() => setShowShareMenu(!showShareMenu)}
+                            className="inline-flex items-center px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors duration-300"
+                          >
+                            <Share2 className="w-4 h-4 mr-2" />
+                            Share
+                          </button>
+                          
+                          {showShareMenu && (
+                            <div className="absolute bottom-full left-0 mb-2 bg-white rounded-lg shadow-lg border border-gray-200 p-2 z-10">
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => handleShare('facebook')}
+                                  className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                                >
+                                  <Facebook className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={() => handleShare('twitter')}
+                                  className="p-2 text-blue-400 hover:bg-blue-50 rounded"
+                                >
+                                  <Twitter className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={() => handleShare('linkedin')}
+                                  className="p-2 text-blue-700 hover:bg-blue-50 rounded"
+                                >
+                                  <Linkedin className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={() => handleShare('copy')}
+                                  className="p-2 text-gray-600 hover:bg-gray-50 rounded"
+                                >
+                                  {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </motion.div>
 
-                {/* Credit Score Checker Promotion */}
-                <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 shadow-lg border border-green-100">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                      <CheckCircle className="w-4 h-4 text-green-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-base font-bold text-gray-900">Check Your Credit Score</h3>
-                      <p className="text-xs text-gray-600">Free & Instant</p>
-                    </div>
+                {/* Related Posts */}
+                {relatedPosts.length > 0 && (
+                  <div className="mt-16">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Articles</h2>
+                    <BlogGrid posts={relatedPosts} columns={3} />
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Get your credit score instantly and understand what it means for your loan applications.
-                  </p>
-                  <Link 
-                    href="/calculators/credit-score-checker"
-                    className="inline-flex items-center justify-center w-full px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-300 text-sm"
-                  >
-                    Check Now
-                  </Link>
-                </div>
-
-                {/* EMI Calculator Promotion */}
-                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-4 shadow-lg border border-blue-100">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Calculator className="w-4 h-4 text-blue-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-base font-bold text-gray-900">EMI Calculator</h3>
-                      <p className="text-xs text-gray-600">Plan Your Loan</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Calculate your monthly EMI and understand the total cost of your loan.
-                  </p>
-                  <Link 
-                    href="/calculators/loan-calculator"
-                    className="inline-flex items-center justify-center w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-300 text-sm"
-                  >
-                    Calculate EMI
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            {/* Tags Section */}
-            {blogPost.tags && blogPost.tags.length > 0 && (
-              <div className="mt-12 pt-8 border-t border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Tags</h3>
-                <div className="flex flex-wrap gap-2">
-                  {blogPost.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full border border-blue-200"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-          </motion.div>
-
-          {/* Quick Share Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="mt-8 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 shadow-lg border border-blue-100"
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <Share2 className="w-5 h-5 text-blue-600" />
-              <h3 className="text-lg font-bold text-gray-900">Share This Article</h3>
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={shareToFacebook}
-                className="flex-1 flex items-center justify-center p-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
-                title="Share on Facebook"
-              >
-                <Facebook className="w-5 h-5 mr-2" />
-                <span className="text-sm font-medium">Facebook</span>
-              </button>
-              <button
-                onClick={shareToTwitter}
-                className="flex-1 flex items-center justify-center p-3 bg-blue-400 text-white rounded-xl hover:bg-blue-500 transition-colors"
-                title="Share on Twitter"
-              >
-                <Twitter className="w-5 h-5 mr-2" />
-                <span className="text-sm font-medium">Twitter</span>
-              </button>
-              <button
-                onClick={shareToLinkedIn}
-                className="flex-1 flex items-center justify-center p-3 bg-blue-700 text-white rounded-xl hover:bg-blue-800 transition-colors"
-                title="Share on LinkedIn"
-              >
-                <Linkedin className="w-5 h-5 mr-2" />
-                <span className="text-sm font-medium">LinkedIn</span>
-              </button>
-              <button
-                onClick={copyToClipboard}
-                className="flex-1 flex items-center justify-center p-3 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition-colors"
-                title="Copy Link"
-              >
-                {copied ? (
-                  <Check className="w-5 h-5 mr-2" />
-                ) : (
-                  <Copy className="w-5 h-5 mr-2" />
                 )}
-                <span className="text-sm font-medium">
-                  {copied ? 'Copied!' : 'Copy Link'}
-                </span>
-              </button>
+              </article>
             </div>
-          </motion.div>
 
-          {/* Tools Section */}
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Credit Score Checker Promotion */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 shadow-lg border border-green-100"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                  <CheckCircle className="w-5 h-5 text-green-600" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900">Check Your Credit Score</h3>
-                  <p className="text-sm text-gray-600">Free & Instant</p>
-                </div>
+            {/* Sidebar - Always Second */}
+            <div className="hidden lg:block lg:w-80 lg:flex-shrink-0 order-2 lg:order-2">
+              <div className="lg:sticky lg:top-20">
+                <BlogSidebar
+                  categories={categories}
+                  subcategories={subcategories}
+                  popularTags={popularTags}
+                  selectedCategory={blogPost.category || 'All'}
+                  selectedSubcategory={blogPost.subcategory || 'All'}
+                  onCategoryChange={handleCategorySelect}
+                  onSubcategoryChange={handleSubcategorySelect}
+                  onTagClick={handleTagClick}
+                />
               </div>
-              <p className="text-sm text-gray-600 mb-4">
-                Get your credit score instantly and understand what it means for your loan applications.
-              </p>
-              <Link 
-                href="/calculators/credit-score-checker"
-                className="inline-flex items-center justify-center w-full px-4 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-all duration-300 text-sm"
-              >
-                Check Now
-              </Link>
-            </motion.div>
-
-            {/* EMI Calculator Promotion */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 shadow-lg border border-blue-100"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Calculator className="w-5 h-5 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900">EMI Calculator</h3>
-                  <p className="text-sm text-gray-600">Plan Your Loan</p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-600 mb-4">
-                Calculate your monthly EMI and understand the total cost of your loan.
-              </p>
-              <Link 
-                href="/calculators/loan-calculator"
-                className="inline-flex items-center justify-center w-full px-4 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all duration-300 text-sm"
-              >
-                Calculate EMI
-              </Link>
-            </motion.div>
+            </div>
           </div>
-        </section>
 
-        {/* Related Posts */}
-        {relatedPosts.length > 0 && (
-          <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                Related Articles
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                You might also be interested in these articles
-              </p>
-            </motion.div>
-            <BlogGrid
-              posts={relatedPosts}
-              title=""
-              subtitle=""
-              showTitle={false}
-              columns={3}
-            />
-          </section>
-        )}
+          {/* Sidebar for Mobile/Tablet - Always at Bottom */}
+          <div className="block lg:hidden mt-8 order-3">
+            <div className="bg-white rounded-2xl shadow-lg p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-6">Explore More</h3>
+              <BlogSidebar
+                categories={categories}
+                subcategories={subcategories}
+                popularTags={popularTags}
+                selectedCategory={blogPost.category || 'All'}
+                selectedSubcategory={blogPost.subcategory || 'All'}
+                onCategoryChange={handleCategorySelect}
+                onSubcategoryChange={handleSubcategorySelect}
+                onTagClick={handleTagClick}
+              />
+            </div>
+          </div>
+        </div>
 
-        {/* Footer */}
         <CTA />
       </div>
     </>
   );
 }
+
+// Static generation functions
+export const getStaticPaths: GetStaticPaths = async () => {
+  try {
+    console.log('🔄 Generating static paths for blog posts...');
+    
+    // Get all published blog posts
+    const posts = await blogService.getPublishedPosts();
+    
+    // Generate paths for each blog post
+    const paths = posts.map((post) => ({
+      params: { slug: post.slug },
+    }));
+
+    console.log(`✅ Generated ${paths.length} static paths for blog posts`);
+    
+    return {
+      paths,
+      fallback: 'blocking', // Generate new pages on-demand if not found
+    };
+  } catch (error) {
+    console.error('❌ Error generating static paths:', error);
+    return {
+      paths: [],
+      fallback: 'blocking',
+    };
+  }
+};
+
+export const getStaticProps: GetStaticProps<BlogPostPageProps> = async ({ params }) => {
+  try {
+    const slug = params?.slug as string;
+    
+    if (!slug) {
+      return {
+        notFound: true,
+      };
+    }
+
+    console.log(`🔄 Generating static props for blog post: ${slug}`);
+    
+    // Load blog post and related data in parallel
+    const [post, allPosts, categoriesData, tagsData] = await Promise.all([
+      blogService.getPostBySlug(slug),
+      blogService.getPublishedPosts(),
+      blogService.getCategories(),
+      blogService.getTags()
+    ]);
+
+    if (!post) {
+      console.log(`❌ Blog post not found: ${slug}`);
+      return {
+        notFound: true,
+      };
+    }
+
+    console.log(`✅ Found blog post: ${post.title}`);
+
+    // Clean up post to ensure no undefined values and convert Date objects to strings
+    const cleanedPost = {
+      ...post,
+      subcategory: post.subcategory || null,
+      category: post.category || 'Uncategorized',
+      tags: post.tags || [],
+      featuredImage: post.featuredImage || null,
+      seoTitle: post.seoTitle || null,
+      seoDescription: post.seoDescription || null,
+      seoKeywords: post.seoKeywords || [],
+      readTime: post.readTime || null,
+      views: post.views || 0,
+      likes: post.likes || 0,
+      shares: post.shares || 0,
+      featured: post.featured || false,
+      // Convert Date objects to ISO strings for JSON serialization
+      publishedAt: toISOString(post.publishedAt),
+      createdAt: toISOString(post.createdAt),
+      updatedAt: toISOString(post.updatedAt),
+    };
+
+    // Get related posts (featured posts excluding current post)
+    const featuredPosts = await blogService.getFeaturedPosts();
+    const filteredRelated = featuredPosts
+      .filter((p: BlogPost) => p.id !== post.id)
+      .slice(0, 3);
+
+    // Clean up related posts
+    const cleanedRelatedPosts = filteredRelated.map(relatedPost => ({
+      ...relatedPost,
+      subcategory: relatedPost.subcategory || null,
+      category: relatedPost.category || 'Uncategorized',
+      tags: relatedPost.tags || [],
+      featuredImage: relatedPost.featuredImage || null,
+      seoTitle: relatedPost.seoTitle || null,
+      seoDescription: relatedPost.seoDescription || null,
+      seoKeywords: relatedPost.seoKeywords || [],
+      readTime: relatedPost.readTime || null,
+      views: relatedPost.views || 0,
+      likes: relatedPost.likes || 0,
+      shares: relatedPost.shares || 0,
+      featured: relatedPost.featured || false,
+      // Convert Date objects to ISO strings for JSON serialization
+      publishedAt: toISOString(relatedPost.publishedAt) || null,
+      createdAt: toISOString(relatedPost.createdAt) || null,
+      updatedAt: toISOString(relatedPost.updatedAt) || null,
+    }));
+
+    // Generate subcategories from all posts
+    const subcategoryMap = new Map<string, number>();
+    allPosts.forEach((p: BlogPost) => {
+      if (p.subcategory) {
+        subcategoryMap.set(p.subcategory, (subcategoryMap.get(p.subcategory) || 0) + 1);
+      }
+    });
+
+    const subcategoriesData = [
+      { name: 'All', count: allPosts.length },
+      ...Array.from(subcategoryMap.entries()).map(([name, count]) => ({
+        name,
+        count
+      }))
+    ];
+
+    return {
+      props: {
+        blogPost: cleanedPost,
+        relatedPosts: cleanedRelatedPosts,
+        categories: categoriesData,
+        subcategories: subcategoriesData,
+        popularTags: tagsData,
+      },
+    };
+  } catch (error) {
+    console.error('❌ Error generating static props:', error);
+    return {
+      notFound: true,
+    };
+  }
+};

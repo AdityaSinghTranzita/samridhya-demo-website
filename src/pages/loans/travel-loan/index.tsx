@@ -189,7 +189,10 @@ export default function TravelLoan() {
               transition={{ duration: 0.8, delay: 0.6 }}
             >
               <motion.button
-                onClick={handleAppDownload}
+                onClick={() => {
+                  // handleAppDownload
+                  window.open('https://apply.samridhya.com', '_blank');
+                }}
                 className="group relative bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-orange-500/25 transition-all duration-300 text-base"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}

@@ -9,6 +9,7 @@ import { useCustomAlert } from '@/hooks/useCustomAlert';
 import { getStorage, ref, listAll, deleteObject, getDownloadURL, getMetadata, uploadBytes } from 'firebase/storage';
 import { Trash2, Upload, Image as ImageIcon, FileText, Video, AlertCircle, CheckCircle, Info } from 'lucide-react';
 import { processImage, IMAGE_CONFIGS, formatFileSize, ValidationResult, OptimizedImage } from '@/utils/imageValidation';
+import { blogService } from '@/services/blogService';
 
 interface MediaFile {
   id: string;
@@ -95,7 +96,11 @@ const MediaLibrary: React.FC = () => {
       }
 
       // Sort by upload date (newest first)
-      mediaFiles.sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime());
+      mediaFiles.sort((a, b) => {
+        const dateA = a.uploadedAt || new Date();
+        const dateB = b.uploadedAt || new Date();
+        return new Date(dateB).getTime() - new Date(dateA).getTime();
+      });
       
       console.log('Final media files:', mediaFiles);
       setFiles(mediaFiles);
@@ -541,7 +546,7 @@ const MediaLibrary: React.FC = () => {
                       </p>
                       <p className="text-gray-500">{formatFileSize(file.size)}</p>
                       <p className="text-gray-400 text-xs">
-                        {file.uploadedAt.toLocaleDateString()}
+                        {blogService.formatDate(file.uploadedAt)}
                       </p>
                       {file.type === 'image' && (
                         <a

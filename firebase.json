@@ -10,8 +10,16 @@
     "trailingSlash": false,
     "rewrites": [
       {
+        "source": "/blog",
+        "destination": "/blog/index.html"
+      },
+      {
+        "source": "/cms/**",
+        "destination": "/cms/index.html"
+      },
+      {
         "source": "**",
-        "destination": "/404.html"
+        "destination": "/index.html"
       }
     ],
     "headers": [
@@ -20,7 +28,34 @@
         "headers": [
           {
             "key": "Cache-Control",
+            "value": "no-store, no-cache, must-revalidate, proxy-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|ico)",
+        "headers": [
+          {
+            "key": "Cache-Control",
             "value": "max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(woff|woff2|ttf|eot)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
           }
         ]
       }
@@ -29,5 +64,20 @@
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
+  },
+  "functions": {
+    "source": "functions"
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    }
   }
 }

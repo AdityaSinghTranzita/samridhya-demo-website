@@ -1,0 +1,396 @@
+{
+  "info": {
+    "name": "Samridhya Blog API",
+    "description": "A comprehensive collection for testing the Samridhya Blog API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://us-central1-your-project-id.cloudfunctions.net/api",
+      "type": "string"
+    },
+    {
+      "key": "localUrl",
+      "value": "http://localhost:5001/your-project-id/us-central1/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "Get All Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/posts?status=published&limit=10&offset=0",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "posts"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "published",
+                  "description": "Filter by status"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of posts to return"
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of posts to skip"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Posts by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/posts?category=Technology&status=published",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "posts"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Technology",
+                  "description": "Filter by category"
+                },
+                {
+                  "key": "status",
+                  "value": "published",
+                  "description": "Filter by status"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Featured Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/posts?featured=true&status=published",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "posts"],
+              "query": [
+                {
+                  "key": "featured",
+                  "value": "true",
+                  "description": "Filter by featured status"
+                },
+                {
+                  "key": "status",
+                  "value": "published",
+                  "description": "Filter by status"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Post by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/posts/POST_ID_HERE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "posts", "POST_ID_HERE"],
+              "variable": [
+                {
+                  "key": "POST_ID_HERE",
+                  "value": "your-post-id",
+                  "description": "Replace with actual post ID"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Post by Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/posts/slug/my-blog-post",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "posts", "slug", "my-blog-post"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create New Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"My New Blog Post\",\n  \"excerpt\": \"This is a brief excerpt of my new blog post.\",\n  \"content\": \"This is the full content of my blog post. It can be very long and contain multiple paragraphs.\",\n  \"author\": \"John Doe\",\n  \"status\": \"draft\",\n  \"category\": \"Technology\",\n  \"tags\": [\"tech\", \"programming\", \"web development\"],\n  \"featuredImage\": \"https://example.com/image.jpg\",\n  \"featured\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/posts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "posts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Post",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Blog Post Title\",\n  \"excerpt\": \"Updated excerpt\",\n  \"content\": \"Updated content\",\n  \"status\": \"published\",\n  \"featured\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/posts/POST_ID_HERE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "posts", "POST_ID_HERE"],
+              "variable": [
+                {
+                  "key": "POST_ID_HERE",
+                  "value": "your-post-id",
+                  "description": "Replace with actual post ID"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Post",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/posts/POST_ID_HERE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "posts", "POST_ID_HERE"],
+              "variable": [
+                {
+                  "key": "POST_ID_HERE",
+                  "value": "your-post-id",
+                  "description": "Replace with actual post ID"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "item": [
+        {
+          "name": "Search Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/search?q=technology&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "technology",
+                  "description": "Search query"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of results to return"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Like Post",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/posts/POST_ID_HERE/like",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "posts", "POST_ID_HERE", "like"],
+              "variable": [
+                {
+                  "key": "POST_ID_HERE",
+                  "value": "your-post-id",
+                  "description": "Replace with actual post ID"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories & Tags",
+      "item": [
+        {
+          "name": "Get Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "categories"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tags",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/tags",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "tags"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Featured & Popular",
+      "item": [
+        {
+          "name": "Get Featured Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/featured?limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "featured"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5",
+                  "description": "Number of featured posts to return"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Popular Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blog/popular?limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "blog", "popular"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5",
+                  "description": "Number of popular posts to return"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Set default headers if needed",
+          "pm.request.headers.add({",
+          "    key: 'Accept',",
+          "    value: 'application/json'",
+          "});"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Basic response validation",
+          "pm.test('Status code is 200 or 201', function () {",
+          "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+          "});",
+          "",
+          "pm.test('Response has success property', function () {",
+          "    const response = pm.response.json();",
+          "    pm.expect(response).to.have.property('success');",
+          "});",
+          "",
+          "pm.test('Response time is less than 2000ms', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+          "});"
+        ]
+      }
+    }
+  ]
+} 

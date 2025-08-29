@@ -172,8 +172,10 @@ export default function LoanNavbar() {
             </button>
             {dropdown === 'calculators' && (
               <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-30">
+                <Link href="/calculators" className="block px-5 py-2 hover:bg-blue-50 text-gray-700 font-medium">All Calculators</Link>
                 <Link href="/calculators/loan-calculator" className="block px-5 py-2 hover:bg-blue-50 text-gray-700">Loan EMI Calculator</Link>
                 <Link href="/calculators/credit-score-checker" className="block px-5 py-2 hover:bg-blue-50 text-gray-700">Credit Score Checker</Link>
+                <Link href="/calculators/sip-calculator" className="block px-5 py-2 hover:bg-blue-50 text-gray-700">SIP Calculator</Link>
               </div>
             )}
           </li>
@@ -250,8 +252,10 @@ export default function LoanNavbar() {
 
             <li className="font-semibold pt-3">Calculators</li>
             <ul className="ml-4 space-y-1">
+              <li><Link href="/calculators" onClick={closeMobileMenu} className="block py-1 font-medium">All Calculators</Link></li>
               <li><Link href="/calculators/loan-calculator" onClick={closeMobileMenu} className="block py-1">Loan EMI Calculator</Link></li>
               <li><Link href="/calculators/credit-score-checker" onClick={closeMobileMenu} className="block py-1">Credit Score Checker</Link></li>
+              <li><Link href="/calculators/sip-calculator" onClick={closeMobileMenu} className="block py-1">SIP Calculator</Link></li>
             </ul>
 
             <li><Link href="/blog" onClick={closeMobileMenu} className="block py-2">Blogs & News</Link></li>

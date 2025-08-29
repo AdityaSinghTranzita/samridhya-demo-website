@@ -160,8 +160,10 @@ export default function Navbar() {
             </button>
             {dropdown === 'calculators' && (
               <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 z-30">
+                <Link href="/calculators" className="block px-5 py-2 hover:bg-blue-50 text-gray-700 font-medium">All Calculators</Link>
                 <Link href="/calculators/loan-calculator" className="block px-5 py-2 hover:bg-blue-50 text-gray-700">Loan EMI Calculator</Link>
                 <Link href="/calculators/credit-score-checker" className="block px-5 py-2 hover:bg-blue-50 text-gray-700">Credit Score Checker</Link>
+                <Link href="/calculators/sip-calculator" className="block px-5 py-2 hover:bg-blue-50 text-gray-700">SIP Calculator</Link>
               </div>
             )}
           </li>
@@ -331,6 +333,13 @@ export default function Navbar() {
                 {mobileDropdowns.calculators && (
                   <div className="ml-4 mt-2 space-y-1">
                     <Link 
+                      href="/calculators" 
+                      onClick={closeMobileMenu} 
+                      className="block py-2 px-4 text-gray-600 hover:bg-blue-50 rounded-lg transition-colors font-medium"
+                    >
+                      All Calculators
+                    </Link>
+                    <Link 
                       href="/calculators/loan-calculator" 
                       onClick={closeMobileMenu} 
                       className="block py-2 px-4 text-gray-600 hover:bg-blue-50 rounded-lg transition-colors"
@@ -343,6 +352,13 @@ export default function Navbar() {
                       className="block py-2 px-4 text-gray-600 hover:bg-blue-50 rounded-lg transition-colors"
                     >
                       Credit Score Checker
+                    </Link>
+                    <Link 
+                      href="/calculators/sip-calculator" 
+                      onClick={closeMobileMenu} 
+                      className="block py-2 px-4 text-gray-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    >
+                      SIP Calculator
                     </Link>
                   </div>
                 )}

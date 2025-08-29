@@ -138,7 +138,7 @@ export const trackLoanPageVisit = (
 
 // Track calculator usage
 export const trackCalculatorUsage = (
-  calculatorType: 'emi' | 'credit_score',
+  calculatorType: 'emi' | 'credit_score' | 'auto_loan' | 'personal_loan' | 'future_value' | 'sip' | 'compound_interest' | 'simple_interest' | 'gst',
   parameters: Record<string, any> = {},
   additionalParams: Record<string, any> = {}
 ) => {

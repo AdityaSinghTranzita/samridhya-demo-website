@@ -7,6 +7,16 @@ import {
 } from 'firebase/auth';
 import { auth } from './config';
 
+// Check if Firebase auth is properly initialized
+const isAuthAvailable = () => {
+  try {
+    return auth && typeof auth.onAuthStateChanged === 'function';
+  } catch (error) {
+    console.error('Firebase auth not available:', error);
+    return false;
+  }
+};
+
 const googleProvider = new GoogleAuthProvider();
 
 // Allowed email domains for CMS access
@@ -30,6 +40,13 @@ export interface SignInResult {
 // Sign in with Google with domain restriction
 export const signInWithGoogle = async (): Promise<SignInResult> => {
   try {
+    if (!isAuthAvailable()) {
+      return {
+        success: false,
+        error: 'Firebase authentication is not available. Please check your configuration.'
+      };
+    }
+
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
     
@@ -59,6 +76,10 @@ export const signInWithGoogle = async (): Promise<SignInResult> => {
 // Sign out
 export const signOutUser = async () => {
   try {
+    if (!isAuthAvailable()) {
+      console.warn('Firebase auth not available for sign out');
+      return;
+    }
     await signOut(auth);
   } catch (error) {
     console.error('Error signing out:', error);
@@ -68,10 +89,29 @@ export const signOutUser = async () => {
 
 // Get current user
 export const getCurrentUser = (): User | null => {
-  return auth.currentUser;
+  try {
+    if (!isAuthAvailable()) {
+      return null;
+    }
+    return auth.currentUser;
+  } catch (error) {
+    console.error('Error getting current user:', error);
+    return null;
+  }
 };
 
 // Listen to auth state changes
 export const onAuthStateChange = (callback: (user: User | null) => void) => {
-  return onAuthStateChanged(auth, callback);
+  try {
+    if (!isAuthAvailable()) {
+      console.warn('Firebase auth not available for auth state change listener');
+      // Return a dummy unsubscribe function
+      return () => {};
+    }
+    return onAuthStateChanged(auth, callback);
+  } catch (error) {
+    console.error('Error setting up auth state change listener:', error);
+    // Return a dummy unsubscribe function
+    return () => {};
+  }
 };

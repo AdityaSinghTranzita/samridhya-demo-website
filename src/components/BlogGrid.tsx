@@ -1,7 +1,4 @@
-'use client';
-
-import { motion } from 'framer-motion';
-import { BlogPost } from '@/services/blogService';
+import { BlogPost, blogService } from '@/services/blogService';
 import BlogCard from './BlogCard';
 
 interface BlogGridProps {
@@ -45,13 +42,7 @@ export default function BlogGrid({
     <div className={className}>
       {/* Title Section */}
       {showTitle && (title || subtitle) && (
-        <motion.div
-          className="text-center mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+        <div className="text-center mb-8">
           {title && (
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
               {title}
@@ -62,7 +53,7 @@ export default function BlogGrid({
               {subtitle}
             </p>
           )}
-        </motion.div>
+        </div>
       )}
 
       {/* Blog Grid */}
@@ -84,22 +75,12 @@ export default function BlogGrid({
       ) : posts.length > 0 ? (
         <div className={`grid ${gridCols[columns]} ${gapSizes[columns]}`}>
           {posts.map((post, index) => (
-            <motion.div
-              key={post.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-            >
+            <div key={post.id}>
               <BlogCard
                 title={post.title}
                 excerpt={post.excerpt}
                 author={post.author}
-                date={(post.publishedAt || post.updatedAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
+                date={blogService.formatDate(post.publishedAt || post.updatedAt)}
                 readTime={`${Math.ceil(post.content.split(' ').length / 200)} min read`}
                 category={post.category}
                 subcategory={post.subcategory}
@@ -107,18 +88,12 @@ export default function BlogGrid({
                 image={post.featuredImage}
                 featured={false}
               />
-            </motion.div>
+            </div>
           ))}
         </div>
       ) : (
         /* Empty State */
-        <motion.div
-          className="text-center py-16 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+        <div className="text-center py-16 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg">
           {emptyIcon && (
             <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
               {emptyIcon}
@@ -130,7 +105,7 @@ export default function BlogGrid({
           <p className="text-gray-600 max-w-md mx-auto px-4">
             Try adjusting your search or filter criteria to find what you're looking for.
           </p>
-        </motion.div>
+        </div>
       )}
     </div>
   );

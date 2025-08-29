@@ -1,8 +1,7 @@
-'use client';
-
-import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Calendar, Clock, User, ArrowRight, Tag } from 'lucide-react';
+import { Calendar, Clock, User, ArrowRight, Tag, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 interface BlogCardProps {
   title: string;
@@ -29,17 +28,55 @@ export default function BlogCard({
   image,
   featured = false
 }: BlogCardProps) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (isLoading) return; // Prevent multiple clicks
+    
+    setIsLoading(true);
+    
+    try {
+      // Use Next.js router for proper navigation
+      await router.push(`/blog/${slug}`);
+    } catch (error) {
+      console.error('Navigation error:', error);
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Link href={`/blog/${slug}`} className="block">
-      <motion.div
+    <div 
+      className="block cursor-pointer relative" 
+      onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          e.stopPropagation();
+          handleClick(e as any);
+        }
+      }}
+      tabIndex={0}
+      role="button"
+      aria-label={`Read article: ${title}`}
+    >
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center rounded-2xl">
+          <div className="flex flex-col items-center space-y-3">
+            <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+            <p className="text-sm font-medium text-gray-700">Loading article...</p>
+          </div>
+        </div>
+      )}
+      
+      <div
         className={`group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col cursor-pointer ${
           featured ? 'ring-2 ring-blue-500/20' : ''
-        }`}
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        whileHover={{ y: -5 }}
+        } ${isLoading ? 'pointer-events-none' : ''}`}
       >
         {/* Featured Badge */}
         {featured && (
@@ -115,11 +152,20 @@ export default function BlogCard({
 
           {/* Read More Button */}
           <div className="inline-flex items-center text-blue-600 hover:text-blue-700 font-semibold text-xs sm:text-sm group-hover:translate-x-1 transition-all duration-300 mt-auto">
-            Read More
-            <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+            {isLoading ? (
+              <>
+                <Loader2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 animate-spin" />
+                Loading...
+              </>
+            ) : (
+              <>
+                Read More
+                <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+              </>
+            )}
           </div>
         </div>
-      </motion.div>
-    </Link>
+      </div>
+    </div>
   );
 }
