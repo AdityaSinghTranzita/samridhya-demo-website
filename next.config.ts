@@ -66,6 +66,33 @@ const nextConfig = {
           
         ],
       },
+      // Sitemap headers
+      {
+        source: '/sitemap.xml',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/xml',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, s-maxage=3600, stale-while-revalidate=86400',
+          },
+        ],
+      },
+      {
+        source: '/sitemap-index.xml',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/xml',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, s-maxage=3600, stale-while-revalidate=86400',
+          },
+        ],
+      },
     ];
   },
   

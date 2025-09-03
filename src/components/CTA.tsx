@@ -283,12 +283,12 @@ export default function Footer() {
                     <ChevronDown className={`w-4 h-4 lg:hidden transition-transform duration-200 ${expandedSections.includes('loan') ? 'rotate-180' : ''}`} />
                   </button>
                   <ul className={`space-y-2 transition-all duration-300 ${expandedSections.includes('loan') ? 'block' : 'hidden lg:block'}`}>
-                    <li><Link href="/calculators/loan-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Personal Loan EMI Calculator</Link></li>
-                    <li><Link href="/calculators/mortgage-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Home Loan EMI Calculator</Link></li>
-                    <li><Link href="/calculators/auto-loan-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Car Loan EMI Calculator</Link></li>
-                    <li><Link href="/calculators/personal-loan-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Business Loan EMI Calculator</Link></li>
-                    <li><Link href="/calculators/amortization-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Amortization Calculator</Link></li>
-                    <li><Link href="/calculators/refinance-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Refinance Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/loan-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Personal Loan EMI Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/mortgage-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Home Loan EMI Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/auto-loan-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Car Loan EMI Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/business-loan-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Business Loan EMI Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/amortization-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Amortization Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/refinance-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Refinance Calculator</Link></li>
                   </ul>
                 </div>
 
@@ -303,12 +303,12 @@ export default function Footer() {
                     <ChevronDown className={`w-4 h-4 lg:hidden transition-transform duration-200 ${expandedSections.includes('investment') ? 'rotate-180' : ''}`} />
                   </button>
                   <ul className={`space-y-2 transition-all duration-300 ${expandedSections.includes('investment') ? 'block' : 'hidden lg:block'}`}>
-                    <li><Link href="/calculators/sip-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">SIP Calculator</Link></li>
-                    <li><Link href="/calculators/compound-interest" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Compound Interest Calculator</Link></li>
-                    <li><Link href="/calculators/lumpsum-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Lumpsum Calculator</Link></li>
-                    <li><Link href="/calculators/fd-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Fixed Deposit Calculator</Link></li>
-                    <li><Link href="/calculators/rd-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Recurring Deposit Calculator</Link></li>
-                    <li><Link href="/calculators/roi-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">ROI Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/sip-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">SIP Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/compound-interest" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Compound Interest Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/lumpsum-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Lumpsum Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/fd-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Fixed Deposit Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/rd-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Recurring Deposit Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/roi-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">ROI Calculator</Link></li>
                   </ul>
                 </div>
 
@@ -323,12 +323,12 @@ export default function Footer() {
                     <ChevronDown className={`w-4 h-4 lg:hidden transition-transform duration-200 ${expandedSections.includes('planning') ? 'rotate-180' : ''}`} />
                   </button>
                   <ul className={`space-y-2 transition-all duration-300 ${expandedSections.includes('planning') ? 'block' : 'hidden lg:block'}`}>
-                    <li><Link href="/calculators/retirement-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Retirement Calculator</Link></li>
-                    <li><Link href="/calculators/child-planning" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Child Planning Calculator</Link></li>
-                    <li><Link href="/calculators/savings-goal" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Savings Goal Calculator</Link></li>
-                    <li><Link href="/calculators/budget-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Budget Calculator</Link></li>
-                    <li><Link href="/calculators/net-worth" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Net Worth Calculator</Link></li>
-                    <li><Link href="/calculators/mortgage-vs-rent" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Mortgage vs Rent Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/retirement-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Retirement Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/child-planning" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Child Planning Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/savings-goal" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Savings Goal Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/budget-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Budget Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/net-worth" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Net Worth Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/mortgage-vs-rent" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Mortgage vs Rent Calculator</Link></li>
                   </ul>
                 </div>
 
@@ -343,12 +343,12 @@ export default function Footer() {
                     <ChevronDown className={`w-4 h-4 lg:hidden transition-transform duration-200 ${expandedSections.includes('tax') ? 'rotate-180' : ''}`} />
                   </button>
                   <ul className={`space-y-2 transition-all duration-300 ${expandedSections.includes('tax') ? 'block' : 'hidden lg:block'}`}>
-                    <li><Link href="/calculators/income-tax" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Income Tax Calculator</Link></li>
-                    <li><Link href="/calculators/gst-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">GST Calculator</Link></li>
-                    <li><Link href="/calculators/credit-card-payoff" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Credit Card Payoff Calculator</Link></li>
-                    <li><Link href="/calculators/debt-to-income" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Debt-to-Income Ratio Calculator</Link></li>
-                    <li><Link href="/calculators/credit-score-checker" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Credit Score Checker</Link></li>
-                    <li><Link href="/calculators/simple-interest-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Simple Interest Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/income-tax" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Income Tax Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/gst-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">GST Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/credit-card-payoff" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Credit Card Payoff Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/debt-to-income" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Debt-to-Income Ratio Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/credit-score-checker" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Credit Score Checker</Link></li>
+                    <li><Link  target="_blank" href="/calculators/simple-interest-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Simple Interest Calculator</Link></li>
                   </ul>
                 </div>
 
@@ -363,12 +363,12 @@ export default function Footer() {
                     <ChevronDown className={`w-4 h-4 lg:hidden transition-transform duration-200 ${expandedSections.includes('utility') ? 'rotate-180' : ''}`} />
                   </button>
                   <ul className={`space-y-2 transition-all duration-300 ${expandedSections.includes('utility') ? 'block' : 'hidden lg:block'}`}>
-                    <li><Link href="/calculators/inflation-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Inflation Calculator</Link></li>
-                    <li><Link href="/calculators/currency-converter" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Currency Converter</Link></li>
-                    <li><Link href="/calculators/future-value-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Future Value Calculator</Link></li>
-                    <li><Link href="/calculators/compound-interest" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Compound Interest Calculator</Link></li>
-                    <li><Link href="/calculators/sip-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">SIP Calculator</Link></li>
-                    <li><Link href="/calculators" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm font-medium">View All Calculators →</Link></li>
+                    <li><Link  target="_blank" href="/calculators/inflation-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Inflation Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/currency-converter" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Currency Converter</Link></li>
+                    <li><Link  target="_blank" href="/calculators/future-value-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Future Value Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/compound-interest" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Compound Interest Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators/sip-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">SIP Calculator</Link></li>
+                    <li><Link  target="_blank" href="/calculators" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm font-medium">View All Calculators →</Link></li>
                   </ul>
                 </div>
               </div>

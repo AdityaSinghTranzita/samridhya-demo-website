@@ -53,7 +53,7 @@ const NewBlogPost: React.FC = () => {
     shares: 0
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
+  const [showPreview, setShowPreview] = useState(true);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [tagInput, setTagInput] = useState('');
   const [seoKeywordInput, setSeoKeywordInput] = useState('');

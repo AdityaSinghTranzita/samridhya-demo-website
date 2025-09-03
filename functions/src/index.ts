@@ -31,6 +31,11 @@ import {
   getPopularPosts
 } from './routes/blogRoutes';
 
+import {
+  generateSitemap,
+  generateSitemapIndex
+} from './routes/sitemapRoutes';
+
 // Create Express app
 const app = express();
 
@@ -136,6 +141,15 @@ app.get('/api/blog/popular', async (req: any, res: any) => {
   await getPopularPosts(req, res);
 });
 
+// Sitemap routes
+app.get('/sitemap.xml', async (req: any, res: any) => {
+  await generateSitemap(req, res);
+});
+
+app.get('/sitemap-index.xml', async (req: any, res: any) => {
+  await generateSitemapIndex(req, res);
+});
+
 // 404 handler
 app.use('*', (req: any, res: any) => {
   res.status(404).json({
@@ -153,37 +167,8 @@ app.use((error: any, req: any, res: any, next: any) => {
   });
 });
 
-// Firestore Triggers - Temporarily commented out for deployment
-/*
-export const onBlogPostChange = onDocumentWritten('blog-posts/{docId}', async (event) => {
-  const logger = new Logger('FirestoreTrigger');
-  
-  try {
-    const { before, after } = event.data!;
-    
-    if (!before && after) {
-      // Document created
-      logger.info('Blog post created', { 
-        docId: event.params.docId,
-        title: after.data()?.title 
-      });
-    } else if (before && after) {
-      // Document updated
-      logger.info('Blog post updated', { 
-        docId: event.params.docId,
-        title: after.data()?.title 
-      });
-    } else if (before && !after) {
-      // Document deleted
-      logger.info('Blog post deleted', { 
-        docId: event.params.docId 
-      });
-    }
-  } catch (error) {
-    logger.error('Error in blog post change trigger', { 
-      error: error instanceof Error ? error.message : String(error),
-      docId: event.params.docId 
-    });
-  }
-});
-*/
+// Import Firestore triggers
+import { onBlogPostChange } from './triggers/blogTriggers';
+
+// Firestore Triggers
+export { onBlogPostChange };
