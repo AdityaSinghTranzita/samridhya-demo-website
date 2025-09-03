@@ -41,7 +41,7 @@ const EditBlogPost: React.FC = () => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
+  const [showPreview, setShowPreview] = useState(true);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [tagInput, setTagInput] = useState('');
   const [seoKeywordInput, setSeoKeywordInput] = useState('');

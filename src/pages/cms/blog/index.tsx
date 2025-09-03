@@ -7,7 +7,7 @@ import CMSLayout from '@/components/CMSLayout';
 import CustomAlert from '@/components/CustomAlert';
 import { useCustomAlert } from '@/hooks/useCustomAlert';
 import { motion } from 'framer-motion';
-import { FileText, Plus, Edit, Trash2, Calendar, Tag, Eye, EyeOff, MoreVertical } from 'lucide-react';
+import { FileText, Plus, Edit, Trash2, Calendar, Tag, Eye, EyeOff, MoreVertical, ExternalLink } from 'lucide-react';
 import { blogService, BlogPost } from '@/services/blogService';
 
 const BlogList: React.FC = () => {
@@ -211,37 +211,37 @@ const BlogList: React.FC = () => {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all duration-300"
             >
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-start space-x-4">
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-4">
                     <div className="flex items-center justify-center w-12 h-12 bg-blue-50 rounded-xl flex-shrink-0">
                       <FileText className="w-6 h-6 text-blue-600" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900 truncate">
+                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                        <h3 className="text-lg font-semibold text-gray-900 break-words">
                           {post.title}
                         </h3>
                         {getStatusBadge(post.status)}
                       </div>
-                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                      <p className="text-gray-600 text-sm mb-3 line-clamp-2 break-words">
                         {post.excerpt}
                       </p>
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-                        <div className="flex items-center space-x-1">
+                      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 sm:gap-4 text-sm text-gray-500">
+                        <div className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
                           <span>Created: {blogService.formatDate(post.createdAt)}</span>
                         </div>
                         {post.publishedAt && (
-                          <div className="flex items-center space-x-1">
+                          <div className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
                             <span>Published: {blogService.formatDate(post.publishedAt)}</span>
                           </div>
                         )}
                         {post.tags.length > 0 && (
-                          <div className="flex items-center space-x-1">
+                          <div className="flex items-center gap-1">
                             <Tag className="w-4 h-4" />
-                            <div className="flex space-x-1">
+                            <div className="flex flex-wrap gap-1">
                               {post.tags.slice(0, 3).map((tag) => (
                                 <span
                                   key={tag}
@@ -262,14 +262,28 @@ const BlogList: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2 flex-shrink-0">
+                <div className="flex flex-wrap items-center justify-start lg:justify-end gap-2 flex-shrink-0">
+                  {/* View Blog Button - Only show for published posts */}
+                  {post.status === 'published' && post.slug && (
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-green-600 hover:text-green-700 transition-colors duration-200 px-2 sm:px-3 py-2 sm:py-1.5 rounded-lg hover:bg-green-50 min-h-[44px] sm:min-h-0"
+                      title="View published post"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span className="text-sm font-medium">View Blog</span>
+                    </Link>
+                  )}
+                  
                   {/* Status Toggle */}
                   <button
                     onClick={() => handleStatusChange(post.id!, post.status === 'published' ? 'draft' : 'published')}
-                    className={`flex items-center space-x-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                    className={`flex items-center gap-1 px-2 sm:px-3 py-2 sm:py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 min-h-[44px] sm:min-h-0 ${
                       post.status === 'published'
-                        ? 'text-yellow-600 hover:text-yellow-700 bg-yellow-50 hover:bg-yellow-100'
-                        : 'text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100'
+                        ? 'text-yellow-600 hover:text-yellow-700 hover:bg-yellow-50'
+                        : 'text-green-600 hover:text-green-700 hover:bg-green-50'
                     }`}
                   >
                     {post.status === 'published' ? (
@@ -288,7 +302,7 @@ const BlogList: React.FC = () => {
                   {/* Edit Button */}
                   <Link
                     href={`/cms/blog/${post.id}/edit`}
-                    className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition-colors duration-200 px-3 py-1.5 rounded-lg hover:bg-blue-50"
+                    className="flex items-center gap-1 text-blue-600 hover:text-blue-700 transition-colors duration-200 px-2 sm:px-3 py-2 sm:py-1.5 rounded-lg hover:bg-blue-50 min-h-[44px] sm:min-h-0"
                   >
                     <Edit className="w-4 h-4" />
                     <span className="text-sm font-medium">Edit</span>
@@ -297,7 +311,7 @@ const BlogList: React.FC = () => {
                   {/* Delete Button */}
                   <button
                     onClick={() => handleDelete(post.id!)}
-                    className="flex items-center space-x-1 text-red-600 hover:text-red-700 transition-colors duration-200 px-3 py-1.5 rounded-lg hover:bg-red-50"
+                    className="flex items-center gap-1 text-red-600 hover:text-red-700 transition-colors duration-200 px-2 sm:px-3 py-2 sm:py-1.5 rounded-lg hover:bg-red-50 min-h-[44px] sm:min-h-0"
                   >
                     <Trash2 className="w-4 h-4" />
                     <span className="text-sm font-medium">Delete</span>

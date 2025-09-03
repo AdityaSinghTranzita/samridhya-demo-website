@@ -7,12 +7,13 @@
     "dev:https": "NODE_ENV=development node server.js",
     "build": "next build",
     "build:firebase": "next build && npm run post-build",
-    "post-build": "cp public/404.html out/404.html && cp public/index.html out/index.html &&  next-sitemap",
+    "post-build": "cp public/404.html out/404.html && cp public/index.html out/index.html && next-sitemap",
     "start": "next start",
     "lint": "next lint",
     "deploy": "./deploy.sh",
     "deploy:firebase": "npm run build:firebase && firebase deploy --only hosting",
     "create-indexes": "node scripts/create-firestore-indexes.js",
+    "generate-sitemap": "node scripts/generate-sitemap.js",
     "analyze": "ANALYZE=true npm run build"
   },
   "dependencies": {

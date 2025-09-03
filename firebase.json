@@ -10,6 +10,14 @@
     "trailingSlash": false,
     "rewrites": [
       {
+        "source": "/sitemap.xml",
+        "function": "api"
+      },
+      {
+        "source": "/sitemap-index.xml",
+        "function": "api"
+      },
+      {
         "source": "/blog",
         "destination": "/blog/index.html"
       },

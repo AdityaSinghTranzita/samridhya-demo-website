@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from 'next/document';
+import Script from 'next/script';
 
 export default function Document() {
   return (
@@ -105,6 +106,14 @@ export default function Document() {
           />
         </noscript>
         {/* End Meta Pixel Code */}
+
+
+         {/* Ahrefs Analytics */}
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="uuJx50jKbzunA1/UhU2rIQ"
+          strategy="afterInteractive"
+        />
         
         {/* Basic Meta Tags */}
         <meta charSet="utf-8" />
@@ -133,6 +142,9 @@ export default function Document() {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Samridhya" />
+        
+        {/* Sitemap Link */}
+        <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
         
         {/* Structured Data for Rich Snippets */}
         <script

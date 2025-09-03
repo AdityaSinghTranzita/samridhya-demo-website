@@ -34,25 +34,7 @@ body {
   padding: 0;
 }
 
-/* Critical loader styles - available before Tailwind loads */
-.page-loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
-  font-family: system-ui, -apple-system, sans-serif;
-}
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
 
 /* Prevent layout shift */
 * {
@@ -604,25 +586,9 @@ html, body {
   user-scalable: yes;
 }
 
-/* Performance optimizations */
-.loading-placeholder {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom right, #f8fafc, #e0f2fe, #e0e7ff);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-/* Critical animations */
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+
+
 
 /* Prevent FOUC for critical elements */
 .navbar-placeholder {

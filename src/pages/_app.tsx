@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 
 import { initGA, trackPageView } from '@/utils/analytics'
 import { AuthProvider } from '@/contexts/AuthContext'
-import PageLoader from '@/components/PageLoader'
 // Temporarily disable cache management to fix redirect loops
 // import { initCacheManagement, preserveLocalStorage, restoreLocalStorage } from '@/utils/cacheUtils'
 
@@ -98,29 +97,6 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="preload" href="/_next/static/css/app.css" as="style" />
         <link rel="preload" href="/_next/static/css/globals.css" as="style" />
         
-        {/* Inline critical CSS for immediate loading */}
-        <style dangerouslySetInnerHTML={{
-          __html: `
-            .page-loader {
-              position: fixed;
-              top: 0;
-              left: 0;
-              right: 0;
-              bottom: 0;
-              z-index: 9999;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              background: #ffffff;
-              font-family: system-ui, -apple-system, sans-serif;
-            }
-            @keyframes spin {
-              from { transform: rotate(0deg); }
-              to { transform: rotate(360deg); }
-            }
-          `
-        }} />
-        
         {/* Performance meta tags */}
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -129,9 +105,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="format-detection" content="telephone=no" />
       </Head>
       
-      <PageLoader>
-        <Component {...pageProps} />
-      </PageLoader>
+      <Component {...pageProps} />
     </AuthProvider>
   )
 }
