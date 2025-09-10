@@ -16,7 +16,7 @@ export default function AutoLoanCalculatorPage() {
         <meta property="og:title" content="Auto Loan Calculator - Calculate Car Loan EMI | Samridhya" />
         <meta property="og:description" content="Use our free auto loan calculator to calculate car loan EMI and affordability." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/calculators/auto-loan-calculator" />
+        <meta property="og:url" content="https://samridhya.com/calculators/auto-loan-calculator/" />
         <meta name="twitter:title" content="Auto Loan Calculator - Calculate Car Loan EMI | Samridhya" />
         <meta name="twitter:description" content="Use our free auto loan calculator to calculate car loan EMI and affordability." />
       </Head>

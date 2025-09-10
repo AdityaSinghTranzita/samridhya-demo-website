@@ -118,7 +118,7 @@ export default function TravelLoan() {
         <meta property="og:title" content="Travel Loan - Vacation & Business Travel Financing | Samridhya" />
         <meta property="og:description" content="Get travel loans up to ₹10 Lakhs from Samridhya. Finance your vacation, business trips, and international travel with quick approval and competitive rates." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/loans/travel-loan" />
+        <meta property="og:url" content="https://samridhya.com/loans/travel-loan/" />
         <meta name="twitter:title" content="Travel Loan - Vacation & Business Travel Financing | Samridhya" />
         <meta name="twitter:description" content="Get travel loans up to ₹10 Lakhs from Samridhya. Finance your vacation, business trips, and international travel." />
       </Head>

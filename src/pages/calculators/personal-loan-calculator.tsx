@@ -16,7 +16,7 @@ export default function PersonalLoanCalculatorPage() {
         <meta property="og:title" content="Personal Loan Calculator - Calculate Personal Loan EMI | Samridhya" />
         <meta property="og:description" content="Use our free personal loan calculator to calculate personal loan EMI and total cost." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/calculators/personal-loan-calculator" />
+        <meta property="og:url" content="https://samridhya.com/calculators/personal-loan-calculator/" />
         <meta name="twitter:title" content="Personal Loan Calculator - Calculate Personal Loan EMI | Samridhya" />
         <meta name="twitter:description" content="Use our free personal loan calculator to calculate personal loan EMI and total cost." />
       </Head>

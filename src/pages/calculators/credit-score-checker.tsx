@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+// Removed framer-motion import for performance
 import Head from 'next/head';
+// Import only the icons we actually use to reduce bundle size
 import {
   CreditCard,
   Shield,
@@ -23,6 +24,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import CTA from '@/components/CTA';
+
 import { trackCreditScoreCheck, trackEvent, trackButtonClick, trackCalculatorUsage } from '@/utils/analytics';
 
 interface CreditScoreData {
@@ -365,7 +367,7 @@ export default function CreditScoreChecker() {
     setError('');
 
     try {
-      const response = await fetch(`${VERIFY_OTP_URL}?phone=${mobileNumber}`, {
+      const response = await fetch(`${VERIFY_OTP_URL}?phone=${mobileNumber}&utm_source=website&utm_medium=website&source=creditscore`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -905,9 +907,9 @@ export default function CreditScoreChecker() {
   return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-16">
         <Head>
-          <title>Free Credit Score Checker | Samridhya</title>
-          <meta name="description" content="Check your credit score instantly and securely. Our advanced system provides accurate credit insights and personalized recommendations based on your financial profile." />
-          <meta name="keywords" content="credit score, credit score checker, free credit score, credit score check, credit score calculator, credit score analysis, credit score report, credit score prediction, credit score improvement" />
+          <title>Free Credit Score Checker – Check CIBIL Score Online</title>
+          <meta name="description" content="Check your credit score online for free! Instantly get your CIBIL report and track your financial health with our secure credit score checker tool." />
+          <meta name="keywords" content="Credit score, credit score checker, check credit score free, how to check credit score, free credit score check, credit score check online, credit score tool, credit score check, best credit score checker, credit score report free, Cibil Score Checker, Cibil report checker, Top Cibil score checker tool, Cibil report generator, cibil score, cibil check" />
           <meta name="author" content="Samridhya" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <meta name="robots" content="index, follow" />
@@ -915,15 +917,159 @@ export default function CreditScoreChecker() {
           <meta name="bing-site-verification" content="your-bing-site-verification-code" />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:site" content="@samridhya" />
-          <meta name="twitter:title" content="Free Credit Score Checker | Samridhya" />
-          <meta name="twitter:description" content="Check your credit score instantly and securely. Our advanced system provides accurate credit insights and personalized recommendations based on your financial profile." />
+          <meta name="twitter:title" content="Free Credit Score Checker – Instant CIBIL Report | Samridhya" />
+          <meta name="twitter:description" content="Check your credit score online for free. Get an instant, secure, and accurate CIBIL report anytime." />
           <meta name="twitter:image" content="https://www.samridhya.com/images/credit-score-checker.jpg" />
-          <meta name="og:title" content="Free Credit Score Checker | Samridhya" />
-          <meta name="og:description" content="Check your credit score instantly and securely. Our advanced system provides accurate credit insights and personalized recommendations based on your financial profile." />
+          <meta name="og:title" content="Free Credit Score Checker – Instant CIBIL Report" />
+          <meta name="og:description" content="Get your credit score online for free. Get an instant, secure, and accurate CIBIL report anytime." />
           <meta name="og:image" content="https://www.samridhya.com/images/credit-score-checker.jpg" />
-          <meta name="og:url" content="https://www.samridhya.com/credit-score-checker" />
+          <meta name="og:url" content="https://samridhya.com/calculators/credit-score-checker/" />
           <meta name="og:site_name" content="Samridhya" />
-          <link rel="canonical" href="https://www.samridhya.com/credit-score-checker" />
+          <link rel="canonical" href="https://samridhya.com/calculators/credit-score-checker/" />
+          
+          {/* Performance Optimization Meta Tags */}
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <link rel="dns-prefetch" href="//buyer.prod.samridh.ai" />
+          
+          {/* Structured Data for SEO */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "WebApplication",
+                "name": "Samridhya Credit Score Checker",
+                "description": "Free credit score checker tool to check your credit score instantly. Get your credit report in minutes with no credit card required.",
+                "url": "https://samridhya.com/calculators/credit-score-checker/",
+                "applicationCategory": "FinanceApplication",
+                "operatingSystem": "Web Browser",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "0",
+                  "priceCurrency": "INR",
+                  "description": "Free credit score checking service"
+                },
+                "featureList": [
+                  "Instant credit score check",
+                  "Free credit report",
+                  "No credit card required",
+                  "Secure and reliable",
+                  "Detailed credit analysis"
+                ],
+                "provider": {
+                  "@type": "Organization",
+                  "name": "Samridhya",
+                  "url": "https://samridhya.com/"
+                }
+              })
+            }}
+          />
+          
+          {/* Critical CSS for above-the-fold content */}
+          <style dangerouslySetInnerHTML={{
+            __html: `
+              /* Prevent flash of unstyled content */
+              body { 
+                background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #eff6ff 100%);
+                margin: 0;
+                padding: 0;
+              }
+              .hero-section { 
+                background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #eff6ff 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem 1rem;
+              }
+              .hero-content { 
+                max-width: 1280px;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+              }
+              .hero-title { 
+                font-size: clamp(1.5rem, 4vw, 3rem);
+                font-weight: 700;
+                color: #1f2937;
+                margin-bottom: 1rem;
+                line-height: 1.1;
+              }
+              .hero-description { 
+                font-size: clamp(0.875rem, 2vw, 1.125rem);
+                color: #6b7280;
+                margin-bottom: 2rem;
+                max-width: 600px;
+              }
+              /* Image loading optimization */
+              img { 
+                transition: opacity 0.3s ease-in-out;
+              }
+              /* Prevent layout shifts */
+              .credit-card {
+                min-height: 200px;
+              }
+              .step-card {
+                min-height: 300px;
+              }
+              /* Skeleton animation */
+              @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.5; }
+              }
+              .animate-pulse {
+                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+              }
+              /* Fade in animation */
+              @keyframes fadeInUp {
+                from {
+                  opacity: 0;
+                  transform: translateY(20px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
+              .animate-fade-in-up {
+                animation: fadeInUp 0.6s ease-out;
+              }
+              /* Prevent CLS */
+              .form-container {
+                min-height: 400px;
+              }
+              /* Prevent FOUC - Critical styles for SEO */
+              html {
+                visibility: visible !important;
+                opacity: 1 !important;
+              }
+              body {
+                visibility: visible !important;
+                opacity: 1 !important;
+              }
+              /* Ensure all content is immediately visible for SEO */
+              .hero-section,
+              .credit-card,
+              .step-card,
+              .form-container {
+                visibility: visible !important;
+                opacity: 1 !important;
+              }
+              /* Prevent layout shifts without hiding content */
+              .animate-fade-in-up {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+              }
+              /* Ensure text content is immediately visible */
+              h1, h2, h3, h4, h5, h6, p, span, div {
+                visibility: visible !important;
+                opacity: 1 !important;
+              }
+            `
+          }} />
         </Head>
         <Navbar />
 
@@ -937,44 +1083,36 @@ export default function CreditScoreChecker() {
           </div>
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-            >
+            <div className="animate-fade-in-up">
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-3 mb-6">
                 <CreditCard className="w-5 h-5 text-white" />
                 <span className="text-white/90 font-medium">Free Credit Score Checker</span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">
                 Check Your Credit Score
                 <br />
                 <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
-                Instantly & Securely
+                Free & Instantly
               </span>
               </h1>
 
-              <p className="text-base sm:text-lg text-white/80 max-w-3xl mx-auto mb-8">
-                Get your credit score instantly. Our advanced system provides accurate credit insights
-                and personalized recommendations based on your financial profile.
+              <p className="text-sm sm:text-base text-white/80 max-w-2xl mx-auto mb-8">
+                Get your credit score in minutes. No credit card required, completely free and secure.
               </p>
-            </motion.div>
+            </div>
           </div>
         </section>
 
         {/* Main Content */}
         <section className="py-12 sm:py-16 lg:py-20">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <AnimatePresence mode="wait">
+            <div className="transition-all duration-300">
               {/* Step 1: Mobile Number Input */}
               {currentStep === 1 && (
-                  <motion.div
+                  <div
                       key="step1"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl"
+                      className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl animate-fade-in-up step-card form-container"
                   >
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
@@ -1040,17 +1178,14 @@ export default function CreditScoreChecker() {
                         {isLoading ? 'Sending OTP...' : 'Get Free Credit Report'}
                       </button>
                     </div>
-                  </motion.div>
+                  </div>
               )}
 
               {/* Step 2: OTP Verification */}
               {currentStep === 2 && (
-                  <motion.div
+                  <div
                       key="step2"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl"
+                      className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl animate-fade-in-up step-card form-container"
                   >
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
@@ -1120,17 +1255,14 @@ export default function CreditScoreChecker() {
                         {isLoading ? 'Verifying...' : 'Verify & Continue'}
                       </button>
                     </div>
-                  </motion.div>
+                  </div>
               )}
 
               {/* Step 3: User Details */}
               {currentStep === 3 && (
-                  <motion.div
+                  <div
                       key="step3"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl"
+                      className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl animate-fade-in-up step-card form-container"
                   >
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
@@ -1230,17 +1362,14 @@ export default function CreditScoreChecker() {
                         {isLoading ? 'Processing...' : 'Get My Credit Score'}
                       </button>
                     </div>
-                  </motion.div>
+                  </div>
               )}
 
               {/* Step 4: Loading */}
               {currentStep === 4 && (
-                  <motion.div
+                  <div
                       key="step4"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl text-center"
+                      className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl text-center animate-fade-in-up step-card form-container"
                   >
                     <div className="flex flex-col items-center space-y-6">
                       <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
@@ -1253,7 +1382,7 @@ export default function CreditScoreChecker() {
                         </p>
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
               )}
 
                             {/* Step 5: Credit Score Dashboard */}
@@ -1261,11 +1390,7 @@ export default function CreditScoreChecker() {
                   <>
                     {/* Data Validation Warning */}
                     {!hasValidReportData(creditScoreData) && creditScoreData.credit_score !== null && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg"
-                        >
+                        <div className="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg animate-fade-in-up">
                           <div className="flex items-center gap-2">
                             <AlertCircle className="w-5 h-5 text-yellow-600" />
                             <div>
@@ -1275,15 +1400,12 @@ export default function CreditScoreChecker() {
                               </p>
                             </div>
                           </div>
-                        </motion.div>
+                        </div>
                     )}
                     
-                    <motion.div
+                    <div
                         key="step5"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        className="space-y-6"
+                        className="space-y-6 animate-fade-in-up"
                     >
                     {/* Back Button */}
                     <div className="flex justify-start">
@@ -1297,7 +1419,7 @@ export default function CreditScoreChecker() {
                     </div>
 
                     {/* Header */}
-                    <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
+                    <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl credit-card">
                       <div className="text-left mb-6">
                         <h1 className="text-2xl font-bold text-gray-900 mb-2">
                           Hey { creditScoreData?.report?.Current_Application?.Current_Application_Details?.Current_Applicant_Details?.First_Name || userDetails.name || 'User'}!
@@ -2006,18 +2128,15 @@ export default function CreditScoreChecker() {
                     )}
 
 
-                  </motion.div>
+                  </div>
                   </>
               )}
 
               {/* Step 6: No Credit Record */}
               {currentStep === 6 && noCreditRecord && (
-                  <motion.div
+                  <div
                       key="step6"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="space-y-6"
+                      className="space-y-6 animate-fade-in-up"
                   >
                     {/* Back Button */}
                     <div className="flex justify-start">
@@ -2158,9 +2277,9 @@ export default function CreditScoreChecker() {
                         </p>
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
               )}
-            </AnimatePresence>
+            </div>
           </div>
         </section>
 
@@ -2178,11 +2297,9 @@ export default function CreditScoreChecker() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Personal Loan Card */}
-              <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              <div
+                  className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-fade-in-up"
+                  style={{ animationDelay: '0.1s' }}
               >
                 <div className="text-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-[#276ef4] to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
@@ -2208,14 +2325,12 @@ export default function CreditScoreChecker() {
                     </button>
                   </Link>
                 </div>
-              </motion.div>
+              </div>
 
               {/* Business Loan Card */}
-              <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              <div
+                  className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-fade-in-up"
+                  style={{ animationDelay: '0.2s' }}
               >
                 <div className="text-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-[#276ef4] to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
@@ -2241,7 +2356,493 @@ export default function CreditScoreChecker() {
                     </button>
                   </Link>
                 </div>
-              </motion.div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Why Check Your Credit Score Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+                Why Check Your Credit Score?
+              </h2>
+              <p className="text-lg text-gray-600 max-w-4xl mx-auto mb-6">
+                Your credit score is one of the most important factors in your financial journey. Whether you are applying for a loan, credit card, or business financing, lenders use your credit score to evaluate your creditworthiness. Knowing your credit score gives you a clear picture of your financial standing. Here's why you should check it regularly:
+              </p>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-3xl mx-auto">
+                <p className="text-blue-800 font-medium">
+                  With our free credit score checker, you can check your Credit score online instantly without needing a credit card or paying any fees.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border border-blue-200">
+                <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-4">
+                  <CheckCircle className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Loan Approvals</h3>
+                <p className="text-gray-600">A higher credit score improves your chances of getting quick loan approvals at competitive interest rates.</p>
+              </div>
+
+              <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl border border-green-200">
+                <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center mb-4">
+                  <CreditCard className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Better Credit Card Offers</h3>
+                <p className="text-gray-600">Lenders offer premium credit cards to individuals with good credit scores.</p>
+              </div>
+
+              <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl border border-purple-200">
+                <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mb-4">
+                  <Shield className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Avoid Loan Rejections</h3>
+                <p className="text-gray-600">Identify issues in your credit history and fix them before applying for a loan.</p>
+              </div>
+
+              <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl border border-orange-200">
+                <div className="w-12 h-12 bg-orange-600 rounded-xl flex items-center justify-center mb-4">
+                  <TrendingUp className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Track Your Financial Health</h3>
+                <p className="text-gray-600">Regular credit checks help you stay on top of your financial progress.</p>
+              </div>
+
+              <div className="bg-gradient-to-br from-teal-50 to-teal-100 p-6 rounded-2xl border border-teal-200">
+                <div className="w-12 h-12 bg-teal-600 rounded-xl flex items-center justify-center mb-4">
+                  <Star className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Completely Free</h3>
+                <p className="text-gray-600">You can check your credit score online for free without hidden charges.</p>
+              </div>
+
+              <div className="bg-gradient-to-br from-pink-50 to-pink-100 p-6 rounded-2xl border border-pink-200">
+                <div className="w-12 h-12 bg-pink-600 rounded-xl flex items-center justify-center mb-4">
+                  <BarChart3 className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Make Informed Decisions</h3>
+                <p className="text-gray-600">Start by checking your free Credit score today and make informed decisions for a better financial future.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How to Check Your Credit Score Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+                How to Check Your Credit Score for Free
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Checking your credit score is quick and easy. Follow these simple steps to get started:
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-white">1</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Enter Your Details</h3>
+                <p className="text-gray-600">Provide your name, email address, and PAN card number.</p>
+              </div>
+
+              <div className="text-center">
+                <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-white">2</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Verify Your Identity</h3>
+                <p className="text-gray-600">Confirm your details securely through OTP verification.</p>
+              </div>
+
+              <div className="text-center">
+                <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-white">3</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Get Instant Access</h3>
+                <p className="text-gray-600">View your free Credit score and detailed credit report online.</p>
+              </div>
+
+              <div className="text-center">
+                <div className="w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-white">4</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Track and Improve</h3>
+                <p className="text-gray-600">Analyze your report and take steps to improve your score if needed.</p>
+              </div>
+            </div>
+
+            <div className="mt-12 bg-white rounded-2xl p-8 shadow-lg border border-blue-200">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <Info className="w-6 h-6 text-blue-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Pro Tip</h3>
+                <p className="text-gray-600 text-lg">
+                  You can check your credit score free online without a credit card, making it safe and hassle-free.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Benefits Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+                Benefits of Our Free Credit Score Checker
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Our credit checker is designed to give you an accurate, secure, and user-friendly experience. Here's why thousands of users trust us:
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No Credit Card Required</h3>
+                    <p className="text-gray-600">Just your PAN card to check your score.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Accurate & Real-Time Reports</h3>
+                    <p className="text-gray-600">Get updated Credit scores and credit reports instantly.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Shield className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">100% Free & Secure</h3>
+                    <p className="text-gray-600">No hidden fees or charges.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <TrendingUp className="w-5 h-5 text-orange-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Track Your Credit Health</h3>
+                    <p className="text-gray-600">Monitor changes in your credit score over time.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <BarChart3 className="w-5 h-5 text-teal-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Identify Improvement Areas</h3>
+                    <p className="text-gray-600">Know what factors are affecting your score and fix them.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <CreditCard className="w-5 h-5 text-pink-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Loan & Credit Card Eligibility</h3>
+                    <p className="text-gray-600">Find the best financial products based on your score.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Credit Score Information Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+                What Is a Credit Score and Why It Matters
+              </h2>
+              <p className="text-lg text-gray-600 max-w-4xl mx-auto">
+                A credit score is a 3-digit number ranging between 300 and 900 that represents your creditworthiness. The higher your score, the better your chances of getting loans and credit cards approved quickly and at lower interest rates.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {/* Credit Score Ranges */}
+              <div className="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Credit Score Ranges</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                    <div>
+                      <h4 className="font-semibold text-green-800">Excellent (750 – 900)</h4>
+                      <p className="text-green-600 text-sm">High chances of loan approval</p>
+                    </div>
+                    <div className="w-4 h-4 bg-green-500 rounded-full"></div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <div>
+                      <h4 className="font-semibold text-blue-800">Good (700 – 749)</h4>
+                      <p className="text-blue-600 text-sm">Eligible for most financial products</p>
+                    </div>
+                    <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                    <div>
+                      <h4 className="font-semibold text-yellow-800">Fair (650 – 699)</h4>
+                      <p className="text-yellow-600 text-sm">May face limited options or higher interest rates</p>
+                    </div>
+                    <div className="w-4 h-4 bg-yellow-500 rounded-full"></div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-200">
+                    <div>
+                      <h4 className="font-semibold text-red-800">Poor (300 – 649)</h4>
+                      <p className="text-red-600 text-sm">Low chances of approval; needs improvement</p>
+                    </div>
+                    <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Factors That Affect Credit Score */}
+              <div className="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Factors That Affect Your Credit Score</h3>
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-blue-600 text-xs font-bold">1</span>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Payment History</h4>
+                      <p className="text-gray-600 text-sm">Timely repayments boost your score.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-green-600 text-xs font-bold">2</span>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Credit Utilization Ratio</h4>
+                      <p className="text-gray-600 text-sm">Keep your usage below 30% of your total credit limit.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-purple-600 text-xs font-bold">3</span>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Length of Credit History</h4>
+                      <p className="text-gray-600 text-sm">Longer histories help build trust with lenders.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-orange-600 text-xs font-bold">4</span>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Credit Mix</h4>
+                      <p className="text-gray-600 text-sm">A healthy balance of secured and unsecured loans is ideal.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-red-600 text-xs font-bold">5</span>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Number of Inquiries</h4>
+                      <p className="text-gray-600 text-sm">Too many loan applications in a short period can lower your score.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Business Credit Score Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+                Business Credit Score Checker
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Are you a business owner looking to expand your company with loans or credit lines?
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-8 shadow-lg border border-blue-200">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <BarChart3 className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Understand Creditworthiness</h3>
+                  <p className="text-gray-600">Understand your company's creditworthiness and financial standing.</p>
+                </div>
+
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <TrendingUp className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Better Loan Terms</h3>
+                  <p className="text-gray-600">Improve chances of getting business loans and better credit terms.</p>
+                </div>
+
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Shield className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Strategic Growth</h3>
+                  <p className="text-gray-600">Monitor your business's finances and strategize for growth.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Free Credit Report Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+                Free Credit Report Checker
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Apart from your Credit score, you can also access your detailed credit report for free.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 shadow-lg">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">This report includes:</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-gray-700">Loan repayment history</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-gray-700">Open and closed credit accounts</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-gray-700">Outstanding debts</span>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-gray-700">Hard inquiries from lenders</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-gray-700">Any defaults or late payments</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-gray-700">Complete financial activity tracking</span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
+                <p className="text-gray-700 text-center">
+                  With this information, you can identify errors, track financial activity, and make informed decisions.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+                FAQs – Credit Score Checker
+              </h2>
+            </div>
+
+            <div className="space-y-6">
+              <div className="bg-gray-50 rounded-2xl p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">1. What is a good credit score?</h3>
+                <p className="text-gray-600">A good credit score typically falls between 700 and 750 or above, as it shows lenders that you manage debt responsibly, improving your chances of loan approvals and lower interest rates.</p>
+              </div>
+
+              <div className="bg-gray-50 rounded-2xl p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">2. How can I check my credit score for free without a credit card?</h3>
+                <p className="text-gray-600">You can simply use your PAN card and verify with an OTP to get your free credit score instantly. No credit card is needed.</p>
+              </div>
+
+              <div className="bg-gray-50 rounded-2xl p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">3. Is it safe to check my credit score online?</h3>
+                <p className="text-gray-600">Yes, checking your credit score on our platform is 100% safe and secure. Your data is protected with encryption and only shared with your approval.</p>
+              </div>
+
+              <div className="bg-gray-50 rounded-2xl p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">4. How often should I check my credit score?</h3>
+                <p className="text-gray-600">You should check your score at least once every 3-6 months to track your progress and ensure there are no errors in your report.</p>
+              </div>
+
+              <div className="bg-gray-50 rounded-2xl p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">5. Does checking my credit score affect my score?</h3>
+                <p className="text-gray-600">No, checking your score on our platform is a soft inquiry and does not impact your credit score.</p>
+              </div>
+
+              <div className="bg-gray-50 rounded-2xl p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">6. What is a good Credit score to get a loan approved?</h3>
+                <p className="text-gray-600">A Credit score of 750 or higher is seen as excellent and boosts your chances of getting a loan approved.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Take Control Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-blue-900 via-cyan-900 to-indigo-900">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+              Take Control of Your Financial Future
+            </h2>
+            <p className="text-lg text-white/80 mb-8">
+              Your credit score opens the door to greater financial opportunities. Whether you want to apply for a personal loan, business loan, or credit card, knowing your score is the first step.
+            </p>
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+              <p className="text-xl text-white font-semibold mb-4">
+                Check your credit score today – completely free and secure.
+              </p>
+              <button
+                onClick={() => {
+                  // Scroll to the form
+                  const formSection = document.querySelector('.form-container');
+                  if (formSection) {
+                    formSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                Check Your Credit Score Now
+              </button>
             </div>
           </div>
         </section>
@@ -2249,4 +2850,11 @@ export default function CreditScoreChecker() {
         <CTA />
       </div>
   );
+}
+
+// Ensure static generation for SEO
+export async function getStaticProps() {
+    return {
+        props: {},
+    };
 } 

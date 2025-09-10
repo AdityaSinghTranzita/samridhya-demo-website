@@ -256,84 +256,34 @@ export default function BlogPostPage({
     router.push(`/blog?tag=${encodeURIComponent(tag)}`);
   };
 
-  // Loading state
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-        <Navbar />
-        <div className="pt-16 sm:pt-20"></div>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading article...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Error state
-  if (error || !blogPost) {
-    return (
-      <>
-        <Head>
-          <title>Blog Post Not Found - Samridhya</title>
-          <meta name="description" content="The blog post you're looking for doesn't exist." />
-        </Head>
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-          <Navbar />
-          <div className="pt-16 sm:pt-20"></div>
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <BookOpen className="w-10 h-10 text-gray-400" />
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">Blog Post Not Found</h1>
-              <p className="text-gray-600 mb-8">
-                {error || 'The blog post you\'re looking for doesn\'t exist.'}
-              </p>
-              <Link
-                href="/blog"
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all duration-300"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Blog
-              </Link>
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
-
   return (
     <>
       <Head>
-        <title>{blogPost.title} - Samridhya</title>
-        <meta name="description" content={blogPost.excerpt} />
-        <meta name="keywords" content={blogPost.tags?.join(', ')} />
-        <meta name="author" content={blogPost.author} />
+        <title>{blogPost?.title || 'Blog Post'} - Samridhya</title>
+        <meta name="description" content={blogPost?.excerpt || 'Blog post from Samridhya'} />
+        <meta name="keywords" content={blogPost?.tags?.join(', ') || 'blog, finance, loans'} />
+        <meta name="author" content={blogPost?.author || 'Samridhya'} />
         <meta name="robots" content="index, follow" />
         
         {/* Open Graph */}
-        <meta property="og:title" content={blogPost.title} />
-        <meta property="og:description" content={blogPost.excerpt} />
+        <meta property="og:title" content={blogPost?.title || 'Blog Post - Samridhya'} />
+        <meta property="og:description" content={blogPost?.excerpt || 'Blog post from Samridhya'} />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://samridhya.in/blog/${blogPost.slug}`} />
-        <meta property="og:image" content={blogPost.featuredImage || 'https://samridhya.in/images/samridhya-preview.png'} />
-        <meta property="article:published_time" content={toISOString(blogPost.publishedAt)} />
-        <meta property="article:modified_time" content={toISOString(blogPost.updatedAt)} />
-        <meta property="article:author" content={blogPost.author} />
-        <meta property="article:section" content={blogPost.category} />
-        {blogPost.tags?.map(tag => (
+        <meta property="og:url" content={`https://samridhya.com/blog/${blogPost?.slug || 'post'}/`} />
+        <meta property="og:image" content={blogPost?.featuredImage || 'https://samridhya.com/images/samridhya-preview.png'} />
+        <meta property="article:published_time" content={blogPost?.publishedAt ? toISOString(blogPost.publishedAt) : ''} />
+        <meta property="article:modified_time" content={blogPost?.updatedAt ? toISOString(blogPost.updatedAt) : ''} />
+        <meta property="article:author" content={blogPost?.author || 'Samridhya'} />
+        <meta property="article:section" content={blogPost?.category || 'Finance'} />
+        {blogPost?.tags?.map(tag => (
           <meta key={tag} property="article:tag" content={tag} />
         ))}
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={blogPost.title} />
-        <meta name="twitter:description" content={blogPost.excerpt} />
-        <meta name="twitter:image" content={blogPost.featuredImage || 'https://samridhya.in/images/samridhya-preview.png'} />
+        <meta name="twitter:title" content={blogPost?.title || 'Blog Post - Samridhya'} />
+        <meta name="twitter:description" content={blogPost?.excerpt || 'Blog post from Samridhya'} />
+        <meta name="twitter:image" content={blogPost?.featuredImage || 'https://samridhya.com/images/samridhya-preview.png'} />
         
         {/* Structured Data */}
         <script
@@ -342,26 +292,26 @@ export default function BlogPostPage({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "BlogPosting",
-              "headline": blogPost.title,
-              "description": blogPost.excerpt,
-              "image": blogPost.featuredImage || 'https://samridhya.in/images/samridhya-preview.png',
+              "headline": blogPost?.title || 'Blog Post',
+              "description": blogPost?.excerpt || 'Blog post from Samridhya',
+              "image": blogPost?.featuredImage || 'https://samridhya.com/images/samridhya-preview.png',
               "author": {
                 "@type": "Person",
-                "name": blogPost.author
+                "name": blogPost?.author || 'Samridhya'
               },
               "publisher": {
                 "@type": "Organization",
                 "name": "Samridhya",
-                "url": "https://samridhya.in"
+                "url": "https://samridhya.com"
               },
-              "datePublished": toISOString(blogPost.publishedAt),
-              "dateModified": toISOString(blogPost.updatedAt),
+              "datePublished": blogPost?.publishedAt ? toISOString(blogPost.publishedAt) : new Date().toISOString(),
+              "dateModified": blogPost?.updatedAt ? toISOString(blogPost.updatedAt) : new Date().toISOString(),
               "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": `https://samridhya.in/blog/${blogPost.slug}`
+                "@id": `https://samridhya.com/blog/${blogPost?.slug || 'post'}/`
               },
-              "articleSection": blogPost.category,
-              "keywords": blogPost.tags?.join(', ')
+              "articleSection": blogPost?.category || 'Finance',
+              "keywords": blogPost?.tags?.join(', ') || 'blog, finance, loans'
             })
           }}
         />
@@ -370,8 +320,10 @@ export default function BlogPostPage({
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
         <Navbar />
         
+        {/* Main content - always show page structure */}
+        <>
         {/* Back Button */}
-        <div className="pt-20 pb-8">
+            <div className="pt-20 pb-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Link
               href="/blog"
@@ -383,12 +335,111 @@ export default function BlogPostPage({
           </div>
         </div>
 
-        {/* Blog Post Content with Sidebar */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Main Content - Always First */}
-            <div className="flex-1 order-1 lg:order-1">
-              <article>
+        {/* Loading state */}
+        {loading && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <div className="flex flex-col lg:flex-row gap-8">
+              {/* Main Content Skeleton */}
+              <div className="flex-1 order-1 lg:order-1">
+                <article>
+                  <div className="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
+                    {/* Image skeleton */}
+                    <div className="h-64 sm:h-80 bg-gray-200"></div>
+                    
+                    {/* Content skeleton */}
+                    <div className="p-6 sm:p-8">
+                      {/* Meta skeleton */}
+                      <div className="flex flex-wrap items-center gap-4 mb-6">
+                        <div className="h-4 bg-gray-200 rounded w-20"></div>
+                        <div className="h-4 bg-gray-200 rounded w-24"></div>
+                        <div className="h-4 bg-gray-200 rounded w-16"></div>
+                        <div className="h-4 bg-gray-200 rounded w-12"></div>
+                      </div>
+                      
+                      {/* Title skeleton */}
+                      <div className="space-y-3 mb-6">
+                        <div className="h-8 bg-gray-200 rounded w-full"></div>
+                        <div className="h-8 bg-gray-200 rounded w-3/4"></div>
+                      </div>
+                      
+                      {/* Categories skeleton */}
+                      <div className="flex flex-wrap gap-3 mb-8">
+                        <div className="h-6 bg-gray-200 rounded-full w-20"></div>
+                        <div className="h-6 bg-gray-200 rounded-full w-16"></div>
+                        <div className="h-6 bg-gray-200 rounded-full w-24"></div>
+                      </div>
+                      
+                      {/* Excerpt skeleton */}
+                      <div className="bg-gray-100 p-4 mb-8">
+                        <div className="space-y-2">
+                          <div className="h-4 bg-gray-200 rounded w-full"></div>
+                          <div className="h-4 bg-gray-200 rounded w-4/5"></div>
+                        </div>
+                      </div>
+                      
+                      {/* Content skeleton */}
+                      <div className="space-y-4">
+                        {[...Array(8)].map((_, index) => (
+                          <div key={index} className="space-y-2">
+                            <div className="h-4 bg-gray-200 rounded w-full"></div>
+                            <div className="h-4 bg-gray-200 rounded w-full"></div>
+                            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </div>
+              
+              {/* Sidebar Skeleton */}
+              <div className="hidden lg:block lg:w-80 lg:flex-shrink-0 order-2">
+                <div className="lg:sticky lg:top-20">
+                  <div className="bg-white rounded-2xl shadow-lg p-6 animate-pulse">
+                    <div className="h-6 bg-gray-200 rounded w-32 mb-6"></div>
+                    <div className="space-y-4">
+                      {[...Array(5)].map((_, index) => (
+                        <div key={index} className="h-4 bg-gray-200 rounded w-full"></div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Error state */}
+        {!loading && (error || !blogPost) && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <div className="flex items-center justify-center min-h-[60vh]">
+              <div className="text-center">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <BookOpen className="w-10 h-10 text-gray-400" />
+                </div>
+                <h1 className="text-3xl font-bold text-gray-900 mb-4">Blog Post Not Found</h1>
+                <p className="text-gray-600 mb-8">
+                  {error || 'The blog post you\'re looking for doesn\'t exist.'}
+                </p>
+                <Link
+                  href="/blog"
+                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all duration-300"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to Blog
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Blog Post Content with Sidebar - only show when not loading and no error */}
+        {!loading && !error && blogPost && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <div className="flex flex-col lg:flex-row gap-8">
+              {/* Main Content - Always First */}
+              <div className="flex-1 order-1 lg:order-1">
+                <article>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -557,7 +608,8 @@ export default function BlogPostPage({
             </div>
           </div>
         </div>
-
+        )}
+        </>
         <CTA />
       </div>
     </>

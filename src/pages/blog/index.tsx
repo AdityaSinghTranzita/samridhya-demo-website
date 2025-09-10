@@ -314,42 +314,26 @@ export default function BlogPage({}: BlogPageProps) {
     }
   }, [isClient, isLoading, allPosts.length, selectedCategory, searchQuery]);
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-        <Navbar />
-        <div className="pt-16 sm:pt-20"></div>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading blog posts...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
       <Head>
-        <title>Blog - Samridhya</title>
-        <meta name="description" content="Stay updated with the latest insights, tips, and news from the world of digital lending. Expert financial advice and industry updates from Samridhya." />
-        <meta name="keywords" content="blog, financial advice, loans, credit score, EMI calculator, digital lending, Samridhya" />
+        <title>Samridhya Blog | Smart Insights on Personal Loans & Finance</title>
+        <meta name="description" content="Explore expert blogs on personal loans, business loans, credit scores & EMI tips. Stay updated with Samridhya for smart, secure financial decisions." />
+        <meta name="keywords" content="personal loans, business loans, credit score, EMI tips, financial advice, loan aggregator, Samridhya, finance blog" />
         <meta name="robots" content="index, follow" />
         
         {/* Open Graph */}
-        <meta property="og:title" content="Blog - Samridhya" />
-        <meta property="og:description" content="Stay updated with the latest insights, tips, and news from the world of digital lending. Expert financial advice and industry updates." />
+        <meta property="og:title" content="Samridhya Blog | Smart Insights on Personal Loans & Finance" />
+        <meta property="og:description" content="Explore expert blogs on personal loans, business loans, credit scores & EMI tips. Stay updated with Samridhya for smart, secure financial decisions." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.in/blog" />
-        <meta property="og:image" content="https://samridhya.in/images/samridhya-preview.png" />
+        <meta property="og:url" content="https://samridhya.com/blog/" />
+        <meta property="og:image" content="https://samridhya.com/images/samridhya-preview.png" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Blog - Samridhya" />
-        <meta name="twitter:description" content="Stay updated with the latest insights, tips, and news from the world of digital lending." />
-        <meta name="twitter:image" content="https://samridhya.in/images/samridhya-preview.png" />
+        <meta name="twitter:title" content="Samridhya Blog | Smart Insights on Personal Loans & Finance" />
+        <meta name="twitter:description" content="Explore expert blogs on personal loans, business loans, credit scores & EMI tips. Stay updated with Samridhya for smart, secure financial decisions." />
+        <meta name="twitter:image" content="https://samridhya.com/images/samridhya-preview.png" />
         
         {/* Structured Data */}
         <script
@@ -358,13 +342,13 @@ export default function BlogPage({}: BlogPageProps) {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Blog",
-              "name": "Samridhya Blog",
-              "description": "Stay updated with the latest insights, tips, and news from the world of digital lending.",
-              "url": "https://samridhya.in/blog",
+              "name": "Samridhya Blog | Smart Insights on Personal Loans & Finance",
+              "description": "Explore expert blogs on personal loans, business loans, credit scores & EMI tips. Stay updated with Samridhya for smart, secure financial decisions.",
+              "url": "https://samridhya.com/blog/",
               "publisher": {
                 "@type": "Organization",
                 "name": "Samridhya",
-                "url": "https://samridhya.in"
+                "url": "https://samridhya.com"
               },
               "blogPost": allPosts.slice(0, 5).map(post => ({
                 "@type": "BlogPosting",
@@ -376,7 +360,7 @@ export default function BlogPage({}: BlogPageProps) {
                 },
                 "datePublished": post.publishedAt,
                 "dateModified": post.updatedAt,
-                "url": `https://samridhya.in/blog/${post.slug}`
+                "url": `https://samridhya.com/blog/${post.slug}/`
               }))
             })
           }}
@@ -388,6 +372,8 @@ export default function BlogPage({}: BlogPageProps) {
         
         {/* Top Margin for Navbar */}
         <div className="pt-16 sm:pt-20"></div>
+        
+        {/* Main content - always show page structure */}
         
         {/* Promotional Banner */}
         <div className="relative">
@@ -544,7 +530,44 @@ export default function BlogPage({}: BlogPageProps) {
               </div>
 
               {/* Blog Grid */}
-              {currentPosts.length > 0 ? (
+              {isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[...Array(6)].map((_, index) => (
+                    <div key={index} className="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
+                      {/* Image skeleton */}
+                      <div className="h-48 bg-gray-200"></div>
+                      
+                      {/* Content skeleton */}
+                      <div className="p-6">
+                        {/* Category skeleton */}
+                        <div className="h-4 bg-gray-200 rounded w-20 mb-3"></div>
+                        
+                        {/* Title skeleton */}
+                        <div className="space-y-2 mb-4">
+                          <div className="h-5 bg-gray-200 rounded w-full"></div>
+                          <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+                        </div>
+                        
+                        {/* Excerpt skeleton */}
+                        <div className="space-y-2 mb-4">
+                          <div className="h-4 bg-gray-200 rounded w-full"></div>
+                          <div className="h-4 bg-gray-200 rounded w-full"></div>
+                          <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                        </div>
+                        
+                        {/* Meta skeleton */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <div className="h-4 bg-gray-200 rounded w-16"></div>
+                            <div className="h-4 bg-gray-200 rounded w-12"></div>
+                          </div>
+                          <div className="h-4 bg-gray-200 rounded w-20"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : currentPosts.length > 0 ? (
                 <BlogGrid posts={currentPosts} />
               ) : (
                 <div className="text-center py-12">

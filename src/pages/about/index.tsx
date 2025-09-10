@@ -169,8 +169,8 @@ export default function About() {
   return (
     <>
       <Head>
-        <title>About Samridhya - Leading Digital Lending Platform | Instant Loans</title>
-        <meta name="description" content="Learn about Samridhya, India's leading digital lending platform. We provide instant personal loans, business loans, and more with competitive rates and quick approval." />
+        <title>About Samridhya | Trusted Instant Loan App in India</title>
+        <meta name="description" content="Samridhya is an ONDC-registered, RBI-compliant digital loan app in India. Get instant personal & business loans with fast approval & flexible EMIs." />
         <meta name="keywords" content="about samridhya, digital lending platform, instant loans, personal loans, business loans, online lending, fintech company, loan provider" />
         <meta name="author" content="Samridhya" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -180,7 +180,7 @@ export default function About() {
         <meta property="og:title" content="About Samridhya - Leading Digital Lending Platform" />
         <meta property="og:description" content="Learn about Samridhya, India's leading digital lending platform. We provide instant personal loans, business loans, and more with competitive rates and quick approval." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/about" />
+        <meta property="og:url" content="https://samridhya.com/about/" />
         <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -200,7 +200,7 @@ export default function About() {
         {/* Additional Meta Tags */}
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="googlebot" content="index, follow" />
-        <link rel="canonical" href="https://samridhya.com/about" />
+        <link rel="canonical" href="https://samridhya.com/about/" />
         
         {/* Mobile Meta Tags */}
         <meta name="mobile-web-app-capable" content="yes" />
@@ -217,7 +217,7 @@ export default function About() {
               "@type": "Organization",
               "name": "Samridhya",
               "description": "India's leading digital lending platform providing instant personal loans, business loans, and more",
-              "url": "https://samridhya.com",
+              "url": "https://samridhya.com/",
               "logo": "https://samridhya.com/favicon.svg",
               "image": "https://samridhya.com/samridhya-preview.png",
               "sameAs": [

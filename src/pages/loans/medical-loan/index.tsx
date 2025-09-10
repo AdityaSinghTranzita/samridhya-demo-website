@@ -118,7 +118,7 @@ export default function MedicalLoan() {
         <meta property="og:title" content="Medical Loan - Emergency Healthcare Financing up to ₹20 Lakhs | Samridhya" />
         <meta property="og:description" content="Get medical loans up to ₹20 Lakhs from Samridhya. Emergency healthcare financing with quick approval in 2-4 hours, competitive rates, and flexible repayment." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/loans/medical-loan" />
+        <meta property="og:url" content="https://samridhya.com/loans/medical-loan/" />
         <meta name="twitter:title" content="Medical Loan - Emergency Healthcare Financing up to ₹20 Lakhs | Samridhya" />
         <meta name="twitter:description" content="Get medical loans up to ₹20 Lakhs from Samridhya. Emergency healthcare financing with quick approval in 2-4 hours." />
       </Head>

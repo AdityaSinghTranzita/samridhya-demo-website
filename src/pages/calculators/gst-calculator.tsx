@@ -16,7 +16,7 @@ export default function GSTCalculatorPage() {
         <meta property="og:title" content="GST Calculator - Calculate Goods and Services Tax | Samridhya" />
         <meta property="og:description" content="Use our free GST calculator to calculate Goods and Services Tax." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/calculators/gst-calculator" />
+        <meta property="og:url" content="https://samridhya.com/calculators/gst-calculator/" />
         <meta name="twitter:title" content="GST Calculator - Calculate Goods and Services Tax | Samridhya" />
         <meta name="twitter:description" content="Use our free GST calculator to calculate Goods and Services Tax." />
       </Head>

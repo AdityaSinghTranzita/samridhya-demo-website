@@ -160,7 +160,7 @@ ${formData.name}`;
         <meta property="og:title" content="Contact Us - Samridhya | Get in Touch for Loan Support" />
         <meta property="og:description" content="Contact Samridhya for loan support, queries, and assistance. Call us at +91 6366234524 or email support@samridhya.com." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/contact" />
+        <meta property="og:url" content="https://samridhya.com/contact/" />
         <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -180,7 +180,7 @@ ${formData.name}`;
         {/* Additional Meta Tags */}
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="googlebot" content="index, follow" />
-        <link rel="canonical" href="https://samridhya.com/contact" />
+        <link rel="canonical" href="https://samridhya.com/contact/" />
 
         {/* Mobile Meta Tags */}
         <meta name="mobile-web-app-capable" content="yes" />
@@ -197,7 +197,7 @@ ${formData.name}`;
               "@type": "ContactPage",
               "name": "Contact Samridhya",
               "description": "Contact Samridhya for loan support, queries, and assistance",
-              "url": "https://samridhya.com/contact",
+              "url": "https://samridhya.com/contact/",
               "mainEntity": {
                 "@type": "Organization",
                 "name": "Samridhya",

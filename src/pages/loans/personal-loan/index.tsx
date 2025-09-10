@@ -114,14 +114,14 @@ export default function PersonalLoan() {
   return (
     <>
       <Head>
-        <title>Personal Loan - Instant Approval up to ₹40 Lakhs | Samridhya</title>
-        <meta name="description" content="Get instant personal loans up to ₹40 Lakhs from Samridhya. Quick approval in 10 minutes, competitive rates from 10.99% p.a., no collateral required. Apply online today!" />
-        <meta name="keywords" content="personal loan, instant personal loan, unsecured loan, quick loan approval, EMI calculator" />
-        <meta property="og:title" content="Personal Loan - Instant Approval up to ₹40 Lakhs | Samridhya" />
-        <meta property="og:description" content="Get instant personal loans up to ₹40 Lakhs from Samridhya. Quick approval in 10 minutes, competitive rates from 10.99% p.a., no collateral required." />
+        <title>Instant Personal Loan Online up to ₹40 Lakhs – Samridhya</title>
+        <meta name="description" content="Get instant personal loans up to ₹40 Lakhs. 100% digital, paperless, RBI-compliant loan app with competitive interest rate, quick approval, & fast disbursal." />
+        <meta name="keywords" content="Personal Loan, instant personal loan, fast and quick personal loan, online personal loan, Digital personal loan, quick approval personal loan, best personal loan app, Flexi Personal Loan, Personal Loan for Self-Employed, Easy personal loan, India's fastest personal loan app, top loan app in India " />
+        <meta property="og:title" content="Apply Online for Instant Personal Loans in India | Flexible EMI Options" />
+        <meta property="og:description" content="Samridhya offers hassle-free personal loans with competitive interest rates, real-time tracking, and 100% paperless approval. Borrow up to ₹40 Lakhs instantly."/>
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/loans/personal-loan" />
-        <meta name="twitter:title" content="Personal Loan - Instant Approval up to ₹40 Lakhs | Samridhya" />
+        <meta property="og:url" content="https://samridhya.com/loans/personal-loan/" />
+        <meta name="twitter:title" content="Instant Personal Loan Online up to ₹40 Lakhs – Samridhya" />
         <meta name="twitter:description" content="Get instant personal loans up to ₹40 Lakhs from Samridhya. Quick approval in 10 minutes, competitive rates from 10.99% p.a." />
       </Head>
       <div className="min-h-screen w-full">

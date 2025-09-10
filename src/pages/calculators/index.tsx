@@ -395,7 +395,7 @@ export default function CalculatorsPage() {
         <meta property="og:title" content="Financial Calculators - Free Online Financial Tools | Samridhya" />
         <meta property="og:description" content="Access our comprehensive collection of free financial calculators. Calculate EMI, investments, taxes, retirement planning and more." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/calculators" />
+        <meta property="og:url" content="https://samridhya.com/calculators/" />
         <meta name="twitter:title" content="Financial Calculators - Free Online Financial Tools | Samridhya" />
         <meta name="twitter:description" content="Access our comprehensive collection of free financial calculators." />
       </Head>

@@ -118,7 +118,7 @@ export default function BusinessLoan() {
         <meta property="og:title" content="Business Loan - Up to ₹2 Crores | Quick Approval | Samridhya" />
         <meta property="og:description" content="Get business loans up to ₹2 Crores from Samridhya. Quick approval in 24 hours, competitive rates from 12.99% p.a. for working capital, expansion, and equipment purchase." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/loans/business-loan" />
+        <meta property="og:url" content="https://samridhya.com/loans/business-loan/" />
         <meta name="twitter:title" content="Business Loan - Up to ₹2 Crores | Quick Approval | Samridhya" />
         <meta name="twitter:description" content="Get business loans up to ₹2 Crores from Samridhya. Quick approval in 24 hours, competitive rates from 12.99% p.a." />
       </Head>

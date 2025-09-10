@@ -23,7 +23,7 @@ export default function PrivacyPolicy() {
         <meta property="og:title" content="Privacy Policy - Samridhya | Data Protection & Security" />
         <meta property="og:description" content="Read Samridhya's privacy policy to understand how we protect your personal information. Learn about data collection, usage, and security measures." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/privacy-policy" />
+        <meta property="og:url" content="https://samridhya.com/privacy-policy/" />
         <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -43,7 +43,7 @@ export default function PrivacyPolicy() {
         {/* Additional Meta Tags */}
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="googlebot" content="index, follow" />
-        <link rel="canonical" href="https://samridhya.com/privacy-policy" />
+        <link rel="canonical" href="https://samridhya.com/privacy-policy/" />
         
         {/* Mobile Meta Tags */}
         <meta name="mobile-web-app-capable" content="yes" />
@@ -60,7 +60,7 @@ export default function PrivacyPolicy() {
               "@type": "WebPage",
               "name": "Privacy Policy",
               "description": "Samridhya's privacy policy explaining how we protect your personal information",
-              "url": "https://samridhya.com/privacy-policy",
+              "url": "https://samridhya.com/privacy-policy/",
               "mainEntity": {
                 "@type": "Organization",
                 "name": "Samridhya",

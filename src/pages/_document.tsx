@@ -155,7 +155,7 @@ export default function Document() {
               "@type": "FinancialService",
               "name": "Samridhya",
               "description": "Instant Personal Loans, Business Loans, Education Loans, Wedding Loans, Travel Loans, and Medical Loans",
-              "url": "https://samridhya.com",
+              "url": "https://samridhya.com/",
               "logo": "https://samridhya.com/favicon.svg",
               "image": "https://samridhya.com/samridhya-preview.png",
               "sameAs": [

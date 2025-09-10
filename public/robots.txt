@@ -7,4 +7,3 @@ Host: https://samridhya.com
 
 # Sitemaps
 Sitemap: https://samridhya.com/sitemap.xml
-Sitemap: https://samridhya.com/sitemap-index.xml

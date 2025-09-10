@@ -16,7 +16,7 @@ export default function SimpleInterestCalculatorPage() {
         <meta property="og:title" content="Simple Interest Calculator - Calculate Simple Interest | Samridhya" />
         <meta property="og:description" content="Use our free simple interest calculator to calculate interest earned on investments." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/calculators/simple-interest-calculator" />
+        <meta property="og:url" content="https://samridhya.com/calculators/simple-interest-calculator/" />
         <meta name="twitter:title" content="Simple Interest Calculator - Calculate Simple Interest | Samridhya" />
         <meta name="twitter:description" content="Use our free simple interest calculator to calculate interest earned on investments." />
       </Head>

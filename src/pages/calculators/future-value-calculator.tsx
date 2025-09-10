@@ -16,7 +16,7 @@ export default function FutureValueCalculatorPage() {
         <meta property="og:title" content="Future Value Calculator - Calculate Investment Growth | Samridhya" />
         <meta property="og:description" content="Use our free future value calculator to calculate how your investments will grow over time." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/calculators/future-value-calculator" />
+        <meta property="og:url" content="https://samridhya.com/calculators/future-value-calculator/" />
         <meta name="twitter:title" content="Future Value Calculator - Calculate Investment Growth | Samridhya" />
         <meta name="twitter:description" content="Use our free future value calculator to calculate how your investments will grow over time." />
       </Head>

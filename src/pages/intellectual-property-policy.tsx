@@ -23,7 +23,7 @@ export default function IntellectualPropertyPolicy() {
         <meta property="og:title" content="Intellectual Property Policy - Samridhya | IP Rights & Protection" />
         <meta property="og:description" content="Read Samridhya's intellectual property policy to understand our IP rights, permitted use, and protection measures." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/intellectual-property-policy" />
+        <meta property="og:url" content="https://samridhya.com/intellectual-property-policy/" />
         <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -43,7 +43,7 @@ export default function IntellectualPropertyPolicy() {
         {/* Additional Meta Tags */}
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="googlebot" content="index, follow" />
-        <link rel="canonical" href="https://samridhya.com/intellectual-property-policy" />
+        <link rel="canonical" href="https://samridhya.com/intellectual-property-policy/" />
         
         {/* Mobile Meta Tags */}
         <meta name="mobile-web-app-capable" content="yes" />
@@ -60,7 +60,7 @@ export default function IntellectualPropertyPolicy() {
               "@type": "WebPage",
               "name": "Intellectual Property Policy",
               "description": "Samridhya's intellectual property policy explaining IP rights and protection",
-              "url": "https://samridhya.com/intellectual-property-policy",
+              "url": "https://samridhya.com/intellectual-property-policy/",
               "mainEntity": {
                 "@type": "Organization",
                 "name": "Samridhya",

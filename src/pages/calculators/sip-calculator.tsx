@@ -16,7 +16,7 @@ export default function SIPCalculatorPage() {
         <meta property="og:title" content="SIP Calculator - Calculate Systematic Investment Plan Returns | Samridhya" />
         <meta property="og:description" content="Use our free SIP calculator to calculate returns on Systematic Investment Plans." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/calculators/sip-calculator" />
+        <meta property="og:url" content="https://samridhya.com/calculators/sip-calculator/" />
         <meta name="twitter:title" content="SIP Calculator - Calculate Systematic Investment Plan Returns | Samridhya" />
         <meta name="twitter:description" content="Use our free SIP calculator to calculate returns on Systematic Investment Plans." />
       </Head>

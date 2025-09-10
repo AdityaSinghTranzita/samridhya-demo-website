@@ -118,7 +118,7 @@ export default function EducationLoan() {
         <meta property="og:title" content="Education Loan - Study Abroad & Domestic Courses | Samridhya" />
         <meta property="og:description" content="Get education loans for study abroad and domestic courses from Samridhya. Up to ₹1 Crore for international studies, moratorium period, competitive rates from 8.5% p.a." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/loans/education-loan" />
+        <meta property="og:url" content="https://samridhya.com/loans/education-loan/" />
         <meta name="twitter:title" content="Education Loan - Study Abroad & Domestic Courses | Samridhya" />
         <meta name="twitter:description" content="Get education loans for study abroad and domestic courses from Samridhya. Up to ₹1 Crore for international studies." />
       </Head>

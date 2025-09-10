@@ -14,6 +14,10 @@
         "function": "api"
       },
       {
+        "source": "/sitemap-new.xml",
+        "function": "api"
+      },
+      {
         "source": "/sitemap-index.xml",
         "function": "api"
       },

@@ -23,7 +23,7 @@ export default function GrievanceRedressalPolicy() {
         <meta property="og:title" content="Grievance Redressal Policy - Samridhya | Complaint Resolution" />
         <meta property="og:description" content="Read Samridhya's grievance redressal policy to understand our complaint resolution process." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/grievance-redressal-policy" />
+        <meta property="og:url" content="https://samridhya.com/grievance-redressal-policy/" />
         <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -43,7 +43,7 @@ export default function GrievanceRedressalPolicy() {
         {/* Additional Meta Tags */}
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="googlebot" content="index, follow" />
-        <link rel="canonical" href="https://samridhya.com/grievance-redressal-policy" />
+        <link rel="canonical" href="https://samridhya.com/grievance-redressal-policy/" />
         
         {/* Mobile Meta Tags */}
         <meta name="mobile-web-app-capable" content="yes" />
@@ -60,7 +60,7 @@ export default function GrievanceRedressalPolicy() {
               "@type": "WebPage",
               "name": "Grievance Redressal Policy",
               "description": "Samridhya's grievance redressal policy explaining complaint resolution process",
-              "url": "https://samridhya.com/grievance-redressal-policy",
+              "url": "https://samridhya.com/grievance-redressal-policy/",
               "mainEntity": {
                 "@type": "Organization",
                 "name": "Samridhya",

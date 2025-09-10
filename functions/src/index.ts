@@ -142,16 +142,19 @@ app.get('/api/blog/popular', async (req: any, res: any) => {
 });
 
 // Sitemap routes
-app.get('/sitemap.xml', async (req: any, res: any) => {
-  await generateSitemap(req, res);
-});
+  app.get('/sitemap.xml', async (req: any, res: any) => {
+    await generateSitemap(req, res);
+  });
+  app.get('/sitemap-new.xml', async (req: any, res: any) => {
+    await generateSitemap(req, res);
+  });
 
 app.get('/sitemap-index.xml', async (req: any, res: any) => {
   await generateSitemapIndex(req, res);
 });
 
 // 404 handler
-app.use('*', (req: any, res: any) => {
+app.use((req: any, res: any) => {
   res.status(404).json({
     success: false,
     error: 'Route not found'

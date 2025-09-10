@@ -118,7 +118,7 @@ export default function WeddingLoan() {
         <meta property="og:title" content="Wedding Loan - Dream Wedding Financing up to ₹25 Lakhs | Samridhya" />
         <meta property="og:description" content="Get wedding loans up to ₹25 Lakhs from Samridhya. Finance your dream wedding with quick approval, competitive rates, and flexible repayment options." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/loans/wedding-loan" />
+        <meta property="og:url" content="https://samridhya.com/loans/wedding-loan/" />
         <meta name="twitter:title" content="Wedding Loan - Dream Wedding Financing up to ₹25 Lakhs | Samridhya" />
         <meta name="twitter:description" content="Get wedding loans up to ₹25 Lakhs from Samridhya. Finance your dream wedding with quick approval and competitive rates." />
       </Head>

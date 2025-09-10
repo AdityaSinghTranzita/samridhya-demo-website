@@ -23,7 +23,7 @@ export default function TermsOfService() {
         <meta property="og:title" content="Terms of Service - Samridhya | Legal Terms & Conditions" />
         <meta property="og:description" content="Read Samridhya's terms of service to understand the legal terms and conditions governing your use of our platform." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/term-of-use" />
+        <meta property="og:url" content="https://samridhya.com/term-of-use/" />
         <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -43,7 +43,7 @@ export default function TermsOfService() {
         {/* Additional Meta Tags */}
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="googlebot" content="index, follow" />
-        <link rel="canonical" href="https://samridhya.com/term-of-use" />
+        <link rel="canonical" href="https://samridhya.com/term-of-use/" />
         
         {/* Mobile Meta Tags */}
         <meta name="mobile-web-app-capable" content="yes" />
@@ -60,7 +60,7 @@ export default function TermsOfService() {
               "@type": "WebPage",
               "name": "Terms of Service",
               "description": "Samridhya's terms of service explaining the legal terms and conditions",
-              "url": "https://samridhya.com/term-of-use",
+              "url": "https://samridhya.com/term-of-use/",
               "mainEntity": {
                 "@type": "Organization",
                 "name": "Samridhya",

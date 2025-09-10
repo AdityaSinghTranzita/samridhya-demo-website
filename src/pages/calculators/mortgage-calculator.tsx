@@ -16,7 +16,7 @@ export default function MortgageCalculatorPage() {
         <meta property="og:title" content="Mortgage Calculator - Calculate Home Loan EMI | Samridhya" />
         <meta property="og:description" content="Use our free mortgage calculator to calculate home loan EMI and affordability." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/calculators/mortgage-calculator" />
+        <meta property="og:url" content="https://samridhya.com/calculators/mortgage-calculator/" />
         <meta name="twitter:title" content="Mortgage Calculator - Calculate Home Loan EMI | Samridhya" />
         <meta name="twitter:description" content="Use our free mortgage calculator to calculate home loan EMI and affordability." />
       </Head>

@@ -15,7 +15,7 @@ export default function BusinessLoanCalculatorPage() {
         <meta property="og:title" content="Business Loan Calculator - Calculate Business Loan EMI | Samridhya" />
         <meta property="og:description" content="Calculate business loan EMI, total interest and repayment schedule instantly." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/calculators/business-loan-calculator" />
+        <meta property="og:url" content="https://samridhya.com/calculators/business-loan-calculator/" />
         <meta name="twitter:title" content="Business Loan Calculator - Calculate Business Loan EMI | Samridhya" />
         <meta name="twitter:description" content="Calculate business loan EMI, total interest and repayment schedule instantly." />
       </Head>

@@ -17,7 +17,7 @@ export default function LoanCalculatorPage() {
         <meta property="og:title" content="EMI Calculator - Calculate Loan EMI Online | Samridhya" />
         <meta property="og:description" content="Use our free EMI calculator to calculate loan EMI online. Get instant EMI calculations for personal loans, business loans, and more with detailed breakdowns." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/calculators/loan-calculator" />
+        <meta property="og:url" content="https://samridhya.com/calculators/loan-calculator/" />
         <meta name="twitter:title" content="EMI Calculator - Calculate Loan EMI Online | Samridhya" />
         <meta name="twitter:description" content="Use our free EMI calculator to calculate loan EMI online. Get instant EMI calculations for personal loans, business loans, and more." />
       </Head>

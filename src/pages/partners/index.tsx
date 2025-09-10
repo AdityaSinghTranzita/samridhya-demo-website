@@ -155,7 +155,7 @@ export default function PartnersPage() {
         <meta property="og:title" content="Our Partners - Samridhya | Leading Banks & NBFCs" />
         <meta property="og:description" content="Discover our trusted partners including HDFC Bank, ICICI Bank, Axis Bank, and leading NBFCs. Apply for partnership with Samridhya." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/partners" />
+        <meta property="og:url" content="https://samridhya.com/partners/" />
         <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -175,7 +175,7 @@ export default function PartnersPage() {
         {/* Additional Meta Tags */}
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="googlebot" content="index, follow" />
-        <link rel="canonical" href="https://samridhya.com/partners" />
+        <link rel="canonical" href="https://samridhya.com/partners/" />
         
         {/* Mobile Meta Tags */}
         <meta name="mobile-web-app-capable" content="yes" />
@@ -192,7 +192,7 @@ export default function PartnersPage() {
               "@type": "WebPage",
               "name": "Our Partners",
               "description": "Discover Samridhya's trusted partners including leading banks and NBFCs",
-              "url": "https://samridhya.com/partners",
+              "url": "https://samridhya.com/partners/",
               "mainEntity": {
                 "@type": "Organization",
                 "name": "Samridhya",

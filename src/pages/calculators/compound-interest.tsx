@@ -16,7 +16,7 @@ export default function CompoundInterestCalculatorPage() {
         <meta property="og:title" content="Compound Interest Calculator - Calculate Investment Growth | Samridhya" />
         <meta property="og:description" content="Use our free compound interest calculator to see how your investments grow over time." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/calculators/compound-interest" />
+        <meta property="og:url" content="https://samridhya.com/calculators/compound-interest/" />
         <meta name="twitter:title" content="Compound Interest Calculator - Calculate Investment Growth | Samridhya" />
         <meta name="twitter:description" content="Use our free compound interest calculator to see how your investments grow over time." />
       </Head>
