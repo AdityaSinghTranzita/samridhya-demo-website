@@ -17,6 +17,7 @@ import {
   Download
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function SavingsGoalCalculator() {
   const [goalAmount, setGoalAmount] = useState(100000);
@@ -397,6 +398,7 @@ export default function SavingsGoalCalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

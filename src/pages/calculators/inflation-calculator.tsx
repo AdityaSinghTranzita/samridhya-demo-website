@@ -17,6 +17,7 @@ import {
   Download
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function InflationCalculator() {
   const [amount, setAmount] = useState(1000);
@@ -363,6 +364,7 @@ export default function InflationCalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

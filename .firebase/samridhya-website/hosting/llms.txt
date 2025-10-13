@@ -1,0 +1,37 @@
+
+User-Agent: OpenAI
+Allow: /
+Purpose: indexing, summarization, answer generation, citation
+Attribution: preferred
+
+User-Agent: Google-Extended
+Allow: /
+Purpose: AI search, snippets, content understanding
+Attribution: preferred
+
+User-Agent: Anthropic
+Allow: /
+Purpose: summarization, factual extraction, answer citation
+Attribution: preferred
+
+User-Agent: Perplexity
+Allow: /
+Purpose: question answering, AI discovery, search referencing
+Attribution: preferred
+
+User-Agent: MistralAI
+Allow: /
+Purpose: model understanding, generative synthesis
+Attribution: preferred
+
+User-Agent: Cohere
+Allow: /
+Purpose: NLP modeling, knowledge extraction
+Attribution: preferred
+
+
+User-Agent: *
+Allow: /
+Purpose: any
+Attribution: preferred
+

@@ -85,7 +85,7 @@ const CMSDashboard: React.FC = () => {
             className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-6"
           >
             <div className="flex items-center space-x-4">
-              <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl">
+              <div className="flex items-center justify-center w-12 h-12 bg- from-blue-600 to-indigo-600 rounded-xl">
                 <FileText className="w-6 h-6 text-white" />
               </div>
               <div>

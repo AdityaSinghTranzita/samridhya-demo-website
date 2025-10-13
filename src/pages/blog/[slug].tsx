@@ -14,6 +14,7 @@ import { blogService, BlogPost, Category } from '@/services/blogService';
 import { trackEvent, trackButtonClick } from '@/utils/analytics';
 import { toISOString } from '@/utils/dateUtils';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { marked } from "marked";
 
 interface BlogPostPageProps {
   blogPost: BlogPost | null;
@@ -270,12 +271,12 @@ export default function BlogPostPage({
         <meta property="og:description" content={blogPost?.excerpt || 'Blog post from Samridhya'} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={`https://samridhya.com/blog/${blogPost?.slug || 'post'}/`} />
-        <meta property="og:image" content={blogPost?.featuredImage || 'https://samridhya.com/images/samridhya-preview.png'} />
+        <meta property="og:image" content={blogPost?.featuredImage || 'https://samridhya.com/samridhya-preview.webp'} />
         <meta property="article:published_time" content={blogPost?.publishedAt ? toISOString(blogPost.publishedAt) : ''} />
         <meta property="article:modified_time" content={blogPost?.updatedAt ? toISOString(blogPost.updatedAt) : ''} />
         <meta property="article:author" content={blogPost?.author || 'Samridhya'} />
         <meta property="article:section" content={blogPost?.category || 'Finance'} />
-        {blogPost?.tags?.map(tag => (
+         {blogPost?.tags?.map(tag => (
           <meta key={tag} property="article:tag" content={tag} />
         ))}
         
@@ -283,7 +284,7 @@ export default function BlogPostPage({
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={blogPost?.title || 'Blog Post - Samridhya'} />
         <meta name="twitter:description" content={blogPost?.excerpt || 'Blog post from Samridhya'} />
-        <meta name="twitter:image" content={blogPost?.featuredImage || 'https://samridhya.com/images/samridhya-preview.png'} />
+        <meta name="twitter:image" content={blogPost?.featuredImage || 'https://samridhya.com/samridhya-preview.webp'} />
         
         {/* Structured Data */}
         <script
@@ -294,7 +295,7 @@ export default function BlogPostPage({
               "@type": "BlogPosting",
               "headline": blogPost?.title || 'Blog Post',
               "description": blogPost?.excerpt || 'Blog post from Samridhya',
-              "image": blogPost?.featuredImage || 'https://samridhya.com/images/samridhya-preview.png',
+              "image": blogPost?.featuredImage || 'https://samridhya.com/samridhya-preview.webp',
               "author": {
                 "@type": "Person",
                 "name": blogPost?.author || 'Samridhya'
@@ -509,11 +510,14 @@ export default function BlogPostPage({
                     <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
                       <p className="text-gray-700 italic">{blogPost.excerpt}</p>
                     </div>
-
                     {/* Content */}
-                    <div 
-                      className="prose prose-lg max-w-none mb-8"
-                      dangerouslySetInnerHTML={{ __html: blogPost.content }}
+                    <div
+                        className="prose prose-lg max-w-none mb-8"
+                        dangerouslySetInnerHTML={{
+                          __html: blogPost.content?.trim().startsWith("<")
+                              ? blogPost.content // Treat as HTML
+                              : marked.parse(blogPost.content || ""), // Treat as Markdown
+                        }}
                     />
 
                     {/* Action Buttons */}
@@ -527,7 +531,7 @@ export default function BlogPostPage({
                             <Share2 className="w-4 h-4 mr-2" />
                             Share
                           </button>
-                          
+
                           {showShareMenu && (
                             <div className="absolute bottom-full left-0 mb-2 bg-white rounded-lg shadow-lg border border-gray-200 p-2 z-10">
                               <div className="flex items-center gap-2">
@@ -745,6 +749,7 @@ export const getStaticProps: GetStaticProps<BlogPostPageProps> = async ({ params
         subcategories: subcategoriesData,
         popularTags: tagsData,
       },
+      revalidate: 1,
     };
   } catch (error) {
     console.error('❌ Error generating static props:', error);

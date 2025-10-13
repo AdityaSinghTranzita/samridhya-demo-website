@@ -15,15 +15,16 @@ import { HiOutlineDocumentText } from 'react-icons/hi';
 import { Download, ArrowRight, Shield, Users, TrendingUp, ChevronDown, ChevronRight } from 'lucide-react';
 import { handleAppDownload } from '@/utils/appStore';
 import { trackButtonClick, trackAppDownload } from '@/utils/analytics';
+import {FaPinterest, FaYoutube} from "react-icons/fa";
 
 export default function Footer() {
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
 
   const toggleSection = (section: string) => {
-    setExpandedSections(prev => 
-      prev.includes(section) 
-        ? prev.filter(s => s !== section)
-        : [...prev, section]
+    setExpandedSections(prev =>
+        prev.includes(section)
+            ? prev.filter(s => s !== section)
+            : [...prev, section]
     );
   };
 
@@ -61,21 +62,21 @@ export default function Footer() {
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-8">
                 <motion.button
-                onClick={() => {
-                  handleAppDownload();
-                  trackButtonClick('download_app', 'cta_section', {
-                    button_position: 'cta_section',
-                    cta_type: 'primary'
-                  });
-                  trackAppDownload('web', 'cta_section', {
-                    download_source: 'cta_section',
-                    cta_type: 'primary'
-                  });
-                }}
-                className=" flex justify-between items-center group relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 text-base"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
+                    onClick={() => {
+                      handleAppDownload();
+                      trackButtonClick('download_app', 'cta_section', {
+                        button_position: 'cta_section',
+                        cta_type: 'primary'
+                      });
+                      trackAppDownload('web', 'cta_section', {
+                        download_source: 'cta_section',
+                        cta_type: 'primary'
+                      });
+                    }}
+                    className=" flex justify-between items-center group relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 text-base"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                >
                   <Download size={20} className="mr-2" />
                   Download App
                 </motion.button>
@@ -150,34 +151,49 @@ export default function Footer() {
                   Your trusted partner for seamless digital lending. Making financial dreams accessible to every Indian.
                 </p>
                 <div className="flex gap-4">
-                  <Link 
-                    href="https://www.facebook.com/SamridhyaInnovations" 
-                    aria-label="Follow us on Facebook"
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
+                  <Link
+                      href="https://www.facebook.com/SamridhyaInnovations"
+                      aria-label="Follow us on Facebook"
+                      className="w-10 h-8 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
                   >
-                    <FaFacebookF size={16} />
+                    <FaFacebookF size={12} />
                   </Link>
-                  <Link 
-                    href="https://www.linkedin.com/company/samridhya/" 
-                    aria-label="Follow us on LinkedIn"
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
+                  <Link
+                      href="https://www.linkedin.com/company/samridhya/"
+                      aria-label="Follow us on LinkedIn"
+                      className="w-10 h-8 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
                   >
-                    <FaLinkedinIn size={16} />
+                    <FaLinkedinIn size={12} />
                   </Link>
-                  <Link 
-                    href="https://x.com/ComSamridh42501" 
-                    aria-label="Follow us on X (Twitter)"
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
+                  <Link
+                      href="https://x.com/ComSamridh42501"
+                      aria-label="Follow us on X (Twitter)"
+                      className="w-10 h-8 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
                   >
-                    <FaXTwitter size={16} />
+                    <FaXTwitter size={12} />
                   </Link>
-                  <Link 
-                    href="https://www.instagram.com/samridhya_innovations/" 
-                    aria-label="Follow us on Instagram"
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
+                  <Link
+                      href="https://www.instagram.com/samridhya_innovations/"
+                      aria-label="Follow us on Instagram"
+                      className="w-10 h-8 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
                   >
-                    <FaInstagram size={16} />
+                    <FaInstagram size={12} />
                   </Link>
+                  <Link
+                      href="https://in.pinterest.com/samridhya_innovations"
+                      aria-label="Follow us on Pinterest"
+                      className="w-10 h-8 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
+                  >
+                    <FaPinterest size={12} />
+                  </Link>
+                  <Link
+                      href="https://www.youtube.com/@samridhya_innovations"
+                      aria-label="Follow us on Youtube"
+                      className="w-10 h-8 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
+                  >
+                    <FaYoutube size={16} />
+                  </Link>
+
                 </div>
               </div>
 
@@ -230,6 +246,11 @@ export default function Footer() {
                     <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
                     Wedding Loan
                   </Link></li>
+                  {/* NEW: Gold Loan added */}
+                  <li><Link href="/loans/gold-loan" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 sm:gap-3 group text-sm md:text-base lg:text-base">
+                    <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
+                    Gold Loan
+                  </Link></li>
                   <li><Link href="/calculators" className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 sm:gap-3 group text-sm md:text-base lg:text-base">
                     <div className="w-1 h-1 bg-blue-500 rounded-full group-hover:scale-150 transition-transform duration-300"></div>
                     All Calculators
@@ -275,8 +296,8 @@ export default function Footer() {
                 {/* Loan EMI Calculators */}
                 <div>
                   <button
-                    onClick={() => toggleSection('loan')}
-                    className="w-full flex items-center justify-between text-white font-semibold text-sm md:text-base mb-4 relative focus:outline-none lg:cursor-default"
+                      onClick={() => toggleSection('loan')}
+                      className="w-full flex items-center justify-between text-white font-semibold text-sm md:text-base mb-4 relative focus:outline-none lg:cursor-default"
                   >
                     <span>Loan EMI Calculators</span>
                     <div className="absolute bottom-0 left-0 w-6 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
@@ -287,6 +308,8 @@ export default function Footer() {
                     <li><Link  target="_blank" href="/calculators/mortgage-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Home Loan EMI Calculator</Link></li>
                     <li><Link  target="_blank" href="/calculators/auto-loan-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Car Loan EMI Calculator</Link></li>
                     <li><Link  target="_blank" href="/calculators/business-loan-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Business Loan EMI Calculator</Link></li>
+                    {/* NEW: Gold Loan EMI Calculator added */}
+                    <li><Link  target="_blank" href="/calculators/gold-loan-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Gold Loan EMI Calculator</Link></li>
                     <li><Link  target="_blank" href="/calculators/amortization-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Amortization Calculator</Link></li>
                     <li><Link  target="_blank" href="/calculators/refinance-calculator" className="text-gray-400 hover:text-white transition-colors duration-300 text-xs md:text-sm">Refinance Calculator</Link></li>
                   </ul>
@@ -295,8 +318,8 @@ export default function Footer() {
                 {/* Investment Calculators */}
                 <div>
                   <button
-                    onClick={() => toggleSection('investment')}
-                    className="w-full flex items-center justify-between text-white font-semibold text-sm md:text-base mb-4 relative focus:outline-none lg:cursor-default"
+                      onClick={() => toggleSection('investment')}
+                      className="w-full flex items-center justify-between text-white font-semibold text-sm md:text-base mb-4 relative focus:outline-none lg:cursor-default"
                   >
                     <span>Investment Calculators</span>
                     <div className="absolute bottom-0 left-0 w-6 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
@@ -315,8 +338,8 @@ export default function Footer() {
                 {/* Financial Planning Calculators */}
                 <div>
                   <button
-                    onClick={() => toggleSection('planning')}
-                    className="w-full flex items-center justify-between text-white font-semibold text-sm md:text-base mb-4 relative focus:outline-none lg:cursor-default"
+                      onClick={() => toggleSection('planning')}
+                      className="w-full flex items-center justify-between text-white font-semibold text-sm md:text-base mb-4 relative focus:outline-none lg:cursor-default"
                   >
                     <span>Financial Planning</span>
                     <div className="absolute bottom-0 left-0 w-6 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
@@ -335,8 +358,8 @@ export default function Footer() {
                 {/* Tax & Debt Calculators */}
                 <div>
                   <button
-                    onClick={() => toggleSection('tax')}
-                    className="w-full flex items-center justify-between text-white font-semibold text-sm md:text-base mb-4 relative focus:outline-none lg:cursor-default"
+                      onClick={() => toggleSection('tax')}
+                      className="w-full flex items-center justify-between text-white font-semibold text-sm md:text-base mb-4 relative focus:outline-none lg:cursor-default"
                   >
                     <span>Tax & Debt Calculators</span>
                     <div className="absolute bottom-0 left-0 w-6 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
@@ -355,8 +378,8 @@ export default function Footer() {
                 {/* Utility Calculators */}
                 <div>
                   <button
-                    onClick={() => toggleSection('utility')}
-                    className="w-full flex items-center justify-between text-white font-semibold text-sm md:text-base mb-4 relative focus:outline-none lg:cursor-default"
+                      onClick={() => toggleSection('utility')}
+                      className="w-full flex items-center justify-between text-white font-semibold text-sm md:text-base mb-4 relative focus:outline-none lg:cursor-default"
                   >
                     <span>Utility Calculators</span>
                     <div className="absolute bottom-0 left-0 w-6 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>

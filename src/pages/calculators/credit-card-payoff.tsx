@@ -17,6 +17,7 @@ import {
   Percent
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 interface PayoffMethod {
   id: string;
@@ -427,6 +428,7 @@ export default function CreditCardPayoffCalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

@@ -26,9 +26,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <Head>
-        {/* Keep performance-related tags */}
         <link rel="preload" href="https://framerusercontent.com/images/kvNaGEJ2iLiDZTVtaiNCqdyUZM.png" as="image" type="image/png" />
-        <link rel="preload" href="/images/Samridhya_Hero.png" as="image" type="image/png" />
+        <link rel="preload" href="/images/Samridhya_Hero.webp" as="image" type="image/webp" />
 
         <link rel="dns-prefetch" href="//framerusercontent.com" />
         <link rel="dns-prefetch" href="//upload.wikimedia.org" />
@@ -43,6 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="format-detection" content="telephone=no" />
+        <meta name="p:domain_verify" content="44864b52a292c673b00c3de3ff9298f2"/>
       </Head>
       <Component {...pageProps} />
     </AuthProvider>

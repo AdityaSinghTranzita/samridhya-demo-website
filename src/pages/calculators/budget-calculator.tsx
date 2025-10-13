@@ -20,6 +20,7 @@ import {
   Trash2
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 interface IncomeItem {
   id: number;
@@ -481,6 +482,7 @@ export default function BudgetCalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

@@ -18,6 +18,7 @@ import {
   Download
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function MortgageVsRentCalculator() {
   const [propertyPrice, setPropertyPrice] = useState(500000);
@@ -587,6 +588,7 @@ export default function MortgageVsRentCalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

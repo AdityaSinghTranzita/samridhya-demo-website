@@ -17,6 +17,7 @@ import {
   PiggyBank
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function RefinanceCalculator() {
   const [currentLoan, setCurrentLoan] = useState({
@@ -401,6 +402,7 @@ export default function RefinanceCalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

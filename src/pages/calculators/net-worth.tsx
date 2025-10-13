@@ -19,6 +19,7 @@ import {
   Trash2
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 interface AssetItem {
   id: number;
@@ -493,6 +494,7 @@ export default function NetWorthCalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

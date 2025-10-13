@@ -5,6 +5,7 @@ import { Calculator, Receipt, Shield, Clock, DollarSign, FileText, BarChart3, Pe
 import { handleAppDownload } from "@/utils/appStore";
 import { trackEvent, trackButtonClick } from "@/utils/analytics";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function GSTCalculatorPage() {
   return (
@@ -340,6 +341,7 @@ export default function GSTCalculatorPage() {
             </motion.div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

@@ -5,6 +5,7 @@ import { Calculator, Wallet, Shield, Clock, DollarSign, Target, BarChart3, Trend
 import { handleAppDownload } from "@/utils/appStore";
 import { trackEvent, trackButtonClick } from "@/utils/analytics";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function PersonalLoanCalculatorPage() {
   return (
@@ -272,6 +273,7 @@ export default function PersonalLoanCalculatorPage() {
             </motion.div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

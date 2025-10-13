@@ -24,7 +24,7 @@ export default function TermsOfService() {
         <meta property="og:description" content="Read Samridhya's terms of service to understand the legal terms and conditions governing your use of our platform." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://samridhya.com/term-of-use/" />
-        <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta property="og:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Samridhya Terms of Service - Legal Terms" />
@@ -35,7 +35,7 @@ export default function TermsOfService() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Terms of Service - Samridhya | Legal Terms & Conditions" />
         <meta name="twitter:description" content="Read Samridhya's terms of service to understand the legal terms and conditions." />
-        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta name="twitter:image:alt" content="Samridhya Terms of Service - Legal Terms" />
         <meta name="twitter:site" content="@samridhya" />
         <meta name="twitter:creator" content="@samridhya" />

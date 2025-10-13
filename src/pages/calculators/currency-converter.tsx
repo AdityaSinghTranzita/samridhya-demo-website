@@ -19,6 +19,7 @@ import {
   RefreshCw
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 interface Currency {
   code: string;
@@ -403,6 +404,7 @@ export default function CurrencyConverter() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

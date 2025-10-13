@@ -24,7 +24,7 @@ export default function GrievanceRedressalPolicy() {
         <meta property="og:description" content="Read Samridhya's grievance redressal policy to understand our complaint resolution process." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://samridhya.com/grievance-redressal-policy/" />
-        <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta property="og:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Samridhya Grievance Redressal Policy - Complaint Resolution" />
@@ -35,7 +35,7 @@ export default function GrievanceRedressalPolicy() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Grievance Redressal Policy - Samridhya | Complaint Resolution" />
         <meta name="twitter:description" content="Read Samridhya's grievance redressal policy to understand our complaint resolution process." />
-        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta name="twitter:image:alt" content="Samridhya Grievance Redressal Policy - Complaint Resolution" />
         <meta name="twitter:site" content="@samridhya" />
         <meta name="twitter:creator" content="@samridhya" />

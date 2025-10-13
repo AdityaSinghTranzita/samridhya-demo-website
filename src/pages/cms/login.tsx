@@ -122,8 +122,9 @@ const LoginPage: React.FC = () => {
   }, [user, loading, router]);
 
   const handleSignIn = async () => {
-    clearError(); // Clear any previous errors
+    clearError();
     await signIn(); // No need for try-catch since signIn no longer throws errors
+
   };
 
   if (loading) {

@@ -5,6 +5,7 @@ import { Calculator, TrendingUp, Shield, Clock, DollarSign } from "lucide-react"
 import { handleAppDownload } from "@/utils/appStore";
 import { trackEvent, trackButtonClick } from "@/utils/analytics";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function LoanCalculatorPage() {
 
@@ -287,6 +288,7 @@ export default function LoanCalculatorPage() {
           </motion.div>
         </div>
       </section>
+        <CTA />
     </div>
     </>
   );

@@ -1,14 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',        // ✅ Pages router
-    './components/**/*.{js,ts,jsx,tsx,mdx}',   // ✅ UI components
-    './src/**/*.{js,ts,jsx,tsx,mdx}',          // ✅ Source directory
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-jakarta)', 'sans-serif'],  // ✅ Connects to Google Font
+        sans: ['var(--font-jakarta)', 'sans-serif'],
       },
       animation: {
         blob: 'blob 7s infinite',

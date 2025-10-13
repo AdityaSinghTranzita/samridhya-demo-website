@@ -5,6 +5,7 @@ import { Calculator, Home, Shield, Clock, DollarSign, Target, BarChart3, Trendin
 import { handleAppDownload } from "@/utils/appStore";
 import { trackEvent, trackButtonClick } from "@/utils/analytics";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function MortgageCalculatorPage() {
   return (
@@ -272,6 +273,7 @@ export default function MortgageCalculatorPage() {
             </motion.div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

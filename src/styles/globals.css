@@ -1,7 +1,7 @@
 @import "tailwindcss";
-/* app/globals.css or styles/globals.css */
 
-/* Critical CSS - Load first */
+
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

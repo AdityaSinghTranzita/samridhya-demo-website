@@ -24,7 +24,7 @@ export default function IntellectualPropertyPolicy() {
         <meta property="og:description" content="Read Samridhya's intellectual property policy to understand our IP rights, permitted use, and protection measures." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://samridhya.com/intellectual-property-policy/" />
-        <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta property="og:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Samridhya Intellectual Property Policy - IP Protection" />
@@ -35,7 +35,7 @@ export default function IntellectualPropertyPolicy() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Intellectual Property Policy - Samridhya | IP Rights & Protection" />
         <meta name="twitter:description" content="Read Samridhya's intellectual property policy to understand our IP rights and protection measures." />
-        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta name="twitter:image:alt" content="Samridhya Intellectual Property Policy - IP Protection" />
         <meta name="twitter:site" content="@samridhya" />
         <meta name="twitter:creator" content="@samridhya" />

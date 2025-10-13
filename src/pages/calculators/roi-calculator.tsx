@@ -17,6 +17,7 @@ import {
   Download
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function ROICalculator() {
   const [initialInvestment, setInitialInvestment] = useState(10000);
@@ -388,6 +389,7 @@ export default function ROICalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

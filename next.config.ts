@@ -1,79 +1,58 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable static export for Firebase hosting (only in production)
-  ...(process.env.NODE_ENV === 'production' && {
-    output: 'export',
-  }),
-  trailingSlash: true,
-  
-  // Disable image optimization for static export
+  reactStrictMode: true,
+  trailingSlash: false,
+
   images: {
     unoptimized: true,
     domains: [
       'firebasestorage.googleapis.com',
       'samridhya.com',
       'www.samridhya.com',
-      'lh3.googleusercontent.com', // For Firebase Auth profile images
-      'upload.wikimedia.org', // For Google Play Store badge
-      'developer.apple.com', // For App Store badge
+      'lh3.googleusercontent.com', // Firebase Auth profile images
+      'upload.wikimedia.org',      // Google Play Store badge
+      'developer.apple.com',       // App Store badge
     ],
   },
-  
-  // Enhanced experimental features for static export
+
   experimental: {
     optimizePackageImports: [
-      'framer-motion', 
-      'react-icons', 
+      'framer-motion',
+      'react-icons',
       'lucide-react',
       '@headlessui/react',
       'date-fns',
       'lodash',
       'clsx',
-      'tailwind-merge'
+      'tailwind-merge',
     ],
     scrollRestoration: true,
     optimizeCss: true,
   },
-  
-  // Enhanced compression and security
+
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
   skipTrailingSlashRedirect: true,
-  
-  // Enhanced security headers
+
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
           },
-          
         ],
       },
-      // Sitemap headers
       {
         source: '/sitemap.xml',
         headers: [
-          {
-            key: 'Content-Type',
-            value: 'text/xml',
-          },
+          { key: 'Content-Type', value: 'text/xml' },
           {
             key: 'Cache-Control',
             value: 'public, s-maxage=3600, stale-while-revalidate=86400',
@@ -83,10 +62,7 @@ const nextConfig = {
       {
         source: '/sitemap-index.xml',
         headers: [
-          {
-            key: 'Content-Type',
-            value: 'text/xml',
-          },
+          { key: 'Content-Type', value: 'text/xml' },
           {
             key: 'Cache-Control',
             value: 'public, s-maxage=3600, stale-while-revalidate=86400',
@@ -95,26 +71,14 @@ const nextConfig = {
       },
     ];
   },
-  
-  // Temporarily disabled all redirects and rewrites to fix redirect loops
-  // async redirects() {
-  //   return [];
-  // },
-  
-  // async rewrites() {
-  //   return [];
-  // },
-  
-  // Performance optimizations
+
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
     styledComponents: true,
   },
-  
-  // Enhanced webpack optimizations for static export
+
   webpack: (config, { dev, isServer }) => {
     if (!dev && !isServer) {
-      // Optimize bundle splitting
       config.optimization.splitChunks = {
         chunks: 'all',
         cacheGroups: {
@@ -134,23 +98,19 @@ const nextConfig = {
           },
         },
       };
-      
-      // Optimize module resolution
+
       config.resolve.alias = {
         ...config.resolve.alias,
         '@': require('path').resolve(__dirname, 'src'),
       };
     }
-    
-    // Handle SVG imports
+
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],
     });
-    
-    // Optimize for static export
+
     if (!isServer) {
-      // Remove server-only dependencies from client bundle
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
@@ -159,16 +119,14 @@ const nextConfig = {
         crypto: false,
       };
     }
-    
+
     return config;
   },
-  
-  // Enhanced environment variables
+
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
   },
-  
-  // Enhanced public runtime config
+
   publicRuntimeConfig: {
     firebaseConfig: {
       apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -181,8 +139,7 @@ const nextConfig = {
     apiUrl: process.env.NEXT_PUBLIC_FIREBASE_FUNCTIONS_URL,
     gaId: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
   },
-  
-  // Enhanced server runtime config
+
   serverRuntimeConfig: {
     firebaseServiceAccount: process.env.FIREBASE_SERVICE_ACCOUNT,
   },

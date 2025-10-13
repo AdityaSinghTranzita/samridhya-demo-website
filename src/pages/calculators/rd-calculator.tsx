@@ -17,6 +17,7 @@ import {
   Download
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function RecurringDepositCalculator() {
   const [monthlyDeposit, setMonthlyDeposit] = useState(5000);
@@ -369,6 +370,7 @@ export default function RecurringDepositCalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

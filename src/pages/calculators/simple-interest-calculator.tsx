@@ -5,6 +5,7 @@ import { Calculator, TrendingUp, Shield, Clock, DollarSign, Target, BarChart3 } 
 import { handleAppDownload } from "@/utils/appStore";
 import { trackEvent, trackButtonClick } from "@/utils/analytics";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function SimpleInterestCalculatorPage() {
   return (
@@ -293,6 +294,7 @@ export default function SimpleInterestCalculatorPage() {
             </motion.div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

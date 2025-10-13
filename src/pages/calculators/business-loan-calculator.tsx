@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Calculator, TrendingUp, Shield, Clock, DollarSign, Building2 } from "lucide-react";
 import { handleAppDownload } from "@/utils/appStore";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function BusinessLoanCalculatorPage() {
   return (
@@ -149,6 +150,7 @@ export default function BusinessLoanCalculatorPage() {
             </motion.div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

@@ -18,6 +18,7 @@ import {
   Download
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function ChildPlanningCalculator() {
   const [childAge, setChildAge] = useState(5);
@@ -409,6 +410,7 @@ export default function ChildPlanningCalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

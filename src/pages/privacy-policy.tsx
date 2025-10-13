@@ -24,7 +24,7 @@ export default function PrivacyPolicy() {
         <meta property="og:description" content="Read Samridhya's privacy policy to understand how we protect your personal information. Learn about data collection, usage, and security measures." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://samridhya.com/privacy-policy/" />
-        <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta property="og:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Samridhya Privacy Policy - Data Protection" />
@@ -35,7 +35,7 @@ export default function PrivacyPolicy() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Privacy Policy - Samridhya | Data Protection & Security" />
         <meta name="twitter:description" content="Read Samridhya's privacy policy to understand how we protect your personal information." />
-        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta name="twitter:image:alt" content="Samridhya Privacy Policy - Data Protection" />
         <meta name="twitter:site" content="@samridhya" />
         <meta name="twitter:creator" content="@samridhya" />

@@ -18,6 +18,7 @@ import {
   Download
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function LumpsumCalculator() {
   const [principal, setPrincipal] = useState(10000);
@@ -355,6 +356,7 @@ export default function LumpsumCalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

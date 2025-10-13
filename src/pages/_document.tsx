@@ -5,40 +5,15 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        {/* Cache-busting meta tags */}
+         Cache-busting meta tags
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
         <meta httpEquiv="Pragma" content="no-cache" />
         <meta httpEquiv="Expires" content="0" />
         <meta name="cache-control" content="no-cache, no-store, must-revalidate" />
         <meta name="pragma" content="no-cache" />
         <meta name="expires" content="0" />
-        
-        {/* Critical CSS to prevent FOUC */}
-        <style dangerouslySetInnerHTML={{
-          __html: `
-            /* Critical CSS for initial render */
-            body { margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
-            * { box-sizing: border-box; }
-            html { scroll-behavior: smooth; }
-            body { overflow-x: hidden; }
-            
-            /* Prevent layout shift during CSS load */
-            .navbar-placeholder { height: 80px; }
-            .hero-placeholder { min-height: 100vh; background: linear-gradient(to bottom right, #f8fafc, #e0f2fe, #e0e7ff); }
-            
-            /* Loading state styles */
-            .loading { opacity: 0; transition: opacity 0.3s ease-in; }
-            .loaded { opacity: 1; }
-            
-            /* Ensure images don't cause layout shift */
-            img { max-width: 100%; height: auto; }
-            
-            /* Basic responsive utilities */
-            @media (max-width: 768px) {
-              .container { padding-left: 1rem; padding-right: 1rem; }
-            }
-          `
-        }} />
+
+
         
         {/* Preload critical CSS */}
         <link rel="preload" href="/_next/static/css/app.css" as="style" />
@@ -59,6 +34,7 @@ export default function Document() {
         <meta name="theme-color" content="#1e293b" media="(prefers-color-scheme: dark)" />
         <meta name="msapplication-TileColor" content="#2563eb" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
+        <meta name="p:domain_verify" content="44864b52a292c673b00c3de3ff9298f2"/>
         
         {/* Google Analytics */}
         <script
@@ -80,7 +56,7 @@ export default function Document() {
           }}
         />
         
-        {/* Meta Pixel Code */}
+
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -124,7 +100,7 @@ export default function Document() {
         {/* Open Graph Meta Tags */}
         <meta property="og:site_name" content="Samridhya" />
         <meta property="og:locale" content="en_US" />
-        <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta property="og:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Samridhya - Instant Personal Loans, Business Loans & More" />
@@ -133,7 +109,7 @@ export default function Document() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@samridhya" />
         <meta name="twitter:creator" content="@samridhya" />
-        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta name="twitter:image:alt" content="Samridhya - Instant Personal Loans, Business Loans & More" />
         
         {/* Additional Meta Tags for Better SEO */}
@@ -142,43 +118,57 @@ export default function Document() {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Samridhya" />
-        
+
         {/* Sitemap Link */}
         <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
         
         {/* Structured Data for Rich Snippets */}
         <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FinancialService",
-              "name": "Samridhya",
-              "description": "Instant Personal Loans, Business Loans, Education Loans, Wedding Loans, Travel Loans, and Medical Loans",
-              "url": "https://samridhya.com/",
-              "logo": "https://samridhya.com/favicon.svg",
-              "image": "https://samridhya.com/samridhya-preview.png",
-              "sameAs": [
-                "https://twitter.com/samridhya",
-                "https://facebook.com/samridhya"
-              ],
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+91-XXXXXXXXXX",
-                "contactType": "customer service"
-              },
-              "areaServed": "India",
-              "serviceType": [
-                "Personal Loan",
-                "Business Loan", 
-                "Education Loan",
-                "Wedding Loan",
-                "Travel Loan",
-                "Medical Loan"
-              ]
-            })
-          }}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FinancialService",
+                "name": "Samridhya",
+                "description": "Instant Personal Loans, Business Loans, Education Loans, Wedding Loans, Travel Loans, and Medical Loans.",
+                "url": "https://samridhya.com/",
+                "logo": "https://samridhya.com/favicon.svg",
+                "image": "https://samridhya.com/samridhya-preview.webp",
+                "sameAs": [
+                  "https://twitter.com/samridhya",
+                  "https://facebook.com/samridhya",
+                  "https://www.linkedin.com/company/samridhya"
+                ],
+                "contactPoint": {
+                  "@type": "ContactPoint",
+                  "telephone": "+91-6366234524",
+                  "contactType": "customer service",
+                  "areaServed": "IN",
+                  "availableLanguage": ["English", "Hindi"]
+                },
+                "address": {
+                  "@type": "PostalAddress",
+                  "streetAddress": "No.1207/343 & 1207/1/343/1, Sierra Cartel, 9th Main, 7th Sector, HSR Layout",
+                  "addressLocality": "Bangalore South",
+                  "addressRegion": "Karnataka",
+                  "postalCode": "560102",
+                  "addressCountry": "IN"
+                },
+                "areaServed": "India",
+                "serviceType": [
+                  "Personal Loan",
+                  "Business Loan",
+                  "Education Loan",
+                  "Wedding Loan",
+                  "Travel Loan",
+                  "Medical Loan",
+                  "Gold Loan",
+                  "CGSTSME Loan",
+                ]
+              }),
+            }}
         />
+
       </Head>
       <body className="font-sans">
         <Main />

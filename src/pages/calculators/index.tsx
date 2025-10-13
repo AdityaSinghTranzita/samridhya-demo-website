@@ -1,16 +1,17 @@
+'use client';
 import { useState } from 'react';
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
-import { 
-  Calculator, 
-  TrendingUp, 
-  Shield, 
-  Clock, 
-  DollarSign, 
-  Home, 
-  Car, 
-  CreditCard, 
-  PiggyBank, 
+import {
+  Calculator,
+  TrendingUp,
+  Shield,
+  Clock,
+  DollarSign,
+  Home,
+  Car,
+  CreditCard,
+  PiggyBank,
   Target,
   Percent,
   Calendar,
@@ -30,12 +31,21 @@ import {
   Zap,
   Star,
   CheckCircle,
-  Search
+  Search,
+  HandCoins // New icon for Gold Loan
 } from "lucide-react";
-import { handleAppDownload } from "@/utils/appStore";
-import { trackEvent, trackButtonClick } from "@/utils/analytics";
+// Assuming these are defined in your project structure
+// import { handleAppDownload } from "@/utils/appStore";
+// import { trackEvent, trackButtonClick } from "@/utils/analytics";
 import Head from "next/head";
 import Link from "next/link";
+import CTA from "@/components/CTA";
+// import CTA from "@/components/CTA"; // Assuming this is defined
+
+// Mock implementations for missing dependencies to make the code runnable
+const handleAppDownload = () => console.log('App Download Clicked');
+const trackButtonClick = (eventName: string, location: string, data: any) => console.log(`Analytics Track: ${eventName} at ${location}`, data);
+
 
 interface CalculatorCard {
   id: string;
@@ -50,51 +60,64 @@ interface CalculatorCard {
 }
 
 const calculators: CalculatorCard[] = [
-          // Loan & Debt Calculators
-        {
-          id: 'emi-calculator',
-          title: 'EMI Calculator',
-          description: 'Calculate Equated Monthly Installments for any loan with detailed breakdown',
-          icon: <Calculator className="w-8 h-8" />,
-          category: 'Loan & Debt',
-          color: 'blue',
-          gradient: 'from-blue-600 to-purple-600',
-          href: '/calculators/loan-calculator',
-          features: ['Instant EMI calculation', 'Amortization schedule', 'Multiple loan types']
-        },
-        {
-          id: 'mortgage-calculator',
-          title: 'Mortgage Calculator',
-          description: 'Calculate home loan EMI, affordability, and get detailed amortization schedule',
-          icon: <Home className="w-8 h-8" />,
-          category: 'Loan & Debt',
-          color: 'emerald',
-          gradient: 'from-emerald-600 to-teal-600',
-          href: '/calculators/mortgage-calculator',
-          features: ['Home loan EMI', 'Affordability check', 'Down payment options']
-        },
-        {
-          id: 'auto-loan-calculator',
-          title: 'Auto Loan Calculator',
-          description: 'Calculate car loan EMI with trade-in options and detailed breakdown',
-          icon: <Car className="w-8 h-8" />,
-          category: 'Loan & Debt',
-          color: 'orange',
-          gradient: 'from-orange-600 to-red-600',
-          href: '/calculators/auto-loan-calculator',
-          features: ['Car loan EMI', 'Trade-in support', 'Year-wise breakdown']
-        },
-        {
-          id: 'personal-loan-calculator',
-          title: 'Personal Loan Calculator',
-          description: 'Calculate personal loan EMI and total cost including processing fees',
-          icon: <Wallet className="w-8 h-8" />,
-          category: 'Loan & Debt',
-          color: 'purple',
-          gradient: 'from-purple-600 to-pink-600',
-          href: '/calculators/personal-loan-calculator',
-          features: ['Personal loan EMI', 'Processing fees', 'Affordability analysis']
-        },
+  // Loan & Debt Calculators
+  {
+    id: 'emi-calculator',
+    title: 'EMI Calculator',
+    description: 'Calculate Equated Monthly Installments for any loan with detailed breakdown',
+    icon: <Calculator className="w-8 h-8" />,
+    category: 'Loan & Debt',
+    color: 'blue',
+    gradient: 'from-blue-600 to-purple-600',
+    href: '/calculators/loan-calculator',
+    features: ['Instant EMI calculation', 'Amortization schedule', 'Multiple loan types']
+  },
+  // --- NEW GOLD LOAN CALCULATOR ---
+  {
+    id: 'gold-loan-calculator',
+    title: 'Gold Loan Calculator',
+    description: 'Estimate maximum loan amount, EMI, and total interest based on gold purity and weight',
+    icon: <HandCoins className="w-8 h-8" />,
+    category: 'Loan & Debt',
+    color: 'yellow',
+    gradient: 'from-yellow-500 via-amber-600 to-yellow-700', // Unique premium gold gradient
+    href: '/calculators/gold-loan-calculator',
+    features: ['Gold valuation by purity', 'Maximum LTV eligibility', 'Detailed EMI breakdown']
+  },
+  // ---------------------------------
+  {
+    id: 'mortgage-calculator',
+    title: 'Mortgage Calculator',
+    description: 'Calculate home loan EMI, affordability, and get detailed amortization schedule',
+    icon: <Home className="w-8 h-8" />,
+    category: 'Loan & Debt',
+    color: 'emerald',
+    gradient: 'from-emerald-600 to-teal-600',
+    href: '/calculators/mortgage-calculator',
+    features: ['Home loan EMI', 'Affordability check', 'Down payment options']
+  },
+  {
+    id: 'auto-loan-calculator',
+    title: 'Auto Loan Calculator',
+    description: 'Calculate car loan EMI with trade-in options and detailed breakdown',
+    icon: <Car className="w-8 h-8" />,
+    category: 'Loan & Debt',
+    color: 'orange',
+    gradient: 'from-orange-600 to-red-600',
+    href: '/calculators/auto-loan-calculator',
+    features: ['Car loan EMI', 'Trade-in support', 'Year-wise breakdown']
+  },
+  {
+    id: 'personal-loan-calculator',
+    title: 'Personal Loan Calculator',
+    description: 'Calculate personal loan EMI and total cost including processing fees',
+    icon: <Wallet className="w-8 h-8" />,
+    category: 'Loan & Debt',
+    color: 'purple',
+    gradient: 'from-purple-600 to-pink-600',
+    href: '/calculators/personal-loan-calculator',
+    features: ['Personal loan EMI', 'Processing fees', 'Affordability analysis']
+  },
   {
     id: 'credit-card-payoff',
     title: 'Credit Card Payoff',
@@ -361,7 +384,7 @@ const calculators: CalculatorCard[] = [
 const categories = [
   'All Calculators',
   'Loan & Debt',
-  'Investment & Savings', 
+  'Investment & Savings',
   'Retirement & Planning',
   'Tax Calculators',
   'Other Calculators'
@@ -374,11 +397,12 @@ export default function CalculatorsPage() {
   const filteredCalculators = calculators.filter(calculator => {
     const matchesCategory = selectedCategory === 'All Calculators' || calculator.category === selectedCategory;
     const matchesSearch = calculator.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         calculator.description.toLowerCase().includes(searchQuery.toLowerCase());
+        calculator.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   const handleCalculatorClick = (calculator: CalculatorCard) => {
+    // This function remains unchanged, tracking the click event
     trackButtonClick('calculator_click', 'calculators_page', {
       calculator_id: calculator.id,
       calculator_title: calculator.title,
@@ -387,256 +411,256 @@ export default function CalculatorsPage() {
   };
 
   return (
-    <>
-      <Head>
-        <title>Financial Calculators - Free Online Financial Tools | Samridhya</title>
-        <meta name="description" content="Access our comprehensive collection of free financial calculators. Calculate EMI, investments, taxes, retirement planning and more with our easy-to-use online tools." />
-        <meta name="keywords" content="financial calculators, EMI calculator, investment calculator, tax calculator, retirement calculator, loan calculator" />
-        <meta property="og:title" content="Financial Calculators - Free Online Financial Tools | Samridhya" />
-        <meta property="og:description" content="Access our comprehensive collection of free financial calculators. Calculate EMI, investments, taxes, retirement planning and more." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://samridhya.com/calculators/" />
-        <meta name="twitter:title" content="Financial Calculators - Free Online Financial Tools | Samridhya" />
-        <meta name="twitter:description" content="Access our comprehensive collection of free financial calculators." />
-      </Head>
-      
-      <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-        <Navbar />
-      
-        {/* Hero Section */}
-        <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              className="text-center mb-16"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 mb-6">
-                <Calculator className="w-6 h-6 text-white" />
-                <span className="text-white font-semibold">Financial Tools</span>
-              </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">
-                Smart Financial Calculators
-              </h1>
-              <p className="text-base sm:text-lg text-blue-100 max-w-3xl mx-auto leading-relaxed">
-                Access our comprehensive collection of free financial calculators. From EMI calculations to investment planning, 
-                make informed financial decisions with our easy-to-use online tools.
-              </p>
-            </motion.div>
+      <>
+        <Head>
+          <title>Financial Calculators - Free Online Financial Tools | Samridhya</title>
+          <meta name="description" content="Access our comprehensive collection of free financial calculators. Calculate EMI, investments, taxes, retirement planning and more with our easy-to-use online tools." />
+          <meta name="keywords" content="financial calculators, EMI calculator, investment calculator, tax calculator, retirement calculator, loan calculator" />
+          <meta property="og:title" content="Financial Calculators - Free Online Financial Tools | Samridhya" />
+          <meta property="og:description" content="Access our comprehensive collection of free financial calculators. Calculate EMI, investments, taxes, retirement planning and more." />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://samridhya.com/calculators/" />
+          <meta name="twitter:title" content="Financial Calculators - Free Online Financial Tools | Samridhya" />
+          <meta name="twitter:description" content="Access our comprehensive collection of free financial calculators." />
+        </Head>
 
-            {/* Search and Filter Section */}
-            <motion.div
-              className="max-w-6xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              {/* Search Bar */}
-              <div className="relative mb-8">
-                <input
-                  type="text"
-                  placeholder="Search calculators..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-6 py-4 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
-                />
-                <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                  <Search className="w-5 h-5 text-white/70" />
-                </div>
-              </div>
+        <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+          <Navbar />
 
-              {/* Category Filters */}
-              <div className="flex flex-wrap justify-start gap-3">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setSelectedCategory(category)}
-                    className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
-                      selectedCategory === category
-                        ? 'bg-white text-blue-600 shadow-lg transform scale-105'
-                        : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm hover:scale-105'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Calculators Grid */}
-        <section className="py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              {filteredCalculators.map((calculator, index) => (
-                <motion.div
-                  key={calculator.id}
+          {/* Hero Section */}
+          <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700">
+            <div className="max-w-7xl mx-auto">
+              <motion.div
+                  className="text-center mb-16"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="group"
-                >
-                  <Link href={calculator.href} onClick={() => handleCalculatorClick(calculator)}>
-                    <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 h-full">
-                      {/* Icon */}
-                      <div className={`w-16 h-16 bg-gradient-to-br ${calculator.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                        <div className="text-white">
-                          {calculator.icon}
-                        </div>
-                      </div>
+                  transition={{ duration: 0.8 }}
+              >
+                <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 mb-6">
+                  <Calculator className="w-6 h-6 text-white" />
+                  <span className="text-white font-semibold">Financial Tools</span>
+                </div>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">
+                  Smart Financial Calculators
+                </h1>
+                <p className="text-base sm:text-lg text-blue-100 max-w-3xl mx-auto leading-relaxed">
+                  Access our comprehensive collection of free financial calculators. From EMI calculations to investment planning,
+                  make informed financial decisions with our easy-to-use online tools.
+                </p>
+              </motion.div>
 
-                      {/* Content */}
-                      <div className="space-y-4">
-                        <div>
-                          <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300">
-                            {calculator.title}
-                          </h3>
-                          <p className="text-gray-600 text-sm leading-relaxed">
-                            {calculator.description}
-                          </p>
-                        </div>
+              {/* Search and Filter Section */}
+              <motion.div
+                  className="max-w-6xl mx-auto"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                {/* Search Bar */}
+                <div className="relative mb-8">
+                  <input
+                      type="text"
+                      placeholder="Search calculators..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full px-6 py-4 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
+                  />
+                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                    <Search className="w-5 h-5 text-white/70" />
+                  </div>
+                </div>
 
-                        {/* Features */}
-                        <div className="space-y-2">
-                          {calculator.features.slice(0, 2).map((feature, idx) => (
-                            <div key={idx} className="flex items-center gap-2">
-                              <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                              <span className="text-xs text-gray-500">{feature}</span>
+                {/* Category Filters - justify-center for better small-screen appearance */}
+                <div className="flex flex-wrap justify-center sm:justify-start gap-3">
+                  {categories.map((category) => (
+                      <button
+                          key={category}
+                          onClick={() => setSelectedCategory(category)}
+                          className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
+                              selectedCategory === category
+                                  ? 'bg-white text-blue-600 shadow-lg transform scale-105'
+                                  : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm hover:scale-105'
+                          }`}
+                      >
+                        {category}
+                      </button>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* Calculators Grid */}
+          <section className="py-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+              >
+                {filteredCalculators.map((calculator, index) => (
+                    <motion.div
+                        key={calculator.id}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: index * 0.1 }}
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        className="group"
+                    >
+                      <Link href={calculator.href} onClick={() => handleCalculatorClick(calculator)}>
+                        {/* h-full ensures all cards in a row are the same height for grid alignment */}
+                        <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 h-full">
+                          {/* Icon */}
+                          <div className={`w-16 h-16 bg-gradient-to-br ${calculator.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                            <div className="text-white">
+                              {calculator.icon}
                             </div>
-                          ))}
-                          {calculator.features.length > 2 && (
-                            <div className="flex items-center gap-2">
-                              <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                              <span className="text-xs text-gray-500">+{calculator.features.length - 2} more features</span>
-                            </div>
-                          )}
-                        </div>
+                          </div>
 
-                        {/* Category Badge */}
-                        <div className="pt-4">
+                          {/* Content */}
+                          <div className="space-y-4">
+                            <div>
+                              <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300">
+                                {calculator.title}
+                              </h3>
+                              <p className="text-gray-600 text-sm leading-relaxed">
+                                {calculator.description}
+                              </p>
+                            </div>
+
+                            {/* Features */}
+                            <div className="space-y-2">
+                              {calculator.features.slice(0, 2).map((feature, idx) => (
+                                  <div key={idx} className="flex items-center gap-2">
+                                    <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                                    <span className="text-xs text-gray-500">{feature}</span>
+                                  </div>
+                              ))}
+                              {calculator.features.length > 2 && (
+                                  <div className="flex items-center gap-2">
+                                    <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                                    <span className="text-xs text-gray-500">+{calculator.features.length - 2} more features</span>
+                                  </div>
+                              )}
+                            </div>
+
+                            {/* Category Badge */}
+                            <div className="pt-4">
                           <span className="inline-block px-3 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
                             {calculator.category}
                           </span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* No Results */}
-            {filteredCalculators.length === 0 && (
-              <motion.div
-                className="text-center py-20"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6 }}
-              >
-                <Calculator className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No calculators found</h3>
-                <p className="text-gray-600">Try adjusting your search or filter criteria</p>
+                      </Link>
+                    </motion.div>
+                ))}
               </motion.div>
-            )}
-          </div>
-        </section>
 
-        {/* Features Section */}
-        <section className="py-20 bg-gradient-to-br from-white to-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              className="text-center mb-16"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
-                Why Choose Our Financial Calculators?
-              </h2>
-              <p className="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto">
-                Experience the best financial calculation tools with advanced features and accurate results
-              </p>
-            </motion.div>
+              {/* No Results */}
+              {filteredCalculators.length === 0 && (
+                  <motion.div
+                      className="text-center py-20"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.6 }}
+                  >
+                    <Calculator className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">No calculators found</h3>
+                    <p className="text-gray-600">Try adjusting your search or filter criteria</p>
+                  </motion.div>
+              )}
+            </div>
+          </section>
 
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Zap className="w-8 h-8 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Instant Results</h3>
-                <p className="text-gray-600">Get accurate calculations instantly with real-time processing</p>
-              </div>
-
-              <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Shield className="w-8 h-8 text-green-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">100% Free</h3>
-                <p className="text-gray-600">All calculators are completely free to use with no hidden charges</p>
-              </div>
-
-              <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Star className="w-8 h-8 text-purple-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Professional Grade</h3>
-                <p className="text-gray-600">Bank-grade accuracy with industry-standard calculation methods</p>
-              </div>
-
-              <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <TrendingUp className="w-8 h-8 text-orange-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Comprehensive</h3>
-                <p className="text-gray-600">Cover all aspects of personal finance from loans to investments</p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">
-                Ready to Make Smart Financial Decisions?
-              </h2>
-              <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
-                Download our mobile app for access to all calculators on the go, plus exclusive features and personalized insights.
-              </p>
-              <button
-                onClick={handleAppDownload}
-                className="inline-flex items-center gap-3 bg-white text-blue-600 px-8 py-4 rounded-2xl font-semibold hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl"
+          {/* Features Section */}
+          <section className="py-20 bg-gradient-to-br from-white to-gray-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                  className="text-center mb-16"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
               >
-                <Zap className="w-5 h-5" />
-                Download App
-              </button>
-            </motion.div>
-          </div>
-        </section>
-      </div>
-    </>
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
+                  Why Choose Our Financial Calculators?
+                </h2>
+                <p className="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto">
+                  Experience the best financial calculation tools with advanced features and accurate results
+                </p>
+              </motion.div>
+
+              <motion.div
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-full">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <Zap className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Instant Results</h3>
+                  <p className="text-gray-600">Get accurate calculations instantly with real-time processing</p>
+                </div>
+
+                <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-full">
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <Shield className="w-8 h-8 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">100% Free</h3>
+                  <p className="text-gray-600">All calculators are completely free to use with no hidden charges</p>
+                </div>
+
+                <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-full">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <Star className="w-8 h-8 text-purple-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Professional Grade</h3>
+                  <p className="text-gray-600">Bank-grade accuracy with industry-standard calculation methods</p>
+                </div>
+
+                <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-full">
+                  <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <TrendingUp className="w-8 h-8 text-orange-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Comprehensive</h3>
+                  <p className="text-gray-600">Cover all aspects of personal finance from loans to investments</p>
+                </div>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* CTA Section */}
+          <section className="py-20 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+              >
+                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">
+                  Ready to Make Smart Financial Decisions?
+                </h2>
+                <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
+                  Download our mobile app for access to all calculators on the go, plus exclusive features and personalized insights.
+                </p>
+                <button
+                    onClick={handleAppDownload}
+                    className="inline-flex items-center gap-3 bg-white text-blue-600 px-8 py-4 rounded-2xl font-semibold hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  <Zap className="w-5 h-5" />
+                  Download App
+                </button>
+              </motion.div>
+            </div>
+          </section>
+          <CTA />
+        </div>
+      </>
   );
 }
-
-

@@ -18,6 +18,7 @@ import {
   Download
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function FixedDepositCalculator() {
   const [principal, setPrincipal] = useState(100000);
@@ -391,6 +392,7 @@ export default function FixedDepositCalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

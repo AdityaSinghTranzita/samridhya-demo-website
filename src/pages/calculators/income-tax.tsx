@@ -18,6 +18,7 @@ import {
   Download
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function IncomeTaxCalculator() {
   const [income, setIncome] = useState({
@@ -501,6 +502,7 @@ export default function IncomeTaxCalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

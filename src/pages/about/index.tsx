@@ -144,26 +144,7 @@ const testimonials = [
   }
 ];
 
-const team = [
-  {
-    name: 'Rajesh Mehta',
-    role: 'CEO & Founder',
-    description: '15+ years in fintech, former executive at leading NBFCs',
-    avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=face'
-  },
-  {
-    name: 'Sunita Desai',
-    role: 'CTO',
-    description: 'Expert in digital lending platforms and AI-driven credit assessment',
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face'
-  },
-  {
-    name: 'Vikram Singh',
-    role: 'Head of Operations',
-    description: 'Specializes in regulatory compliance and customer experience',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face'
-  }
-];
+
 
 export default function About() {
   return (
@@ -181,7 +162,7 @@ export default function About() {
         <meta property="og:description" content="Learn about Samridhya, India's leading digital lending platform. We provide instant personal loans, business loans, and more with competitive rates and quick approval." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://samridhya.com/about/" />
-        <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta property="og:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="About Samridhya - Digital Lending Platform" />
@@ -192,7 +173,7 @@ export default function About() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="About Samridhya - Leading Digital Lending Platform" />
         <meta name="twitter:description" content="Learn about Samridhya, India's leading digital lending platform. We provide instant personal loans, business loans, and more." />
-        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta name="twitter:image:alt" content="About Samridhya - Digital Lending Platform" />
         <meta name="twitter:site" content="@samridhya" />
         <meta name="twitter:creator" content="@samridhya" />
@@ -219,7 +200,7 @@ export default function About() {
               "description": "India's leading digital lending platform providing instant personal loans, business loans, and more",
               "url": "https://samridhya.com/",
               "logo": "https://samridhya.com/favicon.svg",
-              "image": "https://samridhya.com/samridhya-preview.png",
+              "image": "https://samridhya.com/samridhya-preview.webp",
               "sameAs": [
                 "https://twitter.com/samridhya",
                 "https://facebook.com/samridhya"
@@ -779,7 +760,7 @@ export default function About() {
                 <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
               </div>
               <h3 className="text-sm sm:text-lg md:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">Call Us</h3>
-              <p className="text-xs sm:text-sm md:text-base text-gray-600">+91 63662 34524</p>
+              <p className="text-xs sm:text-sm md:text-base text-gray-600">+91 63662 34523</p>
               <p className="text-xs text-gray-500">24/7 Support</p>
             </motion.div>
 

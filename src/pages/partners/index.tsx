@@ -156,7 +156,7 @@ export default function PartnersPage() {
         <meta property="og:description" content="Discover our trusted partners including HDFC Bank, ICICI Bank, Axis Bank, and leading NBFCs. Apply for partnership with Samridhya." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://samridhya.com/partners/" />
-        <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta property="og:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Samridhya Partners - Banks & NBFCs" />
@@ -167,7 +167,7 @@ export default function PartnersPage() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Our Partners - Samridhya | Leading Banks & NBFCs" />
         <meta name="twitter:description" content="Discover our trusted partners including HDFC Bank, ICICI Bank, Axis Bank, and leading NBFCs." />
-        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.png" />
+        <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.webp" />
         <meta name="twitter:image:alt" content="Samridhya Partners - Banks & NBFCs" />
         <meta name="twitter:site" content="@samridhya" />
         <meta name="twitter:creator" content="@samridhya" />
@@ -546,7 +546,7 @@ export default function PartnersPage() {
                       </div>
                       <div>
                         <h4 className="text-[#2b004b] font-bold text-base mb-1">Call Us</h4>
-                        <p className="text-gray-600 text-base">+91 63662 34524</p>
+                        <p className="text-gray-600 text-base">+91 63662 34523</p>
                       </div>
                     </div>
 

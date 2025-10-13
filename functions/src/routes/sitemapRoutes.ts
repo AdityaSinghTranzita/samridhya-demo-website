@@ -106,12 +106,6 @@ export async function generateSitemap(req: Request, res: Response) {
         priority: 0.7
       },
       {
-        loc: `${baseUrl}/loans`,
-        lastmod: now,
-        changefreq: 'weekly',
-        priority: 0.8
-      },
-      {
         loc: `${baseUrl}/calculators`,
         lastmod: now,
         changefreq: 'monthly',
@@ -272,6 +266,12 @@ export async function generateSitemap(req: Request, res: Response) {
       },
       {
         loc: `${baseUrl}/calculators/budget-calculator`,
+        lastmod: now,
+        changefreq: 'monthly',
+        priority: 0.7
+      },
+      {
+        loc: `${baseUrl}/calculators/gold-loan-calculator`,
         lastmod: now,
         changefreq: 'monthly',
         priority: 0.7

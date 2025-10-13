@@ -49,7 +49,7 @@ export const debugImageLoading = (src: string) => {
 
 // Fallback image URLs for common scenarios
 export const FALLBACK_IMAGES = {
-  hero: '/images/Samridhya_Hero.png',
-  logo: '/images/samridhya-preview.png',
+  hero: '/images/Samridhya_Hero.webp',
+  logo: '/samridhya-preview.webp',
   placeholder: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IiM2QjcyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSBsb2FkaW5nLi4uPC90ZXh0Pgo8L3N2Zz4K'
 };

@@ -168,7 +168,7 @@ export default function Hero1() {
   useEffect(() => {
     // Debug image loading in development
     if (process.env.NODE_ENV === 'development') {
-      debugImageLoading('/images/Samridhya_Hero.png');
+      debugImageLoading('/images/Samridhya_Hero.webp');
     }
   }, []);
 
@@ -406,7 +406,7 @@ export default function Hero1() {
                       app_store: 'app_store',
                       button_position: 'hero_section'
                     });
-                    window.open('https://apps.apple.com/app/samridhya/id1234567890', '_blank');
+                    window.open('https://apps.apple.com/in/app/samridhya/id6745554387', '_blank');
                   }}
                   className="cursor-pointer transition-transform hover:scale-105 hover:shadow-md rounded-lg overflow-hidden"
               >
@@ -446,7 +446,7 @@ export default function Hero1() {
                 
                 {!imageError ? (
                   <Image
-                      src= "/images/Samridhya_Hero.png"
+                      src= "/images/Samridhya_Hero.webp"
                       alt="Samridhya Loan App Interface"
                       width={550}
                       height={530}

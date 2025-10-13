@@ -7,6 +7,7 @@ import RichTextEditor from '@/components/RichTextEditor';
 import CMSLayout from '@/components/CMSLayout';
 import CustomAlert from '@/components/CustomAlert';
 import { useCustomAlert } from '@/hooks/useCustomAlert';
+import { marked } from "marked";
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FileText, 
@@ -52,6 +53,9 @@ const NewBlogPost: React.FC = () => {
     likes: 0,
     shares: 0
   });
+  const [useMarkdown, setUseMarkdown] = useState(false);
+  const handleToggle = () => setUseMarkdown(prev => !prev);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -273,38 +277,61 @@ const NewBlogPost: React.FC = () => {
       author: e.target.value,
     }));
   };
-
-  const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTagInput(e.target.value);
-  };
-
-  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' || e.key === ',') {
-      e.preventDefault();
-      addTag();
-    }
-  };
-
-  const addTag = () => {
-    const tag = tagInput.trim().toLowerCase();
-    if (tag && !post.tags.includes(tag) && tag.length <= 20) {
-      setPost(prev => ({
-        ...prev,
-        tags: [...prev.tags, tag],
-      }));
-      setTagInput('');
-      // Clear tags error
-      if (errors.tags) {
-        setErrors(prev => ({ ...prev, tags: '' }));
-      }
-    }
-  };
-
   const removeTag = (tagToRemove: string) => {
     setPost(prev => ({
       ...prev,
       tags: prev.tags.filter(tag => tag !== tagToRemove),
     }));
+  };
+
+
+  const addTag = (input?: string) => {
+    const raw = input ?? tagInput;
+    const tags = raw
+        .split(",")
+        .map(t => t.trim().toLowerCase())
+        .filter(Boolean)
+        .filter(t => t.length <= 20); // enforce length limit
+
+    if (!tags.length) return;
+
+    setPost(prev => {
+      const existing = prev.tags || [];
+      const newTags = tags.filter(t => !existing.includes(t));
+      return {
+        ...prev,
+        tags: [...existing, ...newTags],
+      };
+    });
+
+    setTagInput("");
+
+    // Clear tags error if any
+    if (errors.tags) {
+      setErrors(prev => ({ ...prev, tags: "" }));
+    }
+  };
+
+// Keydown handler (Enter or comma)
+  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      addTag();
+    }
+  };
+
+// Paste handler (comma-separated)
+  const handleTagInputPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const paste = e.clipboardData.getData("text");
+    if (paste.includes(",")) {
+      e.preventDefault();
+      addTag(paste);
+    }
+  };
+
+// Input change
+  const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagInput(e.target.value);
   };
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -347,16 +374,40 @@ const NewBlogPost: React.FC = () => {
     }
   };
 
-  const addSeoKeyword = () => {
-    const keyword = seoKeywordInput.trim().toLowerCase();
-    if (keyword && !post.seoKeywords?.includes(keyword) && keyword.length <= 50) {
-      setPost(prev => ({
-        ...prev,
-        seoKeywords: [...(prev.seoKeywords || []), keyword],
-      }));
-      setSeoKeywordInput('');
+  const handleSeoKeywordPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const paste = e.clipboardData.getData('text');
+    if (paste.includes(',')) {
+      e.preventDefault();
+      addSeoKeyword(paste);
     }
   };
+
+
+
+  const addSeoKeyword = (input?: string) => {
+    // Use provided input (e.g., from paste) or current input state
+    const raw = input ?? seoKeywordInput;
+
+    // Split by comma, trim, lowercase, and remove empty strings
+    const keywords = raw
+        .split(',')
+        .map(k => k.trim().toLowerCase())
+        .filter(Boolean);
+
+    if (!keywords.length) return;
+
+    setPost(prev => {
+      const existing = prev.seoKeywords || [];
+      const newKeywords = keywords.filter(k => !existing.includes(k));
+      return {
+        ...prev,
+        seoKeywords: [...existing, ...newKeywords],
+      };
+    });
+
+    setSeoKeywordInput('');
+  };
+
 
   const removeSeoKeyword = (keywordToRemove: string) => {
     setPost(prev => ({
@@ -376,12 +427,10 @@ const NewBlogPost: React.FC = () => {
       newErrors.content = 'Content is required';
     }
 
-    if (!post.excerpt.trim()) {
-      newErrors.excerpt = 'Excerpt is required';
-    }
 
-    if (post.excerpt.length > 160) {
-      newErrors.excerpt = 'Excerpt must be 160 characters or less';
+
+    if (post.excerpt.length > 200) {
+      newErrors.excerpt = 'Excerpt must be 200 characters or less';
     }
 
     if (!post.author.trim()) {
@@ -467,7 +516,7 @@ const NewBlogPost: React.FC = () => {
             <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
             <span>{post.status === 'published' ? 'Published' : 'Draft'}</span>
           </div>
-          
+
           {/* Featured Image */}
           {post.featuredImage && (
             <div className="mb-6">
@@ -478,7 +527,7 @@ const NewBlogPost: React.FC = () => {
               />
             </div>
           )}
-          
+
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 leading-tight">
             {post.title || 'Untitled Post'}
           </h1>
@@ -503,7 +552,7 @@ const NewBlogPost: React.FC = () => {
                 </span>
               </div>
             </div>
-            
+
             {/* Tags */}
             {post.tags.length > 0 && (
               <div className="space-y-2">
@@ -528,7 +577,15 @@ const NewBlogPost: React.FC = () => {
 
         {/* Content */}
         <div className="prose prose-lg max-w-none preview-content">
-          <div dangerouslySetInnerHTML={{ __html: post.content || '<p>No content yet...</p>' }} />
+          <div
+              dangerouslySetInnerHTML={{
+                __html: post.content
+                    ? post.content.trim().startsWith("<")
+                        ? post.content // already HTML (from RichTextEditor)
+                        : marked.parse(post.content) // convert Markdown to HTML
+                    : "<p>No content yet...</p>",
+              }}
+          />
         </div>
       </div>
     </div>
@@ -689,7 +746,7 @@ const NewBlogPost: React.FC = () => {
               {/* Excerpt */}
               <div>
                 <label htmlFor="excerpt" className="block text-sm font-semibold text-gray-900 mb-2">
-                  Excerpt * <span className="text-xs text-gray-500">({post.excerpt.length}/160)</span>
+                  Excerpt <span className="text-xs text-gray-500">({post.excerpt.length}/200)</span>
                 </label>
                 <textarea
                   id="excerpt"
@@ -699,8 +756,8 @@ const NewBlogPost: React.FC = () => {
                   className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none ${
                     errors.excerpt ? 'border-red-300' : 'border-gray-300'
                   }`}
-                  placeholder="Brief description of the post (max 160 characters)"
-                  maxLength={160}
+                  placeholder="Brief description of the post (max 200 characters)"
+                  maxLength={200}
                 />
                 {errors.excerpt && (
                   <p className="text-red-500 text-sm mt-1">{errors.excerpt}</p>
@@ -807,6 +864,7 @@ const NewBlogPost: React.FC = () => {
                     id="seoTitle"
                     value={post.seoTitle || ''}
                     onChange={handleSeoTitleChange}
+                    onPaste={handleSeoKeywordPaste}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
                     placeholder="Enter SEO title (recommended: 50-60 characters)"
                     maxLength={60}
@@ -819,7 +877,7 @@ const NewBlogPost: React.FC = () => {
                 {/* SEO Description */}
                 <div>
                   <label htmlFor="seoDescription" className="block text-sm font-semibold text-gray-900 mb-2">
-                    SEO Description <span className="text-xs text-gray-500">({post.seoDescription?.length || 0}/160)</span>
+                    SEO Description <span className="text-xs text-gray-500">({post.seoDescription?.length || 0}/200)</span>
                   </label>
                   <textarea
                     id="seoDescription"
@@ -851,7 +909,6 @@ const NewBlogPost: React.FC = () => {
                         onKeyDown={handleSeoKeywordInputKeyDown}
                         className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
                         placeholder="Type a keyword and press Enter or comma"
-                        maxLength={50}
                         disabled={(post.seoKeywords?.length || 0) >= 10}
                       />
                     </div>
@@ -1031,11 +1088,12 @@ const NewBlogPost: React.FC = () => {
                     value={tagInput}
                     onChange={handleTagInputChange}
                     onKeyDown={handleTagInputKeyDown}
+                    onPaste={handleTagInputPaste}
                     className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
                       errors.tags ? 'border-red-300' : 'border-gray-300'
                     }`}
                     placeholder="Type a tag and press Enter or comma"
-                    maxLength={20}
+
                     disabled={post.tags.length >= 10}
                   />
                 </div>
@@ -1066,28 +1124,49 @@ const NewBlogPost: React.FC = () => {
                 
                 {/* Help Text */}
                 <p className="text-xs text-gray-500">
-                  Press Enter or comma to add a tag. Maximum 10 tags, 20 characters each.
+                  Press Enter or comma to add a tag. Maximum 10 tags.
                 </p>
               </div>
             </div>
 
             {/* Content */}
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-6">
-              <label className="block text-sm font-semibold text-gray-900 mb-4">
-                Content *
-              </label>
-              <div className="border border-gray-200 rounded-xl overflow-hidden">
-                <RichTextEditor
-                  value={post.content}
-                  onChange={handleContentChange}
-                  placeholder="Write your post content here..."
-                  className="min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px] max-h-[800px] overflow-y-auto"
-                />
+              <div className="flex items-center justify-between mb-4">
+                <label className="block text-sm font-semibold text-gray-900">
+                  Content *
+                </label>
+                <button
+                    type="button"
+                    onClick={() => setUseMarkdown(prev => !prev)}
+                    className="text-sm px-3 py-1 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
+                >
+                  {useMarkdown ? "Use Rich Text" : "Use Markdown"}
+                </button>
               </div>
+
+              <div className="border border-gray-200 rounded-xl overflow-hidden">
+                {useMarkdown ? (
+                    <textarea
+                        value={post.content}
+                        onChange={e => handleContentChange(e.target.value)}
+                        placeholder="Write your post in Markdown..."
+                        className="w-full p-4 min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px] max-h-[800px] overflow-y-auto resize-none"
+                    />
+                ) : (
+                    <RichTextEditor
+                        value={post.content}
+                        onChange={handleContentChange}
+                        placeholder="Write your post content here..."
+                        className="min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px] max-h-[800px] overflow-y-auto"
+                    />
+                )}
+              </div>
+
               {errors.content && (
-                <p className="text-red-500 text-sm mt-2">{errors.content}</p>
+                  <p className="text-red-500 text-sm mt-2">{errors.content}</p>
               )}
             </div>
+
           </motion.form>
 
           {/* Preview Panel */}

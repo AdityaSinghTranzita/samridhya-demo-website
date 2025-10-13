@@ -19,6 +19,7 @@ import {
   AlertCircle
 } from "lucide-react";
 import Head from "next/head";
+import CTA from "@/components/CTA";
 
 export default function RetirementCalculator() {
   const [currentAge, setCurrentAge] = useState(30);
@@ -466,6 +467,7 @@ export default function RetirementCalculator() {
             </div>
           </div>
         </section>
+        <CTA />
       </div>
     </>
   );

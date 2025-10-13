@@ -32,7 +32,7 @@ export default function Home() {
                 />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://samridhya.com/" />
-                <meta property="og:image" content="https://samridhya.com/samridhya-preview.png" />
+                <meta property="og:image" content="https://samridhya.com/samridhya-preview.webp" />
                 <meta property="og:image:width" content="1200" />
                 <meta property="og:image:height" content="630" />
                 <meta property="og:image:alt" content="Samridhya - Instant Personal Loans, Business Loans & More" />
@@ -46,7 +46,7 @@ export default function Home() {
                     name="twitter:description"
                     content="Get instant personal loans, business loans, education loans, wedding loans, travel loans, and medical loans from Samridhya."
                 />
-                <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.png" />
+                <meta name="twitter:image" content="https://samridhya.com/samridhya-preview.webp" />
                 <meta name="twitter:image:alt" content="Samridhya - Instant Personal Loans, Business Loans & More" />
                 <meta name="twitter:site" content="@samridhya" />
                 <meta name="twitter:creator" content="@samridhya" />

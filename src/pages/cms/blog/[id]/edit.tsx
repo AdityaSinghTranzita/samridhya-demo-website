@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import Head from 'next/head';
 import Link from 'next/link';
 import RichTextEditor from '@/components/RichTextEditor';
+import { marked } from "marked";
 import CMSLayout from '@/components/CMSLayout';
 import CustomAlert from '@/components/CustomAlert';
 import { useCustomAlert } from '@/hooks/useCustomAlert';
@@ -49,6 +50,9 @@ const EditBlogPost: React.FC = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [imageUploading, setImageUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const [useMarkdown, setUseMarkdown] = useState(false);
+  const handleToggle = () => setUseMarkdown(prev => !prev);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -222,33 +226,61 @@ const EditBlogPost: React.FC = () => {
     }) : null);
   };
 
-  const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTagInput(e.target.value);
+  const removeTag = (tagToRemove: string) => {
+    setPost(prev => ({
+      ...prev,
+      tags: prev.tags.filter(tag => tag !== tagToRemove),
+    }));
   };
 
+
+  const addTag = (input?: string) => {
+    const raw = input ?? tagInput;
+    const tags = raw
+        .split(",")
+        .map(t => t.trim().toLowerCase())
+        .filter(Boolean)
+        .filter(t => t.length <= 20); // enforce length limit
+
+    if (!tags.length) return;
+
+    setPost(prev => {
+      const existing = prev.tags || [];
+      const newTags = tags.filter(t => !existing.includes(t));
+      return {
+        ...prev,
+        tags: [...existing, ...newTags],
+      };
+    });
+
+    setTagInput("");
+
+    // Clear tags error if any
+    if (errors.tags) {
+      setErrors(prev => ({ ...prev, tags: "" }));
+    }
+  };
+
+// Keydown handler (Enter or comma)
   const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' || e.key === ',') {
+    if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
       addTag();
     }
   };
 
-  const addTag = () => {
-    const tag = tagInput.trim().toLowerCase();
-    if (tag && post && !post.tags.includes(tag) && tag.length <= 20) {
-      setPost(prev => prev ? ({
-        ...prev,
-        tags: [...prev.tags, tag],
-      }) : null);
-      setTagInput('');
+// Paste handler (comma-separated)
+  const handleTagInputPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const paste = e.clipboardData.getData("text");
+    if (paste.includes(",")) {
+      e.preventDefault();
+      addTag(paste);
     }
   };
 
-  const removeTag = (tagToRemove: string) => {
-    setPost(prev => prev ? ({
-      ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove),
-    }) : null);
+// Input change
+  const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagInput(e.target.value);
   };
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -291,22 +323,46 @@ const EditBlogPost: React.FC = () => {
     }
   };
 
-  const addSeoKeyword = () => {
-    const keyword = seoKeywordInput.trim().toLowerCase();
-    if (keyword && post && !(post.seoKeywords?.includes(keyword)) && keyword.length <= 50) {
-      setPost(prev => prev ? ({
-        ...prev,
-        seoKeywords: [...(prev.seoKeywords || []), keyword],
-      }) : null);
-      setSeoKeywordInput('');
+  const handleSeoKeywordPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const paste = e.clipboardData.getData('text');
+    if (paste.includes(',')) {
+      e.preventDefault();
+      addSeoKeyword(paste);
     }
   };
 
+
+
+  const addSeoKeyword = (input?: string) => {
+    // Use provided input (e.g., from paste) or current input state
+    const raw = input ?? seoKeywordInput;
+
+    // Split by comma, trim, lowercase, and remove empty strings
+    const keywords = raw
+        .split(',')
+        .map(k => k.trim().toLowerCase())
+        .filter(Boolean);
+
+    if (!keywords.length) return;
+
+    setPost(prev => {
+      const existing = prev.seoKeywords || [];
+      const newKeywords = keywords.filter(k => !existing.includes(k));
+      return {
+        ...prev,
+        seoKeywords: [...existing, ...newKeywords],
+      };
+    });
+
+    setSeoKeywordInput('');
+  };
+
+
   const removeSeoKeyword = (keywordToRemove: string) => {
-    setPost(prev => prev ? ({
+    setPost(prev => ({
       ...prev,
       seoKeywords: prev.seoKeywords?.filter(keyword => keyword !== keywordToRemove) || [],
-    }) : null);
+    }));
   };
 
   const validateForm = () => {
@@ -322,12 +378,10 @@ const EditBlogPost: React.FC = () => {
       newErrors.content = 'Content is required';
     }
 
-    if (!post.excerpt.trim()) {
-      newErrors.excerpt = 'Excerpt is required';
-    }
 
-    if (post.excerpt.length > 160) {
-      newErrors.excerpt = 'Excerpt must be 160 characters or less';
+
+    if (post.excerpt.length > 200) {
+      newErrors.excerpt = 'Excerpt must be 200 characters or less';
     }
 
     if (!post.author.trim()) {
@@ -390,78 +444,91 @@ const EditBlogPost: React.FC = () => {
   };
 
   const BlogPreview = () => (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-3 sm:p-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center space-x-2 text-sm text-gray-500 mb-3">
-            <Globe className="w-4 h-4" />
-            <span>Preview</span>
-            <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-            <span>{post?.status === 'published' ? 'Published' : 'Draft'}</span>
-          </div>
-          
-          {/* Featured Image */}
-          {post?.featuredImage && (
-            <div className="mb-6">
-              <img
-                src={post.featuredImage}
-                alt="Featured image"
-                className="w-full h-48 object-cover rounded-xl shadow-md"
-              />
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-3 sm:p-4">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="mb-6">
+            <div className="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+              <Globe className="w-4 h-4" />
+              <span>Preview</span>
+              <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+              <span>{post.status === 'published' ? 'Published' : 'Draft'}</span>
             </div>
-          )}
-          
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">{post?.title || 'Untitled Post'}</h1>
-          {post?.excerpt && (
-            <p className="text-xl text-gray-600 leading-relaxed mb-6">{post.excerpt}</p>
-          )}
-          <div className="space-y-4">
-            {/* Author and Date */}
-            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-              <div className="flex items-center space-x-1">
-                <User className="w-4 h-4" />
-                <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-medium">
-                  {post?.author || 'Unknown Author'}
+
+            {/* Featured Image */}
+            {post.featuredImage && (
+                <div className="mb-6">
+                  <img
+                      src={post.featuredImage}
+                      alt="Featured image"
+                      className="w-full h-48 object-cover rounded-xl shadow-md"
+                  />
+                </div>
+            )}
+
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+              {post.title || 'Untitled Post'}
+            </h1>
+            {post.excerpt && (
+                <p className="text-lg sm:text-xl text-gray-600 leading-relaxed mb-6">
+                  {post.excerpt}
+                </p>
+            )}
+            <div className="space-y-4">
+              {/* Author and Date */}
+              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                <div className="flex items-center space-x-1">
+                  <User className="w-4 h-4" />
+                  <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-medium">
+                  {post.author || 'Unknown Author'}
                 </span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Clock className="w-4 h-4" />
-                <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-medium">
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Clock className="w-4 h-4" />
+                  <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-medium">
                   {new Date().toLocaleDateString()}
                 </span>
-              </div>
-            </div>
-            
-            {/* Tags */}
-            {post?.tags && post.tags.length > 0 && (
-              <div className="space-y-2">
-                <div className="flex items-center space-x-1">
-                  <Tag className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm font-medium text-gray-700">Tags:</span>
                 </div>
-                <div className="flex flex-wrap gap-2 max-w-full">
-                  {post.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1.5 bg-blue-100 text-blue-800 text-sm rounded-full border border-blue-200 hover:bg-blue-200 transition-colors duration-200 whitespace-nowrap flex-shrink-0"
-                    >
+              </div>
+
+              {/* Tags */}
+              {post.tags.length > 0 && (
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-1">
+                      <Tag className="w-4 h-4 text-gray-500" />
+                      <span className="text-sm font-medium text-gray-700">Tags:</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2 max-w-full">
+                      {post.tags.map((tag, index) => (
+                          <span
+                              key={index}
+                              className="px-3 py-1.5 bg-blue-100 text-blue-800 text-sm rounded-full border border-blue-200 hover:bg-blue-200 transition-colors duration-200 whitespace-nowrap flex-shrink-0"
+                          >
                       {tag}
                     </span>
-                  ))}
-                </div>
-              </div>
-            )}
+                      ))}
+                    </div>
+                  </div>
+              )}
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="prose prose-lg max-w-none preview-content">
+            <div
+                dangerouslySetInnerHTML={{
+                  __html: post.content
+                      ? post.content.trim().startsWith("<")
+                          ? post.content // already HTML (from RichTextEditor)
+                          : marked.parse(post.content) // convert Markdown to HTML
+                      : "<p>No content yet...</p>",
+                }}
+            />
           </div>
         </div>
-
-        {/* Content */}
-        <div className="prose prose-lg max-w-none">
-          <div dangerouslySetInnerHTML={{ __html: post?.content || '<p>No content yet...</p>' }} />
-        </div>
       </div>
-    </div>
   );
+
 
   if (loading || isLoading) {
     return (
@@ -621,7 +688,7 @@ const EditBlogPost: React.FC = () => {
               {/* Excerpt */}
               <div>
                 <label htmlFor="excerpt" className="block text-sm font-semibold text-gray-900 mb-2">
-                  Excerpt * <span className="text-xs text-gray-500">({post.excerpt.length}/160)</span>
+                  Excerpt <span className="text-xs text-gray-500">({post.excerpt.length}/200)</span>
                 </label>
                 <textarea
                   id="excerpt"
@@ -631,8 +698,8 @@ const EditBlogPost: React.FC = () => {
                   className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none ${
                     errors.excerpt ? 'border-red-300' : 'border-gray-300'
                   }`}
-                  placeholder="Brief description of the post (max 160 characters)"
-                  maxLength={160}
+                  placeholder="Brief description of the post (max 200 characters)"
+                  maxLength={200}
                 />
                 {errors.excerpt && (
                   <p className="text-red-500 text-sm mt-1">{errors.excerpt}</p>
@@ -810,9 +877,9 @@ const EditBlogPost: React.FC = () => {
                         value={seoKeywordInput}
                         onChange={handleSeoKeywordInputChange}
                         onKeyDown={handleSeoKeywordInputKeyDown}
+                        onPaste={handleSeoKeywordPaste}
                         className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
                         placeholder="Type a keyword and press Enter or comma"
-                        maxLength={50}
                         disabled={(post.seoKeywords?.length || 0) >= 10}
                       />
                     </div>
@@ -933,6 +1000,7 @@ const EditBlogPost: React.FC = () => {
                       value={tagInput}
                       onChange={handleTagInputChange}
                       onKeyDown={handleTagInputKeyDown}
+                      onPaste={handleTagInputPaste}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
                       placeholder="Type a tag and press Enter or comma"
                       maxLength={20}
@@ -984,21 +1052,42 @@ const EditBlogPost: React.FC = () => {
               </div>
             </div>
 
+
             {/* Content */}
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-6">
-              <label className="block text-sm font-semibold text-gray-900 mb-4">
-                Content *
-              </label>
-              <div className="border border-gray-200 rounded-xl overflow-hidden">
-                <RichTextEditor
-                  value={post.content}
-                  onChange={handleContentChange}
-                  placeholder="Write your post content here..."
-                  className="min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px] max-h-[800px] overflow-y-auto"
-                />
+              <div className="flex items-center justify-between mb-4">
+                <label className="block text-sm font-semibold text-gray-900">
+                  Content *
+                </label>
+                <button
+                    type="button"
+                    onClick={() => setUseMarkdown(prev => !prev)}
+                    className="text-sm px-3 py-1 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
+                >
+                  {useMarkdown ? "Use Rich Text" : "Use Markdown"}
+                </button>
               </div>
+
+              <div className="border border-gray-200 rounded-xl overflow-hidden">
+                {useMarkdown ? (
+                    <textarea
+                        value={post.content}
+                        onChange={e => handleContentChange(e.target.value)}
+                        placeholder="Write your post in Markdown..."
+                        className="w-full p-4 min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px] max-h-[800px] overflow-y-auto resize-none"
+                    />
+                ) : (
+                    <RichTextEditor
+                        value={post.content}
+                        onChange={handleContentChange}
+                        placeholder="Write your post content here..."
+                        className="min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px] max-h-[800px] overflow-y-auto"
+                    />
+                )}
+              </div>
+
               {errors.content && (
-                <p className="text-red-500 text-sm mt-2">{errors.content}</p>
+                  <p className="text-red-500 text-sm mt-2">{errors.content}</p>
               )}
             </div>
           </motion.form>

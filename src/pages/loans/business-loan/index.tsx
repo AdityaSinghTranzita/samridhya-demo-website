@@ -526,7 +526,7 @@ export default function BusinessLoan() {
                 <Phone className="w-6 h-6 text-blue-600" />
               </div>
               <h3 className="text-sm font-semibold text-gray-800 mb-2">Call Us</h3>
-              <p className="text-xs text-gray-600">+91 63662 34524</p>
+              <p className="text-xs text-gray-600">+91 63662 34523</p>
               <p className="text-xs text-gray-500">Business Support</p>
             </motion.div>
 

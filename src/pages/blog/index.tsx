@@ -327,13 +327,13 @@ export default function BlogPage({}: BlogPageProps) {
         <meta property="og:description" content="Explore expert blogs on personal loans, business loans, credit scores & EMI tips. Stay updated with Samridhya for smart, secure financial decisions." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://samridhya.com/blog/" />
-        <meta property="og:image" content="https://samridhya.com/images/samridhya-preview.png" />
+        <meta property="og:image" content="https://samridhya.com/images/samridhya-preview.webp" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Samridhya Blog | Smart Insights on Personal Loans & Finance" />
         <meta name="twitter:description" content="Explore expert blogs on personal loans, business loans, credit scores & EMI tips. Stay updated with Samridhya for smart, secure financial decisions." />
-        <meta name="twitter:image" content="https://samridhya.com/images/samridhya-preview.png" />
+        <meta name="twitter:image" content="https://samridhya.com/images/samridhya-preview.webp" />
         
         {/* Structured Data */}
         <script
