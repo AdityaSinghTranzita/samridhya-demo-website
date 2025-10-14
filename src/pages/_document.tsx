@@ -5,19 +5,10 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-         Cache-busting meta tags
-        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        <meta httpEquiv="Pragma" content="no-cache" />
-        <meta httpEquiv="Expires" content="0" />
-        <meta name="cache-control" content="no-cache, no-store, must-revalidate" />
-        <meta name="pragma" content="no-cache" />
-        <meta name="expires" content="0" />
 
 
-        
-        {/* Preload critical CSS */}
-        <link rel="preload" href="/_next/static/css/app.css" as="style" />
-        <link rel="preload" href="/_next/static/css/globals.css" as="style" />
+
+
         
         {/* Preload critical fonts */}
         <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" />

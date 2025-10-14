@@ -61,14 +61,14 @@ const safeGet = (obj: any, path: string, defaultValue: any = 'N/A') => {
   try {
     const keys = path.split('.');
     let result = obj;
-    
+
     for (const key of keys) {
       if (result === null || result === undefined || typeof result !== 'object') {
         return defaultValue;
       }
       result = result[key];
     }
-    
+
     // Handle different data types
     if (result === null || result === undefined) return defaultValue;
     if (typeof result === 'number') return result === 0 ? '0' : result.toString();
@@ -97,12 +97,12 @@ const safeGetNumber = (obj: any, path: string, defaultValue: number = 0): number
 
 const hasValidReportData = (creditScoreData: CreditScoreData | null): boolean => {
   if (!creditScoreData || !creditScoreData.report) return false;
-  
+
   // Check if we have any meaningful data in the report
   const hasPersonalInfo = !!creditScoreData.report.Current_Application?.Current_Application_Details?.Current_Applicant_Details;
   const hasAccountData = !!creditScoreData.report.CAIS_Account?.CAIS_Account_DETAILS;
   const hasSummaryData = !!creditScoreData.report.CAIS_Account?.CAIS_Summary;
-  
+
   return hasPersonalInfo || hasAccountData || hasSummaryData;
 };
 
@@ -124,6 +124,9 @@ export default function CreditScoreChecker() {
   const [error, setError] = useState('');
   const [mounted, setMounted] = useState(false);
   const [noCreditRecord, setNoCreditRecord] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
 
   // Set mounted state for client-side rendering
   useEffect(() => {
@@ -192,7 +195,7 @@ export default function CreditScoreChecker() {
       // User has token but we need to verify if details exist
       setAuthToken(savedToken);
       setMobileNumber(savedMobile);
-      
+
       // Check if user details exist using the backend endpoint
       setIsCheckingExisting(true);
       const checkExistingUser = async () => {
@@ -287,7 +290,7 @@ export default function CreditScoreChecker() {
   const handleOtpChange = (index: number, value: string) => {
     // Only allow numeric characters
     const numericValue = value.replace(/[^0-9]/g, '');
-    
+
     const newOtp = [...otp];
     newOtp[index] = numericValue;
     setOtp(newOtp);
@@ -330,7 +333,7 @@ export default function CreditScoreChecker() {
         });
       } else {
         setError(data.message || 'Failed to send OTP');
-        
+
         // Track OTP generation failure
         trackEvent('otp_generation_failed', {
           user_mobile: mobileNumber,
@@ -342,7 +345,7 @@ export default function CreditScoreChecker() {
     } catch (error) {
       console.error('OTP generation network error:', error);
       setError('Network error. Please check your connection and try again.');
-      
+
       // Track OTP generation network error
       trackEvent('otp_generation_error', {
         user_mobile: mobileNumber,
@@ -449,7 +452,7 @@ export default function CreditScoreChecker() {
     } catch (error) {
       console.error('OTP verification error:', error);
       setError('Network error. Please try again.');
-      
+
       // Track OTP verification network error
       trackEvent('otp_verification_error', {
         user_mobile: mobileNumber,
@@ -926,11 +929,11 @@ export default function CreditScoreChecker() {
           <meta name="og:url" content="https://samridhya.com/calculators/credit-score-checker/" />
           <meta name="og:site_name" content="Samridhya" />
           <link rel="canonical" href="https://samridhya.com/calculators/credit-score-checker/" />
-          
+
           {/* Performance Optimization Meta Tags */}
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <link rel="dns-prefetch" href="//buyer.prod.samridh.ai" />
-          
+
           {/* Structured Data for SEO */}
           <script
             type="application/ld+json"
@@ -964,7 +967,7 @@ export default function CreditScoreChecker() {
               })
             }}
           />
-          
+
           {/* Critical CSS for above-the-fold content */}
           <style dangerouslySetInnerHTML={{
             __html: `
@@ -1139,32 +1142,219 @@ export default function CreditScoreChecker() {
                         />
                       </div>
 
-                      <div className="flex items-start space-x-3">
-                        <input
-                            type="checkbox"
-                            id="terms"
-                            defaultChecked
-                            className="mt-1"
-                        />
-                        <label htmlFor="terms" className="text-sm text-gray-600">
-                          By proceeding, I agree to provide personal details and agree to following{' '}
-                          <a href="#" className="text-blue-600 hover:underline">Credit Score Terms of Use</a>.
-                        </label>
-                      </div>
+                      {/*<div className="flex items-start space-x-3">*/}
+                      {/*  <input*/}
+                      {/*      type="checkbox"*/}
+                      {/*      id="terms"*/}
+                      {/*      checked*/}
+                      {/*      className="mt-1 shrink-0"*/}
+                      {/*  />*/}
+
+                      {/*  <label htmlFor="terms" className="text-sm text-gray-700 leading-relaxed">*/}
+                      {/*    I hereby consent to Decimus Financial Limited being appointed as authorised representative to*/}
+                      {/*    receive my Credit Information from Experian for the purpose of offering loan offers.<br/>*/}
+                      {/*    Please refer to the Experian*/}
+                      {/*    <a href="#" className="text-blue-600 hover:underline font-medium"> Terms & Conditions</a>.*/}
+                      {/*  </label>*/}
+                      {/*</div>*/}
 
                       <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
                         <div className="flex items-center gap-2">
-                          <Shield className="w-5 h-5 text-blue-600" />
+                          <Shield className="w-5 h-5 text-blue-600"/>
                           <span className="text-sm text-blue-800">
                         Your Personal Information is 100% secured with us. We do not share your data with any third party.
                       </span>
                         </div>
                       </div>
+                      <div className="flex items-start space-x-3">
+                        {/* Checkbox */}
+                        <input
+                            type="checkbox"
+                            id="terms"
+                            checked={isChecked}
+                            onChange={(e) => setIsChecked(e.target.checked)}
+                            className="mt-1 shrink-0 cursor-pointer accent-blue-600"
+                        />
+
+                        {/* Label + Modal trigger */}
+                        <label htmlFor="terms" className="text-sm text-gray-700 leading-relaxed">
+                          I hereby consent to Samridhya Innovations Private Limited being appointed as authorised representative to
+                          receive my Credit Information from Experian for the purpose of offering loan offers. <br />
+                          Please refer to the Experian{" "}
+                          <button
+                              type="button"
+                              onClick={() => setShowModal(true)}
+                              className="text-blue-600 hover:underline font-medium focus:outline-none"
+                          >
+                            Terms & Conditions
+                          </button>
+                          .
+                        </label>
+
+                        {/* Modal */}
+                        {showModal && (
+                            // Backdrop: Subtle dark overlay for focus
+                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
+                              {/* Modal Container: Clean, large radius, subtle shadow */}
+                              <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden
+                    border border-gray-100 transform transition-all duration-300 ease-out">
+
+                                {/* Header: Consistent padding and alignment */}
+                                <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+                                  <div className="flex items-center space-x-3">
+                                    {/* Icon: Themed color for a document/legal icon */}
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="lucide lucide-file-text w-5 h-5 text-blue-600"
+                                    >
+                                      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"></path>
+                                      <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                                      <path d="M10 9H8"></path>
+                                      <path d="M16 13H8"></path>
+                                      <path d="M16 17H8"></path>
+                                    </svg>
+                                    <h2 className="text-xl font-semibold text-gray-900">
+                                      Experian Terms & Conditions
+                                    </h2>
+                                  </div>
+                                  <button
+                                      onClick={() => setShowModal(false)}
+                                      className="p-1 rounded-full text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition duration-150"
+                                      aria-label="Close modal"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                                  </button>
+                                </div>
+
+                                {/* Body: Scrolling content area with enhanced legal clauses */}
+                                <div className="px-6 py-5 max-h-[60vh] overflow-y-auto
+                        text-base text-gray-700 space-y-4 leading-relaxed">
+
+                                  {/* Metadata Section */}
+                                  <p className="text-sm text-gray-500 font-medium pb-2 border-b border-gray-50/50">
+                                    <span className="font-semibold text-gray-800">Last updated on:</span> 15/08/2025
+                                  </p>
+
+                                  <p>
+                                    This End User Agreement (the "Agreement") is made between you (the "User" or "You")
+                                    and <span className="font-semibold text-gray-900">Samridhya Innovations Private Limited</span>, a private limited company having its registered office at
+                                    #1207 /343 & 1207 /1/343/1, 9th MAIN, 7th SECTOR, HSR LAYOUT, BANGALORE, KARNATAKA - 560102 (<span className="font-semibold text-gray-800">"CLIENT"</span>,
+                                    "Us" or "We", which term shall include its successors and permitted assigns). The User
+                                    and CLIENT shall be collectively referred to as the "Parties" and individually as a
+                                    "Party".
+                                  </p>
+
+                                  {/* Key Consent Section: Professional call-out box */}
+                                  <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-md">
+                                    <p className="font-medium text-sm text-gray-900">
+                <span className="font-bold text-blue-600 uppercase">BY EXECUTING THIS AGREEMENT / CONSENT FORM, YOU ARE EXPRESSLY AGREEING TO ACCESS THE
+                EXPERIAN CREDIT INFORMATION REPORT AND CREDIT SCORE,</span> AGGREGATE SCORES, INFERENCES,
+                                      REFERENCES AND DETAILS (AS DEFINED BELOW) (TOGETHER REFERRED AS "CREDIT INFORMATION").
+                                      YOU HEREBY ALSO CONSENT TO SUCH CREDIT INFORMATION BEING PROVIDED BY EXPERIAN TO YOU
+                                      AND CLIENT by using Experian tools, algorithms and devices and you hereby agree,
+                                      acknowledge and accept the terms and conditions set forth herein.
+                                    </p>
+                                  </div>
+
+                                  <h3 className="text-lg font-bold text-gray-900 pt-3">
+                                    Information Collection, Use, and Confidentiality
+                                  </h3>
+                                  <ul className="list-disc ml-6 text-sm text-gray-700 space-y-2">
+                                    <li>
+                                      <span className="font-semibold">End Use Purpose:</span> CLIENT shall access your Credit Information as your authorized representative and shall use it solely for the limited purpose of <span className="font-semibold">Credit Assessment and evaluation of loan eligibility</span> in relation to the services proposed to be availed by you from CLIENT.
+                                    </li>
+                                    <li>
+                                      <span className="font-semibold">Confidentiality & No-Disclosure:</span> CLIENT shall not aggregate, retain, store, copy, reproduce, republish, upload, post, transmit, sell or rent the Credit Information to any other person or use it for any purpose other than the defined End Use Purpose.
+                                    </li>
+                                    <li>
+                                      <span className="font-semibold">Data Purging:</span> The Credit Information shared by you, or received on your behalf, shall be destroyed, purged, or erased promptly upon the completion of the transaction/End Use Purpose, this period not being longer than 6 months.
+                                    </li>
+                                  </ul>
+
+                                  <h3 className="text-lg font-bold text-gray-900 pt-3">
+                                    Key Definitions
+                                  </h3>
+                                  <p className="text-sm text-gray-600">
+                                    Capitalized terms used herein but not defined above shall have the following meanings:
+                                  </p>
+
+                                  <ul className="list-disc ml-6 space-y-2 text-sm">
+                                    <li>
+                                      <span className="font-semibold text-gray-900">Business Day</span> means a day (other than a public holiday) on which
+                                      banks are open for general business in Karnataka.
+                                    </li>
+                                    <li>
+                                      <span className="font-semibold text-gray-900">Credit Information Report</span> means the credit information/ scores/
+                                      aggregates/ variable/ inference or reports which shall be generated by Experian.
+                                    </li>
+                                    <li>
+                                      <span className="font-semibold text-gray-900">CICRA</span> shall mean the Credit Information Companies (Regulation)
+                                      Act, 2005 read with the Credit Information Companies Rules, 2006 and the Credit
+                                      Information Companies Regulations, 2006, and shall include any other rules and
+                                      regulations prescribed thereunder.
+                                    </li>
+                                  </ul>
+
+                                  <h3 className="text-lg font-bold text-gray-900 pt-3">
+                                    Governing Law and Jurisdiction
+                                  </h3>
+                                  <p className="text-sm text-gray-700">
+                                    The relationship between you and CLIENT shall be governed by the laws of <span className="font-semibold">India</span>, and all claims or disputes arising therefrom shall be subject to the exclusive jurisdiction of the courts in <span className="font-semibold">Karnataka</span>.
+                                  </p>
+
+                                  {/* Call-to-action message: Boxed for separation */}
+                                  <p className="mt-4 text-center p-3 text-sm text-gray-600 bg-gray-50 rounded-lg border border-gray-100">
+                                    Please read the above mentioned terms & conditions and check the box shown in the
+                                    previous screen to complete the authorization process/ for sharing of your Credit
+                                    Information by Experian with <span className="font-semibold text-gray-800">Samridhya Innovations Private Limited</span> in its capacity as your authorized
+                                    representative.
+                                  </p>
+
+                                  {/* Legal declaration: Right aligned for footer-like structure */}
+                                  <p className="text-xs text-gray-500 italic text-right mt-2">
+                                    <span className="font-medium">Electronic Record Declaration:</span> This document is an electronic record in terms of the Information Technology Act, 2000.
+                                  </p>
+                                </div>
+
+                                {/* Footer: Themed Action Buttons */}
+                                <div className="px-6 py-4 border-t border-gray-100 flex justify-end space-x-3 bg-gray-50 rounded-b-xl">
+                                  <button
+                                      onClick={() => setShowModal(false)}
+                                      className="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-600
+                         hover:bg-gray-100 transition duration-150 font-medium"
+                                  >
+                                    Close
+                                  </button>
+                                  <button
+                                      onClick={() => {
+                                        setIsChecked(true);
+                                        setShowModal(false);
+                                      }}
+                                      className="px-5 py-2.5 rounded-lg
+                         bg-blue-600 text-white font-semibold
+                         hover:bg-blue-700 shadow-md shadow-blue-500/30
+                         transition duration-200"
+                                  >
+                                    Accept & Continue
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                        )}
+                      </div>
 
                       {error && (
                           <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded">
                             <div className="flex items-center gap-2">
-                              <AlertCircle className="w-5 h-5 text-red-600" />
+                              <AlertCircle className="w-5 h-5 text-red-600"/>
                               <span className="text-sm text-red-800">{error}</span>
                             </div>
                           </div>
@@ -1172,7 +1362,7 @@ export default function CreditScoreChecker() {
 
                       <button
                           onClick={generateOtp}
-                          disabled={isLoading}
+                          disabled={isLoading || !(isChecked)}
                           className=" cursor-pointer w-full bg-gradient-to-r from-[#276ef4] to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-600 hover:to-[#276ef4] transition-all duration-200 disabled:opacity-50"
                       >
                         {isLoading ? 'Sending OTP...' : 'Get Free Credit Report'}
@@ -1402,7 +1592,7 @@ export default function CreditScoreChecker() {
                           </div>
                         </div>
                     )}
-                    
+
                     <div
                         key="step5"
                         className="space-y-6 animate-fade-in-up"
@@ -2088,7 +2278,7 @@ export default function CreditScoreChecker() {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {Array.isArray(creditScoreData.report.CAPS.CAPS_Application_Details) 
+                                {Array.isArray(creditScoreData.report.CAPS.CAPS_Application_Details)
                                   ? creditScoreData.report.CAPS.CAPS_Application_Details.slice(0, 10).map((enquiry: any, index: number) => (
                                       <tr key={index} className="border-b border-gray-100">
                                         <td className="px-4 py-2 text-gray-900">
@@ -2857,4 +3047,4 @@ export async function getStaticProps() {
     return {
         props: {},
     };
-} 
+}

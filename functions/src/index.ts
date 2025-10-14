@@ -94,10 +94,12 @@ app.get('/health', async (req: any, res: any) => {
 });
 
 app.get('/api/blog/posts', async (req: any, res: any) => {
+  res.set('Cache-Control', 'public, max-age=60, s-maxage=300');
   await getPosts(req, res);
 });
 
 app.get('/api/blog/posts/:id', async (req: any, res: any) => {
+  res.set('Cache-Control', 'public, max-age=300, s-maxage=3600');
   await getPostById(req, res);
 });
 

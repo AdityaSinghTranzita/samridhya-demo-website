@@ -29,6 +29,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="preload" href="https://framerusercontent.com/images/kvNaGEJ2iLiDZTVtaiNCqdyUZM.png" as="image" type="image/png" />
         <link rel="preload" href="/images/Samridhya_Hero.webp" as="image" type="image/webp" />
 
+
         <link rel="dns-prefetch" href="//framerusercontent.com" />
         <link rel="dns-prefetch" href="//upload.wikimedia.org" />
         <link rel="dns-prefetch" href="//developer.apple.com" />

@@ -198,7 +198,7 @@ export default function GoldLoan() {
                                 <motion.button
                                     onClick={() => {
                                         // handleAppDownload
-                                        window.open('https://apply.samridhya.com?loan=gold', '_blank');
+                                        window.open('https://apply.samridhya.com/gold-loan', '_blank');
                                     }}
                                     className="group relative bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-amber-500/25 transition-all duration-300 text-base"
                                     whileHover={{ scale: 1.05, y: -2 }}

@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
+  assetPrefix: '/',
 
   images: {
     unoptimized: true,
@@ -74,7 +75,6 @@ const nextConfig = {
 
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
-    styledComponents: true,
   },
 
   webpack: (config, { dev, isServer }) => {

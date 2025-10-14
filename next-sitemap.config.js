@@ -9,6 +9,7 @@ module.exports = {
     robotsTxtOptions: {
       additionalSitemaps: [
         'https://samridhya.com/sitemap.xml',
+          'https://samridhya.com/sitemap-new.xml',
       ],
     },
   };
