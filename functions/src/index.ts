@@ -93,6 +93,60 @@ app.get('/health', async (req: any, res: any) => {
   await healthCheck(req, res);
 });
 
+app.get("/track", (req: any, res: any) => {
+  const ua = req.headers["user-agent"]?.toLowerCase() || "";
+  const query = req.query;
+
+  let baseUrl: string;
+  let defaultUtmSource: string;
+  let defaultUtmCampaign: string;
+  const defaultUtmMedium = "redirect";
+
+  if (ua.includes("android")) {
+    baseUrl = "https://play.google.com/store/apps/details?id=samridh.consumer";
+    defaultUtmSource = "android_device";
+    defaultUtmCampaign = "app_store_play";
+  } else if (ua.includes("iphone") || ua.includes("ipad")) {
+    baseUrl = "https://apps.apple.com/in/app/samridhya/id6745554387";
+    defaultUtmSource = "ios_device";
+    defaultUtmCampaign = "app_store_apple";
+  } else {
+    baseUrl = "https://apply.samridhya.com/";
+    defaultUtmSource = "web_device";
+    defaultUtmCampaign = "web_homepage";
+  }
+
+  const finalUtmSource = (query.utm_source as string) || defaultUtmSource;
+  const finalUtmMedium = (query.utm_medium as string) || defaultUtmMedium;
+  const finalUtmCampaign = (query.utm_campaign as string) || defaultUtmCampaign;
+
+  const params = new URLSearchParams();
+
+  for (const key in query) {
+    if (!['utm_source', 'utm_medium', 'utm_campaign'].includes(key)) {
+      const value = query[key];
+      // Handle arrays or ParsedQs properly
+      if (Array.isArray(value)) {
+        value.forEach(v => params.append(key, String(v)));
+      } else {
+        params.set(key, String(value));
+      }
+    }
+  }
+
+  params.set('utm_source', String(finalUtmSource));
+  params.set('utm_medium', String(finalUtmMedium));
+  params.set('utm_campaign', String(finalUtmCampaign));
+
+  const finalQueryString = params.toString();
+  const urlSeparator = baseUrl.includes("?") ? "&" : "?";
+  const finalUrl = finalQueryString ? `${baseUrl}${urlSeparator}${finalQueryString}` : baseUrl;
+
+  console.log(`Detected UA: ${ua.substring(0, 50)}... | Redirecting to: ${finalUrl}`);
+
+  return res.redirect(302, finalUrl);
+});
+
 app.get('/api/blog/posts', async (req: any, res: any) => {
   res.set('Cache-Control', 'public, max-age=60, s-maxage=300');
   await getPosts(req, res);

@@ -1,9 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-// Removed framer-motion import for performance
 import Head from 'next/head';
-// Import only the icons we actually use to reduce bundle size
 import {
   CreditCard,
   Shield,
@@ -15,17 +13,24 @@ import {
   ArrowLeft,
   Phone,
   User,
-  Mail,
+  Zap,
+  Banknote,
+  Briefcase,
   FileText,
   TrendingUp,
-  BarChart3
+  BarChart3,
+  Calendar
 } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import CTA from '@/components/CTA';
+import Navbar from "@/components/Navbar";
+import CTA from "@/components/CTA";
 
-import { trackCreditScoreCheck, trackEvent, trackButtonClick, trackCalculatorUsage } from '@/utils/analytics';
+
+
+const trackCreditScoreCheck = (eventName: string, data: any) => console.log('Analytics - Credit Score Check:', eventName, data);
+const trackEvent = (eventName: string, data: any) => console.log('Analytics - Event:', eventName, data);
+// --- END SIMULATED EXTERNAL DEPENDENCIES ---
+
 
 interface CreditScoreData {
   credit_score: number | null;
@@ -46,15 +51,110 @@ const API_BASE_URL = 'https://buyer.prod.samridh.ai/credit';
 const GENERATE_OTP_URL = `${API_BASE_URL}/generate-otp`;
 const VERIFY_OTP_URL = `${API_BASE_URL}/verify-otp`;
 const SUBMIT_DETAILS_URL = `${API_BASE_URL}/submit-details`;
-const GET_SCORE_URL = `${API_BASE_URL}/get-score`;
+const GET_SCORE_URL = `${API_BASE_URL}/get-score/v2`;
 const CHECK_EXISTING_URL = `${API_BASE_URL}/check-existing`;
 
-// Add data validation helper functions
-const validateCreditScoreData = (data: any): boolean => {
-  if (!data || typeof data !== 'object') return false;
-  // Allow null credit_score for cases where no credit record exists
-  if (data.credit_score !== null && (typeof data.credit_score !== 'number')) return false;
-  return true;
+// --- MASTERS FOR CODE TRANSLATION (Integrated from user-provided masters) ---
+
+const ACCOUNT_TYPE_MASTER: { [key: string]: string } = {
+  '1': 'HOUSING LOAN', '2': 'PROPERTY LOAN', '3': 'LOAN AGAINST SHARES/SECURITIES',
+  '4': 'AUTO LOAN', '5': 'PERSONAL LOAN', '6': 'CONSUMER LOAN', '7': 'GOLD LOAN',
+  '8': 'EDUCATIONAL LOAN', '9': 'LOAN TO PROFESSIONAL', '10': 'CREDIT CARD',
+  '11': 'LEASING', '12': 'OVERDRAFT', '13': 'TWO-WHEELER LOAN', '14': 'NON-FUNDED CREDIT FACILITY',
+  '15': 'LOAN AGAINST BANK DEPOSITS', '16': 'FLEET CARD', '17': 'Commercial Vehicle Loan',
+  '18': 'Telco – Wireless', '19': 'Telco – Broadband', '20': 'Telco – Landline',
+  '23': 'GECL Secured', '24': 'GECL Unsecured', '31': 'Secured Credit Card',
+  '32': 'Used Car Loan', '33': 'Construction Equipment Loan', '34': 'Tractor Loan',
+  '35': 'Corporate Credit Card', '36': 'Kisan Credit Card', '37': 'Loan on Credit Card',
+  '38': 'PMJDY - Overdraft', '39': 'Mudra Loans', '40': 'Microfinance – Business Loan',
+  '41': 'Microfinance – Personal Loan', '42': 'Microfinance – Housing Loan', '43': 'Microfinance – Others',
+  '44': 'PMAY - CLSS', '45': 'P2P Personal Loan', '46': 'P2P Auto Loan', '47': 'P2P Education Loan',
+  '51': 'BUSINESS LOAN – GENERAL', '52': 'BUSINESS LOAN –PRIORITY SECTOR – SMALL BUSINESS',
+  '53': 'BUSINESS LOAN –PRIORITY SECTOR – AGRICULTURE', '54': 'BUSINESS LOAN –PRIORITY SECTOR – OTHERS',
+  '55': 'BUSINESS NON-FUNDED CREDIT FACILITY – GENERAL', '56': 'BUSINESS NON-FUNDED CREDIT FACILITY – PRIORITY SECTOR – SMALL BUSINESS',
+  '57': 'BUSINESS NON-FUNDED CREDIT FACILITY – PRIORITY SECTOR – AGRICULTURE', '58': 'BUSINESS NON-FUNDED CREDIT FACILITY – PRIORITY SECTOR – OTHERS',
+  '59': 'BUSINESS LOANS AGAINST BANK DEPOSITS', '60': 'Staff Loan', '61': 'Business Loan - Unsecured',
+  '69': 'Short Term Personal Loan [Unsecured]', '70': 'Priority Sector Gold Loan [Secured]', '71': 'Temporary Overdraft [Unsecured]',
+  '0': 'Other/Uncategorized Loan', '50': 'Business Loan - Secured'
+};
+
+const ENQUIRY_REASON_MASTER: { [key: string]: string } = {
+  '1': 'Agriculture Loan', '2': 'Auto Loan', '3': 'Business Loan', '4': 'Commercial Vehicle Loan',
+  '5': 'Construction Equipment loan', '6': 'Consumer Loan', '7': 'Credit Card', '8': 'Education Loan',
+  '9': 'Leasing', '10': 'Loan against collateral', '11': 'Microfinance', '12': 'Non-funded Credit Facility',
+  '13': 'Personal Loan', '14': 'Property Loan', '15': 'Telecom', '16': 'Two/Three Wheeler Loan',
+  '17': 'Working Capital Loan', '18': 'Consumer Loan', '19': 'Credit Review', '99': 'Others'
+};
+
+const ACCOUNT_STATUS_MASTER: { [key: string]: { label: string, style: string } } = {
+  '11': { label: 'ACTIVE', style: 'bg-green-100 text-green-800 border-green-300' },
+  '71': { label: 'ACTIVE', style: 'bg-green-100 text-green-800 border-green-300' },
+  '78': { label: 'ACTIVE', style: 'bg-green-100 text-green-800 border-green-300' },
+  '80': { label: 'ACTIVE', style: 'bg-green-100 text-green-800 border-green-300' },
+  '82': { label: 'ACTIVE', style: 'bg-green-100 text-green-800 border-green-300' },
+  '83': { label: 'ACTIVE', style: 'bg-green-100 text-green-800 border-green-300' },
+  '84': { label: 'ACTIVE', style: 'bg-green-100 text-green-800 border-green-300' },
+  '21': { label: 'ACTIVE', style: 'bg-green-100 text-green-800 border-green-300' },
+  '22': { label: 'ACTIVE', style: 'bg-green-100 text-green-800 border-green-300' },
+  '23': { label: 'ACTIVE', style: 'bg-green-100 text-green-800 border-green-300' },
+  '24': { label: 'ACTIVE', style: 'bg-green-100 text-green-800 border-green-300' },
+  '25': { label: 'ACTIVE', style: 'bg-green-100 text-green-800 border-green-300' },
+  '131': { label: 'Restructured (Calamity)', style: 'bg-yellow-100 text-yellow-800 border-yellow-300' },
+  '130': { label: 'Restructured (COVID-19)', style: 'bg-yellow-100 text-yellow-800 border-yellow-300' },
+  '30': { label: 'Restructured', style: 'bg-yellow-100 text-yellow-800 border-yellow-300' },
+  '32': { label: 'Settled', style: 'bg-orange-100 text-orange-800 border-orange-300' },
+  '33': { label: 'Post WO Settled', style: 'bg-orange-100 text-orange-800 border-orange-300' },
+  '43': { label: 'Written-Off', style: 'bg-red-100 text-red-800 border-red-300' },
+  '13': { label: 'CLOSED', style: 'bg-gray-100 text-gray-800 border-gray-300' },
+  '14': { label: 'CLOSED', style: 'bg-gray-100 text-gray-800 border-gray-300' },
+  '15': { label: 'CLOSED', style: 'bg-gray-100 text-gray-800 border-gray-300' },
+  '12': { label: 'CLOSED', style: 'bg-gray-100 text-gray-800 border-gray-300' },
+  '53': { label: 'Suit Filed', style: 'bg-red-100 text-red-800 border-red-300' },
+  '89': { label: 'Wilful Default', style: 'bg-red-100 text-red-800 border-red-300' },
+  '16': { label: 'CLOSED', style: 'bg-gray-100 text-gray-800 border-gray-300' },
+  '17': { label: 'CLOSED', style: 'bg-gray-100 text-gray-800 border-gray-300' },
+};
+
+const EMPLOYMENT_STATUS_MASTER: { [key: string]: string } = {
+  'S': 'Salaried',
+  'N': 'Non-Salaried',
+  'E': 'Self-employed',
+  'P': 'Self-employed Professional',
+  'U': 'Unemployed',
+};
+
+// --- UTILITY FUNCTIONS ---
+
+/**
+ * Formats a number into the Indian numbering system (e.g., 100000 -> 1,00,000).
+ * Handles string or number input. Returns 'N/A' or '0' for non-numeric/null values.
+ * @param value The number to format.
+ * @returns Formatted string with comma separation.
+ */
+const formatIndianNumber = (value: string | number | null): string => {
+  if (value === null || value === undefined) return '0';
+
+  let numStr: string;
+  if (typeof value === 'number') {
+    numStr = value.toFixed(0); // Ensure no decimals for currency
+  } else if (typeof value === 'string') {
+    numStr = value.replace(/[^0-9]/g, ''); // Remove non-numeric characters like commas
+  } else {
+    return '0';
+  }
+
+  if (numStr === '' || isNaN(parseInt(numStr))) return '0';
+  if (numStr === '0') return '0';
+
+  // Indian format: first group of 3 digits, then groups of 2 digits
+  let lastThree = numStr.substring(numStr.length - 3);
+  const otherNumbers = numStr.substring(0, numStr.length - 3);
+  if (otherNumbers !== '') {
+    lastThree = ',' + lastThree;
+  }
+  const formatted = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+
+  return formatted;
 };
 
 const safeGet = (obj: any, path: string, defaultValue: any = 'N/A') => {
@@ -69,42 +169,91 @@ const safeGet = (obj: any, path: string, defaultValue: any = 'N/A') => {
       result = result[key];
     }
 
-    // Handle different data types
     if (result === null || result === undefined) return defaultValue;
-    if (typeof result === 'number') return result === 0 ? '0' : result.toString();
-    if (typeof result === 'string') return result.trim() === '' ? defaultValue : result;
-    return result.toString();
+    if (typeof result === 'number') return result.toString();
+    if (typeof result === 'string') return result.trim() === '' ? defaultValue : result.trim();
+    return result;
   } catch (error) {
-    console.warn(`Error accessing path ${path}:`, error);
     return defaultValue;
   }
 };
 
-const safeGetNumber = (obj: any, path: string, defaultValue: number = 0): number => {
+const safeGetNumber = (obj: any, path: string, defaultValue: number | null = 0): number | null => {
   try {
-    const value = safeGet(obj, path, defaultValue);
+    const value = safeGet(obj, path, defaultValue?.toString() || '0');
     if (typeof value === 'number') return value;
     if (typeof value === 'string') {
-      const num = parseFloat(value);
+      const num = parseFloat(value.replace(/,/g, '')); // Remove commas for numbers like "50,000"
       return isNaN(num) ? defaultValue : num;
     }
     return defaultValue;
   } catch (error) {
-    console.warn(`Error getting number for path ${path}:`, error);
     return defaultValue;
   }
 };
 
-const hasValidReportData = (creditScoreData: CreditScoreData | null): boolean => {
-  if (!creditScoreData || !creditScoreData.report) return false;
-
-  // Check if we have any meaningful data in the report
-  const hasPersonalInfo = !!creditScoreData.report.Current_Application?.Current_Application_Details?.Current_Applicant_Details;
-  const hasAccountData = !!creditScoreData.report.CAIS_Account?.CAIS_Account_DETAILS;
-  const hasSummaryData = !!creditScoreData.report.CAIS_Account?.CAIS_Summary;
-
-  return hasPersonalInfo || hasAccountData || hasSummaryData;
+// FIXED: Adjusted path for new JSON structure
+const validateCreditScoreData = (data: CreditScoreData): boolean => {
+  if (!data || typeof data !== 'object') return false;
+  // Allow null credit_score for cases where no credit record exists
+  if (data.credit_score !== null && (typeof data.credit_score !== 'number')) return false;
+  // Ensure the core report structure is present (INProfileResponse is the root of the report)
+  if (!data.report || !data.report.INProfileResponse || !data.report.INProfileResponse.CreditProfileHeader) return false;
+  return true;
 };
+
+// FIXED: Adjusted paths for new JSON structure
+const hasValidReportData = (creditScoreData: CreditScoreData | null): boolean => {
+  if (!creditScoreData || !creditScoreData.report || !creditScoreData.report.INProfileResponse) return false;
+
+  const report = creditScoreData.report.INProfileResponse;
+  const hasAccountData = !!safeGet(report, 'CAIS_Account.CAIS_Account_DETAILS', null);
+  const hasSummaryData = !!safeGet(report, 'CAIS_Account.CAIS_Summary', null);
+  const hasPersonalInfo = !!safeGet(report, 'Current_Application.Current_Application_Details.Current_Applicant_Details', null);
+
+  return hasAccountData || hasSummaryData || hasPersonalInfo || creditScoreData.credit_score !== null;
+};
+
+const formatDateFromYYYYMMDD = (dateString: string | number | null): string => {
+  if (!dateString) return 'N/A';
+
+  const date = dateString.toString();
+  if (date.length === 8) {
+    const year = date.substring(0, 4);
+    const month = date.substring(4, 6);
+    const day = date.substring(6, 8);
+    // For simplicity and matching common format: DD/MM/YYYY
+    return `${day}/${month}/${year}`;
+  }
+  return 'N/A';
+};
+
+const getAccountType = (code: string | number) => {
+  const codeStr = String(code);
+  return ACCOUNT_TYPE_MASTER[codeStr] || `Other (Code: ${codeStr})`;
+};
+
+const getAccountStatus = (code: string | number) => {
+  const codeStr = String(code);
+  return ACCOUNT_STATUS_MASTER[codeStr] || { label: `Other (Code: ${codeStr})`, style: 'bg-yellow-100 text-yellow-800 border-yellow-300' };
+};
+
+const getEnquiryReason = (code: string | number) => {
+  const codeStr = String(code);
+  return ENQUIRY_REASON_MASTER[codeStr] || `Other (Code: ${codeStr})`;
+};
+
+const getEmploymentStatus = (code: string | number) => {
+  const codeStr = String(code);
+  return EMPLOYMENT_STATUS_MASTER[codeStr] || `Other (Code: ${codeStr})`;
+};
+
+// Helper functions for sessionStorage operations (Client-side only)
+const getSessionStorage = (key: string) => { if (typeof window !== 'undefined') { return sessionStorage.getItem(key); } return null; };
+const setSessionStorage = (key: string, value: string) => { if (typeof window !== 'undefined') { sessionStorage.setItem(key, value); } };
+const removeSessionStorage = (key: string) => { if (typeof window !== 'undefined') { sessionStorage.removeItem(key); } };
+
+// --- START OF MAIN COMPONENT ---
 
 export default function CreditScoreChecker() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -127,191 +276,133 @@ export default function CreditScoreChecker() {
   const [isChecked, setIsChecked] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  // --- Utility/Session Logic ---
 
-  // Set mounted state for client-side rendering
-  useEffect(() => {
-    setMounted(true);
+  const clearAllSessionData = useCallback(() => {
+    removeSessionStorage('cibilReportData');
+    removeSessionStorage('authToken');
+    removeSessionStorage('mobileNumber');
+    removeSessionStorage('userDetails');
+    removeSessionStorage('noCreditRecord');
   }, []);
 
-  // Check for existing data on component mount
-  useEffect(() => {
-    // Only run on client side
-    if (typeof window === 'undefined') return;
+  const syncSessionData = useCallback(() => {
+    if (authToken) setSessionStorage('authToken', authToken);
+    if (mobileNumber) setSessionStorage('mobileNumber', mobileNumber);
+    if (userDetails.name) setSessionStorage('userDetails', JSON.stringify(userDetails));
+    if (creditScoreData) setSessionStorage('cibilReportData', JSON.stringify(creditScoreData));
+    if (noCreditRecord) setSessionStorage('noCreditRecord', 'true');
+  }, [authToken, mobileNumber, userDetails, creditScoreData, noCreditRecord]);
 
-    const savedData = getSessionStorage('cibilReportData');
-    const savedToken = getSessionStorage('authToken');
-    const savedMobile = getSessionStorage('mobileNumber');
-    const savedUserDetails = getSessionStorage('userDetails');
-    const savedNoCreditRecord = getSessionStorage('noCreditRecord');
+  const resetForm = useCallback(() => {
+    clearAllSessionData();
+    setCurrentStep(1);
+    setMobileNumber('');
+    setOtp(['', '', '', '', '', '']);
+    setUserDetails({ name: '', pan: '', email: '', gender: 'male' });
+    setAuthToken('');
+    setCreditScoreData(null);
+    setError('');
+    setNoCreditRecord(false);
+    setIsCheckingExisting(false);
+    setIsChecked(false);
+  }, [clearAllSessionData]);
 
+  // --- Core Business Logic Functions ---
 
+  const validateUserDetails = () => {
+    if (!userDetails.name.trim()) {
+      setError('Please enter your full name.');
+      return false;
+    }
+    if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(userDetails.pan.toUpperCase())) {
+      setError('Please enter a valid 10-digit PAN number.');
+      return false;
+    }
+    if (!/\S+@\S+\.\S+/.test(userDetails.email.toLowerCase())) {
+      setError('Please enter a valid email address.');
+      return false;
+    }
+    setError('');
+    return true;
+  };
 
-    if (savedData) {
-      try {
-        const scoreData = JSON.parse(savedData);
-        setCreditScoreData(scoreData);
+  const fetchCreditScore = useCallback(async (token: string) => {
+    try {
+      setIsLoading(true);
+      setCurrentStep(4); // Move to loading step
 
-        // Also restore auth token and user details if they exist
-        if (savedToken) {
-          setAuthToken(savedToken);
-        }
-        if (savedMobile) {
-          setMobileNumber(savedMobile);
-        }
-        if (savedUserDetails) {
-          try {
-            const userDetails = JSON.parse(savedUserDetails);
-            setUserDetails(userDetails);
-          } catch (e) {
-            console.error('Error parsing saved user details:', e);
-          }
-        }
+      const scoreResponse = await fetch(GET_SCORE_URL, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
 
-        setCurrentStep(5);
+      const scoreData = await scoreResponse.json();
 
-      } catch (e) {
-        console.error('Error loading saved data:', e);
-        removeSessionStorage('cibilReportData');
+      const isSuccess = scoreData.message && (scoreData.message.includes('Success') || scoreData.message.includes('successfully'));
+      const apiData = scoreData.data;
+
+      // Check for 'No Credit Record' conditions
+      // FIXED: Use safeGetNumber for credit_score check on apiData root
+      const isNoCreditRecord = scoreData.message && (
+          scoreData.message.toLowerCase().includes('no credit record') ||
+          scoreData.message.toLowerCase().includes('no credit history') ||
+          (apiData && (apiData.status === 2 || safeGetNumber(apiData, 'credit_score', 0) === 0))
+      );
+
+      if (isNoCreditRecord) {
+        setNoCreditRecord(true);
+        setSessionStorage('noCreditRecord', 'true');
+        trackEvent('credit_score_no_record', { user_mobile: mobileNumber });
+        setCurrentStep(6);
+        return;
       }
-    } else if (savedNoCreditRecord === 'true') {
-      // User has no credit record
-      if (savedToken) {
-        setAuthToken(savedToken);
+
+      if (!isSuccess || !apiData || !apiData.report || !apiData.report.INProfileResponse) {
+        throw new Error(scoreData.message || 'Failed to retrieve credit report data from API.');
       }
-      if (savedMobile) {
-        setMobileNumber(savedMobile);
-      }
-      if (savedUserDetails) {
-        try {
-          const userDetails = JSON.parse(savedUserDetails);
-          setUserDetails(userDetails);
-        } catch (e) {
-          console.error('Error parsing saved user details:', e);
-        }
-      }
-      setNoCreditRecord(true);
-      setCurrentStep(6);
-    } else if (savedToken && savedMobile) {
-      // User has token but we need to verify if details exist
-      setAuthToken(savedToken);
-      setMobileNumber(savedMobile);
 
-      // Check if user details exist using the backend endpoint
-      setIsCheckingExisting(true);
-      const checkExistingUser = async () => {
-        try {
-          const checkExistingResponse = await fetch(CHECK_EXISTING_URL, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${savedToken}`,
-              'Content-Type': 'application/json',
-            },
-          });
-
-          const existingData = await checkExistingResponse.json();
-
-          if (existingData.message === 'User exists' && existingData.data) {
-            // User details exist, populate the form and fetch credit score directly
-            const userData = {
-              name: existingData.data.nickname || '',
-              pan: existingData.data.pan || '',
-              email: existingData.data.email || '',
-              gender: existingData.data.gender || 'male'
-            };
-
-            setUserDetails(userData);
-            setSessionStorage('userDetails', JSON.stringify(userData));
-
-            // Automatically fetch credit score
-            setCurrentStep(4);
-            await fetchCreditScore(savedToken);
-          } else {
-            // No user details found, check if we have saved user details
-            if (savedUserDetails) {
-              try {
-                const userDetails = JSON.parse(savedUserDetails);
-                setUserDetails(userDetails);
-                setCurrentStep(4);
-                await fetchCreditScore(savedToken);
-              } catch (e) {
-                console.error('Error parsing saved user data:', e);
-                clearAllSessionData();
-              }
-            } else {
-              // No user details at all, go to step 3
-              setCurrentStep(3);
-            }
-          }
-        } catch (checkError) {
-          console.error('Error checking existing user details:', checkError);
-          // If check fails, try to use saved user details
-          if (savedUserDetails) {
-            try {
-              const userDetails = JSON.parse(savedUserDetails);
-              setUserDetails(userDetails);
-              setCurrentStep(4);
-              await fetchCreditScore(savedToken);
-            } catch (e) {
-              console.error('Error parsing saved user data:', e);
-              clearAllSessionData();
-            }
-          } else {
-            setCurrentStep(3);
-          }
-        } finally {
-          setIsCheckingExisting(false);
-        }
+      const creditScorePayload: CreditScoreData = {
+        credit_score: safeGetNumber(apiData, 'credit_score', null),
+        report: apiData.report,
+        fetched_at: apiData.fetched_at,
+        status: apiData.status,
       };
 
-      checkExistingUser();
-    } else {
+      if (!validateCreditScoreData(creditScorePayload)) {
+        throw new Error('Invalid or incomplete credit score data received.');
+      }
 
+      setCreditScoreData(creditScorePayload);
+      setSessionStorage('cibilReportData', JSON.stringify(creditScorePayload));
+
+      trackCreditScoreCheck('credit_score_checker', {
+        credit_score: creditScorePayload.credit_score,
+        user_mobile: mobileNumber,
+        step: 'step_5'
+      });
+
+      setCurrentStep(5);
+
+    } catch (error) {
+      console.error('Credit score fetch error:', error);
+      setCurrentStep(3); // Go back to details input on critical failure
+      setError((error as Error).message || 'Error fetching credit score. Please ensure all details are correct.');
+    } finally {
+      setIsLoading(false);
     }
-  }, []);
+  }, [mobileNumber]);
 
-  // Sync session data when important state changes
-  useEffect(() => {
-    if (mounted && (authToken || mobileNumber || userDetails.name || creditScoreData || noCreditRecord)) {
-      syncSessionData();
-    }
-  }, [authToken, mobileNumber, userDetails, creditScoreData, noCreditRecord, mounted, isCheckingExisting]);
 
-  // OTP Timer effect
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (currentStep === 2 && otpTimer > 0) {
-      interval = setInterval(() => {
-        setOtpTimer(prev => prev - 1);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [currentStep, otpTimer]);
-
-  const handleOtpChange = (index: number, value: string) => {
-    // Only allow numeric characters
-    const numericValue = value.replace(/[^0-9]/g, '');
-
-    const newOtp = [...otp];
-    newOtp[index] = numericValue;
-    setOtp(newOtp);
-
-    // Auto-focus next input
-    if (numericValue && index < 5) {
-      const nextInput = document.querySelector(`input[data-index="${index + 1}"]`) as HTMLInputElement;
-      if (nextInput) nextInput.focus();
-    }
-  };
-
-  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      const prevInput = document.querySelector(`input[data-index="${index - 1}"]`) as HTMLInputElement;
-      if (prevInput) prevInput.focus();
-    }
-  };
-
-  const generateOtp = async () => {
+  const generateOtp = useCallback(async () => {
     if (!mobileNumber || mobileNumber.length !== 10) {
-      setError('Please enter a valid 10-digit mobile number');
+      setError('Please enter a valid 10-digit mobile number.');
+      return;
+    }
+    if (!isChecked) {
+      setError('Please read and accept the Experian Terms & Conditions.');
       return;
     }
 
@@ -325,46 +416,25 @@ export default function CreditScoreChecker() {
       if (data.success === true) {
         setCurrentStep(2);
         setOtpTimer(30);
-        // Track OTP generation success
-        trackEvent('otp_generated', {
-          user_mobile: mobileNumber,
-          event_category: 'engagement',
-          event_label: 'otp_generated_mobile_verification'
-        });
+        trackEvent('otp_generated', { user_mobile: mobileNumber });
       } else {
-        setError(data.message || 'Failed to send OTP');
-
-        // Track OTP generation failure
-        trackEvent('otp_generation_failed', {
-          user_mobile: mobileNumber,
-          error_message: data.message || 'unknown_error',
-          event_category: 'error',
-          event_label: 'otp_generation_failed'
-        });
+        setError(data.message || 'Failed to send OTP. Please check the number and try again.');
+        trackEvent('otp_generation_failed', { user_mobile: mobileNumber, error_message: data.message });
       }
     } catch (error) {
-      console.error('OTP generation network error:', error);
       setError('Network error. Please check your connection and try again.');
-
-      // Track OTP generation network error
-      trackEvent('otp_generation_error', {
-        user_mobile: mobileNumber,
-        error_type: 'network_error',
-        event_category: 'error',
-        event_label: 'otp_generation_network_error'
-      });
+      trackEvent('otp_generation_error', { user_mobile: mobileNumber, error_type: 'network_error' });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [mobileNumber, isChecked]);
 
-  const verifyOtp = async () => {
+  const verifyOtp = useCallback(async () => {
     const otpString = otp.join('');
     if (otpString.length !== 6) {
-      setError('Please enter the complete 6-digit OTP');
+      setError('Please enter the complete 6-digit OTP.');
       return;
     }
-
 
     setIsLoading(true);
     setError('');
@@ -372,118 +442,65 @@ export default function CreditScoreChecker() {
     try {
       const response = await fetch(`${VERIFY_OTP_URL}?phone=${mobileNumber}&utm_source=website&utm_medium=website&source=creditscore`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ otp: otpString }),
       });
 
       const data = await response.json();
 
-
       if (data.success === true) {
         const token = data.access_token;
         setAuthToken(token);
-
-        // Store token for future use
         setSessionStorage('authToken', token);
         setSessionStorage('mobileNumber', mobileNumber);
+        trackEvent('otp_verified', { user_mobile: mobileNumber });
 
-        // Track OTP verification success
-        trackEvent('otp_verified', {
-          user_mobile: mobileNumber,
-          event_category: 'engagement',
-          event_label: 'otp_verified_mobile_verification'
+
+        const checkExistingResponse = await fetch(CHECK_EXISTING_URL, {
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` },
         });
 
-        // Check if user details exist using the new backend endpoint
-        setIsCheckingExisting(true);
-        try {
-          const checkExistingResponse = await fetch(CHECK_EXISTING_URL, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
+        const existingData = await checkExistingResponse.json();
 
-          const existingData = await checkExistingResponse.json();
-
-          if (existingData.message === 'User exists' && existingData.data) {
-            // User details exist, populate the form and fetch credit score directly
-            const userData = {
-              name: existingData.data.nickname || '',
-              pan: existingData.data.pan || '',
-              email: existingData.data.email || '',
-              gender: existingData.data.gender || 'male'
-            };
-
-            setUserDetails(userData);
-
-            // Store user details for future use
-            setSessionStorage('userDetails', JSON.stringify(userData));
-
-            // Automatically fetch credit score
-            setCurrentStep(4);
-            await fetchCreditScore(token);
-          } else {
-            // No user details found, proceed to step 3 for manual input
-            setCurrentStep(3);
-          }
-        } catch (checkError) {
-          console.error('Error checking existing user details:', checkError);
-          // If check fails, proceed to step 3 for manual input
+        if (existingData.message === 'User exists' && existingData.data) {
+          const userData = {
+            name: existingData.data.nickname || '',
+            pan: existingData.data.pan || '',
+            email: existingData.data.email || '',
+            gender: existingData.data.gender || 'male'
+          };
+          setUserDetails(userData);
+          setSessionStorage('userDetails', JSON.stringify(userData));
+          // Proceed to fetch score with existing data
+          await fetchCreditScore(token);
+        } else {
+          // No existing user found, prompt for full details
           setCurrentStep(3);
-        } finally {
-          setIsCheckingExisting(false);
         }
-
-        setOtp(['', '', '', '', '', '']);
       } else {
         setError(data.message || 'Invalid OTP. Please try again.');
-        // Track OTP verification failure
-        trackEvent('otp_verification_failed', {
-          user_mobile: mobileNumber,
-          error_message: data.message || 'invalid_otp',
-          event_category: 'error',
-          event_label: 'otp_verification_failed'
-        });
+        trackEvent('otp_verification_failed', { user_mobile: mobileNumber, error_message: data.message });
       }
     } catch (error) {
-      console.error('OTP verification error:', error);
       setError('Network error. Please try again.');
-
-      // Track OTP verification network error
-      trackEvent('otp_verification_error', {
-        user_mobile: mobileNumber,
-        error_type: 'network_error',
-        event_category: 'error',
-        event_label: 'otp_verification_network_error'
-      });
+      trackEvent('otp_verification_error', { user_mobile: mobileNumber, error_type: 'network_error' });
+      setCurrentStep(3); // Fallback to details step on network/critical error
     } finally {
       setIsLoading(false);
+      setIsCheckingExisting(false);
+      setOtp(['', '', '', '', '', '']);
     }
-  };
+  }, [otp, mobileNumber, fetchCreditScore]);
 
-  const submitDetails = async () => {
-    if (!userDetails.name || !userDetails.pan || !userDetails.email) {
-      setError('Please fill in all required fields');
-      return;
-    }
-
-    if (userDetails.pan.length !== 10) {
-      setError('Please enter a valid 10-character PAN number');
-      return;
-    }
+  const submitDetails = useCallback(async () => {
+    if (!validateUserDetails()) return;
 
     setIsLoading(true);
     setError('');
     setCurrentStep(4);
 
     try {
-
-
-      // Submit user details
       const submitResponse = await fetch(SUBMIT_DETAILS_URL, {
         method: 'POST',
         headers: {
@@ -493,25 +510,20 @@ export default function CreditScoreChecker() {
         body: JSON.stringify({
           name: userDetails.name,
           pan: userDetails.pan,
-          email: userDetails.email
+          email: userDetails.email,
+          gender: userDetails.gender
         }),
       });
 
       const submitData = await submitResponse.json();
 
-
-      // Check for success response
       const isSuccess = submitData.message && (
           submitData.message.includes('Success') ||
-          submitData.message.includes('successfully') ||
-          submitData.message.includes('updated successfully')
+          submitData.message.includes('successfully')
       );
 
       if (isSuccess) {
-        // Store user details for future use
         setSessionStorage('userDetails', JSON.stringify(userDetails));
-
-        // Fetch credit score using the new function
         await fetchCreditScore(authToken);
       } else {
         throw new Error(submitData.message || 'Failed to submit details');
@@ -519,299 +531,147 @@ export default function CreditScoreChecker() {
     } catch (error) {
       console.error('Submit details error:', error);
       setCurrentStep(3);
-      setError('Error submitting details. Please try again.');
+      setError((error as Error).message || 'Error submitting details. Please try again.');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [userDetails, authToken, fetchCreditScore]);
 
-  const fetchCreditScore = async (token: string) => {
-    try {
-      console.log('Fetching credit score with token:', token);
 
-      // Get credit score
-      const scoreResponse = await fetch(GET_SCORE_URL, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+  // --- Hooks and Lifecycle (Initial Load Check Updated) ---
 
-      const scoreData = await scoreResponse.json();
-      console.log('Credit score API response:', scoreData);
-      console.log('Credit score value:', scoreData.data?.credit_score);
-      console.log('Message:', scoreData.message);
+  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    if (mounted) syncSessionData();
+  }, [authToken, mobileNumber, userDetails, creditScoreData, noCreditRecord, mounted, syncSessionData]);
 
-      // Check for various success messages
-      const isSuccess = scoreData.message && (
-          scoreData.message.includes('Success') ||
-          scoreData.message.includes('successfully') ||
-          scoreData.message.includes('updated successfully')
-      );
+  // Initial load check for saved session data
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
 
-      // Check if this is a success but with no credit score (null credit_score)
-      const isSuccessWithNoCreditScore = isSuccess && scoreData.data && scoreData.data.credit_score === null;
+    const savedToken = getSessionStorage('authToken');
+    const savedMobile = getSessionStorage('mobileNumber');
+    const savedUserDetails = getSessionStorage('userDetails');
+    const savedData = getSessionStorage('cibilReportData');
+    const savedNoCreditRecord = getSessionStorage('noCreditRecord');
 
-      // Check for no credit record messages or status code 2
-      const isNoCreditRecord = scoreData.message && (
-          scoreData.message.toLowerCase().includes('no credit record') ||
-          scoreData.message.toLowerCase().includes('no credit history') ||
-          scoreData.message.toLowerCase().includes('credit record not found') ||
-          scoreData.message.toLowerCase().includes('no data found') ||
-          scoreData.message.toLowerCase().includes('no record found')
-      ) || (scoreData.data && scoreData.data.status === 2);
-
-      if (isSuccess && scoreData.data) {
-        // Check if this is a no credit record case first
-        // Handle cases where credit_score is null regardless of the message
-        if (isNoCreditRecord || scoreData.data.status === 2 || scoreData.data.credit_score === null || isSuccessWithNoCreditScore) {
-          console.log('Handling no credit record case. Reason:', {
-            isNoCreditRecord,
-            statusIs2: scoreData.data.status === 2,
-            creditScoreIsNull: scoreData.data.credit_score === null,
-            isSuccessWithNoCreditScore
-          });
-          // Handle no credit record case
-          setNoCreditRecord(true);
-          setSessionStorage('noCreditRecord', 'true');
-
-          // Track no credit record found
-          trackEvent('credit_score_no_record', {
-            user_mobile: mobileNumber,
-            event_category: 'engagement',
-            event_label: 'credit_score_no_record_found'
-          });
-
-          // Store user details for future use
-          if (authToken) {
-            setSessionStorage('authToken', authToken);
-          }
-          if (mobileNumber) {
-            setSessionStorage('mobileNumber', mobileNumber);
-          }
-          if (userDetails.name) {
-            setSessionStorage('userDetails', JSON.stringify(userDetails));
-          }
-
-          setCurrentStep(6);
-          return;
-        }
-
-        // Validate the credit score data for cases with actual credit scores
-        console.log('Processing credit score data with actual score:', scoreData.data.credit_score);
-        if (!validateCreditScoreData(scoreData.data)) {
-          console.error('Invalid credit score data structure:', scoreData.data);
-          throw new Error('Invalid credit score data received');
-        }
-
-        // Log the data structure for debugging
-        console.log('Credit score data structure:', {
-          credit_score: scoreData.data.credit_score,
-          has_report: !!scoreData.data.report,
-          report_keys: scoreData.data.report ? Object.keys(scoreData.data.report) : [],
-          has_personal_info: !!scoreData.data.report?.Current_Application?.Current_Application_Details?.Current_Applicant_Details,
-          has_account_data: !!scoreData.data.report?.CAIS_Account?.CAIS_Account_DETAILS,
-          has_summary: !!scoreData.data.report?.CAIS_Account?.CAIS_Summary
-        });
-
-        setCreditScoreData(scoreData.data);
-        setSessionStorage('cibilReportData', JSON.stringify(scoreData.data));
-
-        // Track successful credit score retrieval
-        trackCreditScoreCheck('credit_score_checker', {
-          credit_score: scoreData.data.credit_score || 0,
-          user_mobile: mobileNumber,
-          step: 'step_5'
-        });
-        trackEvent('credit_score_retrieved', {
-          credit_score: scoreData.data.credit_score || 0,
-          user_mobile: mobileNumber,
-          event_category: 'conversion',
-          event_label: 'credit_score_retrieved_success'
-        });
-
-        // Ensure all session data is stored for future use
-        if (authToken) {
-          setSessionStorage('authToken', authToken);
-        }
-        if (mobileNumber) {
-          setSessionStorage('mobileNumber', mobileNumber);
-        }
-        if (userDetails.name) {
-          setSessionStorage('userDetails', JSON.stringify(userDetails));
-        }
-
+    if (savedData) {
+      try {
+        const scoreData = JSON.parse(savedData);
+        setCreditScoreData(scoreData);
+        if (savedToken) setAuthToken(savedToken);
+        if (savedMobile) setMobileNumber(savedMobile);
+        if (savedUserDetails) setUserDetails(JSON.parse(savedUserDetails));
         setCurrentStep(5);
-      } else if (isNoCreditRecord || (!scoreData.data && isSuccess)) {
-        // Handle no credit record case
-        setNoCreditRecord(true);
-        setSessionStorage('noCreditRecord', 'true');
-
-        // Track no credit record found
-        trackEvent('credit_score_no_record', {
-          user_mobile: mobileNumber,
-          event_category: 'engagement',
-          event_label: 'credit_score_no_record_found'
-        });
-
-        // Store user details for future use
-        if (authToken) {
-          setSessionStorage('authToken', authToken);
-        }
-        if (mobileNumber) {
-          setSessionStorage('mobileNumber', mobileNumber);
-        }
-        if (userDetails.name) {
-          setSessionStorage('userDetails', JSON.stringify(userDetails));
-        }
-
-        setCurrentStep(6);
-      } else {
-        console.error('Credit score API error:', scoreData);
-        throw new Error(scoreData.message || 'Failed to get credit score');
+        return;
+      } catch (e) {
+        removeSessionStorage('cibilReportData');
       }
-    } catch (error) {
-      console.error('Credit score fetch error:', error);
-      setCurrentStep(3);
-      setError('Error fetching credit score. Please try again.');
-    } finally {
-      setIsLoading(false);
+    }
+
+    if (savedNoCreditRecord === 'true') {
+      if (savedToken) setAuthToken(savedToken);
+      if (savedMobile) setMobileNumber(savedMobile);
+      if (savedUserDetails) setUserDetails(JSON.parse(savedUserDetails));
+      setNoCreditRecord(true);
+      setCurrentStep(6);
+      return;
+    }
+
+
+    if (savedToken && savedMobile) {
+      setAuthToken(savedToken);
+      setMobileNumber(savedMobile);
+      setIsCheckingExisting(true);
+      setCurrentStep(4); // Show loading while checking existing user
+
+      const checkExistingAndFetch = async () => {
+        try {
+          const checkExistingResponse = await fetch(CHECK_EXISTING_URL, {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${savedToken}` },
+          });
+
+          const existingData = await checkExistingResponse.json();
+
+          if (existingData.message === 'User exists' && existingData.data) {
+            const userData = {
+              name: existingData.data.nickname || '',
+              pan: existingData.data.pan || '',
+              email: existingData.data.email || '',
+              gender: existingData.data.gender || 'male'
+            };
+            setUserDetails(userData);
+            setSessionStorage('userDetails', JSON.stringify(userData));
+            await fetchCreditScore(savedToken);
+          } else if (savedUserDetails) {
+            setUserDetails(JSON.parse(savedUserDetails));
+            await fetchCreditScore(savedToken);
+          } else {
+            setCurrentStep(3);
+          }
+        } catch (e) {
+          console.error('Initial load check failed:', e);
+          setCurrentStep(3);
+        } finally {
+          setIsCheckingExisting(false);
+        }
+      };
+
+      checkExistingAndFetch();
+    }
+  }, [fetchCreditScore]);
+
+  // OTP Timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (currentStep === 2 && otpTimer > 0) {
+      interval = setInterval(() => {
+        setOtpTimer(prev => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [currentStep, otpTimer]);
+
+  const handleOtpChange = (index: number, value: string) => {
+    const numericValue = value.replace(/[^0-9]/g, '');
+    const newOtp = [...otp];
+    newOtp[index] = numericValue;
+    setOtp(newOtp);
+
+    if (numericValue && index < 5) {
+      const nextInput = document.querySelector(`input[data-index="${index + 1}"]`) as HTMLInputElement;
+      if (nextInput) nextInput.focus();
     }
   };
 
-  // Helper function to safely access sessionStorage
-  const getSessionStorage = (key: string) => {
-    if (typeof window !== 'undefined') {
-      return sessionStorage.getItem(key);
-    }
-    return null;
-  };
-
-  const setSessionStorage = (key: string, value: string) => {
-    if (typeof window !== 'undefined') {
-      sessionStorage.setItem(key, value);
+  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      const prevInput = document.querySelector(`input[data-index="${index - 1}"]`) as HTMLInputElement;
+      if (prevInput) prevInput.focus();
     }
   };
 
-  const removeSessionStorage = (key: string) => {
-    if (typeof window !== 'undefined') {
-      sessionStorage.removeItem(key);
-    }
-  };
 
-  const syncSessionData = () => {
-    // Ensure all current state is stored in session storage
-    if (authToken) {
-      setSessionStorage('authToken', authToken);
-    }
-    if (mobileNumber) {
-      setSessionStorage('mobileNumber', mobileNumber);
-    }
-    if (userDetails.name) {
-      setSessionStorage('userDetails', JSON.stringify(userDetails));
-    }
-    if (creditScoreData) {
-      setSessionStorage('cibilReportData', JSON.stringify(creditScoreData));
-    }
-    if (noCreditRecord) {
-      setSessionStorage('noCreditRecord', 'true');
-    }
-  };
+  // --- Score Calculation Utilities (No change needed) ---
 
-  const clearAllSessionData = () => {
-    removeSessionStorage('cibilReportData');
-    removeSessionStorage('authToken');
-    removeSessionStorage('mobileNumber');
-    removeSessionStorage('userDetails');
-    removeSessionStorage('noCreditRecord');
-  };
-
-  const resetForm = () => {
-    clearAllSessionData();
-    setCurrentStep(1);
-    setMobileNumber('');
-    setOtp(['', '', '', '', '', '']);
-    setUserDetails({
-      name: '',
-      pan: '',
-      email: '',
-      gender: 'male'
-    });
-    setAuthToken('');
-    setCreditScoreData(null);
-    setError('');
-    setNoCreditRecord(false);
-    setIsCheckingExisting(false);
-  };
-
-  const getScoreCategory = (score: number | null) => {
-    if (score === null) return { label: 'No Credit Record', color: '#95a5a6' };
-    if (score >= 800) return { label: 'Excellent Credit Score', color: '#27ae60' };
-    if (score >= 750) return { label: 'Very Good Credit Score', color: '#2ecc71' };
-    if (score >= 700) return { label: 'Good Credit Score', color: '#f1c40f' };
-    if (score >= 650) return { label: 'Fair Credit Score', color: '#f39c12' };
-    return { label: 'Poor Credit Score', color: '#e74c3c' };
-  };
-
-  const getNeedleAngle = (score: number | null) => {
-    if (score === null) return 0; // Center position for no credit record
-    // Map score to angle (0-900 score range to -90 to 90 degrees)
-    // Poor: 0-300 (-90 to -54 degrees)
-    // Uncertain: 300-500 (-54 to -18 degrees)
-    // Fair: 500-650 (-18 to 18 degrees)
-    // Good: 650-750 (18 to 54 degrees)
-    // Excellent: 750-900 (54 to 90 degrees)
-
-    const clampedScore = Math.max(0, Math.min(900, score));
-    const angle = (clampedScore / 900) * 180 - 90;
-    return angle;
-  };
-
-  const getNeedleAngleNew = (score: number | null) => {
-    if (score === null) return 0; // Center position for no credit record
-    // Map score to angle (300-850 score range to -90 to 90 degrees)
-    // Poor: 300-579 (-90 to -54 degrees)
-    // Fair: 580-669 (-54 to -18 degrees)
-    // Good: 670-739 (-18 to 18 degrees)
-    // Very Good: 740-799 (18 to 54 degrees)
-    // Excellent: 800-850 (54 to 90 degrees)
-
-    const clampedScore = Math.max(300, Math.min(850, score));
-    const angle = ((clampedScore - 300) / 550) * 180 - 90;
-    return angle;
-  };
-
-  const getScoreCategoryNew = (score: number | null) => {
-    if (score === null) return { label: 'NO RECORD', color: '#6b7280' };
-    if (score >= 800) return { label: 'EXCELLENT', color: '#dc2626' };
-    if (score >= 740) return { label: 'VERY GOOD', color: '#f97316' };
-    if (score >= 670) return { label: 'GOOD', color: '#eab308' };
-    if (score >= 580) return { label: 'FAIR', color: '#16a34a' };
-    return { label: 'POOR', color: '#166534' };
-  };
-
-  // New functions for the image-based meter design
-  const getNeedleAngleImage = (score: number | null): number => {
-    if (score === null) return 0; // Center position for no credit record
-    // Map score from 300-850 to angle -90 to 90 degrees
+  const getSemiCircleProgress = (score: number | null): number => {
+    if (score === null) return 0;
     const minScore = 300;
     const maxScore = 850;
-    const minAngle = -90;
-    const maxAngle = 90;
-
     const normalizedScore = Math.max(minScore, Math.min(maxScore, score));
-    const angle = ((normalizedScore - minScore) / (maxScore - minScore)) * (maxAngle - minAngle) + minAngle;
-
-    return angle;
+    const percentage = ((normalizedScore - minScore) / (maxScore - minScore)) * 100;
+    const arcLength = 157.08;
+    return (percentage / 100) * arcLength;
   };
 
   const getScoreRange = (score: number | null): string => {
     if (score === null) return 'No Record';
     if (score >= 750) return '750 - 850';
-    if (score >= 700) return '700 - 750';
-    if (score >= 650) return '650 - 700';
-    if (score >= 560) return '560 - 650';
-    return '300 - 560';
+    if (score >= 700) return '700 - 749';
+    if (score >= 650) return '650 - 699';
+    if (score >= 560) return '560 - 649';
+    return '300 - 559';
   };
 
   const getScoreCategoryImage = (score: number | null): string => {
@@ -821,74 +681,6 @@ export default function CreditScoreChecker() {
     if (score >= 650) return 'Fair';
     if (score >= 560) return 'Bad';
     return 'Very Bad';
-  };
-
-  const getProgressCircumference = (score: number | null): number => {
-    if (score === null) return 0; // No progress for no credit record
-    // Calculate progress percentage (300-850 range)
-    const minScore = 300;
-    const maxScore = 850;
-    const normalizedScore = Math.max(minScore, Math.min(maxScore, score));
-    const percentage = ((normalizedScore - minScore) / (maxScore - minScore)) * 100;
-
-    // Calculate circumference (full circle = 339.292)
-    const circumference = 339.292;
-    return (percentage / 100) * circumference;
-  };
-
-  // Semi-circle progress functions
-  const getSemiCircleProgress = (score: number | null): number => {
-    if (score === null) return 0; // No progress for no credit record
-    // Calculate progress percentage (300-850 range)
-    const minScore = 300;
-    const maxScore = 850;
-    const normalizedScore = Math.max(minScore, Math.min(maxScore, score));
-    const percentage = ((normalizedScore - minScore) / (maxScore - minScore)) * 100;
-
-    // Calculate semi-circle arc length (π * radius = 157.08)
-    const arcLength = 157.08;
-    return (percentage / 100) * arcLength;
-  };
-
-  const getMarkerX = (score: number | null): number => {
-    if (score === null) return 60; // Center position for no credit record
-    // Calculate marker position on semi-circle (300-850 range)
-    const minScore = 300;
-    const maxScore = 850;
-    const normalizedScore = Math.max(minScore, Math.min(maxScore, score));
-    const percentage = ((normalizedScore - minScore) / (maxScore - minScore)) * 100;
-
-    // Map percentage to x coordinate (10 to 110)
-    const x = 10 + (percentage / 100) * 100;
-    return x;
-  };
-
-  const getMarkerY = (score: number | null): number => {
-    if (score === null) return 70; // Bottom center position for no credit record
-    // Calculate marker position on semi-circle (300-850 range)
-    const minScore = 300;
-    const maxScore = 850;
-    const normalizedScore = Math.max(minScore, Math.min(maxScore, score));
-    const percentage = ((normalizedScore - minScore) / (maxScore - minScore)) * 100;
-
-    // Map percentage to y coordinate on semi-circle
-    // Use cosine function to get y position on arc
-    const angle = (percentage / 100) * Math.PI;
-    const y = 70 - 50 * Math.cos(angle);
-    return y;
-  };
-
-  const formatDateFromYYYYMMDD = (dateString: string | number) => {
-    if (!dateString) return 'N/A';
-
-    const date = dateString.toString();
-    if (date.length === 8) {
-      const year = date.substring(0, 4);
-      const month = date.substring(4, 6);
-      const day = date.substring(6, 8);
-      return `${day}/${month}/${year}`;
-    }
-    return 'N/A';
   };
 
   const getScoreDescription = (score: number | null) => {
@@ -901,11 +693,94 @@ export default function CreditScoreChecker() {
     } else if (score >= 700) {
       return 'You have a good credit score. You may qualify for most credit products, but may not get the best interest rates. Keep paying your bills on time and maintain low credit utilization to improve your score further.';
     } else if (score >= 650) {
-      return 'You are not far from a strong credit score. For the best offers, you should work on improving your score. Do not miss any payments of your credit card bills or loans.';
+      return 'You have a fair credit score. For the best offers, you should work on improving your score. Do not miss any payments of your credit card bills or loans.';
     } else {
       return 'Your credit score needs improvement. You may have difficulty getting approved for credit products. Focus on paying bills on time and reducing outstanding debt to improve your score.';
     }
   };
+
+  // --- REFACTOR: Robust Data Extraction Functions (FIXED PATHS) ---
+
+  const extractPersonalDetails = useMemo(() => {
+    if (!creditScoreData || !creditScoreData.report || !creditScoreData.report.INProfileResponse) return {};
+    const report = creditScoreData.report.INProfileResponse;
+
+    // Prioritize CAIS (reported by lender) data, fall back to Current Application (user provided)
+    const caisDetails = safeGet(report, 'CAIS_Account.CAIS_Account_DETAILS', []);
+    const firstCaisAccount = Array.isArray(caisDetails) ? caisDetails[0] : caisDetails;
+
+    // Corrected paths for the new structure: CAIS_Holder_Details is an array with one object
+    const holderDetails = safeGet(firstCaisAccount, 'CAIS_Holder_Details.0', safeGet(report, 'Current_Application.Current_Application_Details.Current_Applicant_Details', 'N/A'));
+    const holderAddress = safeGet(firstCaisAccount, 'CAIS_Holder_Address_Details.0', safeGet(report, 'Current_Application.Current_Application_Details.Current_Applicant_Address_Details.0', 'N/A'));
+    const holderPhone = safeGet(firstCaisAccount, 'CAIS_Holder_Phone_Details.0', safeGet(report, 'Current_Application.Current_Application_Details.Current_Applicant_Details', 'N/A'));
+
+    const firstName = safeGet(holderDetails, 'First_Name_Non_Normalized', safeGet(holderDetails, 'First_Name', userDetails.name));
+    const middleName = safeGet(holderDetails, 'Middle_Name_1_Non_Normalized', safeGet(holderDetails, 'Middle_Name1', ''));
+    const lastName = safeGet(holderDetails, 'Surname_Non_Normalized', safeGet(holderDetails, 'Last_Name', ''));
+
+    // Fallback logic for name construction
+    const fullNameParts = [
+      safeGet(holderDetails, 'First_Name_Non_Normalized', '').toUpperCase(),
+      safeGet(holderDetails, 'Middle_Name_1_Non_Normalized', '').toUpperCase(),
+      safeGet(holderDetails, 'Middle_Name_2_Non_Normalized', '').toUpperCase(),
+      safeGet(holderDetails, 'Surname_Non_Normalized', '').toUpperCase()
+    ].filter(Boolean).join(' ').trim();
+
+    const appName = safeGet(report, 'Current_Application.Current_Application_Details.Current_Applicant_Details.First_Name', userDetails.name);
+    const finalFullName = fullNameParts || appName || userDetails.name;
+
+
+    const pan = safeGet(holderDetails, 'Income_TAX_PAN', safeGet(holderDetails, 'IncomeTaxPan', userDetails.pan));
+    const dob = formatDateFromYYYYMMDD(safeGet(holderDetails, 'Date_of_birth', safeGet(holderDetails, 'Date_Of_Birth_Applicant', '')));
+    const mobile = safeGet(holderPhone, 'Mobile_Telephone_Number', safeGet(holderPhone, 'MobilePhoneNumber', mobileNumber));
+    const email = safeGet(holderPhone, 'EMailId', userDetails.email);
+
+    const addressLine1 = safeGet(holderAddress, 'First_Line_Of_Address_non_normalized', safeGet(holderAddress, 'FlatNoPlotNoHouseNo', ''));
+    const addressLine2 = safeGet(holderAddress, 'Second_Line_Of_Address_non_normalized', safeGet(holderAddress, 'BldgNoSocietyName', ''));
+    const addressLine3 = safeGet(holderAddress, 'Third_Line_Of_Address_non_normalized', safeGet(holderAddress, 'RoadNoNameAreaLocality', ''));
+    const city = safeGet(holderAddress, 'City_non_normalized', safeGet(holderAddress, 'City', ''));
+    const stateCode = safeGet(holderAddress, 'State_non_normalized', safeGet(holderAddress, 'State', ''));
+    const pin = safeGet(holderAddress, 'ZIP_Postal_Code_non_normalized', safeGet(holderAddress, 'PINCode', ''));
+
+    // Try to get income/employment from either the application details or the first CAIS account
+    const rawReportedIncome = safeGet(firstCaisAccount, 'Income', safeGet(report, 'Current_Application.Current_Application_Details.Current_Other_Details.Income', '0'));
+    const reportedIncome = formatIndianNumber(rawReportedIncome); // Apply Indian formatting here
+    const employmentStatus = getEmploymentStatus(safeGet(report, 'Current_Application.Current_Application_Details.Current_Other_Details.Employment_Status', 'N/A'));
+
+
+    return { fullName: finalFullName, pan, dob, mobile, email, addressLine1, addressLine2, addressLine3, city, stateCode, pin, reportedIncome, employmentStatus };
+  }, [creditScoreData, userDetails, mobileNumber]);
+
+
+  const extractEnquiryDetails = useMemo(() => {
+    if (!creditScoreData || !creditScoreData.report || !creditScoreData.report.INProfileResponse) return [];
+    const enquiryDetails = safeGet(creditScoreData.report.INProfileResponse, 'CAPS.CAPS_Application_Details', null);
+
+    // FIX: Handle the case where CAPS_Application_Details is a single object or an array
+    if (Array.isArray(enquiryDetails)) {
+      return enquiryDetails;
+    } else if (enquiryDetails && typeof enquiryDetails === 'object' && enquiryDetails.Date_of_Request) {
+      return [enquiryDetails];
+    }
+    return [];
+  }, [creditScoreData]);
+
+
+  const extractAccountDetails = useMemo(() => {
+    if (!creditScoreData || !creditScoreData.report || !creditScoreData.report.INProfileResponse) return [];
+    const accountDetails = safeGet(creditScoreData.report.INProfileResponse, 'CAIS_Account.CAIS_Account_DETAILS', null);
+
+    // FIX: Ensure accountDetails is an array, handling null/undefined/single object case
+    if (Array.isArray(accountDetails)) {
+      return accountDetails;
+    } else if (accountDetails && typeof accountDetails === 'object' && accountDetails.Account_Number) {
+      return [accountDetails];
+    }
+    return [];
+  }, [creditScoreData]);
+
+
+  // --- JSX TEMPLATE ---
 
   return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-16">
@@ -913,166 +788,6 @@ export default function CreditScoreChecker() {
           <title>Free Credit Score Checker – Check CIBIL Score Online</title>
           <meta name="description" content="Check your credit score online for free! Instantly get your CIBIL report and track your financial health with our secure credit score checker tool." />
           <meta name="keywords" content="Credit score, credit score checker, check credit score free, how to check credit score, free credit score check, credit score check online, credit score tool, credit score check, best credit score checker, credit score report free, Cibil Score Checker, Cibil report checker, Top Cibil score checker tool, Cibil report generator, cibil score, cibil check" />
-          <meta name="author" content="Samridhya" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <meta name="robots" content="index, follow" />
-          <meta name="google-site-verification" content="your-google-site-verification-code" />
-          <meta name="bing-site-verification" content="your-bing-site-verification-code" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:site" content="@samridhya" />
-          <meta name="twitter:title" content="Free Credit Score Checker – Instant CIBIL Report | Samridhya" />
-          <meta name="twitter:description" content="Check your credit score online for free. Get an instant, secure, and accurate CIBIL report anytime." />
-          <meta name="twitter:image" content="https://www.samridhya.com/images/credit-score-checker.jpg" />
-          <meta name="og:title" content="Free Credit Score Checker – Instant CIBIL Report" />
-          <meta name="og:description" content="Get your credit score online for free. Get an instant, secure, and accurate CIBIL report anytime." />
-          <meta name="og:image" content="https://www.samridhya.com/images/credit-score-checker.jpg" />
-          <meta name="og:url" content="https://samridhya.com/calculators/credit-score-checker/" />
-          <meta name="og:site_name" content="Samridhya" />
-          <link rel="canonical" href="https://samridhya.com/calculators/credit-score-checker/" />
-
-          {/* Performance Optimization Meta Tags */}
-          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <link rel="dns-prefetch" href="//buyer.prod.samridh.ai" />
-
-          {/* Structured Data for SEO */}
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "WebApplication",
-                "name": "Samridhya Credit Score Checker",
-                "description": "Free credit score checker tool to check your credit score instantly. Get your credit report in minutes with no credit card required.",
-                "url": "https://samridhya.com/calculators/credit-score-checker/",
-                "applicationCategory": "FinanceApplication",
-                "operatingSystem": "Web Browser",
-                "offers": {
-                  "@type": "Offer",
-                  "price": "0",
-                  "priceCurrency": "INR",
-                  "description": "Free credit score checking service"
-                },
-                "featureList": [
-                  "Instant credit score check",
-                  "Free credit report",
-                  "No credit card required",
-                  "Secure and reliable",
-                  "Detailed credit analysis"
-                ],
-                "provider": {
-                  "@type": "Organization",
-                  "name": "Samridhya",
-                  "url": "https://samridhya.com/"
-                }
-              })
-            }}
-          />
-
-          {/* Critical CSS for above-the-fold content */}
-          <style dangerouslySetInnerHTML={{
-            __html: `
-              /* Prevent flash of unstyled content */
-              body { 
-                background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #eff6ff 100%);
-                margin: 0;
-                padding: 0;
-              }
-              .hero-section { 
-                background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #eff6ff 100%);
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 2rem 1rem;
-              }
-              .hero-content { 
-                max-width: 1280px;
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-              }
-              .hero-title { 
-                font-size: clamp(1.5rem, 4vw, 3rem);
-                font-weight: 700;
-                color: #1f2937;
-                margin-bottom: 1rem;
-                line-height: 1.1;
-              }
-              .hero-description { 
-                font-size: clamp(0.875rem, 2vw, 1.125rem);
-                color: #6b7280;
-                margin-bottom: 2rem;
-                max-width: 600px;
-              }
-              /* Image loading optimization */
-              img { 
-                transition: opacity 0.3s ease-in-out;
-              }
-              /* Prevent layout shifts */
-              .credit-card {
-                min-height: 200px;
-              }
-              .step-card {
-                min-height: 300px;
-              }
-              /* Skeleton animation */
-              @keyframes pulse {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0.5; }
-              }
-              .animate-pulse {
-                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-              }
-              /* Fade in animation */
-              @keyframes fadeInUp {
-                from {
-                  opacity: 0;
-                  transform: translateY(20px);
-                }
-                to {
-                  opacity: 1;
-                  transform: translateY(0);
-                }
-              }
-              .animate-fade-in-up {
-                animation: fadeInUp 0.6s ease-out;
-              }
-              /* Prevent CLS */
-              .form-container {
-                min-height: 400px;
-              }
-              /* Prevent FOUC - Critical styles for SEO */
-              html {
-                visibility: visible !important;
-                opacity: 1 !important;
-              }
-              body {
-                visibility: visible !important;
-                opacity: 1 !important;
-              }
-              /* Ensure all content is immediately visible for SEO */
-              .hero-section,
-              .credit-card,
-              .step-card,
-              .form-container {
-                visibility: visible !important;
-                opacity: 1 !important;
-              }
-              /* Prevent layout shifts without hiding content */
-              .animate-fade-in-up {
-                animation: none !important;
-                opacity: 1 !important;
-                transform: none !important;
-              }
-              /* Ensure text content is immediately visible */
-              h1, h2, h3, h4, h5, h6, p, span, div {
-                visibility: visible !important;
-                opacity: 1 !important;
-              }
-            `
-          }} />
         </Head>
         <Navbar />
 
@@ -1112,262 +827,192 @@ export default function CreditScoreChecker() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="transition-all duration-300">
               {/* Step 1: Mobile Number Input */}
-              {currentStep === 1 && (
+              {(currentStep === 1 || (currentStep === 4 && isCheckingExisting)) && (
                   <div
                       key="step1"
                       className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl animate-fade-in-up step-card form-container"
                   >
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <Phone className="w-6 h-6 text-blue-600" />
-                      </div>
-                      <div>
-                        <h2 className="text-xl font-semibold text-gray-900">Enter Your Details</h2>
-                        <p className="text-gray-600">Start by entering your mobile number</p>
-                      </div>
-                    </div>
-
-                    <div className="space-y-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Mobile Number
-                        </label>
-                        <input
-                            type="tel"
-                            value={mobileNumber}
-                            onChange={(e) => setMobileNumber(e.target.value)}
-                            placeholder="Enter your 10-digit mobile number"
-                            maxLength={10}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500"
-                        />
-                      </div>
-
-                      {/*<div className="flex items-start space-x-3">*/}
-                      {/*  <input*/}
-                      {/*      type="checkbox"*/}
-                      {/*      id="terms"*/}
-                      {/*      checked*/}
-                      {/*      className="mt-1 shrink-0"*/}
-                      {/*  />*/}
-
-                      {/*  <label htmlFor="terms" className="text-sm text-gray-700 leading-relaxed">*/}
-                      {/*    I hereby consent to Decimus Financial Limited being appointed as authorised representative to*/}
-                      {/*    receive my Credit Information from Experian for the purpose of offering loan offers.<br/>*/}
-                      {/*    Please refer to the Experian*/}
-                      {/*    <a href="#" className="text-blue-600 hover:underline font-medium"> Terms & Conditions</a>.*/}
-                      {/*  </label>*/}
-                      {/*</div>*/}
-
-                      <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
-                        <div className="flex items-center gap-2">
-                          <Shield className="w-5 h-5 text-blue-600"/>
-                          <span className="text-sm text-blue-800">
-                        Your Personal Information is 100% secured with us. We do not share your data with any third party.
-                      </span>
+                    {isCheckingExisting ? (
+                        <div className="flex flex-col items-center space-y-6">
+                          <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                          <h3 className="text-xl font-semibold text-gray-900">Checking your details...</h3>
+                          <p className="text-gray-600">Verifying your existing information</p>
                         </div>
-                      </div>
-                      <div className="flex items-start space-x-3">
-                        {/* Checkbox */}
-                        <input
-                            type="checkbox"
-                            id="terms"
-                            checked={isChecked}
-                            onChange={(e) => setIsChecked(e.target.checked)}
-                            className="mt-1 shrink-0 cursor-pointer accent-blue-600"
-                        />
-
-                        {/* Label + Modal trigger */}
-                        <label htmlFor="terms" className="text-sm text-gray-700 leading-relaxed">
-                          I hereby consent to Samridhya Innovations Private Limited being appointed as authorised representative to
-                          receive my Credit Information from Experian for the purpose of offering loan offers. <br />
-                          Please refer to the Experian{" "}
-                          <button
-                              type="button"
-                              onClick={() => setShowModal(true)}
-                              className="text-blue-600 hover:underline font-medium focus:outline-none"
-                          >
-                            Terms & Conditions
-                          </button>
-                          .
-                        </label>
-
-                        {/* Modal */}
-                        {showModal && (
-                            // Backdrop: Subtle dark overlay for focus
-                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
-                              {/* Modal Container: Clean, large radius, subtle shadow */}
-                              <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden
-                    border border-gray-100 transform transition-all duration-300 ease-out">
-
-                                {/* Header: Consistent padding and alignment */}
-                                <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
-                                  <div className="flex items-center space-x-3">
-                                    {/* Icon: Themed color for a document/legal icon */}
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="lucide lucide-file-text w-5 h-5 text-blue-600"
-                                    >
-                                      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"></path>
-                                      <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
-                                      <path d="M10 9H8"></path>
-                                      <path d="M16 13H8"></path>
-                                      <path d="M16 17H8"></path>
-                                    </svg>
-                                    <h2 className="text-xl font-semibold text-gray-900">
-                                      Experian Terms & Conditions
-                                    </h2>
-                                  </div>
-                                  <button
-                                      onClick={() => setShowModal(false)}
-                                      className="p-1 rounded-full text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition duration-150"
-                                      aria-label="Close modal"
-                                  >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                                  </button>
-                                </div>
-
-                                {/* Body: Scrolling content area with enhanced legal clauses */}
-                                <div className="px-6 py-5 max-h-[60vh] overflow-y-auto
-                        text-base text-gray-700 space-y-4 leading-relaxed">
-
-                                  {/* Metadata Section */}
-                                  <p className="text-sm text-gray-500 font-medium pb-2 border-b border-gray-50/50">
-                                    <span className="font-semibold text-gray-800">Last updated on:</span> 15/08/2025
-                                  </p>
-
-                                  <p>
-                                    This End User Agreement (the "Agreement") is made between you (the "User" or "You")
-                                    and <span className="font-semibold text-gray-900">Samridhya Innovations Private Limited</span>, a private limited company having its registered office at
-                                    #1207 /343 & 1207 /1/343/1, 9th MAIN, 7th SECTOR, HSR LAYOUT, BANGALORE, KARNATAKA - 560102 (<span className="font-semibold text-gray-800">"CLIENT"</span>,
-                                    "Us" or "We", which term shall include its successors and permitted assigns). The User
-                                    and CLIENT shall be collectively referred to as the "Parties" and individually as a
-                                    "Party".
-                                  </p>
-
-                                  {/* Key Consent Section: Professional call-out box */}
-                                  <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-md">
-                                    <p className="font-medium text-sm text-gray-900">
-                <span className="font-bold text-blue-600 uppercase">BY EXECUTING THIS AGREEMENT / CONSENT FORM, YOU ARE EXPRESSLY AGREEING TO ACCESS THE
-                EXPERIAN CREDIT INFORMATION REPORT AND CREDIT SCORE,</span> AGGREGATE SCORES, INFERENCES,
-                                      REFERENCES AND DETAILS (AS DEFINED BELOW) (TOGETHER REFERRED AS "CREDIT INFORMATION").
-                                      YOU HEREBY ALSO CONSENT TO SUCH CREDIT INFORMATION BEING PROVIDED BY EXPERIAN TO YOU
-                                      AND CLIENT by using Experian tools, algorithms and devices and you hereby agree,
-                                      acknowledge and accept the terms and conditions set forth herein.
-                                    </p>
-                                  </div>
-
-                                  <h3 className="text-lg font-bold text-gray-900 pt-3">
-                                    Information Collection, Use, and Confidentiality
-                                  </h3>
-                                  <ul className="list-disc ml-6 text-sm text-gray-700 space-y-2">
-                                    <li>
-                                      <span className="font-semibold">End Use Purpose:</span> CLIENT shall access your Credit Information as your authorized representative and shall use it solely for the limited purpose of <span className="font-semibold">Credit Assessment and evaluation of loan eligibility</span> in relation to the services proposed to be availed by you from CLIENT.
-                                    </li>
-                                    <li>
-                                      <span className="font-semibold">Confidentiality & No-Disclosure:</span> CLIENT shall not aggregate, retain, store, copy, reproduce, republish, upload, post, transmit, sell or rent the Credit Information to any other person or use it for any purpose other than the defined End Use Purpose.
-                                    </li>
-                                    <li>
-                                      <span className="font-semibold">Data Purging:</span> The Credit Information shared by you, or received on your behalf, shall be destroyed, purged, or erased promptly upon the completion of the transaction/End Use Purpose, this period not being longer than 6 months.
-                                    </li>
-                                  </ul>
-
-                                  <h3 className="text-lg font-bold text-gray-900 pt-3">
-                                    Key Definitions
-                                  </h3>
-                                  <p className="text-sm text-gray-600">
-                                    Capitalized terms used herein but not defined above shall have the following meanings:
-                                  </p>
-
-                                  <ul className="list-disc ml-6 space-y-2 text-sm">
-                                    <li>
-                                      <span className="font-semibold text-gray-900">Business Day</span> means a day (other than a public holiday) on which
-                                      banks are open for general business in Karnataka.
-                                    </li>
-                                    <li>
-                                      <span className="font-semibold text-gray-900">Credit Information Report</span> means the credit information/ scores/
-                                      aggregates/ variable/ inference or reports which shall be generated by Experian.
-                                    </li>
-                                    <li>
-                                      <span className="font-semibold text-gray-900">CICRA</span> shall mean the Credit Information Companies (Regulation)
-                                      Act, 2005 read with the Credit Information Companies Rules, 2006 and the Credit
-                                      Information Companies Regulations, 2006, and shall include any other rules and
-                                      regulations prescribed thereunder.
-                                    </li>
-                                  </ul>
-
-                                  <h3 className="text-lg font-bold text-gray-900 pt-3">
-                                    Governing Law and Jurisdiction
-                                  </h3>
-                                  <p className="text-sm text-gray-700">
-                                    The relationship between you and CLIENT shall be governed by the laws of <span className="font-semibold">India</span>, and all claims or disputes arising therefrom shall be subject to the exclusive jurisdiction of the courts in <span className="font-semibold">Karnataka</span>.
-                                  </p>
-
-                                  {/* Call-to-action message: Boxed for separation */}
-                                  <p className="mt-4 text-center p-3 text-sm text-gray-600 bg-gray-50 rounded-lg border border-gray-100">
-                                    Please read the above mentioned terms & conditions and check the box shown in the
-                                    previous screen to complete the authorization process/ for sharing of your Credit
-                                    Information by Experian with <span className="font-semibold text-gray-800">Samridhya Innovations Private Limited</span> in its capacity as your authorized
-                                    representative.
-                                  </p>
-
-                                  {/* Legal declaration: Right aligned for footer-like structure */}
-                                  <p className="text-xs text-gray-500 italic text-right mt-2">
-                                    <span className="font-medium">Electronic Record Declaration:</span> This document is an electronic record in terms of the Information Technology Act, 2000.
-                                  </p>
-                                </div>
-
-                                {/* Footer: Themed Action Buttons */}
-                                <div className="px-6 py-4 border-t border-gray-100 flex justify-end space-x-3 bg-gray-50 rounded-b-xl">
-                                  <button
-                                      onClick={() => setShowModal(false)}
-                                      className="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-600
-                         hover:bg-gray-100 transition duration-150 font-medium"
-                                  >
-                                    Close
-                                  </button>
-                                  <button
-                                      onClick={() => {
-                                        setIsChecked(true);
-                                        setShowModal(false);
-                                      }}
-                                      className="px-5 py-2.5 rounded-lg
-                         bg-blue-600 text-white font-semibold
-                         hover:bg-blue-700 shadow-md shadow-blue-500/30
-                         transition duration-200"
-                                  >
-                                    Accept & Continue
-                                  </button>
-                                </div>
-                              </div>
+                    ) : (
+                        <>
+                          <div className="flex items-center gap-3 mb-6">
+                            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                              <Phone className="w-6 h-6 text-blue-600" />
                             </div>
-                        )}
-                      </div>
-
-                      {error && (
-                          <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded">
-                            <div className="flex items-center gap-2">
-                              <AlertCircle className="w-5 h-5 text-red-600"/>
-                              <span className="text-sm text-red-800">{error}</span>
+                            <div>
+                              <h2 className="text-xl font-semibold text-gray-900">Enter Your Details</h2>
+                              <p className="text-gray-600">Start by entering your mobile number</p>
                             </div>
                           </div>
-                      )}
 
-                      <button
-                          onClick={generateOtp}
-                          disabled={isLoading || !(isChecked)}
-                          className=" cursor-pointer w-full bg-gradient-to-r from-[#276ef4] to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-600 hover:to-[#276ef4] transition-all duration-200 disabled:opacity-50"
-                      >
-                        {isLoading ? 'Sending OTP...' : 'Get Free Credit Report'}
-                      </button>
-                    </div>
+                          <div className="space-y-6">
+                            <div>
+                              <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-2">
+                                Mobile Number
+                              </label>
+                              <input
+                                  id="mobile"
+                                  type="tel"
+                                  value={mobileNumber}
+                                  onChange={(e) => setMobileNumber(e.target.value)}
+                                  placeholder="Enter your 10-digit mobile number"
+                                  maxLength={10}
+                                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500"
+                                  inputMode="numeric"
+                                  pattern="[0-9]{10}"
+                              />
+                            </div>
+
+                            <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
+                              <div className="flex items-center gap-2">
+                                <Shield className="w-5 h-5 text-blue-600"/>
+                                <span className="text-sm text-blue-800">
+                                            <p>For any dispute related concerns reach out to experian <a className={"font-bold underline"} href={"https://www.experian.com/disputes/main.html"} target={"_blank"}>Customer Dispute Portal</a></p>
+                                        </span>
+                              </div>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                              {/* Checkbox */}
+                              <input
+                                  type="checkbox"
+                                  id="terms"
+                                  checked={isChecked}
+                                  onChange={(e) => setIsChecked(e.target.checked)}
+                                  className="mt-1 shrink-0 cursor-pointer accent-blue-600"
+                              />
+
+                              {/* Label + Modal trigger */}
+                              <label htmlFor="terms" className="text-sm text-gray-700 leading-tight">
+                                I hereby consent to Samridhya Innovations Private Limited being appointed as authorised representative to
+                                receive my Credit Information from Experian for the purpose of offering loan offers. <br />
+                                Please refer to the Experian{" "}
+                                <button
+                                    type="button"
+                                    onClick={() => setShowModal(true)}
+                                    className="text-blue-600 hover:underline font-medium focus:outline-none"
+                                >
+                                  Terms & Conditions
+                                </button>
+                              </label>
+
+
+                              {/* Modal */}
+                              {showModal && (
+                                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
+                                    <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden border border-gray-100 transform transition-all duration-300 ease-out">
+                                      <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+                                        <div className="flex items-center space-x-3">
+                                          <FileText className="w-5 h-5 text-blue-600" />
+                                          <h2 className="text-xl font-semibold text-gray-900">
+                                            Experian Terms & Conditions
+                                          </h2>
+                                        </div>
+                                        <button
+                                            onClick={() => setShowModal(false)}
+                                            className="p-1 rounded-full text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition duration-150"
+                                            aria-label="Close modal"
+                                        >
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                                        </button>
+                                      </div>
+                                      <div className="px-6 py-5 max-h-[60vh] overflow-y-auto text-base text-gray-700 space-y-4 leading-relaxed">
+                                        <p className="text-sm text-gray-500 font-medium pb-2 border-b border-gray-50/50">
+                                          <span className="font-semibold text-gray-800">Last updated on:</span> 15/08/2025
+                                        </p>
+                                        <p>
+                                          This End User Agreement (the "Agreement") is made between you (the "User" or "You")
+                                          and <span className="font-semibold text-gray-900">Samridhya Innovations Private Limited</span>, a private limited company having its registered office at
+                                          #1207 /343 & 1207 /1/343/1, 9th MAIN, 7th SECTOR, HSR LAYOUT, BANGALORE, KARNATAKA - 560102 (<span className="font-semibold text-gray-800">"CLIENT"</span>,
+                                          "Us" or "We", which term shall include its successors and permitted assigns). The User
+                                          and CLIENT shall be collectively referred to as the "Parties" and individually as a "Party".
+                                        </p>
+                                        <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-md">
+                                          <p className="font-medium text-sm text-gray-900">
+                                                            <span className="font-bold text-blue-600 uppercase">BY EXECUTING THIS AGREEMENT / CONSENT FORM, YOU ARE EXPRESSLY AGREEING TO ACCESS THE
+                                                            EXPERIAN CREDIT INFORMATION REPORT AND CREDIT SCORE,</span> AGGREGATE SCORES, INFERENCES,
+                                            REFERENCES AND DETAILS (AS DEFINED BELOW) (TOGETHER REFERRED AS "CREDIT INFORMATION").
+                                            YOU HEREBY ALSO CONSENT TO SUCH CREDIT INFORMATION BEING PROVIDED BY EXPERIAN TO YOU
+                                            AND CLIENT by using Experian tools, algorithms and devices and you hereby agree,
+                                            acknowledge and accept the terms and conditions set forth herein.
+                                          </p>
+                                        </div>
+                                        <h3 className="text-lg font-bold text-gray-900 pt-3">
+                                          Information Collection, Use, and Confidentiality
+                                        </h3>
+                                        <ul className="list-disc ml-6 text-sm text-gray-700 space-y-2">
+                                          <li><span className="font-semibold">End Use Purpose:</span> CLIENT shall access your Credit Information as your authorized representative and shall use it solely for the limited purpose of <span className="font-semibold">Credit Assessment and evaluation of loan eligibility</span> in relation to the services proposed to be availed by you from CLIENT.</li>
+                                          <li><span className="font-semibold">Confidentiality & No-Disclosure:</span> CLIENT shall not aggregate, retain, store, copy, reproduce, republish, upload, post, transmit, sell or rent the Credit Information to any other person or use it for any purpose other than the defined End Use Purpose.</li>
+                                          <li><span className="font-semibold">Data Purging:</span> The Credit Information shared by you, or received on your behalf, shall be destroyed, purged, or erased promptly upon the completion of the transaction/End Use Purpose, this period not being longer than 6 months.</li>
+                                        </ul>
+                                        <h3 className="text-lg font-bold text-gray-900 pt-3">Key Definitions</h3>
+                                        <p className="text-sm text-gray-600">Capitalized terms used herein but not defined above shall have the following meanings:</p>
+                                        <ul className="list-disc ml-6 space-y-2 text-sm">
+                                          <li><span className="font-semibold text-gray-900">Business Day</span> means a day (other than a public holiday) on which banks are open for general business in Karnataka.</li>
+                                          <li><span className="font-semibold text-gray-900">Credit Information Report</span> means the credit information/ scores/ aggregates/ variable/ inference or reports which shall be generated by Experian.</li>
+                                          <li><span className="font-semibold text-gray-900">CICRA</span> shall mean the Credit Information Companies (Regulation) Act, 2005 read with the Credit Information Companies Rules, 2006 and the Credit Information Companies Regulations, 2006, and shall include any other rules and regulations prescribed thereunder.</li>
+                                        </ul>
+                                        <h3 className="text-lg font-bold text-gray-900 pt-3">Governing Law and Jurisdiction</h3>
+                                        <p className="text-sm text-gray-700">The relationship between you and CLIENT shall be governed by the laws of <span className="font-semibold">India</span>, and all claims or disputes arising therefrom shall be subject to the exclusive jurisdiction of the courts in <span className="font-semibold">Karnataka</span>.</p>
+                                        <p className="mt-4 text-center p-3 text-sm text-gray-600 bg-gray-50 rounded-lg border border-gray-100">
+                                          Please read the above mentioned terms & conditions and check the box shown in the
+                                          previous screen to complete the authorization process/ for sharing of your Credit
+                                          Information by Experian with <span className="font-semibold text-gray-800">Samridhya Innovations Private Limited</span> in its capacity as your authorized representative.
+                                        </p>
+                                        <p className="text-xs text-gray-500 italic text-right mt-2"><span className="font-medium">Electronic Record Declaration:</span> This document is an electronic record in terms of the Information Technology Act, 2000.</p>
+                                      </div>
+                                      <div className="px-6 py-4 border-t border-gray-100 flex justify-end space-x-3 bg-gray-50 rounded-b-xl">
+                                        <button onClick={() => setShowModal(false)} className="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 transition duration-150 font-medium">
+                                          Close
+                                        </button>
+                                        <button
+                                            onClick={() => { setIsChecked(true); setShowModal(false); }}
+                                            className="px-5 py-2.5 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 shadow-md shadow-blue-500/30 transition duration-200"
+                                        >
+                                          Accept & Continue
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                              )}
+                            </div>
+
+                            {error && (
+                                <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded">
+                                  <div className="flex items-center gap-2">
+                                    <AlertCircle className="w-5 h-5 text-red-600"/>
+                                    <span className="text-sm text-red-800">{error}</span>
+                                  </div>
+                                </div>
+                            )}
+
+                            <button
+                                onClick={generateOtp}
+                                disabled={isLoading || !(isChecked)}
+                                className=" cursor-pointer w-full bg-gradient-to-r from-[#276ef4] to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-600 hover:to-[#276ef4] transition-all duration-200 disabled:opacity-50"
+                            >
+                              {isLoading ? 'Sending OTP...' : 'Get Free Credit Report'}
+                            </button>
+                          </div>
+                          {/* Powered by Experian */}
+                          <div className="mt-6 p-4 bg-gray-50 rounded-lg text-center">
+                            <div className="flex items-center justify-center gap-3">
+                              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                </svg>
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                Powered by <span className="font-semibold text-blue-600">Experian</span>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                    )}
                   </div>
               )}
 
@@ -1466,10 +1111,11 @@ export default function CreditScoreChecker() {
 
                     <div className="space-y-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                           Full Name (as per PAN)
                         </label>
                         <input
+                            id="name"
                             type="text"
                             value={userDetails.name}
                             onChange={(e) => setUserDetails(prev => ({ ...prev, name: e.target.value }))}
@@ -1479,10 +1125,11 @@ export default function CreditScoreChecker() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label htmlFor="pan" className="block text-sm font-medium text-gray-700 mb-2">
                           PAN Number
                         </label>
                         <input
+                            id="pan"
                             type="text"
                             value={userDetails.pan}
                             onChange={(e) => setUserDetails(prev => ({ ...prev, pan: e.target.value.toUpperCase() }))}
@@ -1493,10 +1140,11 @@ export default function CreditScoreChecker() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                           Email Address
                         </label>
                         <input
+                            id="email"
                             type="email"
                             value={userDetails.email}
                             onChange={(e) => setUserDetails(prev => ({ ...prev, email: e.target.value }))}
@@ -1555,8 +1203,8 @@ export default function CreditScoreChecker() {
                   </div>
               )}
 
-              {/* Step 4: Loading */}
-              {currentStep === 4 && (
+              {/* Step 4: Loading (Dedicated step for score fetch) */}
+              {currentStep === 4 && !isCheckingExisting && (
                   <div
                       key="step4"
                       className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl text-center animate-fade-in-up step-card form-container"
@@ -1565,17 +1213,17 @@ export default function CreditScoreChecker() {
                       <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
                       <div>
                         <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                          {isCheckingExisting ? 'Checking your details...' : 'Fetching your credit score...'}
+                          Fetching your credit score...
                         </h3>
                         <p className="text-gray-600">
-                          {isCheckingExisting ? 'Verifying your existing information' : 'This may take a few moments'}
+                          This may take a few moments
                         </p>
                       </div>
                     </div>
                   </div>
               )}
 
-                            {/* Step 5: Credit Score Dashboard */}
+              {/* Step 5: Credit Score Dashboard (COMPREHENSIVE) */}
               {currentStep === 5 && creditScoreData && (
                   <>
                     {/* Data Validation Warning */}
@@ -1597,728 +1245,371 @@ export default function CreditScoreChecker() {
                         key="step5"
                         className="space-y-6 animate-fade-in-up"
                     >
-                    {/* Back Button */}
-                    <div className="flex justify-start">
-                      <button
-                          onClick={resetForm}
-                          className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
-                      >
-                        <ArrowLeft className="w-4 h-4" />
-                        Back to Credit Score Checker
-                      </button>
-                    </div>
-
-                    {/* Header */}
-                    <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl credit-card">
-                      <div className="text-left mb-6">
-                        <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                          Hey { creditScoreData?.report?.Current_Application?.Current_Application_Details?.Current_Applicant_Details?.First_Name || userDetails.name || 'User'}!
-                        </h1>
-                        <p className="text-gray-600">
-                          Here's your Credit Score for {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                        </p>
+                      {/* Back Button */}
+                      <div className="flex justify-start">
+                        <button
+                            onClick={resetForm}
+                            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                        >
+                          <ArrowLeft className="w-4 h-4" />
+                          Start New Check
+                        </button>
                       </div>
 
-                      {/* Credit Score Meter */}
-                      <div className="bg-white rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl">
-                        {/* Header */}
-                        {/* <div className="text-left mb-4 sm:mb-6">
-                      <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Hey {userDetails.name || 'User'}!</h2>
-                      <p className="text-sm sm:text-base text-gray-600">Here's your Credit Score for {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</p>
-                    </div> */}
+                      {/* Header & Score Meter */}
+                      <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl credit-card">
+                        <div className="text-left mb-6">
+                          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                            Hey {extractPersonalDetails.fullName || 'User'}!
+                          </h1>
+                          <p className="text-gray-600">
 
-                        <div className="relative">
-                          {/* Semi-Circular Progress Meter */}
-                          <div className="w-72 h-40 sm:w-80 sm:h-48 lg:w-96 lg:h-56 mx-auto relative">
-                            {/* Background Semi-Circle */}
-                            <svg className="w-full h-full" viewBox="0 0 120 70">
-                              {/* Background track */}
-                              <path
-                                  d="M 10 60 A 50 50 0 0 1 110 60"
-                                  fill="none"
-                                  stroke="#f3f4f6"
-                                  strokeWidth="10"
-                              />
+                            Here's your Credit Score for {formatDateFromYYYYMMDD(safeGet(creditScoreData.report.INProfileResponse, 'CreditProfileHeader.ReportDate')).split('/').slice(1).join('/') || new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                          </p>
+                        </div>
 
-                              {/* Progress arc with gradient */}
-                              <path
-                                  d="M 10 60 A 50 50 0 0 1 110 60"
-                                  fill="none"
-                                  stroke="url(#progressGradient)"
-                                  strokeWidth="10"
-                                  strokeLinecap="round"
-                                  strokeDasharray={`${getSemiCircleProgress(creditScoreData.credit_score)} 157.08`}
-                                  style={{
-                                    strokeDashoffset: 0,
-                                    transition: 'stroke-dasharray 1s ease-in-out'
-                                  }}
-                              />
+                        {/* Credit Score Meter */}
+                        <div className="bg-white rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl">
+                          <div className="relative">
+                            {/* Semi-Circular Progress Meter */}
+                            <div className="w-72 h-40 sm:w-80 sm:h-48 lg:w-96 lg:h-56 mx-auto relative">
+                              <svg className="w-full h-full" viewBox="0 0 120 70">
+                                <path d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#f3f4f6" strokeWidth="10"/>
+                                <path
+                                    d="M 10 60 A 50 50 0 0 1 110 60"
+                                    fill="none"
+                                    stroke="url(#progressGradient)"
+                                    strokeWidth="10"
+                                    strokeLinecap="round"
+                                    strokeDasharray={`${getSemiCircleProgress(creditScoreData.credit_score)} 157.08`}
+                                    style={{ strokeDashoffset: 0, transition: 'stroke-dasharray 1s ease-in-out' }}
+                                />
+                                <defs>
+                                  <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor="#ef4444" />
+                                    <stop offset="20%" stopColor="#f97316" />
+                                    <stop offset="40%" stopColor="#eab308" />
+                                    <stop offset="60%" stopColor="#3b82f6" />
+                                    <stop offset="80%" stopColor="#16a34a" />
+                                    <stop offset="100%" stopColor="#059669" />
+                                  </linearGradient>
+                                </defs>
+                              </svg>
 
-                              {/* Gradient definition */}
-                              <defs>
-                                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                  <stop offset="0%" stopColor="#ef4444" />
-                                  <stop offset="20%" stopColor="#f97316" />
-                                  <stop offset="40%" stopColor="#eab308" />
-                                  <stop offset="60%" stopColor="#3b82f6" />
-                                  <stop offset="80%" stopColor="#16a34a" />
-                                  <stop offset="100%" stopColor="#059669" />
-                                </linearGradient>
-                              </defs>
-                            </svg>
-
-                            {/* Score labels */}
-                            <div className="absolute -bottom-6 sm:-bottom-8 left-0 w-full flex justify-between px-2 sm:px-4 text-xs font-bold text-gray-600">
-                              <div className="text-center">300</div>
-                              <div className="text-center">400</div>
-                              <div className="text-center">500</div>
-                              <div className="text-center">600</div>
-                              <div className="text-center">700</div>
-                              <div className="text-center">800</div>
-                              <div className="text-center">850</div>
-                            </div>
-
-                            {/* Center content */}
-                            <div className="absolute inset-0 flex items-center justify-center" style={{ top: '40px' }}>
-                              <div className="text-center">
-                                <div className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-1 sm:mb-2">
-                                  {creditScoreData.credit_score !== null ? creditScoreData.credit_score : 'N/A'}
-                                </div>
-                                <div className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-700 mb-1">
-                                  {getScoreCategoryImage(creditScoreData.credit_score)}
-                                </div>
-                                <div className="text-xs sm:text-sm text-gray-500">
-                                  {getScoreRange(creditScoreData.credit_score)}
-                                </div>
+                              {/* Score labels */}
+                              <div className="absolute -bottom-6 sm:-bottom-8 left-0 w-full flex justify-between px-2 sm:px-4 text-xs font-bold text-gray-600">
+                                <div className="text-center">300</div>
+                                <div className="text-center">400</div>
+                                <div className="text-center">500</div>
+                                <div className="text-center">600</div>
+                                <div className="text-center">700</div>
+                                <div className="text-center">800</div>
+                                <div className="text-center">850</div>
                               </div>
-                            </div>
-                          </div>
 
-                          {/* Score categories legend */}
-                          <div className="grid grid-cols-5 gap-2 sm:gap-4 mt-8 sm:mt-12">
-                            <div className="text-center">
-                              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded-full mx-auto mb-1 sm:mb-2"></div>
-                              <div className="text-xs sm:text-sm font-semibold text-gray-700">Very Bad</div>
-                              <div className="text-xs text-gray-500">300-559</div>
-                            </div>
-                            <div className="text-center">
-                              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-orange-500 rounded-full mx-auto mb-1 sm:mb-2"></div>
-                              <div className="text-xs sm:text-sm font-semibold text-gray-700">Bad</div>
-                              <div className="text-xs text-gray-500">560-649</div>
-                            </div>
-                            <div className="text-center">
-                              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-yellow-500 rounded-full mx-auto mb-1 sm:mb-2"></div>
-                              <div className="text-xs sm:text-sm font-semibold text-gray-700">Fair</div>
-                              <div className="text-xs text-gray-500">650-699</div>
-                            </div>
-                            <div className="text-center">
-                              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full mx-auto mb-1 sm:mb-2"></div>
-                              <div className="text-xs sm:text-sm font-semibold text-gray-700">Good</div>
-                              <div className="text-xs text-gray-500">700-749</div>
-                            </div>
-                            <div className="text-center">
-                              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-600 rounded-full mx-auto mb-1 sm:mb-2"></div>
-                              <div className="text-xs sm:text-sm font-semibold text-gray-700">Excellent</div>
-                              <div className="text-xs text-gray-500">750-850</div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="text-xs sm:text-sm text-gray-500 mt-4 sm:mt-6 text-center">
-                          Report generated on: {creditScoreData.fetched_at ? new Date(creditScoreData.fetched_at._seconds * 1000).toLocaleDateString() : new Date().toLocaleDateString()}
-                        </div>
-
-                        <div className="text-lg sm:text-xl font-bold text-gray-900 uppercase tracking-wider mt-2 text-center">
-                          Credit Score
-                        </div>
-                      </div>
-
-                      {/* Powered by Experian */}
-                      <div className="mt-6 p-4 bg-gray-50 rounded-lg text-center">
-                        <div className="flex items-center justify-center gap-3">
-                          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                            </svg>
-                          </div>
-                          <div className="text-sm text-gray-600">
-                            Powered by <span className="font-semibold text-blue-600">Experian</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Score Description */}
-                      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                        <p className="text-gray-700">
-                          {getScoreDescription(creditScoreData.credit_score)}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Personal Information */}
-                    {creditScoreData.report?.Current_Application?.Current_Application_Details?.Current_Applicant_Details && creditScoreData.credit_score !== null && (
-                        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
-                          <h3 className="text-xl font-semibold text-gray-900 mb-6">Personal Information</h3>
-
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-400">
-                              <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Basic Details</h4>
-                              <div className="mt-3 space-y-2">
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Full Name:</span>
-                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.First_Name} {creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.Last_Name}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">PAN:</span>
-                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.IncomeTaxPan}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Date of Birth:</span>
-                                  <span className="font-semibold text-sm text-gray-900">
-                                   {formatDateFromYYYYMMDD(creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.Date_Of_Birth_Applicant)}
-                                 </span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Gender:</span>
-                                  <span className="font-semibold text-sm text-gray-900">
-                               {creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.Gender_Code === '1' ? 'Male' :
-                                   creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.Gender_Code === '2' ? 'Female' : 'Other'}
-                             </span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Mobile:</span>
-                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.Telephone_Number_Applicant_1st}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Email:</span>
-                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Details.EMailId || 'N/A'}</span>
+                              {/* Center content */}
+                              <div className="absolute inset-0 flex items-center justify-center" style={{ top: '40px' }}>
+                                <div className="text-center">
+                                  <div className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-1 sm:mb-2">
+                                    {creditScoreData.credit_score !== null ? creditScoreData.credit_score : 'N/A'}
+                                  </div>
+                                  <div className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-700 mb-1">
+                                    {getScoreCategoryImage(creditScoreData.credit_score)}
+                                  </div>
+                                  <div className="text-xs sm:text-sm text-gray-500">
+                                    {getScoreRange(creditScoreData.credit_score)}
+                                  </div>
                                 </div>
                               </div>
                             </div>
 
-                            <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400">
-                              <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Address Details</h4>
-                              <div className="mt-3 space-y-2">
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Address:</span>
-                                  <span className="font-semibold text-sm text-gray-900 text-right">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.FlatNoPlotNoHouseNo}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Building/Society:</span>
-                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.BldgNoSocietyName || 'N/A'}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Road/Area:</span>
-                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.RoadNoNameAreaLocality || 'N/A'}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">City:</span>
-                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.City || 'N/A'}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Landmark:</span>
-                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.Landmark || 'N/A'}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">State:</span>
-                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.State || 'N/A'}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">PIN Code:</span>
-                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.PINCode}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Country:</span>
-                                  <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Applicant_Address_Details.Country_Code || 'N/A'}</span>
-                                </div>
-                              </div>
+                            {/* Score categories legend */}
+                            <div className="grid grid-cols-5 gap-2 sm:gap-4 mt-8 sm:mt-12">
+                              <div className="text-center"><div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded-full mx-auto mb-1 sm:mb-2"></div><div className="text-xs sm:text-sm font-semibold text-gray-700">Very Bad</div><div className="text-xs text-gray-500">300-559</div></div>
+                              <div className="text-center"><div className="w-3 h-3 sm:w-4 sm:h-4 bg-orange-500 rounded-full mx-auto mb-1 sm:mb-2"></div><div className="text-xs sm:text-sm font-semibold text-gray-700">Bad</div><div className="text-xs text-gray-500">560-649</div></div>
+                              <div className="text-center"><div className="w-3 h-3 sm:w-4 sm:h-4 bg-yellow-500 rounded-full mx-auto mb-1 sm:mb-2"></div><div className="text-xs sm:text-sm font-semibold text-gray-700">Fair</div><div className="text-xs text-gray-500">650-699</div></div>
+                              <div className="text-center"><div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full mx-auto mb-1 sm:mb-2"></div><div className="text-xs sm:text-sm font-semibold text-gray-700">Good</div><div className="text-xs text-gray-500">700-749</div></div>
+                              <div className="text-center"><div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-600 rounded-full mx-auto mb-1 sm:mb-2"></div><div className="text-xs sm:text-sm font-semibold text-gray-700">Excellent</div><div className="text-xs text-gray-500">750-850</div></div>
                             </div>
                           </div>
 
-                          {/* Additional Information */}
-                          {creditScoreData.report.Current_Application.Current_Application_Details.Current_Other_Details && (
-                              <div className="mt-6">
-                                <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide mb-3">Additional Information</h4>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                  <div className="bg-blue-50 p-3 rounded-lg">
-                                    <div className="flex justify-between">
-                                      <span className="text-sm text-gray-700 font-medium">Income:</span>
-                                      <span className="font-semibold text-sm text-gray-900">₹{creditScoreData.report.Current_Application.Current_Application_Details.Current_Other_Details.Income || '0'}</span>
-                                    </div>
-                                  </div>
-                                  <div className="bg-green-50 p-3 rounded-lg">
-                                    <div className="flex justify-between">
-                                      <span className="text-sm text-gray-700 font-medium">Marital Status:</span>
-                                      <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Other_Details.Marital_Status || 'N/A'}</span>
-                                    </div>
-                                  </div>
-                                  <div className="bg-purple-50 p-3 rounded-lg">
-                                    <div className="flex justify-between">
-                                      <span className="text-sm text-gray-700 font-medium">Employment Status:</span>
-                                      <span className="font-semibold text-sm text-gray-900">{creditScoreData.report.Current_Application.Current_Application_Details.Current_Other_Details.Employment_Status || 'N/A'}</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                          )}
+                          <div className="text-xs sm:text-sm text-gray-500 mt-4 sm:mt-6 text-center">
+                            Report generated on: {formatDateFromYYYYMMDD(safeGet(creditScoreData.report.INProfileResponse, 'CreditProfileHeader.ReportDate'))}
+                          </div>
+
+                          <div className="text-lg sm:text-xl font-bold text-gray-900 uppercase tracking-wider mt-2 text-center">
+                            Credit Score
+                          </div>
                         </div>
-                    )}
 
-                    {/* Account Holder Details */}
-                    {creditScoreData.report?.CAIS_Account?.CAIS_Account_DETAILS?.[0]?.CAIS_Holder_Details && creditScoreData.credit_score !== null && (
-                        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
-                          <h3 className="text-xl font-semibold text-gray-900 mb-6">Account Holder Details</h3>
 
-                          {Array.isArray(creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Details) ? creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Details.map((holder: any, holderIndex: number) => (
-                              <div key={holderIndex} className="mb-6 border border-gray-200 rounded-lg p-4">
-                                <h4 className="text-lg font-semibold text-gray-900 mb-4">Holder {holderIndex + 1}</h4>
+                        <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
+                          <div className="flex items-center gap-2">
+                            <Shield className="w-5 h-5 text-blue-600"/>
+                            <span className="text-sm text-blue-800">
+                                            <p>For any dispute related concerns reach out to experian <a className={"font-bold underline"} href={"https://www.experian.com/disputes/main.html"} target={"_blank"}>Customer Dispute Portal</a></p>
+                                        </span>
+                          </div>
+                        </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                  <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
-                                    <h5 className="text-sm font-medium text-gray-600 uppercase tracking-wide mb-3">Personal Information</h5>
-                                    <div className="space-y-2">
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Full Name:</span>
-                                        <span className="font-semibold text-sm text-gray-900">{holder.Surname_Non_Normalized || 'N/A'}</span>
+                        {/* Powered by Experian */}
+                        <div className="mt-6 p-4 bg-gray-50 rounded-lg text-center">
+                          <div className="flex items-center justify-center gap-3">
+                            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                              <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                              </svg>
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              Powered by <span className="font-semibold text-blue-600">Experian</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Score Description */}
+                        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                          <p className="text-gray-700" dangerouslySetInnerHTML={{ __html: getScoreDescription(creditScoreData.credit_score) }} />
+                        </div>
+                      </div>
+
+                      {/* Personal Information (Enhanced) */}
+                      {creditScoreData.credit_score !== null && (
+                          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
+                            <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+                              <User className="w-5 h-5 text-gray-600"/> Personal Information
+                            </h3>
+
+                            {(() => {
+                              const details = extractPersonalDetails;
+                              const { fullName, pan, dob, mobile, email, addressLine1, addressLine2, addressLine3, city, stateCode, pin, reportedIncome, employmentStatus } = details;
+
+                              const fullAddress = `${addressLine1} ${addressLine2} ${addressLine3}`.trim();
+
+                              return (
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-400">
+                                      <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Identity & Contact</h4>
+                                      <div className="mt-3 space-y-2">
+                                        <div className="flex justify-between"><span className="text-sm text-gray-700 font-medium">Full Name:</span><span className="font-semibold text-sm text-gray-900 text-right">{fullName}</span></div>
+                                        <div className="flex justify-between"><span className="text-sm text-gray-700 font-medium">PAN:</span><span className="font-semibold text-sm text-gray-900 text-right">{pan}</span></div>
+                                        <div className="flex justify-between"><span className="text-sm text-gray-700 font-medium">Date of Birth:</span><span className="font-semibold text-sm text-gray-900 text-right">{dob}</span></div>
+                                        <div className="flex justify-between"><span className="text-sm text-gray-700 font-medium">Mobile:</span><span className="font-semibold text-sm text-gray-900 text-right">{mobile}</span></div>
+                                        <div className="flex justify-between"><span className="text-sm text-gray-700 font-medium">Email:</span><span className="font-semibold text-sm text-gray-900 text-right break-all">{email}</span></div>
                                       </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">First Name:</span>
-                                        <span className="font-semibold text-sm text-gray-900">{holder.First_Name_Non_Normalized || 'N/A'}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Middle Name:</span>
-                                        <span className="font-semibold text-sm text-gray-900">{holder.Middle_Name_1_Non_Normalized || 'N/A'}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">PAN:</span>
-                                        <span className="font-semibold text-sm text-gray-900">{holder.Income_TAX_PAN || 'N/A'}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Date of Birth:</span>
-                                        <span className="font-semibold text-sm text-gray-900">
-                                     {formatDateFromYYYYMMDD(holder.Date_of_birth)}
-                                   </span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Gender:</span>
-                                        <span className="font-semibold text-sm text-gray-900">
-                                   {holder.Gender_Code === '1' ? 'Male' :
-                                       holder.Gender_Code === '2' ? 'Female' : 'Other'}
-                                 </span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Passport:</span>
-                                        <span className="font-semibold text-sm text-gray-900">{holder.Passport_Number || 'N/A'}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Voter ID:</span>
-                                        <span className="font-semibold text-sm text-gray-900">{holder.Voter_ID_Number || 'N/A'}</span>
+                                    </div>
+
+                                    <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400">
+                                      <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Reported Address</h4>
+                                      <div className="mt-3 space-y-2">
+                                        <p className="text-sm text-gray-900 font-semibold">{fullAddress || 'Address not available.'}</p>
+                                        <p className="text-sm text-gray-700">{city} {stateCode !== 'N/A' && stateCode} {pin !== 'N/A' && `- ${pin}`}</p>
+                                        <div className="flex justify-between border-t border-orange-200 pt-2 mt-2">
+                                          <span className="text-sm text-gray-700 font-medium">Reported Income:</span>
+                                          <span className="font-semibold text-sm text-gray-900">₹{reportedIncome}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span className="text-sm text-gray-700 font-medium">Employment:</span>
+                                          <span className="font-semibold text-sm text-gray-900">{employmentStatus}</span>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
+                              );
+                            })()}
+                          </div>
+                      )}
 
-                                  <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
-                                    <h5 className="text-sm font-medium text-gray-600 uppercase tracking-wide mb-3">Contact Information</h5>
-                                    <div className="space-y-2">
-                                      {Array.isArray(creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Phone_Details) &&
-                                          creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Phone_Details.map((phone: any, phoneIndex: number) => (
-                                              <div key={phoneIndex} className="border-b border-gray-200 pb-2">
-                                                <div className="flex justify-between">
-                                                  <span className="text-sm text-gray-700 font-medium">Phone Type:</span>
-                                                  <span className="font-semibold text-sm text-gray-900">
-                                        {phone.Telephone_Type === '00' ? 'Landline' :
-                                            phone.Telephone_Type === '01' ? 'Mobile' :
-                                                phone.Telephone_Type === '02' ? 'Office' : 'Other'}
-                                      </span>
-                                                </div>
-                                                <div className="flex justify-between">
-                                                  <span className="text-sm text-gray-700 font-medium">Number:</span>
-                                                  <span className="font-semibold text-sm text-gray-900">
-                                        {phone.Telephone_Number || phone.Mobile_Telephone_Number || 'N/A'}
-                                      </span>
-                                                </div>
-                                                <div className="flex justify-between">
-                                                  <span className="text-sm text-gray-700 font-medium">Email:</span>
-                                                  <span className="font-semibold text-sm text-gray-900">{phone.EMailId || 'N/A'}</span>
-                                                </div>
-                                              </div>
-                                          ))}
+                      {/* Credit Report Summary */}
+                      {creditScoreData.credit_score !== null && (
+                          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
+                            <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+                              <Banknote className="w-5 h-5 text-gray-600"/> Credit Summary
+                            </h3>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                              <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
+                                <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Accounts</h4>
+                                <p className="text-2xl font-bold text-gray-900">
+                                  {safeGet(creditScoreData.report.INProfileResponse, 'CAIS_Account.CAIS_Summary.Credit_Account.CreditAccountTotal', '0')}
+                                </p>
+                              </div>
+                              <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
+                                <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Active Accounts</h4>
+                                <p className="text-2xl font-bold text-gray-900">
+                                  {safeGet(creditScoreData.report.INProfileResponse, 'CAIS_Account.CAIS_Summary.Credit_Account.CreditAccountActive', '0')}
+                                </p>
+                              </div>
+                              <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400">
+                                <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Closed Accounts</h4>
+                                <p className="text-2xl font-bold text-gray-900">
+                                  {safeGet(creditScoreData.report.INProfileResponse, 'CAIS_Account.CAIS_Summary.Credit_Account.CreditAccountClosed', '0')}
+                                </p>
+                              </div>
+                              <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-400">
+                                <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Outstanding</h4>
+                                <p className="text-xl font-bold text-gray-900">
+                                  ₹{formatIndianNumber(safeGet(creditScoreData.report.INProfileResponse, 'CAIS_Account.CAIS_Summary.Total_Outstanding_Balance.Outstanding_Balance_All', '0'))}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                      )}
+
+                      {safeGetNumber(creditScoreData.report.INProfileResponse, 'CAPS.CAPS_Summary.CAPSLast180Days', 0) > 0 && creditScoreData.credit_score !== null && (
+                          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
+                            <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+                              <Zap className="w-5 h-5 text-gray-600"/> Recent Credit Inquiries (Hard Pulls)
+                            </h3>
+
+                            {/* Enquiry Summary Boxes */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                              <div className="bg-purple-50 p-4 rounded-lg border border-purple-300 text-center">
+                                <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wide mb-1">Last 7 Days</h4>
+                                <p className="text-2xl font-bold text-gray-900">{safeGet(creditScoreData.report.INProfileResponse, 'CAPS.CAPS_Summary.CAPSLast7Days', '0')}</p>
+                              </div>
+                              <div className="bg-purple-50 p-4 rounded-lg border border-purple-300 text-center">
+                                <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wide mb-1">Last 30 Days</h4>
+                                <p className="text-2xl font-bold text-gray-900">{safeGet(creditScoreData.report.INProfileResponse, 'CAPS.CAPS_Summary.CAPSLast30Days', '0')}</p>
+                              </div>
+                              <div className="bg-purple-50 p-4 rounded-lg border border-purple-300 text-center">
+                                <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wide mb-1">Last 90 Days</h4>
+                                <p className="text-2xl font-bold text-gray-900">{safeGet(creditScoreData.report.INProfileResponse, 'CAPS.CAPS_Summary.CAPSLast90Days', '0')}</p>
+                              </div>
+                              <div className="bg-purple-50 p-4 rounded-lg border border-purple-300 text-center">
+                                <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wide mb-1">Last 180 Days</h4>
+                                <p className="text-2xl font-bold text-gray-900">{safeGet(creditScoreData.report.INProfileResponse, 'CAPS.CAPS_Summary.CAPSLast180Days', '0')}</p>
+                              </div>
+                            </div>
+
+                            {/* Detailed Enquiries Table */}
+                            <div>
+                              <h4 className="text-lg font-semibold text-gray-900 mb-4">Detailed Inquiry History</h4>
+                              <div className="overflow-x-auto border border-gray-200 rounded-lg">
+                                <table className="min-w-full text-sm divide-y divide-gray-200">
+                                  <thead>
+                                  <tr className="bg-gray-50">
+                                    <th className="px-4 py-2 text-left text-gray-600 font-semibold">Date</th>
+                                    <th className="px-4 py-2 text-left text-gray-600 font-semibold">Institution</th>
+                                    <th className="px-4 py-2 text-left text-gray-600 font-semibold">Purpose</th>
+                                    <th className="px-4 py-2 text-left text-gray-600 font-semibold">Amount</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody className="divide-y divide-gray-100">
+                                  {(() => {
+                                    const enquiries = extractEnquiryDetails;
+
+                                    if (enquiries.length === 0) {
+                                      return (
+                                          <tr>
+                                            <td colSpan={4} className="px-4 py-3 text-center text-gray-500">No detailed recent inquiries found in report.</td>
+                                          </tr>
+                                      );
+                                    }
+
+                                    return enquiries.slice(0, 10).map((enquiry: any, index: number) => (
+                                        <tr key={index} className="bg-white hover:bg-gray-50">
+                                          <td className="px-4 py-3 text-gray-800">
+                                            {formatDateFromYYYYMMDD(safeGet(enquiry, 'Date_of_Request'))}
+                                          </td>
+                                          <td className="px-4 py-3 text-gray-800 font-medium">{safeGet(enquiry, 'Subscriber_Name')}</td>
+                                          <td className="px-4 py-3 text-gray-600">
+                                            {getEnquiryReason(safeGet(enquiry, 'Enquiry_Reason'))}
+                                          </td>
+                                          <td className="px-4 py-3 text-gray-800">₹{formatIndianNumber(safeGet(enquiry, 'Amount_Financed', '0'))}</td>
+                                        </tr>
+                                    ));
+                                  })()}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                      )}
+
+
+                      {/* Account Details (Enhanced with DPD History) */}
+                      {extractAccountDetails.length > 0 && creditScoreData.credit_score !== null && (
+                          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
+                            <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+                              <Briefcase className="w-5 h-5 text-gray-600"/> Detailed Credit Accounts
+                            </h3>
+
+                            {/* All Accounts - ensuring it handles both single object and array cases gracefully */}
+                            {extractAccountDetails.map((account: any, accountIndex: number) => {
+                              const status = getAccountStatus(safeGet(account, 'Account_Status'));
+                              // Payment_History_Profile is a long string, extract history from there for DPD chart
+                              const paymentHistoryString = safeGet(account, 'Payment_History_Profile', '');
+                              const fullAccountHistory = Array.isArray(safeGet(account, 'CAIS_Account_History', [])) ? safeGet(account, 'CAIS_Account_History', []) : [];
+                              const maxHistory = 12;
+
+                              // Use the parsed CAIS_Account_History which is cleaner
+                              const historyDisplay = fullAccountHistory.slice(0, maxHistory).map((hist: any) => ({
+                                monthYear: `${hist.Month}/${hist.Year.toString().slice(-2)}`,
+                                dpd: safeGet(hist, 'Days_Past_Due', '?'),
+                                isLate: safeGet(hist, 'Days_Past_Due', '0') !== '0' && safeGet(hist, 'Days_Past_Due', '0') !== '?'
+                              }));
+
+
+                              return (
+                                  <div key={accountIndex} className="mb-6 border border-gray-200 rounded-lg p-5 transition-shadow hover:shadow-md">
+                                    <div className="flex flex-col md:flex-row md:items-start justify-between mb-4 border-b pb-3">
+                                      <div>
+                                        <h4 className="text-lg font-bold text-gray-900">
+                                          {getAccountType(safeGet(account, 'Account_Type'))} - {safeGet(account, 'Subscriber_Name')}
+                                        </h4>
+                                        <p className="text-sm text-gray-500">A/C: {safeGet(account, 'Account_Number')}</p>
+                                      </div>
+                                      <span className={`px-3 py-1 rounded-full text-xs font-semibold mt-2 md:mt-0 ${status.style}`}>
+                                                    {status.label}
+                                                </span>
                                     </div>
-                                  </div>
-                                </div>
 
-                                {/* Address Details */}
-                                {Array.isArray(creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Address_Details) && (
-                                    <div className="mt-6">
-                                      <h5 className="text-lg font-semibold text-gray-900 mb-4">Address Details</h5>
-                                      {creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS[0].CAIS_Holder_Address_Details.map((address: any, addressIndex: number) => (
-                                          <div key={addressIndex} className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400">
-                                            <div className="space-y-2">
-                                              <div className="flex justify-between">
-                                                <span className="text-sm text-gray-700 font-medium">Address Line 1:</span>
-                                                <span className="font-semibold text-sm text-gray-900 text-right">{address.First_Line_Of_Address_non_normalized || 'N/A'}</span>
-                                              </div>
-                                              <div className="flex justify-between">
-                                                <span className="text-sm text-gray-700 font-medium">Address Line 2:</span>
-                                                <span className="font-semibold text-sm text-gray-900 text-right">{address.Second_Line_Of_Address_non_normalized || 'N/A'}</span>
-                                              </div>
-                                              <div className="flex justify-between">
-                                                <span className="text-sm text-gray-700 font-medium">Address Line 3:</span>
-                                                <span className="font-semibold text-sm text-gray-900 text-right">{address.Third_Line_Of_Address_non_normalized || 'N/A'}</span>
-                                              </div>
-                                              <div className="flex justify-between">
-                                                <span className="text-sm text-gray-700 font-medium">City:</span>
-                                                <span className="font-semibold text-sm text-gray-900">{address.City_non_normalized || 'N/A'}</span>
-                                              </div>
-                                              <div className="flex justify-between">
-                                                <span className="text-sm text-gray-700 font-medium">State:</span>
-                                                <span className="font-semibold text-sm text-gray-900">{address.State_non_normalized || 'N/A'}</span>
-                                              </div>
-                                              <div className="flex justify-between">
-                                                <span className="text-sm text-gray-700 font-medium">PIN Code:</span>
-                                                <span className="font-semibold text-sm text-gray-900">{address.ZIP_Postal_Code_non_normalized || 'N/A'}</span>
-                                              </div>
-                                              <div className="flex justify-between">
-                                                <span className="text-sm text-gray-700 font-medium">Country:</span>
-                                                <span className="font-semibold text-sm text-gray-900">{address.CountryCode_non_normalized || 'N/A'}</span>
-                                              </div>
-                                              <div className="flex justify-between">
-                                                <span className="text-sm text-gray-700 font-medium">Address Type:</span>
-                                                <span className="font-semibold text-sm text-gray-900">
-                                       {address.Address_indicator_non_normalized === '01' ? 'Current' :
-                                           address.Address_indicator_non_normalized === '02' ? 'Office' : 'Other'}
-                                     </span>
-                                              </div>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                                      {/* Financial Details */}
+                                      <div className="col-span-2 md:col-span-1 bg-gray-50 p-3 rounded-lg">
+                                        <p className="text-xs text-gray-600 uppercase">Original Amt.</p>
+                                        <p className="font-semibold text-gray-900">₹{formatIndianNumber(safeGet(account, 'Highest_Credit_or_Original_Loan_Amount', '0'))}</p>
+                                      </div>
+                                      <div className="col-span-2 md:col-span-1 bg-gray-50 p-3 rounded-lg">
+                                        <p className="text-xs text-gray-600 uppercase">Current Balance</p>
+                                        <p className="font-semibold text-gray-900">₹{formatIndianNumber(safeGet(account, 'Current_Balance', '0'))}</p>
+                                      </div>
+                                      <div className="col-span-1 bg-gray-50 p-3 rounded-lg">
+                                        <p className="text-xs text-gray-600 uppercase">Opened</p>
+                                        <p className="font-semibold text-gray-900">{formatDateFromYYYYMMDD(safeGet(account, 'Open_Date'))}</p>
+                                      </div>
+                                      <div className="col-span-1 bg-gray-50 p-3 rounded-lg">
+                                        <p className="text-xs text-gray-600 uppercase">Closed</p>
+                                        <p className="font-semibold text-gray-900">{formatDateFromYYYYMMDD(safeGet(account, 'Date_Closed'))}</p>
+                                      </div>
+                                    </div>
+
+                                    {/* Payment History/DPD Chart */}
+                                    <h5 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                      <Calendar className="w-4 h-4 text-gray-600" /> Payment History (Last {historyDisplay.length} Months)
+                                    </h5>
+                                    <div className="flex overflow-x-auto pb-2 space-x-2">
+                                      {historyDisplay.reverse().map((item, index) => (
+                                          <div key={index} className="flex-shrink-0 w-16 text-center p-2 rounded-lg"
+                                               style={{ backgroundColor: item.isLate ? '#fee2e2' : item.dpd === '0' ? '#dcfce7' : '#f3f4f6',
+                                                 border: item.isLate ? '1px solid #f87171' : '1px solid #d1d5db' }}>
+                                            <div className="text-xs font-medium text-gray-500 mb-1">{item.monthYear}</div>
+                                            <div className={`text-sm font-bold ${item.isLate ? 'text-red-600' : 'text-green-600'}`}>
+                                              {item.dpd === '0' ? 'OK' : item.dpd}
                                             </div>
                                           </div>
                                       ))}
                                     </div>
-                                )}
-                              </div>
-                          )) : null}
-                        </div>
-                    )}
-
-                    {/* Credit Report Summary */}
-                    {creditScoreData.credit_score !== null && (
-                    <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-6">Credit Report Summary</h3>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
-                          <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Credit Accounts</h4>
-                          <p className="text-2xl font-bold text-gray-900">
-                            {safeGet(creditScoreData.report, 'CAIS_Account.CAIS_Summary.Credit_Account.CreditAccountTotal', '0')}
-                          </p>
-                        </div>
-                        <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
-                          <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Active Accounts</h4>
-                          <p className="text-2xl font-bold text-gray-900">
-                            {safeGet(creditScoreData.report, 'CAIS_Account.CAIS_Summary.Credit_Account.CreditAccountActive', '0')}
-                          </p>
-                        </div>
-                        <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400">
-                          <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Closed Accounts</h4>
-                          <p className="text-2xl font-bold text-gray-900">
-                            {safeGet(creditScoreData.report, 'CAIS_Account.CAIS_Summary.Credit_Account.CreditAccountClosed', '0')}
-                          </p>
-                        </div>
-                        <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-400">
-                          <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Enquiries</h4>
-                          <p className="text-2xl font-bold text-gray-900">
-                            {safeGet(creditScoreData.report, 'TotalCAPS_Summary.TotalCAPSLast180Days', '0')}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Additional Credit Details */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide mb-3">Outstanding Balances</h4>
-                          <div className="space-y-2">
-                            <div className="flex justify-between">
-                              <span className="text-sm text-gray-700 font-medium">Secured Balance:</span>
-                              <span className="font-semibold text-gray-900">₹{safeGet(creditScoreData.report, 'CAIS_Account.CAIS_Summary.Total_Outstanding_Balance.Outstanding_Balance_Secured', '0')}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-sm text-gray-700 font-medium">Unsecured Balance:</span>
-                              <span className="font-semibold text-gray-900">₹{safeGet(creditScoreData.report, 'CAIS_Account.CAIS_Summary.Total_Outstanding_Balance.Outstanding_Balance_UnSecured', '0')}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-sm text-gray-700 font-medium">Total Balance:</span>
-                              <span className="font-semibold text-gray-900">₹{safeGet(creditScoreData.report, 'CAIS_Account.CAIS_Summary.Total_Outstanding_Balance.Outstanding_Balance_All', '0')}</span>
-                            </div>
+                                    <p className="text-xs text-gray-500 mt-3">
+                                      DPD: Days Past Due. 'OK' or '0' means timely payment. Higher numbers indicate delay. '?' means status not reported.
+                                    </p>
+                                  </div>
+                              );
+                            })}
                           </div>
-                        </div>
+                      )}
 
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide mb-3">Recent Enquiries</h4>
-                          <div className="space-y-2">
-                            <div className="flex justify-between">
-                              <span className="text-sm text-gray-700 font-medium">Last 7 Days:</span>
-                              <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'TotalCAPS_Summary.TotalCAPSLast7Days', '0')}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-sm text-gray-700 font-medium">Last 30 Days:</span>
-                              <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'TotalCAPS_Summary.TotalCAPSLast30Days', '0')}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-sm text-gray-700 font-medium">Last 90 Days:</span>
-                              <span className="font-semibold text-gray-900">{safeGet(creditScoreData.report, 'TotalCAPS_Summary.TotalCAPSLast90Days', '0')}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+
                     </div>
-                    )}
-
-                    {/* Account Details */}
-                    {creditScoreData.report?.CAIS_Account?.CAIS_Account_DETAILS?.[0] && creditScoreData.credit_score !== null && (
-                        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
-                          <h3 className="text-xl font-semibold text-gray-900 mb-6">Account Details</h3>
-
-                          {/* All Accounts */}
-                          {Array.isArray(creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS) ? creditScoreData.report.CAIS_Account.CAIS_Account_DETAILS.map((account: any, accountIndex: number) => (
-                              <div key={accountIndex} className="mb-8 border border-gray-200 rounded-lg p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                  <h4 className="text-lg font-semibold text-gray-900">
-                                    Account {accountIndex + 1} - {account.Account_Type === '05' ? 'Personal Loan' :
-                                      account.Account_Type === '13' ? 'Personal Loan' :
-                                          account.Account_Type === '06' ? 'Personal Loan' :
-                                              account.Account_Type === '10' ? 'Credit Card' : 'Other Credit Facility'}
-                                  </h4>
-                                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                                      account.Account_Status === '11' ? 'bg-green-100 text-green-800' :
-                                          account.Account_Status === '13' ? 'bg-gray-100 text-gray-800' :
-                                              account.Account_Status === '43' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800'
-                                  }`}>
-                             {account.Account_Status === '11' ? 'Active' :
-                                 account.Account_Status === '13' ? 'Closed' :
-                                     account.Account_Status === '43' ? 'Closed' : 'Other'}
-                           </span>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                                  <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
-                                    <h5 className="text-sm font-medium text-gray-600 uppercase tracking-wide mb-3">Account Information</h5>
-                                    <div className="space-y-2">
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Account Number:</span>
-                                        <span className="font-semibold text-sm text-gray-900">{account.Account_Number || 'N/A'}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Subscriber:</span>
-                                        <span className="font-semibold text-sm text-gray-900">{account.Subscriber_Name || 'N/A'}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Open Date:</span>
-                                        <span className="font-semibold text-sm text-gray-900">
-                                     {formatDateFromYYYYMMDD(account.Open_Date)}
-                                   </span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Close Date:</span>
-                                        <span className="font-semibold text-sm text-gray-900">
-                                     {formatDateFromYYYYMMDD(account.Date_Closed)}
-                                   </span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Terms Duration:</span>
-                                        <span className="font-semibold text-sm text-gray-900">{account.Terms_Duration || 'N/A'} months</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Rate of Interest:</span>
-                                        <span className="font-semibold text-sm text-gray-900">{account.Rate_of_Interest || 'N/A'}%</span>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
-                                    <h5 className="text-sm font-medium text-gray-600 uppercase tracking-wide mb-3">Financial Details</h5>
-                                    <div className="space-y-2">
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Original Amount:</span>
-                                        <span className="font-semibold text-gray-900">₹{account.Highest_Credit_or_Original_Loan_Amount || '0'}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Credit Limit:</span>
-                                        <span className="font-semibold text-gray-900">₹{account.Credit_Limit_Amount || '0'}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Current Balance:</span>
-                                        <span className="font-semibold text-gray-900">₹{account.Current_Balance || '0'}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Amount Past Due:</span>
-                                        <span className="font-semibold text-gray-900">₹{account.Amount_Past_Due || '0'}</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">Last Payment:</span>
-                                        <span className="font-semibold text-sm text-gray-900">
-                                     {formatDateFromYYYYMMDD(account.Date_of_Last_Payment)}
-                                   </span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-sm text-gray-700 font-medium">EMI Amount:</span>
-                                        <span className="font-semibold text-gray-900">₹{account.Scheduled_Monthly_Payment_Amount || '0'}</span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                {/* Payment History */}
-                                {account.Account_Review_Data && account.Account_Review_Data.length > 0 && (
-                                    <div>
-                                      <h5 className="text-lg font-semibold text-gray-900 mb-4">Payment History</h5>
-                                      <div className="overflow-x-auto">
-                                        <table className="w-full text-sm">
-                                          <thead>
-                                          <tr className="bg-gray-50">
-                                            <th className="px-4 py-2 text-left text-gray-900 font-semibold">Month/Year</th>
-                                            <th className="px-4 py-2 text-left text-gray-900 font-semibold">Status</th>
-                                            <th className="px-4 py-2 text-left text-gray-900 font-semibold">Balance</th>
-                                            <th className="px-4 py-2 text-left text-gray-900 font-semibold">Credit Limit</th>
-                                            <th className="px-4 py-2 text-left text-gray-900 font-semibold">Payment</th>
-                                            <th className="px-4 py-2 text-left text-gray-900 font-semibold">EMI</th>
-                                          </tr>
-                                          </thead>
-                                          <tbody>
-                                          {Array.isArray(account.Account_Review_Data) ? account.Account_Review_Data.slice(0, 12).map((entry: any, index: number) => (
-                                              <tr key={index} className="border-b border-gray-100">
-                                                <td className="px-4 py-2 text-gray-900">{entry.Month}/{entry.Year}</td>
-                                                <td className="px-4 py-2">
-                                         <span className={`px-2 py-1 rounded-full text-xs ${
-                                             entry.Account_Status === '11' ? 'bg-green-100 text-green-800' :
-                                                 entry.Account_Status === '13' ? 'bg-gray-100 text-gray-800' :
-                                                     entry.Account_Status === '43' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800'
-                                         }`}>
-                                           {entry.Account_Status === '11' ? 'Active' :
-                                               entry.Account_Status === '13' ? 'Closed' :
-                                                   entry.Account_Status === '43' ? 'Closed' : 'Other'}
-                                         </span>
-                                                </td>
-                                                <td className="px-4 py-2 text-gray-900">₹{entry.Current_Balance || '0'}</td>
-                                                <td className="px-4 py-2 text-gray-900">₹{entry.Credit_Limit_Amount || '0'}</td>
-                                                <td className="px-4 py-2 text-gray-900">₹{entry.Actual_Payment_Amount || '0'}</td>
-                                                <td className="px-4 py-2 text-gray-900">₹{entry.EMI_Amount || '0'}</td>
-                                              </tr>
-                                          )) : null}
-                                          </tbody>
-                                        </table>
-                                      </div>
-                                    </div>
-                                )}
-                              </div>
-                          )) : null}
-                        </div>
-                    )}
-
-                    {/* Enquiry Details */}
-                    {creditScoreData.report?.CAPS?.CAPS_Application_Details && creditScoreData.credit_score !== null && (
-                        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl">
-                          <h3 className="text-xl font-semibold text-gray-900 mb-6">Credit Enquiry Details</h3>
-
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-400">
-                              <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide mb-3">Enquiry Summary</h4>
-                              <div className="space-y-2">
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Last 7 Days:</span>
-                                  <span className="font-semibold text-gray-900">{creditScoreData.report.CAPS.CAPS_Summary.CAPSLast7Days || '0'}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Last 30 Days:</span>
-                                  <span className="font-semibold text-gray-900">{creditScoreData.report.CAPS.CAPS_Summary.CAPSLast30Days || '0'}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Last 90 Days:</span>
-                                  <span className="font-semibold text-gray-900">{creditScoreData.report.CAPS.CAPS_Summary.CAPSLast90Days || '0'}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Last 180 Days:</span>
-                                  <span className="font-semibold text-gray-900">{creditScoreData.report.CAPS.CAPS_Summary.CAPSLast180Days || '0'}</span>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400">
-                              <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wide mb-3">Non-Credit Enquiries</h4>
-                              <div className="space-y-2">
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Last 7 Days:</span>
-                                  <span className="font-semibold text-gray-900">{creditScoreData.report.NonCreditCAPS.NonCreditCAPS_Summary.NonCreditCAPSLast7Days || '0'}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Last 30 Days:</span>
-                                  <span className="font-semibold text-gray-900">{creditScoreData.report.NonCreditCAPS.NonCreditCAPS_Summary.NonCreditCAPSLast30Days || '0'}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Last 90 Days:</span>
-                                  <span className="font-semibold text-gray-900">{creditScoreData.report.NonCreditCAPS.NonCreditCAPS_Summary.NonCreditCAPSLast90Days || '0'}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-700 font-medium">Last 180 Days:</span>
-                                  <span className="font-semibold text-gray-900">{creditScoreData.report.NonCreditCAPS.NonCreditCAPS_Summary.NonCreditCAPSLast180Days || '0'}</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Recent Enquiries Table */}
-                          <div>
-                            <h4 className="text-lg font-semibold text-gray-900 mb-4">Recent Enquiries</h4>
-                            <div className="overflow-x-auto">
-                              <table className="w-full text-sm">
-                                <thead>
-                                <tr className="bg-gray-50">
-                                  <th className="px-4 py-2 text-left text-gray-900 font-semibold">Date</th>
-                                  <th className="px-4 py-2 text-left text-gray-900 font-semibold">Institution</th>
-                                  <th className="px-4 py-2 text-left text-gray-900 font-semibold">Purpose</th>
-                                  <th className="px-4 py-2 text-left text-gray-900 font-semibold">Amount</th>
-                                  <th className="px-4 py-2 text-left text-gray-900 font-semibold">Duration</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {Array.isArray(creditScoreData.report.CAPS.CAPS_Application_Details)
-                                  ? creditScoreData.report.CAPS.CAPS_Application_Details.slice(0, 10).map((enquiry: any, index: number) => (
-                                      <tr key={index} className="border-b border-gray-100">
-                                        <td className="px-4 py-2 text-gray-900">
-                                          {formatDateFromYYYYMMDD(enquiry.Date_of_Request)}
-                                        </td>
-                                        <td className="px-4 py-2 text-gray-900">{enquiry.Subscriber_Name || 'N/A'}</td>
-                                        <td className="px-4 py-2 text-gray-900">
-                                          {enquiry.Enquiry_Reason === '7' ? 'Personal Loan' :
-                                              enquiry.Enquiry_Reason === '6' ? 'Credit Card' :
-                                                  enquiry.Enquiry_Reason === '13' ? 'Credit Card' : 'Other'}
-                                        </td>
-                                        <td className="px-4 py-2 text-gray-900">₹{enquiry.Amount_Financed || '0'}</td>
-                                        <td className="px-4 py-2 text-gray-900">{enquiry.Duration_Of_Agreement || '0'} months</td>
-                                      </tr>
-                                    ))
-                                  : creditScoreData.report.CAPS.CAPS_Application_Details ? (
-                                      <tr className="border-b border-gray-100">
-                                        <td className="px-4 py-2 text-gray-900">
-                                          {formatDateFromYYYYMMDD(creditScoreData.report.CAPS.CAPS_Application_Details.Date_of_Request)}
-                                        </td>
-                                        <td className="px-4 py-2 text-gray-900">{creditScoreData.report.CAPS.CAPS_Application_Details.Subscriber_Name || 'N/A'}</td>
-                                        <td className="px-4 py-2 text-gray-900">
-                                          {creditScoreData.report.CAPS.CAPS_Application_Details.Enquiry_Reason === '7' ? 'Personal Loan' :
-                                              creditScoreData.report.CAPS.CAPS_Application_Details.Enquiry_Reason === '6' ? 'Credit Card' :
-                                                  creditScoreData.report.CAPS.CAPS_Application_Details.Enquiry_Reason === '13' ? 'Credit Card' : 'Other'}
-                                        </td>
-                                        <td className="px-4 py-2 text-gray-900">₹{creditScoreData.report.CAPS.CAPS_Application_Details.Amount_Financed || '0'}</td>
-                                        <td className="px-4 py-2 text-gray-900">{creditScoreData.report.CAPS.CAPS_Application_Details.Duration_Of_Agreement || '0'} months</td>
-                                      </tr>
-                                    ) : null
-                                }
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                    )}
-
-
-                  </div>
                   </>
               )}
 
@@ -2335,7 +1626,7 @@ export default function CreditScoreChecker() {
                           className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
                       >
                         <ArrowLeft className="w-4 h-4" />
-                        Back to Credit Score Checker
+                        Start New Check
                       </button>
                     </div>
 
@@ -2349,7 +1640,7 @@ export default function CreditScoreChecker() {
                           No Credit Record Found
                         </h1>
                         <p className="text-lg text-gray-600 mb-6">
-                          Hey <span className="font-bold text-gray-900">{ creditScoreData?.report?.Current_Application?.Current_Application_Details?.Current_Applicant_Details?.First_Name || userDetails.name || 'User'}</span>! We couldn't find any credit history associated with your details.
+                          Hey <span className="font-bold text-gray-900">{ userDetails.name || 'User'}</span>! We couldn't find any credit history associated with your details.
                         </p>
                       </div>
 
@@ -3022,14 +2313,14 @@ export default function CreditScoreChecker() {
                 Check your credit score today – completely free and secure.
               </p>
               <button
-                onClick={() => {
-                  // Scroll to the form
-                  const formSection = document.querySelector('.form-container');
-                  if (formSection) {
-                    formSection.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
-                className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  onClick={() => {
+                    // Scroll to the form
+                    const formSection = document.querySelector('.form-container');
+                    if (formSection) {
+                      formSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
                 Check Your Credit Score Now
               </button>
@@ -3044,7 +2335,7 @@ export default function CreditScoreChecker() {
 
 // Ensure static generation for SEO
 export async function getStaticProps() {
-    return {
-        props: {},
-    };
+  return {
+    props: {},
+  };
 }
