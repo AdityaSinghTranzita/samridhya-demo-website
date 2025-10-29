@@ -42,7 +42,7 @@ const app = express();
 // Comprehensive CORS configuration
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  
+
   // Define allowed origins
   const allowedOrigins = [
     'http://localhost:3000',
@@ -55,29 +55,29 @@ app.use((req, res, next) => {
     'https://samridhya-website.vercel.app',
     'https://samridhya.vercel.app'
   ];
-  
+
   // Set CORS headers for all requests
   if (origin && allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
-  
+
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Cache-Control, Pragma, Expires');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Max-Age', '86400');
-  
+
   // Security headers
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  
+
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
     res.status(204).end();
     return;
   }
-  
+
   next();
 });
 
@@ -102,6 +102,7 @@ app.get("/track", (req: any, res: any) => {
   let defaultUtmCampaign: string;
   const defaultUtmMedium = "redirect";
 
+
   if (ua.includes("android")) {
     baseUrl = "https://play.google.com/store/apps/details?id=samridh.consumer";
     defaultUtmSource = "android_device";
@@ -123,26 +124,37 @@ app.get("/track", (req: any, res: any) => {
   const params = new URLSearchParams();
 
   for (const key in query) {
-    if (!['utm_source', 'utm_medium', 'utm_campaign'].includes(key)) {
+    if (!["utm_source", "utm_medium", "utm_campaign"].includes(key)) {
       const value = query[key];
-      // Handle arrays or ParsedQs properly
       if (Array.isArray(value)) {
-        value.forEach(v => params.append(key, String(v)));
+        value.forEach((v) => params.append(key, String(v)));
       } else {
         params.set(key, String(value));
       }
     }
   }
 
-  params.set('utm_source', String(finalUtmSource));
-  params.set('utm_medium', String(finalUtmMedium));
-  params.set('utm_campaign', String(finalUtmCampaign));
+  params.set("utm_source", finalUtmSource);
+  params.set("utm_medium", finalUtmMedium);
+  params.set("utm_campaign", finalUtmCampaign);
 
   const finalQueryString = params.toString();
-  const urlSeparator = baseUrl.includes("?") ? "&" : "?";
-  const finalUrl = finalQueryString ? `${baseUrl}${urlSeparator}${finalQueryString}` : baseUrl;
 
-  console.log(`Detected UA: ${ua.substring(0, 50)}... | Redirecting to: ${finalUrl}`);
+  let finalUrl: string;
+
+  if (ua.includes("android")) {
+    const encodedReferrer = encodeURIComponent(finalQueryString);
+    finalUrl = `${baseUrl}&referrer=${encodedReferrer}`;
+  } else {
+    const urlSeparator = baseUrl.includes("?") ? "&" : "?";
+    finalUrl = finalQueryString
+        ? `${baseUrl}${urlSeparator}${finalQueryString}`
+        : baseUrl;
+  }
+
+  console.log(
+      `Detected UA: ${ua.substring(0, 60)}... | Redirecting to: ${finalUrl}`
+  );
 
   return res.redirect(302, finalUrl);
 });
@@ -198,12 +210,12 @@ app.get('/api/blog/popular', async (req: any, res: any) => {
 });
 
 // Sitemap routes
-  app.get('/sitemap.xml', async (req: any, res: any) => {
-    await generateSitemap(req, res);
-  });
-  app.get('/sitemap-new.xml', async (req: any, res: any) => {
-    await generateSitemap(req, res);
-  });
+app.get('/sitemap.xml', async (req: any, res: any) => {
+  await generateSitemap(req, res);
+});
+app.get('/sitemap-new.xml', async (req: any, res: any) => {
+  await generateSitemap(req, res);
+});
 
 app.get('/sitemap-index.xml', async (req: any, res: any) => {
   await generateSitemapIndex(req, res);
