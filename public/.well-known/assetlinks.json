@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegrate_permission/common.handler_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "samridh.consumer",
+      "sha256_cert_fingerprints": [
+        "12:73:0E:E3:A8:36:44:B2:CB:F0:DD:4C:76:79:C9:C0:63:37:99:DB:83:77:A4:9E:D2:5F:65:E8:EC:E7:E2:8F"
+      ]
+    }
+  }
+]
